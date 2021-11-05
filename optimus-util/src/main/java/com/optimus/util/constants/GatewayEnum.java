@@ -1,8 +1,13 @@
 package com.optimus.util.constants;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * GatewayEnum
  */
+@Getter
+@AllArgsConstructor
 public enum GatewayEnum {
 
     GATEWAY_CHANNEL_STATUS_Y("Y", "启用"), //
@@ -23,18 +28,5 @@ public enum GatewayEnum {
 
     private String code;
     private String memo;
-
-    private GatewayEnum(String code, String memo) {
-        this.code = code;
-        this.memo = memo;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getMemo() {
-        return memo;
-    }
 
 }

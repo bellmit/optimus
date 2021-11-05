@@ -1,8 +1,13 @@
 package com.optimus.util.constants;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * OrderEnum
  */
+@Getter
+@AllArgsConstructor
 public enum OrderEnum {
 
     ORDER_TYPE_R("R", "充值"), //
@@ -30,18 +35,5 @@ public enum OrderEnum {
 
     private String code;
     private String memo;
-
-    private OrderEnum(String code, String memo) {
-        this.code = code;
-        this.memo = memo;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getMemo() {
-        return memo;
-    }
 
 }

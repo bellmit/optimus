@@ -1,8 +1,12 @@
 package com.optimus.web.common;
 
+import com.optimus.dao.domain.CommonSystemConfigDO;
 import com.optimus.service.common.CommonSystemConfigService;
+// import com.optimus.util.constants.RespCodeEnum;
+// import com.optimus.web.global.exception.OptimusException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,21 +28,24 @@ public class CommonSystemConfigController {
     private CommonSystemConfigService commonSystemConfigService;
 
     @GetMapping("/getCommonSystemConfigByKey")
-    public String getCommonSystemConfigByKey(@RequestParam("key") String key) {
+    public CommonSystemConfigDO getCommonSystemConfigByKey(@RequestParam("key") String key) {
 
         log.info("start getCommonSystemConfigByKey, key is {}", key);
 
-        String value = null;
+        CommonSystemConfigDO resp = new CommonSystemConfigDO();
 
-        try {
+        // 验证全局异常示例代码
+        // int res = 10 / 0;
+        // log.info("res is {}", res);
 
-            value = commonSystemConfigService.getCommonSystemConfigByKey(key);
+        // if (StringUtils.hasLength(key)) {
+        // throw new OptimusException(RespCodeEnum.INVALID_PARAM);
+        // }
 
-        } catch (Exception e) {
-            log.error("getCommonSystemConfigByKey is error", e);
-        }
+        String value = commonSystemConfigService.getCommonSystemConfigByKey(key);
+        resp.setValue(value);
 
-        return value;
+        return resp;
 
     }
 }

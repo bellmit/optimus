@@ -1,8 +1,13 @@
 package com.optimus.util.constants;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * AccountEnum
  */
+@Getter
+@AllArgsConstructor
 public enum AccountEnum {
 
     ACCOUNT_TYPE_P("P", "平台内部余额户(平台)"), //
@@ -20,18 +25,5 @@ public enum AccountEnum {
 
     private String code;
     private String memo;
-
-    private AccountEnum(String code, String memo) {
-        this.code = code;
-        this.memo = memo;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getMemo() {
-        return memo;
-    }
 
 }

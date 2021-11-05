@@ -1,8 +1,13 @@
 package com.optimus.util.constants;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * MemberEnum
  */
+@Getter
+@AllArgsConstructor
 public enum MemberEnum {
 
     MEMBER_TYPE_S("S", "平台"), //
@@ -37,18 +42,5 @@ public enum MemberEnum {
 
     private String code;
     private String memo;
-
-    private MemberEnum(String code, String memo) {
-        this.code = code;
-        this.memo = memo;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getMemo() {
-        return memo;
-    }
 
 }

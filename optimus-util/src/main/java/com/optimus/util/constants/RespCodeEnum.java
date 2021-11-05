@@ -1,14 +1,20 @@
 package com.optimus.util.constants;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * RespCodeEnum
  */
+@Getter
+@AllArgsConstructor
 public enum RespCodeEnum {
 
     /* ---------系统类编码--------- */
 
     SUCCESS("1000", "成功"), //
     FAILE("1001", "失败"), //
+    INVALID_PARAM("1002", "无效参数"), //
 
     /* ---------会员类编码--------- */
 
@@ -30,18 +36,5 @@ public enum RespCodeEnum {
 
     private String code;
     private String memo;
-
-    private RespCodeEnum(String code, String memo) {
-        this.code = code;
-        this.memo = memo;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getMemo() {
-        return memo;
-    }
 
 }
