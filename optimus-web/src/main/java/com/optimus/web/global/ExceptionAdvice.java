@@ -26,7 +26,6 @@ public class ExceptionAdvice {
     @ExceptionHandler({ OptimusException.class })
     public ResponseEntity<Resp<RespCodeEnum>> exception(OptimusException e) {
 
-        System.out.println("==========");
         Resp<RespCodeEnum> resp = new Resp<RespCodeEnum>();
         resp.setCode(e.getRespCodeEnum().getCode());
         resp.setMemo(e.getRespCodeEnum().getMemo());
@@ -44,7 +43,6 @@ public class ExceptionAdvice {
     @ExceptionHandler({ Exception.class })
     public ResponseEntity<Resp<RespCodeEnum>> exception(Exception e) {
 
-        System.out.println("-=-=");
         Resp<RespCodeEnum> resp = new Resp<RespCodeEnum>();
         resp.setCode(RespCodeEnum.FAILE.getCode());
         resp.setMemo(RespCodeEnum.FAILE.getMemo());
