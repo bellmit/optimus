@@ -1,9 +1,9 @@
 package com.optimus.web.common;
 
-import com.optimus.dao.domain.CommonSystemConfigDO;
 import com.optimus.service.common.CommonSystemConfigService;
 // import com.optimus.util.constants.RespCodeEnum;
 // import com.optimus.web.global.exception.OptimusException;
+import com.optimus.web.common.resp.GetCommonSystemConfigResp;
 
 import org.springframework.beans.factory.annotation.Autowired;
 // import org.springframework.util.StringUtils;
@@ -28,11 +28,11 @@ public class CommonSystemConfigController {
     private CommonSystemConfigService commonSystemConfigService;
 
     @GetMapping("/getCommonSystemConfigByKey")
-    public CommonSystemConfigDO getCommonSystemConfigByKey(@RequestParam("key") String key) {
+    public GetCommonSystemConfigResp getCommonSystemConfigByKey(@RequestParam("key") String key) {
 
         log.info("start getCommonSystemConfigByKey, key is {}", key);
 
-        CommonSystemConfigDO resp = new CommonSystemConfigDO();
+        GetCommonSystemConfigResp resp = new GetCommonSystemConfigResp();
 
         // 验证全局异常示例代码
         // int res = 10 / 0;
