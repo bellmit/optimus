@@ -2,7 +2,7 @@ package com.optimus.web.common;
 
 import com.optimus.service.common.CommonSystemConfigService;
 // import com.optimus.util.constants.RespCodeEnum;
-// import com.optimus.web.global.exception.OptimusException;
+// import com.optimus.util.global.exception.OptimusException;
 import com.optimus.web.common.resp.GetCommonSystemConfigResp;
 
 import org.springframework.beans.factory.annotation.Autowired;

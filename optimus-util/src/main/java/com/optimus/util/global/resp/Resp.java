@@ -1,4 +1,4 @@
-package com.optimus.web.global.resp;
+package com.optimus.util.global.resp;
 
 import java.io.Serializable;
 

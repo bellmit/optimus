@@ -1,6 +1,6 @@
-package com.optimus.web.global;
+package com.optimus.util.global;
 
-import com.optimus.web.global.resp.Resp;
+import com.optimus.util.global.resp.Resp;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.MethodParameter;
