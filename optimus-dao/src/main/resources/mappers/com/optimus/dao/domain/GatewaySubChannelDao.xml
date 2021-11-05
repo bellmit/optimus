@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.optimus.dao.mapper.GatewaySubChannelDao">
+
+  <resultMap id="BaseResultMap" type="com.optimus.dao.domain.GatewaySubChannelDO">
+    <id column="ID" jdbcType="NUMERIC" property="id" />
+    <result column="PARENT_CHANNEL_CODE" jdbcType="VARCHAR" property="parentChannelCode" />
+    <result column="CHANNEL_CODE" jdbcType="VARCHAR" property="channelCode" />
+    <result column="CHANNEL_NAME" jdbcType="VARCHAR" property="channelName" />
+    <result column="CHANNEL_STATUS" jdbcType="VARCHAR" property="channelStatus" />
+    <result column="FACE_VALUE_TYPE" jdbcType="VARCHAR" property="faceValueType" />
+    <result column="FACE_VALUE" jdbcType="VARCHAR" property="faceValue" />
+    <result column="WEIGHT" jdbcType="NUMERIC" property="weight" />
+    <result column="FATIGUE" jdbcType="NUMERIC" property="fatigue" />
+    <result column="NEXT_USABLE_TIME" jdbcType="TIMESTAMP" property="nextUsableTime" />
+    <result column="IMPL_TYPE" jdbcType="VARCHAR" property="implType" />
+    <result column="IMPL_PATH" jdbcType="VARCHAR" property="implPath" />
+    <result column="CALLBACK_IP" jdbcType="VARCHAR" property="callbackIp" />
+    <result column="BIZ_CONTENT" jdbcType="VARCHAR" property="bizContent" />
+    <result column="CREATE_BY" jdbcType="VARCHAR" property="createBy" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="UPDATE_BY" jdbcType="VARCHAR" property="updateBy" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    ID, PARENT_CHANNEL_CODE, CHANNEL_CODE, CHANNEL_NAME, CHANNEL_STATUS, FACE_VALUE_TYPE, 
+    FACE_VALUE, WEIGHT, FATIGUE, NEXT_USABLE_TIME, IMPL_TYPE, IMPL_PATH, CALLBACK_IP, 
+    BIZ_CONTENT, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME
+  </sql>
+
+  <select id="getGatewaySubChannelById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_GATEWAY_SUB_CHANNEL
+    where ID = #{id,jdbcType=NUMERIC}
+  </select>
+
+  <insert id="addGatewaySubChannel" parameterType="com.optimus.dao.domain.GatewaySubChannelDO">
+    insert into T_GATEWAY_SUB_CHANNEL
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="parentChannelCode != null">
+        PARENT_CHANNEL_CODE,
+      </if>
+      <if test="channelCode != null">
+        CHANNEL_CODE,
+      </if>
+      <if test="channelName != null">
+        CHANNEL_NAME,
+      </if>
+      <if test="channelStatus != null">
+        CHANNEL_STATUS,
+      </if>
+      <if test="faceValueType != null">
+        FACE_VALUE_TYPE,
+      </if>
+      <if test="faceValue != null">
+        FACE_VALUE,
+      </if>
+      <if test="weight != null">
+        WEIGHT,
+      </if>
+      <if test="fatigue != null">
+        FATIGUE,
+      </if>
+      <if test="nextUsableTime != null">
+        NEXT_USABLE_TIME,
+      </if>
+      <if test="implType != null">
+        IMPL_TYPE,
+      </if>
+      <if test="implPath != null">
+        IMPL_PATH,
+      </if>
+      <if test="callbackIp != null">
+        CALLBACK_IP,
+      </if>
+      <if test="bizContent != null">
+        BIZ_CONTENT,
+      </if>
+      <if test="createBy != null">
+        CREATE_BY,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="updateBy != null">
+        UPDATE_BY,
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null"> #{id,jdbcType=NUMERIC},
+      </if>
+      <if test="parentChannelCode != null"> #{parentChannelCode,jdbcType=VARCHAR},
+      </if>
+      <if test="channelCode != null"> #{channelCode,jdbcType=VARCHAR},
+      </if>
+      <if test="channelName != null"> #{channelName,jdbcType=VARCHAR},
+      </if>
+      <if test="channelStatus != null"> #{channelStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="faceValueType != null"> #{faceValueType,jdbcType=VARCHAR},
+      </if>
+      <if test="faceValue != null"> #{faceValue,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null"> #{weight,jdbcType=NUMERIC},
+      </if>
+      <if test="fatigue != null"> #{fatigue,jdbcType=NUMERIC},
+      </if>
+      <if test="nextUsableTime != null"> #{nextUsableTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="implType != null"> #{implType,jdbcType=VARCHAR},
+      </if>
+      <if test="implPath != null"> #{implPath,jdbcType=VARCHAR},
+      </if>
+      <if test="callbackIp != null"> #{callbackIp,jdbcType=VARCHAR},
+      </if>
+      <if test="bizContent != null"> #{bizContent,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null"> #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null"> #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null"> #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null"> #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateGatewaySubChannel" parameterType="com.optimus.dao.domain.GatewaySubChannelDO">
+    update T_GATEWAY_SUB_CHANNEL
+    <set>
+      <if test="parentChannelCode != null">
+        PARENT_CHANNEL_CODE = #{parentChannelCode,jdbcType=VARCHAR},
+      </if>
+      <if test="channelCode != null">
+        CHANNEL_CODE = #{channelCode,jdbcType=VARCHAR},
+      </if>
+      <if test="channelName != null">
+        CHANNEL_NAME = #{channelName,jdbcType=VARCHAR},
+      </if>
+      <if test="channelStatus != null">
+        CHANNEL_STATUS = #{channelStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="faceValueType != null">
+        FACE_VALUE_TYPE = #{faceValueType,jdbcType=VARCHAR},
+      </if>
+      <if test="faceValue != null">
+        FACE_VALUE = #{faceValue,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null">
+        WEIGHT = #{weight,jdbcType=NUMERIC},
+      </if>
+      <if test="fatigue != null">
+        FATIGUE = #{fatigue,jdbcType=NUMERIC},
+      </if>
+      <if test="nextUsableTime != null">
+        NEXT_USABLE_TIME = #{nextUsableTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="implType != null">
+        IMPL_TYPE = #{implType,jdbcType=VARCHAR},
+      </if>
+      <if test="implPath != null">
+        IMPL_PATH = #{implPath,jdbcType=VARCHAR},
+      </if>
+      <if test="callbackIp != null">
+        CALLBACK_IP = #{callbackIp,jdbcType=VARCHAR},
+      </if>
+      <if test="bizContent != null">
+        BIZ_CONTENT = #{bizContent,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        CREATE_BY = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        UPDATE_BY = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=NUMERIC}
+  </update>
+
+</mapper>

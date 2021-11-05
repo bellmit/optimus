@@ -1,0 +1,31 @@
+spring:
+    datasource:
+        url: jdbc:oracle:thin:@182.254.152.205:1521:ORCL
+        username: system
+        password: TrGAF7tn9L
+        driver-class-name: oracle.jdbc.OracleDriver
+        type: com.zaxxer.hikari.HikariDataSource
+        hikari:
+            pool-name: Optimus_HikariCP         # 连接池名称
+            minimum-idle: 100                   # 最小空闲连接数
+            maximum-pool-size: 500              # 连接池最大连接数
+            idle-timeout: 180000                # 空闲链接存活最大时间
+            max-lifetime: 1800000               # 连接池中链接的最长生命周期
+            connection-timeout: 30000           # 数据库连接超时时间
+            auto-commit: true                   # 连接池中链接的自动提交行为
+    
+    cache:
+        type: caffeine
+        cache-names:
+        - systemConfig
+        caffeine:
+            spec: maximumSize=1000, expireAfterWrite=600s
+
+mybatis:
+    mapper-locations: classpath*:/mappers/**/*.xml
+    configuration:
+        map-underscore-to-camel-case: true
+
+logging:
+    config: classpath:logback-spring.xml
+

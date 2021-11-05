@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.optimus</groupId>
+		<artifactId>optimus</artifactId>
+		<version>0.0.1-RELEASED</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<groupId>com.optimus.generator</groupId>
+	<artifactId>optimus-generator</artifactId>
+	<version>0.0.1-RELEASED</version>
+	<packaging>jar</packaging>
+
+	<name>optimus-generator</name>
+	<description>optimus-generator project</description>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.mybatis.generator</groupId>
+				<artifactId>mybatis-generator-maven-plugin</artifactId>
+				<version>${mybatis-generator-maven-plugin.version}</version>
+				<dependencies>
+					<dependency>
+						<groupId>com.oracle</groupId>
+						<artifactId>ojdbc8</artifactId>
+						<version>${ojdbc8.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>com.oracle.database.nls</groupId>
+						<artifactId>orai18n</artifactId>
+						<version>${orai18n.version}</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<overwrite>true</overwrite>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

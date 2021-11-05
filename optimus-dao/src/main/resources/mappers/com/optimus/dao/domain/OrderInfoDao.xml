@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.optimus.dao.mapper.OrderInfoDao">
+
+  <resultMap id="BaseResultMap" type="com.optimus.dao.domain.OrderInfoDO">
+    <id column="ID" jdbcType="NUMERIC" property="id" />
+    <result column="MEMBER_ID" jdbcType="VARCHAR" property="memberId" />
+    <result column="SUP_DIRECT_MEMBER_ID" jdbcType="VARCHAR" property="supDirectMemberId" />
+    <result column="CODE_MEMBER_ID" jdbcType="VARCHAR" property="codeMemberId" />
+    <result column="ORDER_ID" jdbcType="VARCHAR" property="orderId" />
+    <result column="CALLER_ORDER_ID" jdbcType="VARCHAR" property="callerOrderId" />
+    <result column="CALLEE_ORDER_ID" jdbcType="VARCHAR" property="calleeOrderId" />
+    <result column="ORDER_TYPE" jdbcType="VARCHAR" property="orderType" />
+    <result column="ORDER_STATUS" jdbcType="VARCHAR" property="orderStatus" />
+    <result column="ORDER_AMOUNT" jdbcType="NUMERIC" property="orderAmount" />
+    <result column="ACTUAL_AMOUNT" jdbcType="NUMERIC" property="actualAmount" />
+    <result column="ORDER_TIME" jdbcType="TIMESTAMP" property="orderTime" />
+    <result column="PAY_TIME" jdbcType="TIMESTAMP" property="payTime" />
+    <result column="SPLIT_PROFIT_STATUS" jdbcType="VARCHAR" property="splitProfitStatus" />
+    <result column="BEHAVIOR" jdbcType="VARCHAR" property="behavior" />
+    <result column="MERCHANT_CALLBACK_URL" jdbcType="VARCHAR" property="merchantCallbackUrl" />
+    <result column="MERCHANT_CALLBACK_COUNT" jdbcType="NUMERIC" property="merchantCallbackCount" />
+    <result column="MERCHANT_NOTIFY_STATUS" jdbcType="VARCHAR" property="merchantNotifyStatus" />
+    <result column="CHANNEL_CODE" jdbcType="VARCHAR" property="channelCode" />
+    <result column="SUB_CHANNEL_CODE" jdbcType="VARCHAR" property="subChannelCode" />
+    <result column="CHANNEL_RETURN_MESSAGE" jdbcType="VARCHAR" property="channelReturnMessage" />
+    <result column="CHANNEL_ORDER_QUERY_COUNT" jdbcType="NUMERIC" property="channelOrderQueryCount" />
+    <result column="CREATE_BY" jdbcType="VARCHAR" property="createBy" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="UPDATE_BY" jdbcType="VARCHAR" property="updateBy" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    ID, MEMBER_ID, SUP_DIRECT_MEMBER_ID, CODE_MEMBER_ID, ORDER_ID, CALLER_ORDER_ID, CALLEE_ORDER_ID, 
+    ORDER_TYPE, ORDER_STATUS, ORDER_AMOUNT, ACTUAL_AMOUNT, ORDER_TIME, PAY_TIME, SPLIT_PROFIT_STATUS, 
+    BEHAVIOR, MERCHANT_CALLBACK_URL, MERCHANT_CALLBACK_COUNT, MERCHANT_NOTIFY_STATUS, 
+    CHANNEL_CODE, SUB_CHANNEL_CODE, CHANNEL_RETURN_MESSAGE, CHANNEL_ORDER_QUERY_COUNT, 
+    CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME
+  </sql>
+
+  <select id="getOrderInfoById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_ORDER_INFO
+    where ID = #{id,jdbcType=NUMERIC}
+  </select>
+
+  <insert id="addOrderInfo" parameterType="com.optimus.dao.domain.OrderInfoDO">
+    insert into T_ORDER_INFO
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="memberId != null">
+        MEMBER_ID,
+      </if>
+      <if test="supDirectMemberId != null">
+        SUP_DIRECT_MEMBER_ID,
+      </if>
+      <if test="codeMemberId != null">
+        CODE_MEMBER_ID,
+      </if>
+      <if test="orderId != null">
+        ORDER_ID,
+      </if>
+      <if test="callerOrderId != null">
+        CALLER_ORDER_ID,
+      </if>
+      <if test="calleeOrderId != null">
+        CALLEE_ORDER_ID,
+      </if>
+      <if test="orderType != null">
+        ORDER_TYPE,
+      </if>
+      <if test="orderStatus != null">
+        ORDER_STATUS,
+      </if>
+      <if test="orderAmount != null">
+        ORDER_AMOUNT,
+      </if>
+      <if test="actualAmount != null">
+        ACTUAL_AMOUNT,
+      </if>
+      <if test="orderTime != null">
+        ORDER_TIME,
+      </if>
+      <if test="payTime != null">
+        PAY_TIME,
+      </if>
+      <if test="splitProfitStatus != null">
+        SPLIT_PROFIT_STATUS,
+      </if>
+      <if test="behavior != null">
+        BEHAVIOR,
+      </if>
+      <if test="merchantCallbackUrl != null">
+        MERCHANT_CALLBACK_URL,
+      </if>
+      <if test="merchantCallbackCount != null">
+        MERCHANT_CALLBACK_COUNT,
+      </if>
+      <if test="merchantNotifyStatus != null">
+        MERCHANT_NOTIFY_STATUS,
+      </if>
+      <if test="channelCode != null">
+        CHANNEL_CODE,
+      </if>
+      <if test="subChannelCode != null">
+        SUB_CHANNEL_CODE,
+      </if>
+      <if test="channelReturnMessage != null">
+        CHANNEL_RETURN_MESSAGE,
+      </if>
+      <if test="channelOrderQueryCount != null">
+        CHANNEL_ORDER_QUERY_COUNT,
+      </if>
+      <if test="createBy != null">
+        CREATE_BY,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="updateBy != null">
+        UPDATE_BY,
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null"> #{id,jdbcType=NUMERIC},
+      </if>
+      <if test="memberId != null"> #{memberId,jdbcType=VARCHAR},
+      </if>
+      <if test="supDirectMemberId != null"> #{supDirectMemberId,jdbcType=VARCHAR},
+      </if>
+      <if test="codeMemberId != null"> #{codeMemberId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null"> #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="callerOrderId != null"> #{callerOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="calleeOrderId != null"> #{calleeOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderType != null"> #{orderType,jdbcType=VARCHAR},
+      </if>
+      <if test="orderStatus != null"> #{orderStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="orderAmount != null"> #{orderAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="actualAmount != null"> #{actualAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="orderTime != null"> #{orderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payTime != null"> #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="splitProfitStatus != null"> #{splitProfitStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="behavior != null"> #{behavior,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantCallbackUrl != null"> #{merchantCallbackUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantCallbackCount != null"> #{merchantCallbackCount,jdbcType=NUMERIC},
+      </if>
+      <if test="merchantNotifyStatus != null"> #{merchantNotifyStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="channelCode != null"> #{channelCode,jdbcType=VARCHAR},
+      </if>
+      <if test="subChannelCode != null"> #{subChannelCode,jdbcType=VARCHAR},
+      </if>
+      <if test="channelReturnMessage != null"> #{channelReturnMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="channelOrderQueryCount != null"> #{channelOrderQueryCount,jdbcType=NUMERIC},
+      </if>
+      <if test="createBy != null"> #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null"> #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null"> #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null"> #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateOrderInfo" parameterType="com.optimus.dao.domain.OrderInfoDO">
+    update T_ORDER_INFO
+    <set>
+      <if test="memberId != null">
+        MEMBER_ID = #{memberId,jdbcType=VARCHAR},
+      </if>
+      <if test="supDirectMemberId != null">
+        SUP_DIRECT_MEMBER_ID = #{supDirectMemberId,jdbcType=VARCHAR},
+      </if>
+      <if test="codeMemberId != null">
+        CODE_MEMBER_ID = #{codeMemberId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null">
+        ORDER_ID = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="callerOrderId != null">
+        CALLER_ORDER_ID = #{callerOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="calleeOrderId != null">
+        CALLEE_ORDER_ID = #{calleeOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderType != null">
+        ORDER_TYPE = #{orderType,jdbcType=VARCHAR},
+      </if>
+      <if test="orderStatus != null">
+        ORDER_STATUS = #{orderStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="orderAmount != null">
+        ORDER_AMOUNT = #{orderAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="actualAmount != null">
+        ACTUAL_AMOUNT = #{actualAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="orderTime != null">
+        ORDER_TIME = #{orderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payTime != null">
+        PAY_TIME = #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="splitProfitStatus != null">
+        SPLIT_PROFIT_STATUS = #{splitProfitStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="behavior != null">
+        BEHAVIOR = #{behavior,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantCallbackUrl != null">
+        MERCHANT_CALLBACK_URL = #{merchantCallbackUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantCallbackCount != null">
+        MERCHANT_CALLBACK_COUNT = #{merchantCallbackCount,jdbcType=NUMERIC},
+      </if>
+      <if test="merchantNotifyStatus != null">
+        MERCHANT_NOTIFY_STATUS = #{merchantNotifyStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="channelCode != null">
+        CHANNEL_CODE = #{channelCode,jdbcType=VARCHAR},
+      </if>
+      <if test="subChannelCode != null">
+        SUB_CHANNEL_CODE = #{subChannelCode,jdbcType=VARCHAR},
+      </if>
+      <if test="channelReturnMessage != null">
+        CHANNEL_RETURN_MESSAGE = #{channelReturnMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="channelOrderQueryCount != null">
+        CHANNEL_ORDER_QUERY_COUNT = #{channelOrderQueryCount,jdbcType=NUMERIC},
+      </if>
+      <if test="createBy != null">
+        CREATE_BY = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        UPDATE_BY = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=NUMERIC}
+  </update>
+
+</mapper>

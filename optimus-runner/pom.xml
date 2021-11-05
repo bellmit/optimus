@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.optimus</groupId>
+		<artifactId>optimus</artifactId>
+		<version>0.0.1-RELEASED</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<groupId>com.optimus.runner</groupId>
+	<artifactId>optimus-runner</artifactId>
+	<version>0.0.1-RELEASED</version>
+	<packaging>jar</packaging>
+
+	<name>optimus-runner</name>
+	<description>optimus-runner project</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.optimus.web</groupId>
+			<artifactId>optimus-web</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>com.optimus.runner.OptimusRunnerApplication</mainClass>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
