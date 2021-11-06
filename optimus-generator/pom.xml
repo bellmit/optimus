@@ -19,6 +19,13 @@
 	<name>optimus-generator</name>
 	<description>optimus-generator project</description>
 
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-resources-plugin</artifactId>
+		</dependency>
+	</dependencies>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -27,7 +34,7 @@
 				<version>${mybatis-generator-maven-plugin.version}</version>
 				<dependencies>
 					<dependency>
-						<groupId>com.oracle</groupId>
+						<groupId>com.oracle.database.jdbc</groupId>
 						<artifactId>ojdbc8</artifactId>
 						<version>${ojdbc8.version}</version>
 					</dependency>
