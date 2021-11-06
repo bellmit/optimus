@@ -24,22 +24,6 @@
 			<groupId>com.optimus.util</groupId>
 			<artifactId>optimus-util</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jdbc</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.mybatis.spring.boot</groupId>
-			<artifactId>mybatis-spring-boot-starter</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.oracle</groupId>
-			<artifactId>ojdbc8</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.oracle.database.nls</groupId>
-			<artifactId>orai18n</artifactId>
-		</dependency>
 	</dependencies>
 
 </project>

@@ -21,20 +21,12 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.optimus.tps</groupId>
-			<artifactId>optimus-tps</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>com.optimus.dao</groupId>
 			<artifactId>optimus-dao</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-cache</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.github.ben-manes.caffeine</groupId>
-			<artifactId>caffeine</artifactId>
+			<groupId>com.optimus.tps</groupId>
+			<artifactId>optimus-tps</artifactId>
 		</dependency>
 	</dependencies>
 
