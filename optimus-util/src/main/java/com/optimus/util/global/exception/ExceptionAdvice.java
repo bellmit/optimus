@@ -1,9 +1,8 @@
-package com.optimus.util.global;
+package com.optimus.util.global.exception;
 
 import java.util.Objects;
 
 import com.optimus.util.constants.RespCodeEnum;
-import com.optimus.util.global.exception.OptimusException;
 import com.optimus.util.global.resp.Resp;
 
 import org.springframework.context.annotation.Configuration;
@@ -12,11 +11,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * ExceptionAdvice
  */
 @Configuration
 @RestControllerAdvice
+@Slf4j
 public class ExceptionAdvice {
 
     /**
@@ -39,6 +41,8 @@ public class ExceptionAdvice {
         resp.setCode(code);
         resp.setMemo(memo);
 
+        log.warn("warn resp is {}", resp);
+
         return ResponseEntity.status(HttpStatus.OK).body(resp);
 
     }
@@ -55,6 +59,8 @@ public class ExceptionAdvice {
         Resp<RespCodeEnum> resp = new Resp<RespCodeEnum>();
         resp.setCode(RespCodeEnum.FAILE.getCode());
         resp.setMemo(RespCodeEnum.FAILE.getMemo());
+
+        log.error("error resp is {}", e);
 
         return ResponseEntity.status(HttpStatus.OK).body(resp);
 

@@ -1,6 +1,4 @@
-package com.optimus.util.global;
-
-import com.optimus.util.global.resp.Resp;
+package com.optimus.util.global.resp;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.MethodParameter;
@@ -11,11 +9,14 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * RespConfig
  */
 @Configuration
 @RestControllerAdvice
+@Slf4j
 public class RespBodyAdvice implements ResponseBodyAdvice<Object> {
 
     /**
@@ -29,7 +30,10 @@ public class RespBodyAdvice implements ResponseBodyAdvice<Object> {
             return arg0;
         }
 
-        return new Resp<>(arg0);
+        Resp<Object> resp = new Resp<>(arg0);
+        log.info("{}.{} is {}", arg1.getMethod().getDeclaringClass().getSimpleName(), arg1.getMethod().getName(), resp);
+
+        return resp;
     }
 
     /**
