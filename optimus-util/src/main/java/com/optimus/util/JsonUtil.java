@@ -12,7 +12,7 @@ import com.optimus.util.global.exception.OptimusException;
  */
 public class JsonUtil {
 
-    public static final ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper mapper = new ObjectMapper();
 
     /**
      * toString
