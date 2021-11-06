@@ -22,4 +22,10 @@ public class OptimusException extends RuntimeException {
 
     private RespCodeEnum respCodeEnum;
 
+    private String memo;
+
+    public OptimusException(RespCodeEnum respCodeEnum) {
+        this.respCodeEnum = respCodeEnum;
+    }
+
 }

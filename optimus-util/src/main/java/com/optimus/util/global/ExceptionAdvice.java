@@ -1,5 +1,7 @@
 package com.optimus.util.global;
 
+import java.util.Objects;
+
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.global.exception.OptimusException;
 import com.optimus.util.global.resp.Resp;
@@ -26,11 +28,18 @@ public class ExceptionAdvice {
     @ExceptionHandler({ OptimusException.class })
     public ResponseEntity<Resp<RespCodeEnum>> exception(OptimusException e) {
 
-        Resp<RespCodeEnum> resp = new Resp<RespCodeEnum>();
-        resp.setCode(e.getRespCodeEnum().getCode());
-        resp.setMemo(e.getRespCodeEnum().getMemo());
+        String code = e.getRespCodeEnum().getCode();
+        String memo = e.getRespCodeEnum().getMemo();
 
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resp);
+        if (!Objects.isNull(e.getMemo())) {
+            memo = e.getMemo();
+        }
+
+        Resp<RespCodeEnum> resp = new Resp<RespCodeEnum>();
+        resp.setCode(code);
+        resp.setMemo(memo);
+
+        return ResponseEntity.status(HttpStatus.OK).body(resp);
 
     }
 
@@ -47,7 +56,7 @@ public class ExceptionAdvice {
         resp.setCode(RespCodeEnum.FAILE.getCode());
         resp.setMemo(RespCodeEnum.FAILE.getMemo());
 
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resp);
+        return ResponseEntity.status(HttpStatus.OK).body(resp);
 
     }
 

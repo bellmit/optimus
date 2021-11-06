@@ -1,6 +1,7 @@
 package com.optimus.web.common;
 
 import com.optimus.service.common.CommonSystemConfigService;
+import com.optimus.util.JsonUtil;
 // import com.optimus.util.constants.RespCodeEnum;
 // import com.optimus.util.global.exception.OptimusException;
 import com.optimus.web.common.resp.GetCommonSystemConfigResp;
@@ -34,6 +35,11 @@ public class CommonSystemConfigController {
 
         GetCommonSystemConfigResp resp = new GetCommonSystemConfigResp();
 
+        String value = commonSystemConfigService.getCommonSystemConfigByKey(key);
+        resp.setValue(value);
+
+        log.info("resp is {}", resp);
+
         // 验证全局异常示例代码
         // int res = 10 / 0;
         // log.info("res is {}", res);
@@ -42,8 +48,10 @@ public class CommonSystemConfigController {
         // throw new OptimusException(RespCodeEnum.INVALID_PARAM);
         // }
 
-        String value = commonSystemConfigService.getCommonSystemConfigByKey(key);
-        resp.setValue(value);
+        // jackson示例代码
+        String jsonString = JsonUtil.toString(resp);
+        log.info("bean to jsonString is {}", jsonString);
+        log.info("jsonString to bean is {}", JsonUtil.toBean(jsonString, GetCommonSystemConfigResp.class));
 
         return resp;
 
