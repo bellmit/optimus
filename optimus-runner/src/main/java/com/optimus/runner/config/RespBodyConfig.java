@@ -1,4 +1,6 @@
-package com.optimus.util.global.resp;
+package com.optimus.runner.config;
+
+import com.optimus.util.global.resp.Resp;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.MethodParameter;
@@ -12,12 +14,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * RespConfig
+ * RespBodyConfig
  */
 @Configuration
 @RestControllerAdvice
 @Slf4j
-public class RespBodyAdvice implements ResponseBodyAdvice<Object> {
+public class RespBodyConfig implements ResponseBodyAdvice<Object> {
 
     /**
      * beforeBodyWrite

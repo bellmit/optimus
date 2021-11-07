@@ -1,6 +1,7 @@
-package com.optimus.util.global.jackson;
+package com.optimus.runner.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.optimus.util.JsonUtil;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -10,11 +11,11 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 /**
- * JacksonObjectMapperConfig
+ * JacksoConfig
  */
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(Jackson2ObjectMapperBuilder.class)
-public class JacksonObjectMapperConfig {
+public class JacksonConfig {
 
     /**
      * jacksonObjectMapper
@@ -27,7 +28,10 @@ public class JacksonObjectMapperConfig {
     @ConditionalOnMissingBean
     public ObjectMapper jacksonObjectMapper(Jackson2ObjectMapperBuilder builder) {
 
-        return builder.createXmlMapper(false).build();
+        ObjectMapper objectMapper = builder.createXmlMapper(false).build();
+        JsonUtil.setObjectMapper(objectMapper);
+
+        return objectMapper;
 
     }
 

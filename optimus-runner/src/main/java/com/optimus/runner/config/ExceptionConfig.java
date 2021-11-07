@@ -1,8 +1,9 @@
-package com.optimus.util.global.exception;
+package com.optimus.runner.config;
 
 import java.util.Objects;
 
 import com.optimus.util.constants.RespCodeEnum;
+import com.optimus.util.global.exception.OptimusException;
 import com.optimus.util.global.resp.Resp;
 
 import org.springframework.context.annotation.Configuration;
@@ -14,12 +15,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * ExceptionAdvice
+ * ExceptionConfig
  */
 @Configuration
 @RestControllerAdvice
 @Slf4j
-public class ExceptionAdvice {
+public class ExceptionConfig {
 
     /**
      * exception for OptimusException

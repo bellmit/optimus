@@ -1,6 +1,7 @@
-package com.optimus.util.global.req;
+package com.optimus.runner.config;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
 import org.springframework.context.annotation.Configuration;
@@ -13,12 +14,12 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdvice;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * ReqBodyAdvice
+ * ReqBodyConfig
  */
 @Configuration
 @RestControllerAdvice
 @Slf4j
-public class ReqBodyAdvice implements RequestBodyAdvice {
+public class ReqBodyConfig implements RequestBodyAdvice {
 
     /**
      * supports
@@ -48,7 +49,8 @@ public class ReqBodyAdvice implements RequestBodyAdvice {
     public Object afterBodyRead(Object arg0, HttpInputMessage arg1, MethodParameter arg2, Type arg3,
             Class<? extends HttpMessageConverter<?>> arg4) {
 
-        log.info("{}.{} is {}", arg2.getMethod().getDeclaringClass().getSimpleName(), arg2.getMethod().getName(), arg0);
+        Method method = arg2.getMethod();
+        log.info("{}.{} is {}", method.getDeclaringClass().getSimpleName(), method.getName(), arg0);
 
         return arg0;
     }

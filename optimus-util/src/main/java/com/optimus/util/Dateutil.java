@@ -14,7 +14,7 @@ public class Dateutil {
     public static final String TIME_PATTERN = "HH:mm:ss";
 
     /**
-     * 当前日期
+     * currentDate
      * 
      * @return
      */

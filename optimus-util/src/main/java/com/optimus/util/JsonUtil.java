@@ -9,17 +9,10 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.global.exception.OptimusException;
-import com.optimus.util.global.jackson.JacksonObjectMapperConfig;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.stereotype.Component;
 
 /**
  * JsonUtil
  */
-@Component
-@ConditionalOnClass(JacksonObjectMapperConfig.class)
 public class JsonUtil {
 
     private static ObjectMapper objectMapper;
@@ -27,11 +20,10 @@ public class JsonUtil {
     /**
      * setObjectMapper
      * 
-     * @param jacksonObjectMapper
+     * @param objectMapper
      */
-    @Autowired
-    public void setObjectMapper(ObjectMapper jacksonObjectMapper) {
-        JsonUtil.objectMapper = jacksonObjectMapper;
+    public static void setObjectMapper(ObjectMapper objectMapper) {
+        JsonUtil.objectMapper = objectMapper;
     }
 
     /**
