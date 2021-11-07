@@ -1,8 +1,12 @@
 package com.optimus.web.common;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.optimus.service.common.CommonSystemConfigService;
 import com.optimus.web.common.req.GetCommonSystemConfigReq;
-// import com.optimus.util.JsonUtil;
+import com.optimus.util.JsonUtil;
 // import com.optimus.util.constants.RespCodeEnum;
 // import com.optimus.util.global.exception.OptimusException;
 import com.optimus.web.common.resp.GetCommonSystemConfigResp;
@@ -48,10 +52,28 @@ public class CommonSystemConfigController {
         // }
 
         // jackson示例代码
-        // String jsonString = JsonUtil.toString(resp);
-        // log.info("bean to jsonString is {}", jsonString);
-        // log.info("jsonString to bean is {}", JsonUtil.toBean(jsonString,
-        // GetCommonSystemConfigResp.class));
+        String jsonString = JsonUtil.toString(resp);
+        log.info("bean to jsonString is {}", jsonString);
+        log.info("jsonString to bean is {}", JsonUtil.toBean(jsonString, GetCommonSystemConfigResp.class));
+
+        GetCommonSystemConfigResp resp1 = new GetCommonSystemConfigResp();
+        resp1.setValue("1");
+        GetCommonSystemConfigResp resp2 = new GetCommonSystemConfigResp();
+        resp2.setValue("2");
+
+        List<GetCommonSystemConfigResp> respList = new ArrayList<>();
+        respList.add(resp1);
+        respList.add(resp2);
+
+        jsonString = JsonUtil.toString(respList);
+        log.info("bean to jsonString is {}", jsonString);
+
+        respList = JsonUtil.toBean(jsonString, new TypeReference<List<GetCommonSystemConfigResp>>() {
+        });
+        log.info("jsonString to collect is {}", respList);
+
+        Object object = JsonUtil.toBean(jsonString, List.class, GetCommonSystemConfigResp.class);
+        log.info("jsonString to collect is {}", object);
 
         return resp;
 

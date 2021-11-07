@@ -15,8 +15,7 @@ public enum RespCodeEnum {
     SUCCESS("1000", "成功"), //
     FAILE("1001", "失败"), //
     INVALID_PARAM("1002", "无效参数"), //
-    NOTNULL_PARAM("1003", "参数不能为空"), //
-    ERROR_CONVERT("1004", "转换异常"), //
+    ERROR_CONVERT("1003", "转换异常"), //
 
     /* ---------会员类编码--------- */
 

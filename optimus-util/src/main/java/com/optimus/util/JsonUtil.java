@@ -1,18 +1,38 @@
 package com.optimus.util;
 
+import java.io.IOException;
 import java.util.Objects;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.global.exception.OptimusException;
+import com.optimus.util.global.jackson.JacksonObjectMapperConfig;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.stereotype.Component;
 
 /**
  * JsonUtil
  */
+@Component
+@ConditionalOnClass(JacksonObjectMapperConfig.class)
 public class JsonUtil {
 
-    private static final ObjectMapper mapper = new ObjectMapper();
+    private static ObjectMapper objectMapper;
+
+    /**
+     * setObjectMapper
+     * 
+     * @param jacksonObjectMapper
+     */
+    @Autowired
+    public void setObjectMapper(ObjectMapper jacksonObjectMapper) {
+        JsonUtil.objectMapper = jacksonObjectMapper;
+    }
 
     /**
      * toString
@@ -26,17 +46,13 @@ public class JsonUtil {
             return null;
         }
 
-        String result = null;
-
         try {
 
-            result = mapper.writeValueAsString(object);
+            return objectMapper.writeValueAsString(object);
 
         } catch (JsonProcessingException e) {
-            throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "Json转换异常");
+            throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "ObjectToJson转换异常");
         }
-
-        return result;
 
     }
 
@@ -44,28 +60,74 @@ public class JsonUtil {
      * toBean
      * 
      * @param <T>
-     * @param jsonString
-     * @param tClass
+     * @param json
+     * @param clazz
      * @return
      */
-    public static <T> T toBean(String jsonString, Class<T> tClass) {
+    public static <T> T toBean(String json, Class<T> clazz) {
 
-        if (Objects.isNull(jsonString)) {
+        if (Objects.isNull(json)) {
             return null;
         }
 
-        T result = null;
+        try {
+
+            return objectMapper.readValue(json, clazz);
+
+        } catch (JsonProcessingException e) {
+            throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "JsonToBean转换异常");
+        }
+
+    }
+
+    /**
+     * toBean
+     * 
+     * @param <T>
+     * @param json
+     * @param typeReference
+     * @return
+     */
+    public static <T> T toBean(String json, TypeReference<T> typeReference) {
+
+        if (Objects.isNull(json) || Objects.isNull(typeReference)) {
+            return null;
+        }
+
+        if (typeReference.getType().equals(String.class)) {
+            return null;
+        }
 
         try {
 
-            result = mapper.readValue(jsonString, tClass);
+            return objectMapper.readValue(json, typeReference);
 
-        } catch (JsonProcessingException e) {
-            throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "Json转换异常");
+        } catch (IOException e) {
+            throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "JsonToCollection转换异常");
         }
 
-        return result;
+    }
 
+    /**
+     * toBean
+     * 
+     * @param <T>
+     * @param json
+     * @param collectionClass
+     * @param elementClasses
+     * @return
+     */
+    public static <T> T toBean(String json, Class<?> collectionClass, Class<?>... elementClasses) {
+
+        try {
+
+            JavaType javaType = objectMapper.getTypeFactory().constructParametricType(collectionClass, elementClasses);
+
+            return objectMapper.readValue(json, javaType);
+
+        } catch (IOException e) {
+            throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "JsonToObject转换异常");
+        }
     }
 
 }
