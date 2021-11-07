@@ -31,6 +31,12 @@ public class CommonSystemConfigController {
     @Autowired
     private CommonSystemConfigService commonSystemConfigService;
 
+    /**
+     * getCommonSystemConfig
+     * 
+     * @param req
+     * @return
+     */
     @GetMapping("/getCommonSystemConfig")
     public GetCommonSystemConfigResp getCommonSystemConfig(@RequestBody GetCommonSystemConfigReq req) {
 
