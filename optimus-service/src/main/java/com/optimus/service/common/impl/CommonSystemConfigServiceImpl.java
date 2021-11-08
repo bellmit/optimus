@@ -4,12 +4,14 @@ import com.optimus.manager.common.CommonSystemConfigManager;
 import com.optimus.service.common.CommonSystemConfigService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  * CommonSystemConfigServiceImpl
+ * 
+ * 示例代码
  */
-@Component
+@Service
 public class CommonSystemConfigServiceImpl implements CommonSystemConfigService {
 
     @Autowired

@@ -8,7 +8,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.optimus.util.constants.RespCodeEnum;
-import com.optimus.util.global.exception.OptimusException;
+import com.optimus.util.exception.OptimusException;
 
 /**
  * JsonUtil

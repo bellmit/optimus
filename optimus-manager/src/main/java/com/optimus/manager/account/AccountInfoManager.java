@@ -10,7 +10,7 @@ import com.optimus.manager.account.model.ChangeAmountModel;
 public interface AccountInfoManager {
 
     /**
-     * changeAmount
+     * 变更账户金额
      * 
      * @param changeAmountModelList
      * @return

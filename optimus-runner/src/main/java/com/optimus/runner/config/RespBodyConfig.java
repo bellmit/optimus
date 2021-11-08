@@ -1,6 +1,6 @@
 package com.optimus.runner.config;
 
-import com.optimus.util.global.resp.Resp;
+import com.optimus.util.resp.Resp;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.MethodParameter;

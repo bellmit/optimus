@@ -3,13 +3,19 @@ package com.optimus.manager.account.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import com.optimus.util.constants.account.AccountChangeAmountTypeEnum;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
  * ChangeAmountModel
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @ToString
 public class ChangeAmountModel implements Serializable {
 
@@ -19,7 +25,7 @@ public class ChangeAmountModel implements Serializable {
 
     private String orderId;
 
-    private String code;
+    private AccountChangeAmountTypeEnum accountAmountChangeType;
 
     private BigDecimal amount;
 
