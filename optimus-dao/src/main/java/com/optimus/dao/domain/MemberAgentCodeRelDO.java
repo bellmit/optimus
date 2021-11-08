@@ -13,7 +13,7 @@ import lombok.ToString;
 @ToString
 public class MemberAgentCodeRelDO implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2568884923022155298L;
 
     private Long id;
 

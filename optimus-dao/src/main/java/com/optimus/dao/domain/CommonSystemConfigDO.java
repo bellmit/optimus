@@ -10,7 +10,7 @@ import lombok.ToString;
 @ToString
 public class CommonSystemConfigDO implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -4964796267082044767L;
 
     private Long id;
 

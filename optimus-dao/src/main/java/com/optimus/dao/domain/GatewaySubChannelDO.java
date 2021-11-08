@@ -13,7 +13,7 @@ import lombok.ToString;
 @ToString
 public class GatewaySubChannelDO implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 9126865979674298686L;
 
     private Long id;
 

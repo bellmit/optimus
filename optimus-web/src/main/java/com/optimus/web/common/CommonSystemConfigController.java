@@ -6,6 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.optimus.service.common.CommonSystemConfigService;
 import com.optimus.web.common.req.GetCommonSystemConfigReq;
+import com.optimus.util.Dateutil;
 import com.optimus.util.JsonUtil;
 import com.optimus.web.common.resp.GetCommonSystemConfigResp;
 import com.optimus.web.common.validate.CommonSystemConfigValidate;
@@ -46,6 +47,7 @@ public class CommonSystemConfigController {
 
         String value = commonSystemConfigService.getCommonSystemConfigByBaseKey(req.getBaseKey());
         resp.setValue(value);
+        resp.setDate(Dateutil.currentDate());
 
         log.info("value is {}", value);
 

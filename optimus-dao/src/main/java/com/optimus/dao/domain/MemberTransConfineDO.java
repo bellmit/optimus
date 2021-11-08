@@ -14,7 +14,7 @@ import lombok.ToString;
 @ToString
 public class MemberTransConfineDO implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -4035940679621994839L;
 
     private Long id;
 

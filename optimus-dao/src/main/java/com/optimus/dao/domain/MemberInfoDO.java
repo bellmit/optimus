@@ -13,7 +13,7 @@ import lombok.ToString;
 @ToString
 public class MemberInfoDO implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -7029495333118659521L;
 
     private Long id;
 

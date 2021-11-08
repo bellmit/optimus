@@ -14,7 +14,7 @@ import lombok.ToString;
 @ToString
 public class OrderDetailDO implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -1589077009756433789L;
 
     private Long id;
 

@@ -14,7 +14,7 @@ import lombok.ToString;
 @ToString
 public class MemberChannelDO implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -716903795015284362L;
 
     private Long id;
 

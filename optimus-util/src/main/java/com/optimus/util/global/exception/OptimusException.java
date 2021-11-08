@@ -18,7 +18,7 @@ import lombok.ToString;
 @ToString
 public class OptimusException extends RuntimeException {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 7068851877027924285L;
 
     private RespCodeEnum respCodeEnum;
 

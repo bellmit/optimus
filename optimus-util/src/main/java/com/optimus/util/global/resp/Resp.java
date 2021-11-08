@@ -16,7 +16,7 @@ import lombok.ToString;
 @ToString
 public class Resp<T> implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -5107305879027514980L;
 
     private String code = RespCodeEnum.SUCCESS.getCode();
 
