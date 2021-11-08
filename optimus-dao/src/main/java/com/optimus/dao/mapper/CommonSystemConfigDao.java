@@ -10,11 +10,11 @@ import org.apache.ibatis.annotations.Param;
 public interface CommonSystemConfigDao {
 
     /**
-     * getCommonSystemConfigByKey
+     * getCommonSystemConfigByBaseKey
      * 
-     * @param key
+     * @param baseKey
      * @return
      */
-    CommonSystemConfigDO getCommonSystemConfigByKey(@Param("key") String key);
+    CommonSystemConfigDO getCommonSystemConfigByBaseKey(@Param("baseKey") String baseKey);
 
 }

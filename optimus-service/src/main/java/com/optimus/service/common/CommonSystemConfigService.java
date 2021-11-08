@@ -8,11 +8,11 @@ package com.optimus.service.common;
 public interface CommonSystemConfigService {
 
     /**
-     * getCommonSystemConfigByKey
+     * getCommonSystemConfigByBaseKey
      * 
-     * @param key
+     * @param baseKey
      * @return
      */
-    String getCommonSystemConfigByKey(String key);
+    String getCommonSystemConfigByBaseKey(String baseKey);
 
 }

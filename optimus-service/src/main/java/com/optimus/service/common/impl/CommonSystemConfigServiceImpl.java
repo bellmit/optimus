@@ -16,8 +16,8 @@ public class CommonSystemConfigServiceImpl implements CommonSystemConfigService 
     private CommonSystemConfigManager commonSystemConfigManager;
 
     @Override
-    public String getCommonSystemConfigByKey(String key) {
-        return commonSystemConfigManager.getCommonSystemConfigByKey(key);
+    public String getCommonSystemConfigByBaseKey(String baseKey) {
+        return commonSystemConfigManager.getCommonSystemConfigByBaseKey(baseKey);
     }
 
 }

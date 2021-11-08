@@ -4,7 +4,7 @@
 
   <resultMap id="BaseResultMap" type="com.optimus.dao.domain.CommonSystemConfigDO">
     <id column="ID" jdbcType="DECIMAL" property="id" />
-    <result column="KEY" jdbcType="VARCHAR" property="key" />
+    <result column="BASE_KEY" jdbcType="VARCHAR" property="baseKey" />
     <result column="VALUE" jdbcType="VARCHAR" property="value" />
     <result column="REMARK" jdbcType="VARCHAR" property="remark" />
     <result column="CREATE_BY" jdbcType="VARCHAR" property="createBy" />
@@ -14,15 +14,14 @@
   </resultMap>
 
   <sql id="Base_Column_List">
-    ID, KEY, VALUE, REMARK, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME
+    ID, BASE_KEY, VALUE, REMARK, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME
   </sql>
 
-  <select id="getCommonSystemConfigByKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="getCommonSystemConfigByBaseKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     SELECT 
     <include refid="Base_Column_List" />
     FROM T_COMMON_SYSTEM_CONFIG
-    WHERE KEY = #{key,jdbcType=VARCHAR}
-    AND ROWNUM &lt;= 1000
+    WHERE BASE_KEY = #{baseKey,jdbcType=VARCHAR}
   </select>
 
 </mapper>

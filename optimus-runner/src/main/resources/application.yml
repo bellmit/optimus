@@ -1,9 +1,9 @@
 spring:
     datasource:
-        url: jdbc:oracle:thin:@182.254.152.205:1521:ORCL
-        username: system
-        password: TrGAF7tn9L
-        driver-class-name: oracle.jdbc.OracleDriver
+        url: jdbc:sqlserver://18.163.194.110:1433;databaseName=Hulk
+        username: sa
+        password: WMENkdaPL321
+        driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
         type: com.zaxxer.hikari.HikariDataSource
         hikari:
             pool-name: Optimus_HikariCP         # 连接池名称

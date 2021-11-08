@@ -44,7 +44,7 @@ public class CommonSystemConfigController {
 
         CommonSystemConfigValidate.validateGetCommonSystemConfig(req);
 
-        String value = commonSystemConfigService.getCommonSystemConfigByKey(req.getKey());
+        String value = commonSystemConfigService.getCommonSystemConfigByBaseKey(req.getBaseKey());
         resp.setValue(value);
 
         log.info("value is {}", value);

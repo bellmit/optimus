@@ -14,7 +14,7 @@ public class CommonSystemConfigDO implements Serializable {
 
     private Long id;
 
-    private String key;
+    private String baseKey;
 
     private String value;
 

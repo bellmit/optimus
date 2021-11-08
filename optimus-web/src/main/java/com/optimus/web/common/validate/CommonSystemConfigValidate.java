@@ -24,8 +24,8 @@ public class CommonSystemConfigValidate {
             throw new OptimusException(RespCodeEnum.INVALID_PARAM, "入参对象不能为空");
         }
 
-        if (!StringUtils.hasLength(req.getKey())) {
-            throw new OptimusException(RespCodeEnum.INVALID_PARAM, "key不能为空");
+        if (!StringUtils.hasLength(req.getBaseKey())) {
+            throw new OptimusException(RespCodeEnum.INVALID_PARAM, "baseKey不能为空");
         }
 
     }

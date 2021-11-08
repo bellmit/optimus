@@ -24,18 +24,18 @@ public class CommonSystemConfigManagerImpl implements CommonSystemConfigManager 
     private CommonSystemConfigDao commonSystemConfigDao;
 
     @Override
-    @Cacheable(value = "systemConfig", key = "#key", unless = "#result == null")
-    public String getCommonSystemConfigByKey(String key) {
+    @Cacheable(value = "systemConfig", key = "#baseKey", unless = "#result == null")
+    public String getCommonSystemConfigByBaseKey(String baseKey) {
 
         String value = null;
 
-        if (!StringUtils.hasLength(key)) {
-            log.warn("key is null");
+        if (!StringUtils.hasLength(baseKey)) {
+            log.warn("baseKey is null");
             return value;
         }
 
-        CommonSystemConfigDO commonSystemConfigDO = commonSystemConfigDao.getCommonSystemConfigByKey(key);
-        log.info("getCommonSystemConfigByKey is {}", commonSystemConfigDO);
+        CommonSystemConfigDO commonSystemConfigDO = commonSystemConfigDao.getCommonSystemConfigByBaseKey(baseKey);
+        log.info("getCommonSystemConfigByBaseKey is {}", commonSystemConfigDO);
 
         if (Objects.isNull(commonSystemConfigDO)) {
             return value;

@@ -6,11 +6,11 @@ package com.optimus.manager.common;
 public interface CommonSystemConfigManager {
 
     /**
-     * getCommonSystemConfigByKey
+     * getCommonSystemConfigByBaseKey
      * 
-     * @param key
+     * @param baseKey
      * @return
      */
-    String getCommonSystemConfigByKey(String key);
+    String getCommonSystemConfigByBaseKey(String baseKey);
 
 }
