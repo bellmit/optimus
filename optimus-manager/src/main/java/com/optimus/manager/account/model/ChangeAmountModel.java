@@ -25,7 +25,7 @@ public class ChangeAmountModel implements Serializable {
 
     private String orderId;
 
-    private AccountChangeAmountTypeEnum accountAmountChangeType;
+    private AccountChangeAmountTypeEnum accountAmountChangeTypeEnum;
 
     private BigDecimal amount;
 
