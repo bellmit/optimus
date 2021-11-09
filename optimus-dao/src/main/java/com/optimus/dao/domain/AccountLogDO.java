@@ -8,6 +8,8 @@ import lombok.Data;
 
 /**
  * AccountLogDO
+ * 
+ * @author sunxp
  */
 @Data
 public class AccountLogDO implements Serializable {

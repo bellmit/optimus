@@ -5,6 +5,11 @@ import java.util.Date;
 
 import lombok.Data;
 
+/**
+ * CommonSystemConfigDO
+ * 
+ * @author sunxp
+ */
 @Data
 public class CommonSystemConfigDO implements Serializable {
 
