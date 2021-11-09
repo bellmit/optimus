@@ -90,7 +90,7 @@ public class ReqBodyConfig implements RequestBodyAdvice {
         }
 
         String sign = SignUtil.sign(map, memberInfoList.get(0).getMemberKey());
-        if (signObject.toString().equals(sign)) {
+        if (!signObject.toString().equals(sign)) {
             throw new OptimusException(RespCodeEnum.ERROR_SIGN);
         }
 
