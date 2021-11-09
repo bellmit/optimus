@@ -39,7 +39,7 @@
         <!-- 不丢弃日志 -->
         <discardingThreshold>0</discardingThreshold>
         <!-- 队列深度 -->
-        <queueSize>102400</queueSize>
+        <queueSize>1024</queueSize>
         <!-- 队列入队时非阻塞 -->
         <neverBlock>true</neverBlock>
         <!-- 附加appender -->
