@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * CacheConfig
+ * 
+ * @author sunxp
  */
 @Configuration
 @EnableCaching

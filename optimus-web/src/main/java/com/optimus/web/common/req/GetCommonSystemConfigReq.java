@@ -1,16 +1,18 @@
 package com.optimus.web.common.req;
 
-import java.io.Serializable;
+import com.optimus.util.req.Req;
 
 import lombok.Data;
 import lombok.ToString;
 
 /**
  * GetCommonSystemConfigReq
+ * 
+ * @author sunxp
  */
 @Data
 @ToString
-public class GetCommonSystemConfigReq implements Serializable {
+public class GetCommonSystemConfigReq extends Req {
 
     private static final long serialVersionUID = 1L;
 

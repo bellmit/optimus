@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Param;
 
 /**
  * CommonSystemConfigDao
+ * 
+ * @author sunxp
  */
 public interface CommonSystemConfigDao {
 

@@ -1,4 +1,4 @@
-package com.optimus.util.global.exception;
+package com.optimus.util.exception;
 
 import com.optimus.util.constants.RespCodeEnum;
 
@@ -10,6 +10,8 @@ import lombok.ToString;
 
 /**
  * OptimusException
+ * 
+ * @author sunxp
  */
 @Getter
 @Setter

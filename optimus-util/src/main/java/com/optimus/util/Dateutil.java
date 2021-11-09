@@ -4,8 +4,10 @@ import java.util.Date;
 
 /**
  * Dateutil
+ * 
+ * @author sunxp
  */
-public class Dateutil {
+public class DateUtil {
 
     public static final String DATETIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
 

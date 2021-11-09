@@ -12,6 +12,8 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 /**
  * JacksoConfig
+ * 
+ * @author sunxp
  */
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(Jackson2ObjectMapperBuilder.class)

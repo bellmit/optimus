@@ -3,13 +3,15 @@ package com.optimus.web.common.validate;
 import java.util.Objects;
 
 import com.optimus.util.constants.RespCodeEnum;
-import com.optimus.util.global.exception.OptimusException;
+import com.optimus.util.exception.OptimusException;
 import com.optimus.web.common.req.GetCommonSystemConfigReq;
 
 import org.springframework.util.StringUtils;
 
 /**
  * CommonSystemConfigValidate
+ * 
+ * @author sunxp
  */
 public class CommonSystemConfigValidate {
 

@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 
 /**
  * CommonSystemConfigServiceImpl
+ * 
+ * @author sunxp
  */
 @Component
 public class CommonSystemConfigServiceImpl implements CommonSystemConfigService {

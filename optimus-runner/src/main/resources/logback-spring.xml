@@ -2,12 +2,14 @@
 <configuration debug="false">
 
     <!-- log address -->
-    <property name="LOG_HOME" value="/Users/admin/logs" />
+    <property name="LOG-HOME" value="/Users/admin/logs" />
+    <!-- app name -->
+    <property name="APP-NAME" value="optimus" />
 
     <!-- sudout log -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <!-- 格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度,%msg：日志消息，%n是换行符 -->
+            <!-- 格式化输出:%d表示日期,%thread表示线程名,%-5level:级别从左显示5个字符宽度,%msg:日志消息,%n是换行符 -->
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS, GMT+8} [%thread] %-5level %logger{50} - %msg%n</pattern>
             <!-- 编码 -->
             <charset>UTF-8</charset>
@@ -16,18 +18,32 @@
 
     <!-- file log -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- 日志文件输出的文件名 -->
-            <FileNamePattern>${LOG_HOME}/optimus.%d{yyyy-MM-dd, GMT+8}.log</FileNamePattern>
+            <FileNamePattern>${LOG-HOME}/%d{yyyy-MM-dd, GMT+8}/${APP-NAME}.%d{yyyy-MM-dd, GMT+8}.%i.log</FileNamePattern>
+            <!-- 文件大小 -->
+            <MaxFileSize>20MB</MaxFileSize>
             <!-- 日志文件保留天数 -->
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <!-- 格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
+            <!-- 格式化输出:%d表示日期,%thread表示线程名,%-5level:级别从左显示5个字符宽度%msg:日志消息,%n是换行符 -->
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS, GMT+8} [%thread] %-5level %logger{50} - %msg%n</pattern>
             <!-- 编码 -->
             <charset>UTF-8</charset>
         </encoder>
+    </appender>
+
+    <!-- async file log -->
+    <appender name="ASYNC-FILE" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- 不丢弃日志 -->
+        <discardingThreshold>0</discardingThreshold>
+        <!-- 队列深度 -->
+        <queueSize>1024</queueSize>
+        <!-- 队列入队时非阻塞 -->
+        <neverBlock>true</neverBlock>
+        <!-- 附加appender -->
+        <appender-ref ref="FILE" />
     </appender>
 
     <!-- mybatis log -->
@@ -36,6 +52,6 @@
     <!-- log level -->
     <root level="INFO">
         <appender-ref ref="STDOUT" level="DEBUG" />
-        <appender-ref ref="FILE" />
+        <appender-ref ref="ASYNC-FILE" />
     </root>
 </configuration>

@@ -3,8 +3,8 @@ package com.optimus.runner.config;
 import java.util.Objects;
 
 import com.optimus.util.constants.RespCodeEnum;
-import com.optimus.util.global.exception.OptimusException;
-import com.optimus.util.global.resp.Resp;
+import com.optimus.util.exception.OptimusException;
+import com.optimus.util.resp.Resp;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -16,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * ExceptionConfig
+ * 
+ * @author sunxp
  */
 @Configuration
 @RestControllerAdvice

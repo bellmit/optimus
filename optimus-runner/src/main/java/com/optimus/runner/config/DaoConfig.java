@@ -6,6 +6,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * DaoConfig
+ * 
+ * @author sunxp
  */
 @Configuration
 @EnableTransactionManagement

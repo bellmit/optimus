@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * CommonSystemConfigController
  * 
- * 示例代码
+ * @author sunxp
  */
 @RestController
 @RequestMapping(value = "/optimus/common")
@@ -33,6 +33,11 @@ public class CommonSystemConfigController {
 
     /**
      * getCommonSystemConfig
+     * 
+     * http://127.0.0.1:8080/optimus/common/getCommonSystemConfig
+     * 
+     * {"key": "ORDER_RELEASE_TIME", "date": "2021-11-23 08:00:00", "sign":
+     * "7f4a0c5740838447b71e76c6fb6e2d13", "memberId": "100001"}
      * 
      * @param req
      * @return
@@ -47,25 +52,30 @@ public class CommonSystemConfigController {
         String value = commonSystemConfigService.getCommonSystemConfigByKey(req.getKey());
         resp.setValue(value);
 
-        log.info("value is {}", value);
+        return resp;
 
-        // 验证全局异常示例代码
-        // int res = 10 / 0;
-        // log.info("res is {}", res);
+    }
+
+    /**
+     * 示例代码
+     */
+    protected void demo() {
+
+        GetCommonSystemConfigResp resp = new GetCommonSystemConfigResp();
+        resp.setValue("10");
+
+        // 全局异常示例代码
+        int res = 10 / 0;
+        log.info("res is {}", res);
 
         // jackson示例代码
         String jsonString = JsonUtil.toString(resp);
         log.info("bean to jsonString is {}", jsonString);
         log.info("jsonString to bean is {}", JsonUtil.toBean(jsonString, GetCommonSystemConfigResp.class));
 
-        GetCommonSystemConfigResp resp1 = new GetCommonSystemConfigResp();
-        resp1.setValue("1");
-        GetCommonSystemConfigResp resp2 = new GetCommonSystemConfigResp();
-        resp2.setValue("2");
-
         List<GetCommonSystemConfigResp> respList = new ArrayList<>();
-        respList.add(resp1);
-        respList.add(resp2);
+        respList.add(new GetCommonSystemConfigResp("1"));
+        respList.add(new GetCommonSystemConfigResp("2"));
 
         jsonString = JsonUtil.toString(respList);
         log.info("bean to jsonString is {}", jsonString);
@@ -73,11 +83,6 @@ public class CommonSystemConfigController {
         respList = JsonUtil.toBean(jsonString, new TypeReference<List<GetCommonSystemConfigResp>>() {
         });
         log.info("jsonString to collect is {}", respList);
-
-        Object object = JsonUtil.toBean(jsonString, List.class, GetCommonSystemConfigResp.class);
-        log.info("jsonString to collect is {}", object);
-
-        return resp;
 
     }
 }
