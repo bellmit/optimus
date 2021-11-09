@@ -4,13 +4,11 @@ import java.io.Serializable;
 import java.util.Date;
 
 import lombok.Data;
-import lombok.ToString;
 
 /**
  * MemberAgentCodeRelDO
  */
 @Data
-@ToString
 public class MemberAgentCodeRelDO implements Serializable {
 
     private static final long serialVersionUID = 2568884923022155298L;

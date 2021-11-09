@@ -1,11 +1,10 @@
 package com.optimus.util;
 
 import java.io.IOException;
-import java.util.Objects;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.exception.OptimusException;
@@ -27,16 +26,30 @@ public class JsonUtil {
     }
 
     /**
+     * toTree
+     * 
+     * @param json
+     * @return
+     */
+    public static JsonNode toTree(String json) {
+
+        try {
+
+            return objectMapper.readTree(json);
+
+        } catch (JsonProcessingException e) {
+            throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "readTree转换异常");
+        }
+
+    }
+
+    /**
      * toString
      * 
      * @param object
      * @return
      */
     public static String toString(Object object) {
-
-        if (Objects.isNull(object)) {
-            return null;
-        }
 
         try {
 
@@ -58,10 +71,6 @@ public class JsonUtil {
      */
     public static <T> T toBean(String json, Class<T> clazz) {
 
-        if (Objects.isNull(json)) {
-            return null;
-        }
-
         try {
 
             return objectMapper.readValue(json, clazz);
@@ -82,14 +91,6 @@ public class JsonUtil {
      */
     public static <T> T toBean(String json, TypeReference<T> typeReference) {
 
-        if (Objects.isNull(json) || Objects.isNull(typeReference)) {
-            return null;
-        }
-
-        if (typeReference.getType().equals(String.class)) {
-            return null;
-        }
-
         try {
 
             return objectMapper.readValue(json, typeReference);
@@ -98,28 +99,6 @@ public class JsonUtil {
             throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "JsonToCollection转换异常");
         }
 
-    }
-
-    /**
-     * toBean
-     * 
-     * @param <T>
-     * @param json
-     * @param collectionClass
-     * @param elementClasses
-     * @return
-     */
-    public static <T> T toBean(String json, Class<?> collectionClass, Class<?>... elementClasses) {
-
-        try {
-
-            JavaType javaType = objectMapper.getTypeFactory().constructParametricType(collectionClass, elementClasses);
-
-            return objectMapper.readValue(json, javaType);
-
-        } catch (IOException e) {
-            throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "JsonToObject转换异常");
-        }
     }
 
 }

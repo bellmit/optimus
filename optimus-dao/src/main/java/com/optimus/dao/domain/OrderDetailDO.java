@@ -5,13 +5,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import lombok.Data;
-import lombok.ToString;
 
 /**
  * OrderDetailDO
  */
 @Data
-@ToString
 public class OrderDetailDO implements Serializable {
 
     private static final long serialVersionUID = -1589077009756433789L;

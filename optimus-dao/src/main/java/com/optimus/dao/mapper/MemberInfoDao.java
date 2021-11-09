@@ -1,5 +1,7 @@
 package com.optimus.dao.mapper;
 
+import java.util.List;
+
 import com.optimus.dao.domain.MemberInfoDO;
 
 /**
@@ -14,6 +16,14 @@ public interface MemberInfoDao {
      * @return
      */
     MemberInfoDO getMemberInfoById(Long id);
+
+    /**
+     * getMemberInfoList
+     * 
+     * @param memberInfoDO
+     * @return
+     */
+    List<MemberInfoDO> getMemberInfoList(MemberInfoDO memberInfoDO);
 
     /**
      * addMemberInfo

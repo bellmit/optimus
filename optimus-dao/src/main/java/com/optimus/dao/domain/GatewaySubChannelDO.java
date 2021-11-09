@@ -4,13 +4,11 @@ import java.io.Serializable;
 import java.util.Date;
 
 import lombok.Data;
-import lombok.ToString;
 
 /**
  * GatewaySubChannelDO
  */
 @Data
-@ToString
 public class GatewaySubChannelDO implements Serializable {
 
     private static final long serialVersionUID = 9126865979674298686L;

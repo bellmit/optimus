@@ -4,13 +4,11 @@ import java.io.Serializable;
 import java.util.Date;
 
 import lombok.Data;
-import lombok.ToString;
 
 /**
  * GatewayChannelDO
  */
 @Data
-@ToString
 public class GatewayChannelDO implements Serializable {
 
     private static final long serialVersionUID = -7977533896868875306L;

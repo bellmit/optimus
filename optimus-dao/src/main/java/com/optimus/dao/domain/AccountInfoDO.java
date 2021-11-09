@@ -5,13 +5,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import lombok.Data;
-import lombok.ToString;
 
 /**
  * AccountInfoDO
  */
 @Data
-@ToString
 public class AccountInfoDO implements Serializable {
 
     private static final long serialVersionUID = 3292437107022937393L;

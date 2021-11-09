@@ -4,13 +4,11 @@ import java.io.Serializable;
 import java.util.Date;
 
 import lombok.Data;
-import lombok.ToString;
 
 /**
  * GetCommonSystemConfigResp
  */
 @Data
-@ToString
 public class GetCommonSystemConfigResp implements Serializable {
 
     private static final long serialVersionUID = -4806554998121629152L;

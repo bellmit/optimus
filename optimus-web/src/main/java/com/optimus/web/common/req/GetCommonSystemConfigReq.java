@@ -1,19 +1,20 @@
 package com.optimus.web.common.req;
 
-import java.io.Serializable;
 import java.util.Date;
 
+import com.optimus.util.req.Req;
+
+import groovy.transform.EqualsAndHashCode;
 import lombok.Data;
-import lombok.ToString;
 
 /**
  * GetCommonSystemConfigReq
  */
 @Data
-@ToString
-public class GetCommonSystemConfigReq implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+public class GetCommonSystemConfigReq extends Req {
 
-    private static final long serialVersionUID = -7003794914303013777L;
+    private static final long serialVersionUID = 7560553439812942745L;
 
     private String baseKey;
 

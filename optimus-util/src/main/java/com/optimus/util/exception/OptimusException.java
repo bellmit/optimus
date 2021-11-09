@@ -2,20 +2,18 @@ package com.optimus.util.exception;
 
 import com.optimus.util.constants.RespCodeEnum;
 
+import groovy.transform.EqualsAndHashCode;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 /**
  * OptimusException
  */
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@EqualsAndHashCode(callSuper = true)
 public class OptimusException extends RuntimeException {
 
     private static final long serialVersionUID = 7068851877027924285L;

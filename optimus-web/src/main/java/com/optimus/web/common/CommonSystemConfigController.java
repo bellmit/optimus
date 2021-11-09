@@ -76,9 +76,6 @@ public class CommonSystemConfigController {
         });
         log.info("jsonString to collect is {}", respList);
 
-        Object object = JsonUtil.toBean(jsonString, List.class, GetCommonSystemConfigResp.class);
-        log.info("jsonString to collect is {}", object);
-
         return resp;
 
     }

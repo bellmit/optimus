@@ -35,6 +35,22 @@
     where ID = #{id,jdbcType=NUMERIC}
   </select>
 
+  <select id="getMemberInfoList" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_MEMBER_INFO
+    <where>
+      <if test="id != null">
+        and ID = #{id,jdbcType=NUMERIC}
+      </if>
+      <if test="memberId != null">
+        and MEMBER_ID = #{memberId,jdbcType=VARCHAR}
+      </if>
+      <if test="deleteFlag != null">
+        and DELETE_FLAG = #{deleteFlag,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
 
   <insert id="addMemberInfo" parameterType="com.optimus.dao.domain.MemberInfoDO">
     insert into T_MEMBER_INFO

@@ -6,14 +6,12 @@ import com.optimus.util.constants.RespCodeEnum;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 /**
  * Resp<T>
  */
 @Data
 @NoArgsConstructor
-@ToString
 public class Resp<T> implements Serializable {
 
     private static final long serialVersionUID = -5107305879027514980L;

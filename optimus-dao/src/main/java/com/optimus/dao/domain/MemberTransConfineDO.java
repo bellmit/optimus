@@ -5,13 +5,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import lombok.Data;
-import lombok.ToString;
 
 /**
  * MemberTransConfineDO
  */
 @Data
-@ToString
 public class MemberTransConfineDO implements Serializable {
 
     private static final long serialVersionUID = -4035940679621994839L;
