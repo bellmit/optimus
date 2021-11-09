@@ -23,6 +23,8 @@ import lombok.extern.slf4j.Slf4j;
  * CommonSystemConfigController
  * 
  * 示例代码
+ * 
+ * @author sunxp
  */
 @RestController
 @RequestMapping(value = "/optimus/common")
@@ -52,8 +54,8 @@ public class CommonSystemConfigController {
         log.info("value is {}", value);
 
         // 验证全局异常示例代码
-        // int res = 10 / 0;
-        // log.info("res is {}", res);
+        int res = 10 / 0;
+        log.info("res is {}", res);
 
         // jackson示例代码
         String jsonString = JsonUtil.toString(resp);

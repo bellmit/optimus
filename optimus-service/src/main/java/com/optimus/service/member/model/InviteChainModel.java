@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 /**
  * InviteChainModel
+ * 
+ * @author sunxp
  */
 @Data
 @NoArgsConstructor

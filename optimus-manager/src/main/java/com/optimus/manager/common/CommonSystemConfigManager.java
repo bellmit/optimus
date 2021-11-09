@@ -2,6 +2,8 @@ package com.optimus.manager.common;
 
 /**
  * CommonSystemConfigManager
+ * 
+ * @author sunxp
  */
 public interface CommonSystemConfigManager {
 

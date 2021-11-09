@@ -15,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * CommonSystemConfigManagerImpl
+ * 
+ * @author sunxp
  */
 @Component
 @Slf4j

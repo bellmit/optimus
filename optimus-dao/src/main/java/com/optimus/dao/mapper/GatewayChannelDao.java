@@ -4,6 +4,8 @@ import com.optimus.dao.domain.GatewayChannelDO;
 
 /**
  * GatewayChannelDao
+ * 
+ * @author sunxp
  */
 public interface GatewayChannelDao {
 

@@ -8,6 +8,8 @@ import lombok.Data;
 
 /**
  * MemberTransConfineDO
+ * 
+ * @author sunxp
  */
 @Data
 public class MemberTransConfineDO implements Serializable {

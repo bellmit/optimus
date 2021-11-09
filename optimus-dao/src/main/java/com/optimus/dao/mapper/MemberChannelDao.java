@@ -4,6 +4,8 @@ import com.optimus.dao.domain.MemberChannelDO;
 
 /**
  * MemberChannelDao
+ * 
+ * @author sunxp
  */
 public interface MemberChannelDao {
 

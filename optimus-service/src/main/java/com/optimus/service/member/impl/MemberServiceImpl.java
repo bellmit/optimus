@@ -15,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * MemberServiceImpl
+ * 
+ * @author sunxp
  */
 @Service
 @Slf4j

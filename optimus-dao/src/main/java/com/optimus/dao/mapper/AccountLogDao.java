@@ -4,6 +4,8 @@ import com.optimus.dao.domain.AccountLogDO;
 
 /**
  * AccountLogDao
+ * 
+ * @author sunxp
  */
 public interface AccountLogDao {
 

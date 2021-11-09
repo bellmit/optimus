@@ -6,6 +6,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  * OptimusRunnerApplication
+ * 
+ * @author sunxp
  */
 @SpringBootApplication(scanBasePackages = "com.optimus")
 @EnableAsync

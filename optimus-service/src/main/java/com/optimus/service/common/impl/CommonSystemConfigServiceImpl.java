@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
  * CommonSystemConfigServiceImpl
  * 
  * 示例代码
+ * 
+ * @author sunxp
  */
 @Service
 public class CommonSystemConfigServiceImpl implements CommonSystemConfigService {

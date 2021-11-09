@@ -4,6 +4,8 @@ import com.optimus.dao.domain.MemberTransConfineDO;
 
 /**
  * MemberTransConfineDao
+ * 
+ * @author sunxp
  */
 public interface MemberTransConfineDao {
 

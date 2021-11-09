@@ -7,6 +7,8 @@ import lombok.Data;
 
 /**
  * GetCommonSystemConfigResp
+ * 
+ * @author sunxp
  */
 @Data
 public class GetCommonSystemConfigResp implements Serializable {

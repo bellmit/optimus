@@ -32,6 +32,8 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * ReqBodyConfig
+ * 
+ * @author sunxp
  */
 @Configuration
 @RestControllerAdvice

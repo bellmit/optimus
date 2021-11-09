@@ -11,6 +11,8 @@ import com.optimus.util.exception.OptimusException;
 
 /**
  * JsonUtil
+ * 
+ * @author sunxp
  */
 public class JsonUtil {
 

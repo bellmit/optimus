@@ -7,6 +7,8 @@ import lombok.Data;
 
 /**
  * GatewaySubChannelDO
+ * 
+ * @author sunxp
  */
 @Data
 public class GatewaySubChannelDO implements Serializable {

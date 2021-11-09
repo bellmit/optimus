@@ -7,6 +7,8 @@ import lombok.Data;
 
 /**
  * MemberAgentCodeRelDO
+ * 
+ * @author sunxp
  */
 @Data
 public class MemberAgentCodeRelDO implements Serializable {

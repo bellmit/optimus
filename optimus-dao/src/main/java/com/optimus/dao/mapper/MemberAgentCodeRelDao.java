@@ -4,6 +4,8 @@ import com.optimus.dao.domain.MemberAgentCodeRelDO;
 
 /**
  * MemberAgentCodeRelDao
+ * 
+ * @author sunxp
  */
 public interface MemberAgentCodeRelDao {
 

@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 /**
  * OptimusException
+ * 
+ * @author sunxp
  */
 @Data
 @NoArgsConstructor

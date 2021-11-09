@@ -5,6 +5,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * GenerateUtil
+ * 
+ * @author sunxp
  */
 public class GenerateUtil {
 

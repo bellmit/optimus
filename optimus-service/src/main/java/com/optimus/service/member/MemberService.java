@@ -7,6 +7,8 @@ import com.optimus.service.member.model.InviteChainModel;
 
 /**
  * MemberService
+ * 
+ * @author sunxp
  */
 public interface MemberService {
 

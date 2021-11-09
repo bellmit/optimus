@@ -8,6 +8,8 @@ import lombok.Data;
 
 /**
  * GetCommonSystemConfigReq
+ * 
+ * @author sunxp
  */
 @Data
 public class GetCommonSystemConfigReq extends Req {

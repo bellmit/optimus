@@ -4,6 +4,8 @@ import com.optimus.dao.domain.AccountInfoDO;
 
 /**
  * AccountInfoDao
+ * 
+ * @author sunxp
  */
 public interface AccountInfoDao {
 

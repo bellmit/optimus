@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 
 /**
  * GatewayService
+ * 
+ * @author sunxp
  */
 public interface GatewayService {
 

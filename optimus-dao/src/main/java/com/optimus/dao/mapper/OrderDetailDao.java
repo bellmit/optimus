@@ -4,6 +4,8 @@ import com.optimus.dao.domain.OrderDetailDO;
 
 /**
  * OrderDetailDao
+ * 
+ * @author sunxp
  */
 public interface OrderDetailDao {
 

@@ -4,6 +4,8 @@ import java.util.Date;
 
 /**
  * Dateutil
+ * 
+ * @author sunxp
  */
 public class Dateutil {
 

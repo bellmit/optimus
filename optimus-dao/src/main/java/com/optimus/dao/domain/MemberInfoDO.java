@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 /**
  * MemberInfoDO
+ * 
+ * @author sunxp
  */
 @Data
 @NoArgsConstructor

@@ -6,6 +6,8 @@ import com.optimus.manager.account.model.ChangeAmountModel;
 
 /**
  * AccountInfoManager
+ * 
+ * @author sunxp
  */
 public interface AccountInfoManager {
 

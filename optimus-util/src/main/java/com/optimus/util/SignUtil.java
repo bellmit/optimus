@@ -13,6 +13,8 @@ import org.springframework.util.StringUtils;
 
 /**
  * SignUtil
+ * 
+ * @author sunxp
  */
 public class SignUtil {
 

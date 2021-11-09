@@ -8,6 +8,8 @@ import lombok.Data;
 
 /**
  * MemberChannelDO
+ * 
+ * @author sunxp
  */
 @Data
 public class MemberChannelDO implements Serializable {

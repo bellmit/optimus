@@ -6,6 +6,8 @@ import com.optimus.dao.domain.MemberInfoDO;
 
 /**
  * MemberInfoDao
+ * 
+ * @author sunxp
  */
 public interface MemberInfoDao {
 

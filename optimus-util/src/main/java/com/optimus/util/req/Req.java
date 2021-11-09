@@ -6,6 +6,8 @@ import lombok.Data;
 
 /**
  * Req
+ * 
+ * @author sunxp
  */
 @Data
 public class Req implements Serializable {

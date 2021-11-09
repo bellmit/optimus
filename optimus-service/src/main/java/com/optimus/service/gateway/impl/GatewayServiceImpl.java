@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 /**
  * GatewayServiceImpl
+ * 
+ * @author sunxp
  */
 @Service
 public class GatewayServiceImpl implements GatewayService {

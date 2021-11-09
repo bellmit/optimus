@@ -10,6 +10,8 @@ import org.springframework.util.StringUtils;
 
 /**
  * CommonSystemConfigValidate
+ * 
+ * @author sunxp
  */
 public class CommonSystemConfigValidate {
 
