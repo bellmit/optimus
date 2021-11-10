@@ -10,6 +10,7 @@ import com.optimus.dao.mapper.MemberInfoDao;
 import com.optimus.service.member.MemberService;
 import com.optimus.service.member.dto.InviteChainDTO;
 import com.optimus.service.member.dto.MemberInfoDTO;
+import com.optimus.util.BeanUtil;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -28,21 +29,13 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<MemberInfoDTO> getMemberInfoList(MemberInfoDTO memberInfoDTO) {
 
-        List<MemberInfoDTO> memberInfoDTOList = new ArrayList<>();
-
         MemberInfoDO memberInfoDO = new MemberInfoDO();
         BeanUtils.copyProperties(memberInfoDTO, memberInfoDO);
 
         List<MemberInfoDO> memberInfoDOList = memberInfoDao.getMemberInfoList(memberInfoDO);
 
-        for (MemberInfoDO item : memberInfoDOList) {
-
-            memberInfoDTO = new MemberInfoDTO();
-            BeanUtils.copyProperties(item, memberInfoDTO);
-
-            memberInfoDTOList.add(memberInfoDTO);
-
-        }
+        List<MemberInfoDTO> memberInfoDTOList = new ArrayList<>();
+        BeanUtil.copyProperties(memberInfoDOList, memberInfoDTOList, MemberInfoDTO.class);
 
         return memberInfoDTOList;
 
