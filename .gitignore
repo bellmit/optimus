@@ -1,5 +1,18 @@
-
 .idea
 *.iml
 
 */target/
+
+.DS_Store
+.classpath
+.factorypath
+.project
+
+HELP.md
+mvnw*
+
+.mvn/
+.settings/
+
+optimus-*/.gitignore
+
