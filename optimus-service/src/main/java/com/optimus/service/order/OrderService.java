@@ -2,9 +2,9 @@ package com.optimus.service.order;
 
 import java.util.List;
 
-import com.optimus.dao.domain.OrderInfoDO;
-import com.optimus.manager.account.model.ChangeAmountModel;
-import com.optimus.service.member.model.InviteChainModel;
+import com.optimus.manager.account.dto.ChangeAmountDTO;
+import com.optimus.service.member.dto.InviteChainDTO;
+import com.optimus.service.order.dto.CreateOrderDTO;
 
 /**
  * OrderService
@@ -16,16 +16,16 @@ public interface OrderService {
     /**
      * 创建订单
      * 
-     * @param orderInfoDO
+     * @param createOrderDTO
      */
-    void createOrder(OrderInfoDO orderInfoDO);
+    void createOrder(CreateOrderDTO createOrderDTO);
 
     /**
      * 构建分润信息
      * 
-     * @param inviteChainModelList
+     * @param inviteChainDTOList
      * @return
      */
-    List<ChangeAmountModel> buildSplitProfit(List<InviteChainModel> inviteChainModelList);
+    List<ChangeAmountDTO> buildSplitProfit(List<InviteChainDTO> inviteChainDTOList);
 
 }

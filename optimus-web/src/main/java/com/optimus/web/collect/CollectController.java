@@ -1,10 +1,10 @@
-package com.optimus.web.account;
+package com.optimus.web.collect;
 
 import com.optimus.service.account.AccountService;
-import com.optimus.service.account.repuest.ApplyForRechargeRequest;
-import com.optimus.web.account.req.ApplyForRechargeReq;
-import com.optimus.web.account.resp.ApplyForRechargeResp;
-import lombok.extern.slf4j.Slf4j;
+import com.optimus.service.account.dto.ApplyForRechargeDTO;
+import com.optimus.web.collect.req.ApplyForRechargeReq;
+import com.optimus.web.collect.resp.ApplyForRechargeResp;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,14 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 账户服务
- *
+ * 收单web
+ * 
  * @author hongp
  */
 @RestController
-@RequestMapping(value = "/optimus/account")
-@Slf4j
-public class AccountController {
+@RequestMapping(value = "/optimus/collect")
+public class CollectController {
 
     @Autowired
     private AccountService accountService;
@@ -33,10 +32,15 @@ public class AccountController {
      */
     @GetMapping("/applyForRecharge")
     public ApplyForRechargeResp applyForRecharge(@RequestBody ApplyForRechargeReq req) {
-        ApplyForRechargeRequest request = new ApplyForRechargeRequest();
-        BeanUtils.copyProperties(req, request);
+
+        ApplyForRechargeDTO applyForRechargeDTO = new ApplyForRechargeDTO();
+        BeanUtils.copyProperties(req, applyForRechargeDTO);
+
         ApplyForRechargeResp resp = new ApplyForRechargeResp();
-        resp.setOrderId(accountService.applyForRecharge(request));
+        resp.setOrderId(accountService.applyForRecharge(applyForRechargeDTO));
+
         return resp;
+
     }
+
 }

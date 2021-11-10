@@ -2,7 +2,7 @@ package com.optimus.manager.account;
 
 import java.util.List;
 
-import com.optimus.manager.account.model.ChangeAmountModel;
+import com.optimus.manager.account.dto.ChangeAmountDTO;
 
 /**
  * AccountInfoManager
@@ -14,9 +14,9 @@ public interface AccountInfoManager {
     /**
      * 变更账户金额
      * 
-     * @param changeAmountModelList
+     * @param changeAmountDTOList
      * @return
      */
-    boolean changeAmount(List<ChangeAmountModel> changeAmountModelList);
+    boolean changeAmount(List<ChangeAmountDTO> changeAmountDTOList);
 
 }

@@ -1,4 +1,4 @@
-package com.optimus.manager.account.model;
+package com.optimus.manager.account.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -8,14 +8,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * ChangeAmountModel
+ * ChangeAmountDTO
  * 
  * @author sunxp
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChangeAmountModel implements Serializable {
+public class ChangeAmountDTO implements Serializable {
 
     private static final long serialVersionUID = -6719708847330825714L;
 

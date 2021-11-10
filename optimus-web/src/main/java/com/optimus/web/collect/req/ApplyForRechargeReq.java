@@ -1,4 +1,4 @@
-package com.optimus.service.account.repuest;
+package com.optimus.web.collect.req;
 
 import com.optimus.util.req.Req;
 import lombok.Data;
@@ -11,9 +11,9 @@ import java.math.BigDecimal;
  * @author hongp
  */
 @Data
-public class ApplyForRechargeRequest extends Req {
+public class ApplyForRechargeReq extends Req {
 
-    private static final long serialVersionUID = 98560750616070655L;
+    private static final long serialVersionUID = 7078100127511156222L;
 
     /**
      * 会员编号

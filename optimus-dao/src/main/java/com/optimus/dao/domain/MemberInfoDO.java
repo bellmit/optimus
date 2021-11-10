@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * MemberInfoDO
@@ -12,7 +11,6 @@ import lombok.NoArgsConstructor;
  * @author sunxp
  */
 @Data
-@NoArgsConstructor
 public class MemberInfoDO implements Serializable {
 
     private static final long serialVersionUID = -7029495333118659521L;
@@ -50,9 +48,5 @@ public class MemberInfoDO implements Serializable {
     private String updateBy;
 
     private Date updateTime;
-
-    public MemberInfoDO(String memberId) {
-        this.memberId = memberId;
-    }
 
 }

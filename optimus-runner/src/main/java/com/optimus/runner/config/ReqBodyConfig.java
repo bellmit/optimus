@@ -11,8 +11,8 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.optimus.dao.domain.MemberInfoDO;
 import com.optimus.service.member.MemberService;
+import com.optimus.service.member.dto.MemberInfoDTO;
 import com.optimus.util.JsonUtil;
 import com.optimus.util.SignUtil;
 import com.optimus.util.constants.RespCodeEnum;
@@ -80,8 +80,8 @@ public class ReqBodyConfig implements RequestBodyAdvice {
         Map<String, String> map = JsonUtil.toBean(body, new TypeReference<Map<String, String>>() {
         });
 
-        List<MemberInfoDO> memberInfoList = memberService
-                .getMemberInfoList(new MemberInfoDO(memberIdObject.toString()));
+        List<MemberInfoDTO> memberInfoList = memberService
+                .getMemberInfoList(new MemberInfoDTO(memberIdObject.toString()));
         if (CollectionUtils.isEmpty(memberInfoList)) {
             throw new OptimusException(RespCodeEnum.MEMBER_NO);
         }

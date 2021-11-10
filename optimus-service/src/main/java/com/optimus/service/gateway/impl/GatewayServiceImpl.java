@@ -1,8 +1,7 @@
 package com.optimus.service.gateway.impl;
 
-import java.math.BigDecimal;
-
 import com.optimus.service.gateway.GatewayService;
+import com.optimus.service.gateway.dto.MatchChannelDTO;
 
 import org.springframework.stereotype.Service;
 
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class GatewayServiceImpl implements GatewayService {
 
     @Override
-    public String matchChannel(String memberId, String channelCode, BigDecimal orderAmount) {
+    public String matchChannel(MatchChannelDTO matchChannelDTO) {
         return null;
     }
 

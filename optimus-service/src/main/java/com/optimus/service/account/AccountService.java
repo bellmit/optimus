@@ -1,6 +1,6 @@
 package com.optimus.service.account;
 
-import com.optimus.service.account.repuest.ApplyForRechargeRequest;
+import com.optimus.service.account.dto.ApplyForRechargeDTO;
 
 /**
  * 账户服务
@@ -12,9 +12,9 @@ public interface AccountService {
     /**
      * 申请充值
      *
-     * @param request 请求信息
+     * @param applyForRechargeDTO 申请充值DTO
      * @return 订单编号
      */
-    String applyForRecharge(ApplyForRechargeRequest request);
+    String applyForRecharge(ApplyForRechargeDTO applyForRechargeDTO);
 
 }

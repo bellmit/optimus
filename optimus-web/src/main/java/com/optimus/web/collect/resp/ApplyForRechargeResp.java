@@ -1,4 +1,4 @@
-package com.optimus.web.account.resp;
+package com.optimus.web.collect.resp;
 
 import lombok.Data;
 
@@ -18,4 +18,5 @@ public class ApplyForRechargeResp implements Serializable {
      * 订单号
      */
     private String orderId;
+
 }

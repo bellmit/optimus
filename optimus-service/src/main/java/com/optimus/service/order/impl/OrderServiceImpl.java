@@ -2,10 +2,10 @@ package com.optimus.service.order.impl;
 
 import java.util.List;
 
-import com.optimus.dao.domain.OrderInfoDO;
-import com.optimus.manager.account.model.ChangeAmountModel;
-import com.optimus.service.member.model.InviteChainModel;
+import com.optimus.manager.account.dto.ChangeAmountDTO;
+import com.optimus.service.member.dto.InviteChainDTO;
 import com.optimus.service.order.OrderService;
+import com.optimus.service.order.dto.CreateOrderDTO;
 
 import org.springframework.stereotype.Service;
 
@@ -18,12 +18,12 @@ import org.springframework.stereotype.Service;
 public class OrderServiceImpl implements OrderService {
 
     @Override
-    public void createOrder(OrderInfoDO orderInfoDO) {
+    public void createOrder(CreateOrderDTO createOrderDTO) {
 
     }
 
     @Override
-    public List<ChangeAmountModel> buildSplitProfit(List<InviteChainModel> inviteChainModelList) {
+    public List<ChangeAmountDTO> buildSplitProfit(List<InviteChainDTO> inviteChainDTOList) {
         return null;
     }
 

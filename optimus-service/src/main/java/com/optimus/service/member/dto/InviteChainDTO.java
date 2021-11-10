@@ -1,4 +1,4 @@
-package com.optimus.service.member.model;
+package com.optimus.service.member.dto;
 
 import java.io.Serializable;
 
@@ -7,23 +7,23 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * InviteChainModel
+ * InviteChainDTO
  * 
  * @author sunxp
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class InviteChainModel implements Serializable {
+public class InviteChainDTO implements Serializable {
 
     private static final long serialVersionUID = -5860137738423012704L;
 
-    private int index;
+    private Integer index;
 
-    private int parentIndex;
+    private Integer parentIndex;
 
     private String memberId;
 
-    private InviteChainModel inviteChainModel;
+    private InviteChainDTO inviteChainDTO;
 
 }
