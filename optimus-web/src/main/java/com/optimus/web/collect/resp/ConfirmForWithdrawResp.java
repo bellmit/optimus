@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @author hongp
  */
 @Data
-public class ConfirmWithdrawResp implements Serializable {
+public class ConfirmForWithdrawResp implements Serializable {
 
     private static final long serialVersionUID = -7431021596457242460L;
 }

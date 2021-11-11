@@ -12,7 +12,7 @@ import java.math.BigDecimal;
  * @author hongp
  */
 @Data
-public class ConfirmForRechargeReq  extends Req {
+public class ConfirmForRechargeReq extends Req {
 
     private static final long serialVersionUID = 8367300262598958078L;
 

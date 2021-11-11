@@ -13,4 +13,5 @@ import java.io.Serializable;
 public class RechargeResp implements Serializable {
 
     private static final long serialVersionUID = -5636605016265553629L;
+
 }

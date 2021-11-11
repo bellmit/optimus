@@ -32,8 +32,7 @@ public class TransferReq extends Req {
     private String callerOrderId;
 
     /**
-     * 划账类型
-     * type[类型：余额-预付款/预付款-余额]
+     * 划账类型 type[类型：余额-预付款/预付款-余额]
      */
     private String transferType;
 

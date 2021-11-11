@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/optimus/collect")
 public class CollectController {
 
-
     @Autowired
     private GatewayService gatewayService;
 
@@ -87,7 +86,6 @@ public class CollectController {
 
         return new ConfirmForRechargeResp();
     }
-
 
     /**
      * 充值
@@ -149,15 +147,14 @@ public class CollectController {
         return resp;
     }
 
-
     /**
      * 确认提现
      *
      * @param req
-     * @return ConfirmWithdrawResp
+     * @return ConfirmForWithdrawReq
      */
-    @PostMapping("/confirmWithdraw")
-    public ConfirmWithdrawResp confirmWithdraw(@RequestBody ConfirmWithdrawReq req) {
+    @PostMapping("/confirmForWithdraw")
+    public ConfirmForWithdrawResp confirmForWithdraw(@RequestBody ConfirmForWithdrawReq req) {
 
         // 验证会员类型
         if (!StringUtils.pathEquals(MemberEnum.MEMBER_TYPE_S.getCode(), req.getMemberInfo().getMemberType())) {
@@ -171,10 +168,9 @@ public class CollectController {
 
         // 支付订单
 
-        return new ConfirmWithdrawResp();
+        return new ConfirmForWithdrawResp();
 
     }
-
 
     /**
      * 提现
