@@ -13,11 +13,6 @@ import org.springframework.stereotype.Service;
 public class AccountServiceImpl implements AccountService {
 
     @Override
-    public String applyForRecharge(ApplyForRechargeDTO applyForRechargeDTO) {
-        return "R2021102510305599900000001";
-    }
-
-    @Override
     public void recharge(RechargeDTO rechargeDTO) {
         return;
     }

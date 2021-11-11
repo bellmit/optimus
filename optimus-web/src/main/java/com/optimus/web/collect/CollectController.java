@@ -57,12 +57,12 @@ public class CollectController {
         // 验证会员信息
         MemberInfoDTO memberInfo = req.getMemberInfo();
 
-        if(Objects.isNull(memberInfo)){
-            throw new OptimusException(RespCodeEnum.MEMBER_NO, "会员不存在");
+        if (Objects.isNull(memberInfo)) {
+            throw new OptimusException(RespCodeEnum.MEMBER_NO);
         }
 
-        if(!StringUtils.pathEquals(MemberEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType())){
-            throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型不匹配");
+        if (!StringUtils.pathEquals(MemberEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType())) {
+            throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为代理");
         }
 
         // 创建订单
@@ -154,7 +154,7 @@ public class CollectController {
 
     /**
      * 下单
-     * 
+     *
      * @param req
      * @return
      */

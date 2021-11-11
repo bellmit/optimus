@@ -9,14 +9,6 @@ import com.optimus.service.account.dto.*;
  */
 public interface AccountService {
 
-    /**
-     * 申请充值
-     *
-     * @param applyForRechargeDTO 申请充值DTO
-     * @return 订单编号
-     */
-    String applyForRecharge(ApplyForRechargeDTO applyForRechargeDTO);
-
 
     /**
      * 充值
