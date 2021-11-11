@@ -1,5 +1,6 @@
 package com.optimus.web.collect.req;
 
+import com.optimus.service.member.dto.MemberInfoDTO;
 import com.optimus.util.req.Req;
 import lombok.Data;
 
@@ -24,4 +25,10 @@ public class ApplyForRechargeReq extends Req {
      * 金额
      */
     private BigDecimal amount;
+
+    /**
+     * 会员信息
+     */
+    private MemberInfoDTO memberInfo;
+
 }

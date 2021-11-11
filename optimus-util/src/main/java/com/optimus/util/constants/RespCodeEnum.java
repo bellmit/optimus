@@ -31,6 +31,8 @@ public enum RespCodeEnum {
     MEMBER_NO("2000", "会员不存在"),
     //
     MEMBER_ERROR("2001", "会员信息异常"),
+    //
+    MEMBER_TYPE_ERROR("2002", "会员类型不匹配"),
 
     /* ---------账户类编码--------- */
 

@@ -37,7 +37,7 @@ public class CreateOrderDTO implements Serializable {
     private String orderId;
 
     /**
-     * 调用方会员编号
+     * 调用方订单编号
      */
     private String callerOrderId;
 
@@ -59,7 +59,7 @@ public class CreateOrderDTO implements Serializable {
     /**
      * 商户回调地址
      */
-    private String mechantCallBackUrl;
+    private String merchantCallBackUrl;
 
     /**
      * 网关渠道编号
