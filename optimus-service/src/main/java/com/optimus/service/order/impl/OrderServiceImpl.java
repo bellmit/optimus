@@ -19,9 +19,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class OrderServiceImpl implements OrderService {
 
+
     @Override
     public void createOrder(CreateOrderDTO createOrderDTO) {
 
+        // 验证上游订单是否重复
+
+        // 根据订单类型处理订单金额
+
+        // 落库
+
+        // 回写参数赋值
     }
 
     @Override

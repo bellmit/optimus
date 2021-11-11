@@ -1,10 +1,6 @@
 package com.optimus.web.collect;
 
 import com.optimus.service.account.AccountService;
-import com.optimus.service.account.dto.ApplyForWithdrawDTO;
-import com.optimus.service.account.dto.RechargeDTO;
-import com.optimus.service.account.dto.TransferDTO;
-import com.optimus.service.account.dto.WithdrawDTO;
 import com.optimus.service.gateway.GatewayService;
 import com.optimus.service.gateway.dto.MatchChannelDTO;
 import com.optimus.service.member.dto.MemberInfoDTO;
@@ -17,15 +13,12 @@ import com.optimus.util.exception.OptimusException;
 import com.optimus.web.collect.req.*;
 import com.optimus.web.collect.resp.*;
 import com.optimus.web.collect.validate.CollectValidate;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Objects;
 
 /**
  * 收单web
@@ -54,14 +47,8 @@ public class CollectController {
     @PostMapping("/applyForRecharge")
     public ApplyForRechargeResp applyForRecharge(@RequestBody ApplyForRechargeReq req) {
 
-        // 验证会员信息
-        MemberInfoDTO memberInfo = req.getMemberInfo();
-
-        if (Objects.isNull(memberInfo)) {
-            throw new OptimusException(RespCodeEnum.MEMBER_NO);
-        }
-
-        if (!StringUtils.pathEquals(MemberEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType())) {
+        // 验证会员类型
+        if (!StringUtils.pathEquals(MemberEnum.MEMBER_TYPE_A.getCode(), req.getMemberInfo().getMemberType())) {
             throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为代理");
         }
 
@@ -81,6 +68,31 @@ public class CollectController {
     }
 
     /**
+     * 确认充值
+     *
+     * @param req
+     * @return ConfirmForRechargeResp
+     */
+    @PostMapping("/confirmForRecharge")
+    public ConfirmForRechargeResp confirmForRecharge(@RequestBody ConfirmForRechargeReq req) {
+
+        // 验证会员类型
+        if (!StringUtils.pathEquals(MemberEnum.MEMBER_TYPE_S.getCode(), req.getMemberInfo().getMemberType())) {
+            throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为平台");
+        }
+
+        // 获取下级会员信息
+        // 验证下级会员类型为代理
+
+        // 获取订单信息
+
+        // 支付订单
+
+        return new ConfirmForRechargeResp();
+    }
+
+
+    /**
      * 充值
      *
      * @param req
@@ -88,10 +100,22 @@ public class CollectController {
      */
     @PostMapping("/recharge")
     public RechargeResp recharge(@RequestBody RechargeReq req) {
+        // 获取会员信息
+        MemberInfoDTO memberInfo = req.getMemberInfo();
 
-        RechargeDTO rechargeDTO = new RechargeDTO();
-        BeanUtils.copyProperties(req, rechargeDTO);
-        accountService.recharge(rechargeDTO);
+        // 验证会员类型
+        if (!StringUtils.pathEquals(MemberEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType())
+                || !StringUtils.pathEquals(MemberEnum.MEMBER_TYPE_C.getCode(), memberInfo.getMemberType())) {
+            throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为代理或码商");
+        }
+
+        // 获取下级会员信息
+
+        // 验证上下级关系
+
+        // 创建订单
+
+        // 支付订单
 
         return new RechargeResp();
 
@@ -106,15 +130,54 @@ public class CollectController {
     @PostMapping("/applyForWithdraw")
     public ApplyForWithdrawResp applyForWithdraw(@RequestBody ApplyForWithdrawReq req) {
 
-        ApplyForWithdrawDTO applyForWithdrawDTO = new ApplyForWithdrawDTO();
-        BeanUtils.copyProperties(req, applyForWithdrawDTO);
+        // 验证会员类型
+        if (!StringUtils.pathEquals(MemberEnum.MEMBER_TYPE_A.getCode(), req.getMemberInfo().getMemberType())
+                || !StringUtils.pathEquals(MemberEnum.MEMBER_TYPE_M.getCode(), req.getMemberInfo().getMemberType())) {
+            throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为代理或管理");
+        }
 
+        // 验证账户余额是否充足
+
+        // 创建订单
+        CreateOrderDTO createOrderDTO = new CreateOrderDTO();
+        createOrderDTO.setMemberId(req.getMemberId());
+        createOrderDTO.setOrderType(OrderEnum.ORDER_TYPE_W.getCode());
+        createOrderDTO.setOrderAmount(req.getAmount());
+        orderService.createOrder(createOrderDTO);
+
+        // 返回信息
         ApplyForWithdrawResp resp = new ApplyForWithdrawResp();
-        resp.setOrderId(accountService.applyForWithdraw(applyForWithdrawDTO));
+        resp.setOrderId(createOrderDTO.getOrderId());
 
         return resp;
+    }
+
+
+    /**
+     * 确认提现
+     *
+     * @param req
+     * @return ConfirmWithdrawResp
+     */
+    @PostMapping("/confirmWithdraw")
+    public ConfirmWithdrawResp confirmWithdraw(@RequestBody ConfirmWithdrawReq req) {
+
+        // 验证会员类型
+        if (!StringUtils.pathEquals(MemberEnum.MEMBER_TYPE_S.getCode(), req.getMemberInfo().getMemberType())) {
+            throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为平台");
+        }
+
+        // 获取下级会员信息
+        // 验证下级会员类型为代理或者管理
+
+        // 获取订单信息
+
+        // 支付订单
+
+        return new ConfirmWithdrawResp();
 
     }
+
 
     /**
      * 提现
@@ -125,17 +188,31 @@ public class CollectController {
     @PostMapping("/withdraw")
     public WithdrawResp withdraw(@RequestBody WithdrawReq req) {
 
-        WithdrawDTO withdrawDTO = new WithdrawDTO();
-        BeanUtils.copyProperties(req, withdrawDTO);
+        // 获取会员信息
+        MemberInfoDTO memberInfo = req.getMemberInfo();
 
-        accountService.withdraw(withdrawDTO);
+        // 验证会员类型
+        if (!StringUtils.pathEquals(MemberEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType())
+                || !StringUtils.pathEquals(MemberEnum.MEMBER_TYPE_C.getCode(), memberInfo.getMemberType())) {
+            throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为代理或码商");
+        }
+
+        // 获取下级会员信息
+
+        // 验证上下级关系
+
+        // 验证账户余额是否充足
+
+        // 创建订单
+
+        // 支付订单
 
         return new WithdrawResp();
 
     }
 
     /**
-     * 提现
+     * 划账
      *
      * @param req
      * @return TransferResp
@@ -143,10 +220,18 @@ public class CollectController {
     @PostMapping("/transfer")
     public TransferResp transfer(@RequestBody TransferReq req) {
 
-        TransferDTO transferDTO = new TransferDTO();
-        BeanUtils.copyProperties(req, transferDTO);
+        // 获取会员信息
+        MemberInfoDTO memberInfo = req.getMemberInfo();
 
-        accountService.transfer(transferDTO);
+        // 验证会员类型
+        if (!StringUtils.pathEquals(MemberEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType())
+                || !StringUtils.pathEquals(MemberEnum.MEMBER_TYPE_M.getCode(), memberInfo.getMemberType())) {
+            throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为代理或管理");
+        }
+
+        // 创建订单
+
+        // 支付订单
 
         return new TransferResp();
 
