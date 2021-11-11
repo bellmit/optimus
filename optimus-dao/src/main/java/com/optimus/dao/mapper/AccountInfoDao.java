@@ -3,14 +3,14 @@ package com.optimus.dao.mapper;
 import com.optimus.dao.domain.AccountInfoDO;
 
 /**
- * AccountInfoDao
+ * 账户信息Dao
  * 
  * @author sunxp
  */
 public interface AccountInfoDao {
 
     /**
-     * getAccountInfoById
+     * 根据主键查询账户信息
      * 
      * @param id
      * @return
@@ -18,7 +18,7 @@ public interface AccountInfoDao {
     AccountInfoDO getAccountInfoById(Long id);
 
     /**
-     * addAccountInfo
+     * 新增一条账户信息
      * 
      * @param accountInfoDO
      * @return
@@ -26,7 +26,7 @@ public interface AccountInfoDao {
     int addAccountInfo(AccountInfoDO accountInfoDO);
 
     /**
-     * updateAccountInfo
+     * 更新账户信息
      * 
      * @param accountInfoDO
      * @return

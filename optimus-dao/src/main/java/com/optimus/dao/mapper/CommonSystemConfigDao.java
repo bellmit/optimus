@@ -5,14 +5,14 @@ import com.optimus.dao.domain.CommonSystemConfigDO;
 import org.apache.ibatis.annotations.Param;
 
 /**
- * CommonSystemConfigDao
+ * 系统配置Dao
  * 
  * @author sunxp
  */
 public interface CommonSystemConfigDao {
 
     /**
-     * getCommonSystemConfigByBaseKey
+     * 根据baseKey查询系统配置
      * 
      * @param baseKey
      * @return

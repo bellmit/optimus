@@ -7,7 +7,7 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * MemberTransConfineDO
+ * 会员交易限制DO
  * 
  * @author sunxp
  */

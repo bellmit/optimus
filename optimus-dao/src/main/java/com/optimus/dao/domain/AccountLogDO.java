@@ -7,7 +7,7 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * AccountLogDO
+ * 账户日志DO
  * 
  * @author sunxp
  */

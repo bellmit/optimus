@@ -8,7 +8,6 @@
     <result column="LOGIN_NAME" jdbcType="VARCHAR" property="loginName" />
     <result column="LOGIN_PASSWARD" jdbcType="VARCHAR" property="loginPassward" />
     <result column="MEMBER_KEY" jdbcType="VARCHAR" property="memberKey" />
-    <result column="MERCHANT_KEY" jdbcType="VARCHAR" property="merchantKey" />
     <result column="MOBILE" jdbcType="VARCHAR" property="mobile" />
     <result column="EMAIL" jdbcType="VARCHAR" property="email" />
     <result column="SHOW_NAME" jdbcType="VARCHAR" property="showName" />
@@ -23,8 +22,8 @@
   </resultMap>
 
   <sql id="Base_Column_List">
-    ID, MEMBER_ID, LOGIN_NAME, LOGIN_PASSWARD, MEMBER_KEY, MERCHANT_KEY, MOBILE, EMAIL, 
-    SHOW_NAME, MEMBER_TYPE, MEMBER_STATUS, SUP_DIRECT_MEMBER_ID, DELETE_FLAG, CREATE_BY, 
+    ID, MEMBER_ID, LOGIN_NAME, LOGIN_PASSWARD, MEMBER_KEY, MOBILE, EMAIL, SHOW_NAME, 
+    MEMBER_TYPE, MEMBER_STATUS, SUP_DIRECT_MEMBER_ID, DELETE_FLAG, CREATE_BY, 
     CREATE_TIME, UPDATE_BY, UPDATE_TIME
   </sql>
 
@@ -69,9 +68,6 @@
       </if>
       <if test="memberKey != null">
         MEMBER_KEY,
-      </if>
-      <if test="merchantKey != null">
-        MERCHANT_KEY,
       </if>
       <if test="mobile != null">
         MOBILE,
@@ -118,8 +114,6 @@
       </if>
       <if test="memberKey != null"> #{memberKey,jdbcType=VARCHAR},
       </if>
-      <if test="merchantKey != null"> #{merchantKey,jdbcType=VARCHAR},
-      </if>
       <if test="mobile != null"> #{mobile,jdbcType=VARCHAR},
       </if>
       <if test="email != null"> #{email,jdbcType=VARCHAR},
@@ -159,9 +153,6 @@
       </if>
       <if test="memberKey != null">
         MEMBER_KEY = #{memberKey,jdbcType=VARCHAR},
-      </if>
-      <if test="merchantKey != null">
-        MERCHANT_KEY = #{merchantKey,jdbcType=VARCHAR},
       </if>
       <if test="mobile != null">
         MOBILE = #{mobile,jdbcType=VARCHAR},

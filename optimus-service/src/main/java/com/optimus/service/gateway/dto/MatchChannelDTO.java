@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import lombok.Data;
 
 /**
- * MatchChannelDTO
+ * 网关服务DTO
  * 
  * @author sunxp
  */

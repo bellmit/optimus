@@ -16,7 +16,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 /**
- * MemberServiceImpl
+ * 会员服务
  * 
  * @author sunxp
  */

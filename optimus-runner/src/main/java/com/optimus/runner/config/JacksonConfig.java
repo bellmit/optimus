@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 /**
- * JacksoConfig
+ * JacksonConfig
  * 
  * @author sunxp
  */
@@ -20,7 +20,7 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 public class JacksonConfig {
 
     /**
-     * jacksonObjectMapper
+     * jackson对象管理器
      * 
      * @param builder
      * @return

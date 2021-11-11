@@ -3,14 +3,14 @@ package com.optimus.dao.mapper;
 import com.optimus.dao.domain.OrderInfoDO;
 
 /**
- * OrderInfoDao
+ * 订单信息Dao
  * 
  * @author sunxp
  */
 public interface OrderInfoDao {
 
     /**
-     * getOrderInfoById
+     * 根据主键查询订单信息
      * 
      * @param id
      * @return
@@ -18,7 +18,7 @@ public interface OrderInfoDao {
     OrderInfoDO getOrderInfoById(Long id);
 
     /**
-     * addOrderInfo
+     * 新增一条订单信息
      * 
      * @param orderInfoDO
      * @return
@@ -26,7 +26,7 @@ public interface OrderInfoDao {
     int addOrderInfo(OrderInfoDO orderInfoDO);
 
     /**
-     * updateOrderInfo
+     * 更新订单信息
      * 
      * @param orderInfoDO
      * @return

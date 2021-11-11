@@ -6,7 +6,7 @@ import com.optimus.service.member.dto.MemberInfoDTO;
 import com.optimus.service.member.dto.InviteChainDTO;
 
 /**
- * MemberService
+ * 会员服务
  * 
  * @author sunxp
  */

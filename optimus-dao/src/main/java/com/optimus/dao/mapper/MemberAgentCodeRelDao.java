@@ -3,14 +3,14 @@ package com.optimus.dao.mapper;
 import com.optimus.dao.domain.MemberAgentCodeRelDO;
 
 /**
- * MemberAgentCodeRelDao
+ * 会员代理码商关系Dao
  * 
  * @author sunxp
  */
 public interface MemberAgentCodeRelDao {
 
     /**
-     * getMemberAgentCodeRelById
+     * 根据主键查询会员代理码商关系
      * 
      * @param id
      * @return
@@ -18,7 +18,7 @@ public interface MemberAgentCodeRelDao {
     MemberAgentCodeRelDO getMemberAgentCodeRelById(Long id);
 
     /**
-     * addMemberAgentCodeRel
+     * 新增一条会员代理码商关系
      * 
      * @param memberAgentCodeRelDO
      * @return
@@ -26,7 +26,7 @@ public interface MemberAgentCodeRelDao {
     int addMemberAgentCodeRel(MemberAgentCodeRelDO memberAgentCodeRelDO);
 
     /**
-     * updateMemberAgentCodeRel
+     * 更新会员代理码商关系
      * 
      * @param memberAgentCodeRelDO
      * @return

@@ -3,14 +3,14 @@ package com.optimus.dao.mapper;
 import com.optimus.dao.domain.MemberChannelDO;
 
 /**
- * MemberChannelDao
+ * 会员渠道Dao
  * 
  * @author sunxp
  */
 public interface MemberChannelDao {
 
     /**
-     * getMemberChannelById
+     * 根据主键查询会员渠道
      * 
      * @param id
      * @return
@@ -18,7 +18,7 @@ public interface MemberChannelDao {
     MemberChannelDO getMemberChannelById(Long id);
 
     /**
-     * addMemberChannel
+     * 新增一条会员渠道
      * 
      * @param memberChannelDO
      * @return
@@ -26,7 +26,7 @@ public interface MemberChannelDao {
     int addMemberChannel(MemberChannelDO memberChannelDO);
 
     /**
-     * updateMemberChannel
+     * 更新会员渠道
      * 
      * @param memberChannelDO
      * @return

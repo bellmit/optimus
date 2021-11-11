@@ -2,11 +2,18 @@ package com.optimus.web.collect;
 
 import com.optimus.service.account.AccountService;
 import com.optimus.service.account.dto.*;
+import com.optimus.service.gateway.GatewayService;
+import com.optimus.service.gateway.dto.MatchChannelDTO;
+import com.optimus.service.order.OrderService;
+import com.optimus.service.order.dto.CreateOrderDTO;
 import com.optimus.web.collect.req.*;
 import com.optimus.web.collect.resp.*;
+import com.optimus.web.collect.validate.CollectValidate;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,13 +30,19 @@ public class CollectController {
     @Autowired
     private AccountService accountService;
 
+    @Autowired
+    private GatewayService gatewayService;
+
+    @Autowired
+    private OrderService orderService;
+
     /**
      * 申请充值
      *
      * @param req
      * @return ApplyForRechargeResp
      */
-    @GetMapping("/applyForRecharge")
+    @PostMapping("/applyForRecharge")
     public ApplyForRechargeResp applyForRecharge(@RequestBody ApplyForRechargeReq req) {
 
         ApplyForRechargeDTO applyForRechargeDTO = new ApplyForRechargeDTO();
@@ -42,14 +55,13 @@ public class CollectController {
 
     }
 
-
     /**
      * 充值
      *
      * @param req
      * @return RechargeResp
      */
-    @GetMapping("/recharge")
+    @PostMapping("/recharge")
     public RechargeResp recharge(@RequestBody RechargeReq req) {
 
         RechargeDTO rechargeDTO = new RechargeDTO();
@@ -57,8 +69,8 @@ public class CollectController {
         accountService.recharge(rechargeDTO);
 
         return new RechargeResp();
-    }
 
+    }
 
     /**
      * 申请提现
@@ -66,7 +78,7 @@ public class CollectController {
      * @param req
      * @return ApplyForWithdrawResp
      */
-    @GetMapping("/applyForWithdraw")
+    @PostMapping("/applyForWithdraw")
     public ApplyForWithdrawResp applyForWithdraw(@RequestBody ApplyForWithdrawReq req) {
 
         ApplyForWithdrawDTO applyForWithdrawDTO = new ApplyForWithdrawDTO();
@@ -76,8 +88,8 @@ public class CollectController {
         resp.setOrderId(accountService.applyForWithdraw(applyForWithdrawDTO));
 
         return resp;
-    }
 
+    }
 
     /**
      * 提现
@@ -85,7 +97,7 @@ public class CollectController {
      * @param req
      * @return WithdrawResp
      */
-    @GetMapping("/withdraw")
+    @PostMapping("/withdraw")
     public WithdrawResp withdraw(@RequestBody WithdrawReq req) {
 
         WithdrawDTO withdrawDTO = new WithdrawDTO();
@@ -94,8 +106,8 @@ public class CollectController {
         accountService.withdraw(withdrawDTO);
 
         return new WithdrawResp();
-    }
 
+    }
 
     /**
      * 提现
@@ -103,7 +115,7 @@ public class CollectController {
      * @param req
      * @return TransferResp
      */
-    @GetMapping("/transfer")
+    @PostMapping("/transfer")
     public TransferResp transfer(@RequestBody TransferReq req) {
 
         TransferDTO transferDTO = new TransferDTO();
@@ -112,6 +124,35 @@ public class CollectController {
         accountService.transfer(transferDTO);
 
         return new TransferResp();
+
+    }
+
+    /**
+     * 下单
+     * 
+     * @param req
+     * @return
+     */
+    @PostMapping("/placeOrder")
+    PlaceOrderResp placeOrder(@RequestBody PlaceOrderReq req) {
+
+        // 参数验证
+        CollectValidate.validatePlaceOrder(req);
+
+        // 主渠道验证
+        // 有效性&类型
+
+        // 撮合渠道
+        String subChannelCode = gatewayService.matchChannel(new MatchChannelDTO());
+        if (!StringUtils.hasLength(subChannelCode)) {
+
+        }
+
+        // 下单
+        orderService.createOrder(new CreateOrderDTO());
+
+        return new PlaceOrderResp();
+
     }
 
 }

@@ -6,7 +6,7 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * MemberInfoDO
+ * 会员信息DO
  * 
  * @author sunxp
  */
@@ -24,8 +24,6 @@ public class MemberInfoDO implements Serializable {
     private String loginPassward;
 
     private String memberKey;
-
-    private String merchantKey;
 
     private String mobile;
 

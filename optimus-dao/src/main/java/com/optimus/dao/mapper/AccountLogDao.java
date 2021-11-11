@@ -3,14 +3,14 @@ package com.optimus.dao.mapper;
 import com.optimus.dao.domain.AccountLogDO;
 
 /**
- * AccountLogDao
+ * 账户日志Dao
  * 
  * @author sunxp
  */
 public interface AccountLogDao {
 
     /**
-     * getAccountLogById
+     * 根据主键查询账户日志
      * 
      * @param id
      * @return
@@ -18,7 +18,7 @@ public interface AccountLogDao {
     AccountLogDO getAccountLogById(Long id);
 
     /**
-     * addAccountLog
+     * 新增一条账户日志
      * 
      * @param accountLogDO
      * @return
@@ -26,7 +26,7 @@ public interface AccountLogDao {
     int addAccountLog(AccountLogDO accountLogDO);
 
     /**
-     * updateAccountLog
+     * 更新账户日志记录
      * 
      * @param accountLogDO
      * @return

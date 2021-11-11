@@ -5,14 +5,14 @@ import java.util.List;
 import com.optimus.dao.domain.MemberInfoDO;
 
 /**
- * MemberInfoDao
+ * 会员信息Dao
  * 
  * @author sunxp
  */
 public interface MemberInfoDao {
 
     /**
-     * getMemberInfoById
+     * 根据主键查询会员信息
      * 
      * @param id
      * @return
@@ -20,7 +20,7 @@ public interface MemberInfoDao {
     MemberInfoDO getMemberInfoById(Long id);
 
     /**
-     * getMemberInfoList
+     * 查询会员信息列表
      * 
      * @param memberInfoDO
      * @return
@@ -28,7 +28,7 @@ public interface MemberInfoDao {
     List<MemberInfoDO> getMemberInfoList(MemberInfoDO memberInfoDO);
 
     /**
-     * addMemberInfo
+     * 新增一条会员信息
      * 
      * @param memberInfoDO
      * @return
@@ -36,7 +36,7 @@ public interface MemberInfoDao {
     int addMemberInfo(MemberInfoDO memberInfoDO);
 
     /**
-     * updateMemberInfo
+     * 更新会员信息
      * 
      * @param memberInfoDO
      * @return

@@ -80,8 +80,10 @@ public class ReqBodyConfig implements RequestBodyAdvice {
         Map<String, String> map = JsonUtil.toBean(body, new TypeReference<Map<String, String>>() {
         });
 
-        List<MemberInfoDTO> memberInfoList = memberService
-                .getMemberInfoList(new MemberInfoDTO(memberIdObject.toString()));
+        MemberInfoDTO memberInfoDTO = new MemberInfoDTO();
+        memberInfoDTO.setMemberId(memberIdObject.toString());
+
+        List<MemberInfoDTO> memberInfoList = memberService.getMemberInfoList(memberInfoDTO);
         if (CollectionUtils.isEmpty(memberInfoList)) {
             throw new OptimusException(RespCodeEnum.MEMBER_NO);
         }

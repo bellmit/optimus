@@ -7,7 +7,7 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * OrderInfoDO
+ * 订单信息DO
  * 
  * @author sunxp
  */

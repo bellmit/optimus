@@ -2,10 +2,10 @@ package com.optimus.manager.account;
 
 import java.util.List;
 
-import com.optimus.manager.account.dto.ChangeAmountDTO;
+import com.optimus.manager.account.dto.DoTransDTO;
 
 /**
- * AccountInfoManager
+ * 账户信息Manager
  * 
  * @author sunxp
  */
@@ -17,6 +17,6 @@ public interface AccountInfoManager {
      * @param changeAmountDTOList
      * @return
      */
-    boolean changeAmount(List<ChangeAmountDTO> changeAmountDTOList);
+    boolean doTrans(List<DoTransDTO> changeAmountDTOList);
 
 }

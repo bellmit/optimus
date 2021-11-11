@@ -6,7 +6,7 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * CommonSystemConfigDO
+ * 系统配置DO
  * 
  * @author sunxp
  */

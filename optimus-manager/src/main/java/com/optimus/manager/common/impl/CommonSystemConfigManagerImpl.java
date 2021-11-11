@@ -14,7 +14,7 @@ import org.springframework.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * CommonSystemConfigManagerImpl
+ * 系统配置Manager
  * 
  * @author sunxp
  */

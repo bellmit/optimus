@@ -3,14 +3,14 @@ package com.optimus.dao.mapper;
 import com.optimus.dao.domain.MemberTransConfineDO;
 
 /**
- * MemberTransConfineDao
+ * 会员交易限制Dao
  * 
  * @author sunxp
  */
 public interface MemberTransConfineDao {
 
     /**
-     * getMemberTransConfineById
+     * 根据主键查询会员交易限制
      * 
      * @param id
      * @return
@@ -18,7 +18,7 @@ public interface MemberTransConfineDao {
     MemberTransConfineDO getMemberTransConfineById(Long id);
 
     /**
-     * addMemberTransConfine
+     * 新增一条会员交易限制
      * 
      * @param memberTransConfineDO
      * @return
@@ -26,7 +26,7 @@ public interface MemberTransConfineDao {
     int addMemberTransConfine(MemberTransConfineDO memberTransConfineDO);
 
     /**
-     * updateMemberTransConfine
+     * 更新会员交易限制
      * 
      * @param memberTransConfineDO
      * @return

@@ -3,14 +3,14 @@ package com.optimus.dao.mapper;
 import com.optimus.dao.domain.GatewaySubChannelDO;
 
 /**
- * GatewaySubChannelDao
+ * 网关子渠道Dao
  * 
  * @author sunxp
  */
 public interface GatewaySubChannelDao {
 
     /**
-     * getGatewaySubChannelById
+     * 根据主键查询网关子渠道
      * 
      * @param id
      * @return
@@ -18,7 +18,7 @@ public interface GatewaySubChannelDao {
     GatewaySubChannelDO getGatewaySubChannelById(Long id);
 
     /**
-     * addGatewaySubChannel
+     * 新增一条网关子渠道
      * 
      * @param gatewaySubChannelDO
      * @return
@@ -26,7 +26,7 @@ public interface GatewaySubChannelDao {
     int addGatewaySubChannel(GatewaySubChannelDO gatewaySubChannelDO);
 
     /**
-     * updateGatewaySubChannel
+     * 更新网关子渠道
      * 
      * @param gatewaySubChannelDO
      * @return

@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ExceptionConfig {
 
     /**
-     * exception for OptimusException
+     * 业务异常
      * 
      * @param e
      * @return
@@ -51,7 +51,7 @@ public class ExceptionConfig {
     }
 
     /**
-     * exception for Exception
+     * 系统异常
      * 
      * @param e
      * @return

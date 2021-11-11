@@ -6,7 +6,7 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * GatewaySubChannelDO
+ * 网关子渠道DO
  * 
  * @author sunxp
  */

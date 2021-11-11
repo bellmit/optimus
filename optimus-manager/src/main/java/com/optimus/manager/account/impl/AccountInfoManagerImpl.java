@@ -3,14 +3,14 @@ package com.optimus.manager.account.impl;
 import java.util.List;
 
 import com.optimus.manager.account.AccountInfoManager;
-import com.optimus.manager.account.dto.ChangeAmountDTO;
+import com.optimus.manager.account.dto.DoTransDTO;
 
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * AccountInfoManagerImpl
+ * 账户信息Manager
  * 
  * @author sunxp
  */
@@ -19,9 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 public class AccountInfoManagerImpl implements AccountInfoManager {
 
     @Override
-    public boolean changeAmount(List<ChangeAmountDTO> changeAmountModelList) {
+    public boolean doTrans(List<DoTransDTO> changeAmountModelList) {
 
-        log.info("changeAmount changeAmountModelList is {}", changeAmountModelList);
+        log.info("doTrans changeAmountModelList is {}", changeAmountModelList);
 
         return false;
 

@@ -6,7 +6,7 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * MemberAgentCodeRelDO
+ * 会员代理码商关系DO
  * 
  * @author sunxp
  */

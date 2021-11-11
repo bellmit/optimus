@@ -6,7 +6,7 @@ import com.optimus.service.gateway.dto.MatchChannelDTO;
 import org.springframework.stereotype.Service;
 
 /**
- * GatewayServiceImpl
+ * 网关服务
  * 
  * @author sunxp
  */

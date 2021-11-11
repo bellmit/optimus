@@ -7,7 +7,7 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * MemberChannelDO
+ * 会员渠道DO
  * 
  * @author sunxp
  */
