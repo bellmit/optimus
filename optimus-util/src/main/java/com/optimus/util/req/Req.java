@@ -1,6 +1,7 @@
 package com.optimus.util.req;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import lombok.Data;
 
@@ -16,7 +17,7 @@ public class Req implements Serializable {
 
     private String method;
 
-    private String timestamp;
+    private Date timestamp;
 
     private String sign;
 

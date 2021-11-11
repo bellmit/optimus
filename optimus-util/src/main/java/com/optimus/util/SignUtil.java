@@ -18,6 +18,13 @@ import org.springframework.util.StringUtils;
  */
 public class SignUtil {
 
+    /** 共用方法名字段 */
+    public static final String METHOD = "method";
+
+    /** 共用时间戳字段 */
+    public static final String TIMESTAMP = "timestamp";
+
+    /** 共用签名字段 */
     public static final String SIGN = "sign";
 
     /**
@@ -41,11 +48,11 @@ public class SignUtil {
     public static String sign(Map<String, String> map, String key) {
 
         if (CollectionUtils.isEmpty(map)) {
-            throw new OptimusException(RespCodeEnum.ERROR_SIGN, "签名参数为空");
+            throw new OptimusException(RespCodeEnum.ERROR_SIGN, "签名参数不能为空");
         }
 
         if (!StringUtils.hasLength(key)) {
-            throw new OptimusException(RespCodeEnum.ERROR_SIGN, "密钥为空");
+            throw new OptimusException(RespCodeEnum.ERROR_SIGN, "密钥不能为空");
         }
 
         String[] keys = map.keySet().toArray(new String[0]);

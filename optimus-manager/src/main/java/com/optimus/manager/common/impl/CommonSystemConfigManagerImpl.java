@@ -43,12 +43,8 @@ public class CommonSystemConfigManagerImpl implements CommonSystemConfigManager 
             return value;
         }
 
-        value = commonSystemConfigDO.getValue();
-        if (!StringUtils.hasLength(value)) {
-            return value;
-        }
+        return commonSystemConfigDO.getValue();
 
-        return value;
     }
 
 }

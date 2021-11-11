@@ -41,4 +41,8 @@ public class MemberInfoDTO implements Serializable {
      */
     private String supDirectMemberId;
 
+    public MemberInfoDTO(String memberId) {
+        this.memberId = memberId;
+    }
+
 }
