@@ -1,6 +1,5 @@
 package com.optimus.web.collect;
 
-import com.optimus.service.account.AccountService;
 import com.optimus.service.gateway.GatewayService;
 import com.optimus.service.gateway.dto.MatchChannelDTO;
 import com.optimus.service.member.dto.MemberInfoDTO;
@@ -29,8 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/optimus/collect")
 public class CollectController {
 
-    @Autowired
-    private AccountService accountService;
 
     @Autowired
     private GatewayService gatewayService;
