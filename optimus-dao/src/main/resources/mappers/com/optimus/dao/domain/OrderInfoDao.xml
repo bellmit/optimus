@@ -47,6 +47,13 @@
     where ID = #{id,jdbcType=NUMERIC}
   </select>
 
+  <select id="getOrderInfoByOrderId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_ORDER_INFO
+    where ORDER_ID = #{orderId,jdbcType=VARCHAR}
+  </select>
+
   <insert id="addOrderInfo" parameterType="com.optimus.dao.domain.OrderInfoDO">
     insert into T_ORDER_INFO
     <trim prefix="(" suffix=")" suffixOverrides=",">

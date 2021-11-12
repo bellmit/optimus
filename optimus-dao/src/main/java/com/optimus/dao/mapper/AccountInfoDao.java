@@ -1,25 +1,35 @@
 package com.optimus.dao.mapper;
 
 import com.optimus.dao.domain.AccountInfoDO;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 账户信息Dao
- * 
+ *
  * @author sunxp
  */
 public interface AccountInfoDao {
 
     /**
      * 根据主键查询账户信息
-     * 
+     *
      * @param id
      * @return
      */
     AccountInfoDO getAccountInfoById(Long id);
 
     /**
+     * 根据会员编号和账户类型查询账户信息
+     *
+     * @param memberId
+     * @param accountType
+     * @return OrderInfoDTO
+     */
+    AccountInfoDO getAccountInfoByMemberIdAndAccountType(@Param("memberId") String memberId, @Param("accountType") String accountType);
+
+    /**
      * 新增一条账户信息
-     * 
+     *
      * @param accountInfoDO
      * @return
      */
@@ -27,7 +37,7 @@ public interface AccountInfoDao {
 
     /**
      * 更新账户信息
-     * 
+     *
      * @param accountInfoDO
      * @return
      */

@@ -1,10 +1,6 @@
 package com.optimus.web.collect.req;
 
-import com.optimus.service.member.dto.MemberInfoDTO;
-import com.optimus.util.req.Req;
 import lombok.Data;
-
-import java.math.BigDecimal;
 
 /**
  * 申请充值请求
@@ -12,23 +8,8 @@ import java.math.BigDecimal;
  * @author hongp
  */
 @Data
-public class ApplyForRechargeReq extends Req {
+public class ApplyForRechargeReq extends BaseCollectReq {
 
     private static final long serialVersionUID = 7078100127511156222L;
-
-    /**
-     * 会员编号
-     */
-    private String memberId;
-
-    /**
-     * 金额
-     */
-    private BigDecimal amount;
-
-    /**
-     * 会员信息
-     */
-    private MemberInfoDTO memberInfo;
 
 }

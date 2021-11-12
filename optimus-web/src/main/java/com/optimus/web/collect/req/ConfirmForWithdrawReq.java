@@ -1,10 +1,6 @@
 package com.optimus.web.collect.req;
 
-import com.optimus.service.member.dto.MemberInfoDTO;
-import com.optimus.util.req.Req;
 import lombok.Data;
-
-import java.math.BigDecimal;
 
 /**
  * 确认提现请求
@@ -12,14 +8,9 @@ import java.math.BigDecimal;
  * @author hongp
  */
 @Data
-public class ConfirmForWithdrawReq extends Req {
+public class ConfirmForWithdrawReq extends BaseCollectReq {
 
     private static final long serialVersionUID = 4184593428540688978L;
-
-    /**
-     * 会员编号
-     */
-    private String memberId;
 
     /**
      * 下级会员编号
@@ -27,12 +18,8 @@ public class ConfirmForWithdrawReq extends Req {
     private String subMemberId;
 
     /**
-     * 金额
+     * 订单编号
      */
-    private BigDecimal amount;
+    private String orderId;
 
-    /**
-     * 会员信息
-     */
-    private MemberInfoDTO memberInfo;
 }

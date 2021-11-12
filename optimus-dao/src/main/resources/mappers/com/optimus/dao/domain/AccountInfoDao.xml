@@ -26,6 +26,14 @@
     where ID = #{id,jdbcType=NUMERIC}
   </select>
 
+  <select id="getAccountInfoByMemberIdAndAccountType"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_ACCOUNT_INFO
+    where MEMBER_ID = #{memberId,jdbcType=VARCHAR}
+    and ACCOUNT_TYPE = #{accountType,jdbcType=VARCHAR}
+  </select>
+
   <insert id="addAccountInfo" parameterType="com.optimus.dao.domain.AccountInfoDO">
     insert into T_ACCOUNT_INFO
     <trim prefix="(" suffix=")" suffixOverrides=",">

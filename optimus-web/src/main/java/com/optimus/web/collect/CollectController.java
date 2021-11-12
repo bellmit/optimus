@@ -1,10 +1,17 @@
 package com.optimus.web.collect;
 
+import com.optimus.service.account.AccountService;
+import com.optimus.service.account.dto.AccountInfoDTO;
 import com.optimus.service.gateway.GatewayService;
 import com.optimus.service.gateway.dto.MatchChannelDTO;
+import com.optimus.service.member.MemberService;
 import com.optimus.service.member.dto.MemberInfoDTO;
 import com.optimus.service.order.OrderService;
 import com.optimus.service.order.dto.CreateOrderDTO;
+import com.optimus.service.order.dto.OrderInfoDTO;
+import com.optimus.service.order.dto.PayOrderDTO;
+import com.optimus.util.DateUtil;
+import com.optimus.util.constants.AccountEnum;
 import com.optimus.util.constants.MemberEnum;
 import com.optimus.util.constants.OrderEnum;
 import com.optimus.util.constants.RespCodeEnum;
@@ -18,6 +25,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * 收单web
@@ -34,6 +44,12 @@ public class CollectController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private MemberService memberService;
+
+    @Autowired
+    private AccountService accountService;
+
     /**
      * 申请充值
      *
@@ -43,8 +59,11 @@ public class CollectController {
     @PostMapping("/applyForRecharge")
     public ApplyForRechargeResp applyForRecharge(@RequestBody ApplyForRechargeReq req) {
 
+        // 获取会员信息
+        MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
+
         // 验证会员类型
-        if (!StringUtils.pathEquals(MemberEnum.MEMBER_TYPE_A.getCode(), req.getMemberInfo().getMemberType())) {
+        if (!StringUtils.pathEquals(MemberEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType())) {
             throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为代理");
         }
 
@@ -53,11 +72,12 @@ public class CollectController {
         createOrder.setMemberId(req.getMemberId());
         createOrder.setOrderType(OrderEnum.ORDER_TYPE_R.getCode());
         createOrder.setOrderAmount(req.getAmount());
-        orderService.createOrder(createOrder);
+        createOrder.setCallerOrderId(req.getCallerOrderId());
+        OrderInfoDTO orderInfo = orderService.createOrder(createOrder);
 
         // 返回信息
         ApplyForRechargeResp resp = new ApplyForRechargeResp();
-        resp.setOrderId(createOrder.getOrderId());
+        resp.setOrderId(orderInfo.getOrderId());
 
         return resp;
 
@@ -72,17 +92,34 @@ public class CollectController {
     @PostMapping("/confirmForRecharge")
     public ConfirmForRechargeResp confirmForRecharge(@RequestBody ConfirmForRechargeReq req) {
 
+        // 获取会员信息
+        MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
+
         // 验证会员类型
-        if (!StringUtils.pathEquals(MemberEnum.MEMBER_TYPE_S.getCode(), req.getMemberInfo().getMemberType())) {
+        if (!StringUtils.pathEquals(MemberEnum.MEMBER_TYPE_S.getCode(), memberInfo.getMemberType())) {
             throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为平台");
         }
 
         // 获取下级会员信息
+        MemberInfoDTO subMemberInfo = memberService.getMemberInfoByMemberId(req.getSubMemberId());
+        if (Objects.isNull(subMemberInfo)) {
+            throw new OptimusException(RespCodeEnum.MEMBER_NO, "下级会员不存在");
+        }
+
         // 验证下级会员类型为代理
+        if (!StringUtils.pathEquals(MemberEnum.MEMBER_TYPE_A.getCode(), subMemberInfo.getMemberType())) {
+            throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "下级会员类型必须为代理");
+        }
 
         // 获取订单信息
+        OrderInfoDTO orderInfo = orderService.getOrderInfoByOrderId(req.getOrderId());
+
+        if (Objects.isNull(orderInfo)) {
+            throw new OptimusException(RespCodeEnum.ORDER_NO);
+        }
 
         // 支付订单
+        payOrder(orderInfo);
 
         return new ConfirmForRechargeResp();
     }
@@ -96,7 +133,7 @@ public class CollectController {
     @PostMapping("/recharge")
     public RechargeResp recharge(@RequestBody RechargeReq req) {
         // 获取会员信息
-        MemberInfoDTO memberInfo = req.getMemberInfo();
+        MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
 
         // 验证会员类型
         if (!StringUtils.pathEquals(MemberEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType())
@@ -104,16 +141,13 @@ public class CollectController {
             throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为代理或码商");
         }
 
-        // 获取下级会员信息
-
         // 验证上下级关系
+        checkMemberLevel(memberInfo, req.getSubDirectMemberId());
 
-        // 创建订单
-
-        // 支付订单
+        // 创建订单 支付订单
+        createAndPayOrder(req, OrderEnum.ORDER_TYPE_R.getCode());
 
         return new RechargeResp();
-
     }
 
     /**
@@ -124,14 +158,20 @@ public class CollectController {
      */
     @PostMapping("/applyForWithdraw")
     public ApplyForWithdrawResp applyForWithdraw(@RequestBody ApplyForWithdrawReq req) {
+        // 获取会员信息
+        MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
 
         // 验证会员类型
-        if (!StringUtils.pathEquals(MemberEnum.MEMBER_TYPE_A.getCode(), req.getMemberInfo().getMemberType())
-                || !StringUtils.pathEquals(MemberEnum.MEMBER_TYPE_M.getCode(), req.getMemberInfo().getMemberType())) {
+        if (!StringUtils.pathEquals(MemberEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType())
+                || !StringUtils.pathEquals(MemberEnum.MEMBER_TYPE_M.getCode(), memberInfo.getMemberType())) {
             throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为代理或管理");
         }
 
         // 验证账户余额是否充足
+        AccountInfoDTO accountInfo = accountService.getAccountInfoByMemberIdAndAccountType(req.getMemberId(), AccountEnum.ACCOUNT_TYPE_B.getCode());
+        if(accountInfo.getAmount().compareTo(BigDecimal.ZERO) <= 0){
+            throw new OptimusException(RespCodeEnum.ACCOUNT_AMOUNT_ERROR);
+        }
 
         // 创建订单
         CreateOrderDTO createOrder = new CreateOrderDTO();
@@ -156,17 +196,28 @@ public class CollectController {
     @PostMapping("/confirmForWithdraw")
     public ConfirmForWithdrawResp confirmForWithdraw(@RequestBody ConfirmForWithdrawReq req) {
 
+        // 获取会员信息
+        MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
+
         // 验证会员类型
-        if (!StringUtils.pathEquals(MemberEnum.MEMBER_TYPE_S.getCode(), req.getMemberInfo().getMemberType())) {
+        if (!StringUtils.pathEquals(MemberEnum.MEMBER_TYPE_S.getCode(), memberInfo.getMemberType())) {
             throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为平台");
         }
 
-        // 获取下级会员信息
-        // 验证下级会员类型为代理或者管理
-
         // 获取订单信息
+        OrderInfoDTO orderInfo = orderService.getOrderInfoByOrderId(req.getOrderId());
+
+        if (Objects.isNull(orderInfo)) {
+            throw new OptimusException(RespCodeEnum.ORDER_NO);
+        }
+
+        // 校验订单里面的会员编号
+        if(StringUtils.pathEquals(orderInfo.getMemberId(), req.getSubMemberId())){
+            throw new OptimusException(RespCodeEnum.ORDER_ERROR);
+        }
 
         // 支付订单
+        payOrder(orderInfo);
 
         return new ConfirmForWithdrawResp();
 
@@ -182,7 +233,7 @@ public class CollectController {
     public WithdrawResp withdraw(@RequestBody WithdrawReq req) {
 
         // 获取会员信息
-        MemberInfoDTO memberInfo = req.getMemberInfo();
+        MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
 
         // 验证会员类型
         if (!StringUtils.pathEquals(MemberEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType())
@@ -190,15 +241,17 @@ public class CollectController {
             throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为代理或码商");
         }
 
-        // 获取下级会员信息
-
         // 验证上下级关系
+        checkMemberLevel(memberInfo, req.getSubDirectMemberId());
 
         // 验证账户余额是否充足
+        AccountInfoDTO accountInfo = accountService.getAccountInfoByMemberIdAndAccountType(req.getMemberId(), AccountEnum.ACCOUNT_TYPE_B.getCode());
+        if(accountInfo.getAmount().compareTo(BigDecimal.ZERO) <= 0){
+            throw new OptimusException(RespCodeEnum.ACCOUNT_AMOUNT_ERROR);
+        }
 
-        // 创建订单
-
-        // 支付订单
+        // 创建订单 支付订单
+        createAndPayOrder(req, OrderEnum.ORDER_TYPE_W.getCode());
 
         return new WithdrawResp();
 
@@ -214,7 +267,7 @@ public class CollectController {
     public TransferResp transfer(@RequestBody TransferReq req) {
 
         // 获取会员信息
-        MemberInfoDTO memberInfo = req.getMemberInfo();
+        MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
 
         // 验证会员类型
         if (!StringUtils.pathEquals(MemberEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType())
@@ -223,8 +276,14 @@ public class CollectController {
         }
 
         // 创建订单
+        CreateOrderDTO createOrder = new CreateOrderDTO();
+        createOrder.setMemberId(req.getMemberId());
+        createOrder.setOrderType(OrderEnum.ORDER_TYPE_M.getCode());
+        createOrder.setOrderAmount(req.getAmount());
+        OrderInfoDTO orderInfo = orderService.createOrder(createOrder);
 
         // 支付订单
+        payOrder(orderInfo);
 
         return new TransferResp();
 
@@ -256,6 +315,57 @@ public class CollectController {
 
         return new PlaceOrderResp();
 
+    }
+
+    /**
+     * 支付订单
+     *
+     * @param orderInfo
+     */
+    private void payOrder(OrderInfoDTO orderInfo) {
+        PayOrderDTO payOrder = new PayOrderDTO();
+        payOrder.setMemberId(orderInfo.getMemberId());
+        payOrder.setOrderId(orderInfo.getOrderId());
+        payOrder.setActualAmount(orderInfo.getActualAmount());
+        payOrder.setOrderAmount(orderInfo.getOrderAmount());
+        payOrder.setFee(orderInfo.getFee());
+        payOrder.setPayTime(DateUtil.currentDate());
+        orderService.payOrder(payOrder);
+    }
+
+    /**
+     * 创建且支付订单
+     *
+     * @param baseCollectReq
+     * @param orderType
+     */
+    private void createAndPayOrder(BaseCollectReq baseCollectReq, String orderType) {
+        CreateOrderDTO createOrder = new CreateOrderDTO();
+        createOrder.setMemberId(baseCollectReq.getMemberId());
+        createOrder.setOrderType(orderType);
+        createOrder.setOrderAmount(baseCollectReq.getAmount());
+        createOrder.setCallerOrderId(baseCollectReq.getCallerOrderId());
+        OrderInfoDTO orderInfo = orderService.createOrder(createOrder);
+        payOrder(orderInfo);
+    }
+
+    /**
+     * 校验上下级
+     *
+     * @param memberInfo
+     * @param subDirectMemberId
+     */
+    private void checkMemberLevel(MemberInfoDTO memberInfo,  String subDirectMemberId) {
+        // 获取下级会员信息
+        MemberInfoDTO subMemberInfo = memberService.getMemberInfoByMemberId(subDirectMemberId);
+        if (Objects.isNull(subMemberInfo)) {
+            throw new OptimusException(RespCodeEnum.MEMBER_NO, "下级会员不存在");
+        }
+
+        // 验证上下级关系
+        if (!StringUtils.pathEquals(memberInfo.getMemberId(), subMemberInfo.getSupDirectMemberId())) {
+            throw new OptimusException(RespCodeEnum.MEMBER_LEVEL_ERROR);
+        }
     }
 
 }

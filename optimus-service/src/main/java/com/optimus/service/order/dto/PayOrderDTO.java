@@ -32,6 +32,16 @@ public class PayOrderDTO implements Serializable {
     private BigDecimal actualAmount;
 
     /**
+     * 订单金额
+     */
+    private BigDecimal orderAmount;
+
+    /**
+     * 手续费
+     */
+    private BigDecimal fee;
+
+    /**
      * 支付时间
      */
     private Date payTime;

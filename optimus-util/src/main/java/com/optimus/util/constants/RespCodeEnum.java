@@ -32,13 +32,18 @@ public enum RespCodeEnum {
 
     MEMBER_TYPE_ERROR("2002", "会员类型不匹配"),
 
+    MEMBER_LEVEL_ERROR("2003", "会员层级不匹配"),
+
     /* ---------账户类编码--------- */
 
     ACCOUNT_NO("3000", "账户不存在"),
 
+    ACCOUNT_AMOUNT_ERROR("3001", "账户余额不足"),
+
     /* ---------订单类编码--------- */
 
     ORDER_NO("4000", "订单不存在"),
+    ORDER_ERROR("4001", "订单信息异常"),
 
     /* ---------网关类编码--------- */
 

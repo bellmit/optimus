@@ -2,6 +2,7 @@ package com.optimus.service.member.dto;
 
 import java.io.Serializable;
 
+import com.optimus.util.constants.MemberEnum;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -28,6 +29,7 @@ public class MemberInfoDTO implements Serializable {
 
     /**
      * 会员类型
+     * @see MemberEnum
      */
     private String memberType;
 

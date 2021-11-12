@@ -47,7 +47,7 @@ public class CollectValidate {
             throw new OptimusException(RespCodeEnum.INVALID_PARAM, "网关渠道编号不能为空");
         }
 
-        if (!StringUtils.hasLength(placeOrderReq.getMechantCallBackUrl())) {
+        if (!StringUtils.hasLength(placeOrderReq.getMerchantCallBackUrl())) {
             throw new OptimusException(RespCodeEnum.INVALID_PARAM, "商户回调地址不能为空");
         }
 

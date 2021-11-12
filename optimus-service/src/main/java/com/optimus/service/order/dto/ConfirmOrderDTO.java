@@ -2,6 +2,7 @@ package com.optimus.service.order.dto;
 
 import java.io.Serializable;
 
+import com.optimus.util.constants.OrderEnum;
 import lombok.Data;
 
 /**
@@ -31,6 +32,7 @@ public class ConfirmOrderDTO implements Serializable {
 
     /**
      * 订单状态
+     * @see OrderEnum
      */
     private String orderStatus;
 

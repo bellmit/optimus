@@ -39,6 +39,6 @@ public class PlaceOrderReq extends Req {
     /**
      * 商户回调地址
      */
-    private String mechantCallBackUrl;
+    private String merchantCallBackUrl;
 
 }

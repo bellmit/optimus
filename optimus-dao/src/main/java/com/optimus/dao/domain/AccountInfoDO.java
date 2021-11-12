@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.optimus.util.constants.AccountEnum;
 import lombok.Data;
 
 /**
@@ -18,12 +19,25 @@ public class AccountInfoDO implements Serializable {
 
     private Long id;
 
+    /**
+     * 会员编号
+     */
     private String memberId;
 
+    /**
+     * 账户ID
+     */
     private String accountId;
 
+    /**
+     * 账户类型
+     * @see AccountEnum
+     */
     private String accountType;
 
+    /**
+     * 账户金额
+     */
     private BigDecimal amount;
 
     private String createBy;

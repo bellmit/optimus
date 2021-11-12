@@ -18,6 +18,14 @@ public interface OrderInfoDao {
     OrderInfoDO getOrderInfoById(Long id);
 
     /**
+     * 根据订单编号查询订单信息
+     *
+     * @param orderId
+     * @return OrderInfoDO
+     */
+    OrderInfoDO getOrderInfoByOrderId(String orderId);
+
+    /**
      * 新增一条订单信息
      * 
      * @param orderInfoDO
