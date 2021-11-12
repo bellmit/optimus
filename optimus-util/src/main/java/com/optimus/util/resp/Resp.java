@@ -22,6 +22,9 @@ public class Resp<T> implements Serializable {
 
     private String memo = RespCodeEnum.SUCCESS.getMemo();
 
+    /**
+     * 响应报文体
+     */
     private T data;
 
     public Resp(T data) {
