@@ -1,8 +1,5 @@
 package com.optimus.util;
 
-import java.io.IOException;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,7 +36,7 @@ public class JsonUtil {
 
             return objectMapper.readTree(json);
 
-        } catch (JsonProcessingException e) {
+        } catch (Exception e) {
             throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "readTree转换异常");
         }
 
@@ -57,7 +54,7 @@ public class JsonUtil {
 
             return objectMapper.writeValueAsString(object);
 
-        } catch (JsonProcessingException e) {
+        } catch (Exception e) {
             throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "ObjectToJson转换异常");
         }
 
@@ -77,7 +74,7 @@ public class JsonUtil {
 
             return objectMapper.readValue(json, clazz);
 
-        } catch (JsonProcessingException e) {
+        } catch (Exception e) {
             throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "JsonToBean转换异常");
         }
 
@@ -97,7 +94,7 @@ public class JsonUtil {
 
             return objectMapper.readValue(json, typeReference);
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "JsonToCollection转换异常");
         }
 

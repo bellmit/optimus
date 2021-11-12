@@ -19,9 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 public class AccountInfoManagerImpl implements AccountInfoManager {
 
     @Override
-    public boolean doTrans(List<DoTransDTO> changeAmountModelList) {
+    public boolean doTrans(List<DoTransDTO> doTransList) {
 
-        log.info("doTrans changeAmountModelList is {}", changeAmountModelList);
+        log.info("doTrans doTransList is {}", doTransList);
 
         return false;
 

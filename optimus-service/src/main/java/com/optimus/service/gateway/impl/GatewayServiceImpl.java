@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class GatewayServiceImpl implements GatewayService {
 
     @Override
-    public String matchChannel(MatchChannelDTO matchChannelDTO) {
+    public String matchChannel(MatchChannelDTO matchChannel) {
         return null;
     }
 

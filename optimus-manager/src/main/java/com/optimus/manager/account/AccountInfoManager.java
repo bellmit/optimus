@@ -12,11 +12,11 @@ import com.optimus.manager.account.dto.DoTransDTO;
 public interface AccountInfoManager {
 
     /**
-     * 变更账户金额
+     * 做交易
      * 
-     * @param changeAmountDTOList
+     * @param changeAmountList
      * @return
      */
-    boolean doTrans(List<DoTransDTO> changeAmountDTOList);
+    boolean doTrans(List<DoTransDTO> changeAmountList);
 
 }

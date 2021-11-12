@@ -36,6 +36,6 @@ public class InviteChainDTO implements Serializable {
     /**
      * 邀请链DTO
      */
-    private InviteChainDTO inviteChainDTO;
+    private InviteChainDTO inviteChain;
 
 }

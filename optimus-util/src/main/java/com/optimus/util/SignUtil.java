@@ -63,7 +63,7 @@ public class SignUtil {
 
         for (String item : keys) {
 
-            if (SIGN.equals(item)) {
+            if (StringUtils.pathEquals(item, SIGN)) {
                 continue;
             }
 

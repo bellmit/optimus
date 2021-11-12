@@ -13,12 +13,12 @@ import com.optimus.service.member.dto.InviteChainDTO;
 public interface MemberService {
 
     /**
-     * 查询用户信息列表
+     * 根据memberId查询用户信息
      * 
-     * @param memberInfoDTO
+     * @param memberId
      * @return
      */
-    List<MemberInfoDTO> getMemberInfoList(MemberInfoDTO memberInfoDTO);
+    MemberInfoDTO getMemberInfoByMemberId(String memberId);
 
     /**
      * 构建邀请链

@@ -20,36 +20,36 @@ public interface OrderService {
      * 
      * 适用场景-申请充值/充值/申请提现/提现/划账/下单
      * 
-     * @param createOrderDTO
+     * @param createOrder
      */
-    void createOrder(CreateOrderDTO createOrderDTO);
+    void createOrder(CreateOrderDTO createOrder);
 
     /**
      * 调用网关渠道下单返回
      * 
      * 适用场景-调用网关渠道下单返回
      * 
-     * @param confirmOrderDTO
+     * @param confirmOrder
      */
-    void confirmOrder(ConfirmOrderDTO confirmOrderDTO);
+    void confirmOrder(ConfirmOrderDTO confirmOrder);
 
     /**
      * 支付订单
      * 
      * 适用场景-充值/提现/划账/网关渠道回调
      * 
-     * @param payOrderDTO
+     * @param payOrder
      */
-    void payOrder(PayOrderDTO payOrderDTO);
+    void payOrder(PayOrderDTO payOrder);
 
     /**
      * 构建交易信息
      * 
      * 适用场景-网关渠道回调成功
      * 
-     * @param inviteChainDTOList
+     * @param inviteChainList
      * @return
      */
-    List<DoTransDTO> buildSplitProfit(List<InviteChainDTO> inviteChainDTOList);
+    List<DoTransDTO> buildSplitProfit(List<InviteChainDTO> inviteChainList);
 
 }

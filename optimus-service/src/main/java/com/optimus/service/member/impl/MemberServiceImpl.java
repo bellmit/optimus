@@ -1,7 +1,7 @@
 package com.optimus.service.member.impl;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.Resource;
 
@@ -10,10 +10,13 @@ import com.optimus.dao.mapper.MemberInfoDao;
 import com.optimus.service.member.MemberService;
 import com.optimus.service.member.dto.InviteChainDTO;
 import com.optimus.service.member.dto.MemberInfoDTO;
-import com.optimus.util.BeanUtil;
+import com.optimus.util.constants.MemberEnum;
+import com.optimus.util.constants.RespCodeEnum;
+import com.optimus.util.exception.OptimusException;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 /**
  * 会员服务
@@ -27,17 +30,21 @@ public class MemberServiceImpl implements MemberService {
     private MemberInfoDao memberInfoDao;
 
     @Override
-    public List<MemberInfoDTO> getMemberInfoList(MemberInfoDTO memberInfoDTO) {
+    public MemberInfoDTO getMemberInfoByMemberId(String memberId) {
 
-        MemberInfoDO memberInfoDO = new MemberInfoDO();
-        BeanUtils.copyProperties(memberInfoDTO, memberInfoDO);
+        MemberInfoDO memberInfoDO = memberInfoDao.getMemberInfoByMemberId(memberId);
 
-        List<MemberInfoDO> memberInfoDOList = memberInfoDao.getMemberInfoList(memberInfoDO);
+        if (Objects.isNull(memberInfoDO)) {
+            throw new OptimusException(RespCodeEnum.MEMBER_NO);
+        }
+        if (!StringUtils.pathEquals(memberInfoDO.getDeleteFlag(), MemberEnum.DELETE_FLAG_ND.getCode())) {
+            throw new OptimusException(RespCodeEnum.MEMBER_NO);
+        }
 
-        List<MemberInfoDTO> memberInfoDTOList = new ArrayList<>();
-        BeanUtil.copyProperties(memberInfoDOList, memberInfoDTOList, MemberInfoDTO.class);
+        MemberInfoDTO memberInfo = new MemberInfoDTO();
+        BeanUtils.copyProperties(memberInfoDO, memberInfo);
 
-        return memberInfoDTOList;
+        return memberInfo;
 
     }
 

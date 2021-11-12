@@ -49,15 +49,15 @@ public class CollectController {
         }
 
         // 创建订单
-        CreateOrderDTO createOrderDTO = new CreateOrderDTO();
-        createOrderDTO.setMemberId(req.getMemberId());
-        createOrderDTO.setOrderType(OrderEnum.ORDER_TYPE_R.getCode());
-        createOrderDTO.setOrderAmount(req.getAmount());
-        orderService.createOrder(createOrderDTO);
+        CreateOrderDTO createOrder = new CreateOrderDTO();
+        createOrder.setMemberId(req.getMemberId());
+        createOrder.setOrderType(OrderEnum.ORDER_TYPE_R.getCode());
+        createOrder.setOrderAmount(req.getAmount());
+        orderService.createOrder(createOrder);
 
         // 返回信息
         ApplyForRechargeResp resp = new ApplyForRechargeResp();
-        resp.setOrderId(createOrderDTO.getOrderId());
+        resp.setOrderId(createOrder.getOrderId());
 
         return resp;
 
@@ -134,15 +134,15 @@ public class CollectController {
         // 验证账户余额是否充足
 
         // 创建订单
-        CreateOrderDTO createOrderDTO = new CreateOrderDTO();
-        createOrderDTO.setMemberId(req.getMemberId());
-        createOrderDTO.setOrderType(OrderEnum.ORDER_TYPE_W.getCode());
-        createOrderDTO.setOrderAmount(req.getAmount());
-        orderService.createOrder(createOrderDTO);
+        CreateOrderDTO createOrder = new CreateOrderDTO();
+        createOrder.setMemberId(req.getMemberId());
+        createOrder.setOrderType(OrderEnum.ORDER_TYPE_W.getCode());
+        createOrder.setOrderAmount(req.getAmount());
+        orderService.createOrder(createOrder);
 
         // 返回信息
         ApplyForWithdrawResp resp = new ApplyForWithdrawResp();
-        resp.setOrderId(createOrderDTO.getOrderId());
+        resp.setOrderId(createOrder.getOrderId());
 
         return resp;
     }

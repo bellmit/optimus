@@ -33,8 +33,6 @@ public class GatewaySubChannelDO implements Serializable {
 
     private Short fatigue;
 
-    private Date nextUsableTime;
-
     private String implType;
 
     private String implPath;

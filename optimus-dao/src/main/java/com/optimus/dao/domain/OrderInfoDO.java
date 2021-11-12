@@ -20,7 +20,7 @@ public class OrderInfoDO implements Serializable {
 
     private String memberId;
 
-    private String supDirectMemberId;
+    private String supMemberId;
 
     private String codeMemberId;
 
@@ -37,6 +37,8 @@ public class OrderInfoDO implements Serializable {
     private BigDecimal orderAmount;
 
     private BigDecimal actualAmount;
+
+    private BigDecimal fee;
 
     private Date orderTime;
 

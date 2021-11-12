@@ -12,7 +12,6 @@
     <result column="FACE_VALUE" jdbcType="VARCHAR" property="faceValue" />
     <result column="WEIGHT" jdbcType="NUMERIC" property="weight" />
     <result column="FATIGUE" jdbcType="NUMERIC" property="fatigue" />
-    <result column="NEXT_USABLE_TIME" jdbcType="TIMESTAMP" property="nextUsableTime" />
     <result column="IMPL_TYPE" jdbcType="VARCHAR" property="implType" />
     <result column="IMPL_PATH" jdbcType="VARCHAR" property="implPath" />
     <result column="CALLBACK_IP" jdbcType="VARCHAR" property="callbackIp" />
@@ -25,8 +24,8 @@
 
   <sql id="Base_Column_List">
     ID, PARENT_CHANNEL_CODE, CHANNEL_CODE, CHANNEL_NAME, CHANNEL_STATUS, FACE_VALUE_TYPE, 
-    FACE_VALUE, WEIGHT, FATIGUE, NEXT_USABLE_TIME, IMPL_TYPE, IMPL_PATH, CALLBACK_IP, 
-    BIZ_CONTENT, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME
+    FACE_VALUE, WEIGHT, FATIGUE, IMPL_TYPE, IMPL_PATH, CALLBACK_IP, BIZ_CONTENT, 
+    CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME
   </sql>
 
   <select id="getGatewaySubChannelById" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -65,9 +64,6 @@
       </if>
       <if test="fatigue != null">
         FATIGUE,
-      </if>
-      <if test="nextUsableTime != null">
-        NEXT_USABLE_TIME,
       </if>
       <if test="implType != null">
         IMPL_TYPE,
@@ -112,8 +108,6 @@
       <if test="weight != null"> #{weight,jdbcType=NUMERIC},
       </if>
       <if test="fatigue != null"> #{fatigue,jdbcType=NUMERIC},
-      </if>
-      <if test="nextUsableTime != null"> #{nextUsableTime,jdbcType=TIMESTAMP},
       </if>
       <if test="implType != null"> #{implType,jdbcType=VARCHAR},
       </if>
@@ -160,9 +154,6 @@
       </if>
       <if test="fatigue != null">
         FATIGUE = #{fatigue,jdbcType=NUMERIC},
-      </if>
-      <if test="nextUsableTime != null">
-        NEXT_USABLE_TIME = #{nextUsableTime,jdbcType=TIMESTAMP},
       </if>
       <if test="implType != null">
         IMPL_TYPE = #{implType,jdbcType=VARCHAR},

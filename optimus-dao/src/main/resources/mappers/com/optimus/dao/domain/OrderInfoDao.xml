@@ -5,7 +5,7 @@
   <resultMap id="BaseResultMap" type="com.optimus.dao.domain.OrderInfoDO">
     <id column="ID" jdbcType="NUMERIC" property="id" />
     <result column="MEMBER_ID" jdbcType="VARCHAR" property="memberId" />
-    <result column="SUP_DIRECT_MEMBER_ID" jdbcType="VARCHAR" property="supDirectMemberId" />
+    <result column="SUP_MEMBER_ID" jdbcType="VARCHAR" property="supMemberId" />
     <result column="CODE_MEMBER_ID" jdbcType="VARCHAR" property="codeMemberId" />
     <result column="ORDER_ID" jdbcType="VARCHAR" property="orderId" />
     <result column="CALLER_ORDER_ID" jdbcType="VARCHAR" property="callerOrderId" />
@@ -14,6 +14,7 @@
     <result column="ORDER_STATUS" jdbcType="VARCHAR" property="orderStatus" />
     <result column="ORDER_AMOUNT" jdbcType="NUMERIC" property="orderAmount" />
     <result column="ACTUAL_AMOUNT" jdbcType="NUMERIC" property="actualAmount" />
+    <result column="FEE" jdbcType="NUMERIC" property="fee" />
     <result column="ORDER_TIME" jdbcType="TIMESTAMP" property="orderTime" />
     <result column="PAY_TIME" jdbcType="TIMESTAMP" property="payTime" />
     <result column="SPLIT_PROFIT_STATUS" jdbcType="VARCHAR" property="splitProfitStatus" />
@@ -32,11 +33,11 @@
   </resultMap>
 
   <sql id="Base_Column_List">
-    ID, MEMBER_ID, SUP_DIRECT_MEMBER_ID, CODE_MEMBER_ID, ORDER_ID, CALLER_ORDER_ID, CALLEE_ORDER_ID, 
-    ORDER_TYPE, ORDER_STATUS, ORDER_AMOUNT, ACTUAL_AMOUNT, ORDER_TIME, PAY_TIME, SPLIT_PROFIT_STATUS, 
-    BEHAVIOR, MERCHANT_CALLBACK_URL, MERCHANT_CALLBACK_COUNT, MERCHANT_NOTIFY_STATUS, 
-    CHANNEL_CODE, SUB_CHANNEL_CODE, CHANNEL_RETURN_MESSAGE, CHANNEL_ORDER_QUERY_COUNT, 
-    CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME
+    ID, MEMBER_ID, SUP_MEMBER_ID, CODE_MEMBER_ID, ORDER_ID, CALLER_ORDER_ID, CALLEE_ORDER_ID, 
+    ORDER_TYPE, ORDER_STATUS, ORDER_AMOUNT, ACTUAL_AMOUNT, FEE, ORDER_TIME, PAY_TIME, 
+    SPLIT_PROFIT_STATUS, BEHAVIOR, MERCHANT_CALLBACK_URL, MERCHANT_CALLBACK_COUNT, 
+    MERCHANT_NOTIFY_STATUS, CHANNEL_CODE, SUB_CHANNEL_CODE, CHANNEL_RETURN_MESSAGE, 
+    CHANNEL_ORDER_QUERY_COUNT, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME
   </sql>
 
   <select id="getOrderInfoById" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -55,8 +56,8 @@
       <if test="memberId != null">
         MEMBER_ID,
       </if>
-      <if test="supDirectMemberId != null">
-        SUP_DIRECT_MEMBER_ID,
+      <if test="supMemberId != null">
+        SUP_MEMBER_ID,
       </if>
       <if test="codeMemberId != null">
         CODE_MEMBER_ID,
@@ -81,6 +82,9 @@
       </if>
       <if test="actualAmount != null">
         ACTUAL_AMOUNT,
+      </if>
+      <if test="fee != null">
+        FEE,
       </if>
       <if test="orderTime != null">
         ORDER_TIME,
@@ -133,7 +137,7 @@
       </if>
       <if test="memberId != null"> #{memberId,jdbcType=VARCHAR},
       </if>
-      <if test="supDirectMemberId != null"> #{supDirectMemberId,jdbcType=VARCHAR},
+      <if test="supMemberId != null"> #{supMemberId,jdbcType=VARCHAR},
       </if>
       <if test="codeMemberId != null"> #{codeMemberId,jdbcType=VARCHAR},
       </if>
@@ -150,6 +154,8 @@
       <if test="orderAmount != null"> #{orderAmount,jdbcType=NUMERIC},
       </if>
       <if test="actualAmount != null"> #{actualAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="fee != null"> #{fee,jdbcType=NUMERIC},
       </if>
       <if test="orderTime != null"> #{orderTime,jdbcType=TIMESTAMP},
       </if>
@@ -190,8 +196,8 @@
       <if test="memberId != null">
         MEMBER_ID = #{memberId,jdbcType=VARCHAR},
       </if>
-      <if test="supDirectMemberId != null">
-        SUP_DIRECT_MEMBER_ID = #{supDirectMemberId,jdbcType=VARCHAR},
+      <if test="supMemberId != null">
+        SUP_MEMBER_ID = #{supMemberId,jdbcType=VARCHAR},
       </if>
       <if test="codeMemberId != null">
         CODE_MEMBER_ID = #{codeMemberId,jdbcType=VARCHAR},
@@ -216,6 +222,9 @@
       </if>
       <if test="actualAmount != null">
         ACTUAL_AMOUNT = #{actualAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="fee != null"> 
+        FEE = #{fee,jdbcType=NUMERIC},
       </if>
       <if test="orderTime != null">
         ORDER_TIME = #{orderTime,jdbcType=TIMESTAMP},

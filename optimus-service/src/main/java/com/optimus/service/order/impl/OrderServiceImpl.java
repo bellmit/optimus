@@ -21,7 +21,7 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public void createOrder(CreateOrderDTO createOrderDTO) {
+    public void createOrder(CreateOrderDTO createOrder) {
 
         // 验证上游订单是否重复
 
@@ -33,17 +33,17 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void confirmOrder(ConfirmOrderDTO confirmOrderDTO) {
+    public void confirmOrder(ConfirmOrderDTO confirmOrder) {
 
     }
 
     @Override
-    public void payOrder(PayOrderDTO payOrderDTO) {
+    public void payOrder(PayOrderDTO payOrder) {
 
     }
 
     @Override
-    public List<DoTransDTO> buildSplitProfit(List<InviteChainDTO> inviteChainDTOList) {
+    public List<DoTransDTO> buildSplitProfit(List<InviteChainDTO> inviteChainList) {
         return null;
     }
 

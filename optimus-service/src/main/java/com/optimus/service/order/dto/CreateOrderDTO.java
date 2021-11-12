@@ -22,9 +22,9 @@ public class CreateOrderDTO implements Serializable {
     private String memberId;
 
     /**
-     * 直接上级会员编号
+     * 上级会员编号
      */
-    private String supDirectMemberId;
+    private String supMemberId;
 
     /**
      * 码商会员编号
