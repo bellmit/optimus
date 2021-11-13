@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 账户交易枚举
+ * 账户变更类型枚举
  * 
  * @author sunxp
  */
@@ -12,7 +12,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum AccountChangeTypeEnum {
 
-    /* ---------账户交易--------- */
+    /* ---------账户变更类型--------- */
 
     P_PLUS("P+", "加平台内部余额户金额"),
 

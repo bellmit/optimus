@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 会员-商户下单开关枚举
+ * 会员商户下单开关枚举
  * 
  * @author sunxp
  */
@@ -12,7 +12,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum MemberMerchantOrderSwitchEnum {
 
-    /* ---------会员-商户下单开关--------- */
+    /* ---------会员商户下单开关--------- */
 
     MERCHANT_ORDER_SWITCH_Y("Y", "开启"),
 
