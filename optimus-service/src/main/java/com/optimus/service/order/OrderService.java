@@ -4,10 +4,9 @@ import java.util.List;
 
 import com.optimus.manager.account.dto.DoTransDTO;
 import com.optimus.service.member.dto.InviteChainDTO;
+import com.optimus.service.order.dto.CreateOrderDTO;
 import com.optimus.service.order.dto.OrderInfoDTO;
 import com.optimus.service.order.dto.PayOrderDTO;
-import com.optimus.service.order.dto.ConfirmOrderDTO;
-import com.optimus.service.order.dto.CreateOrderDTO;
 
 /**
  * 订单服务
@@ -15,6 +14,15 @@ import com.optimus.service.order.dto.CreateOrderDTO;
  * @author sunxp
  */
 public interface OrderService {
+
+    /**
+     * 根据订单编号查询订单信息
+     *
+     *
+     * @param orderId
+     * @return OrderInfoDTO
+     */
+    OrderInfoDTO getOrderInfoByOrderId(String orderId);
 
     /**
      * 创建订单
@@ -25,15 +33,6 @@ public interface OrderService {
      * @return OrderInfoDTO
      */
     OrderInfoDTO createOrder(CreateOrderDTO createOrder);
-
-    /**
-     * 调用网关渠道下单返回
-     *
-     * 适用场景-调用网关渠道下单返回
-     *
-     * @param confirmOrder
-     */
-    void confirmOrder(ConfirmOrderDTO confirmOrder);
 
     /**
      * 支付订单
@@ -53,15 +52,5 @@ public interface OrderService {
      * @return
      */
     List<DoTransDTO> buildSplitProfit(List<InviteChainDTO> inviteChainList);
-
-    /**
-     * 根据订单编号查询订单信息
-     *
-     * 适用场景-
-     *
-     * @param orderId
-     * @return OrderInfoDTO
-     */
-    OrderInfoDTO getOrderInfoByOrderId(String orderId);
 
 }

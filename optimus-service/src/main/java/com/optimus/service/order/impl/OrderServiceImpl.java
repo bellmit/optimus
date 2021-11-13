@@ -13,7 +13,6 @@ import com.optimus.service.member.dto.InviteChainDTO;
 import com.optimus.service.order.OrderService;
 import com.optimus.service.order.core.BaseOrder;
 import com.optimus.service.order.core.factory.OrderFactory;
-import com.optimus.service.order.dto.ConfirmOrderDTO;
 import com.optimus.service.order.dto.CreateOrderDTO;
 import com.optimus.service.order.dto.OrderInfoDTO;
 import com.optimus.service.order.dto.PayOrderDTO;
@@ -37,6 +36,20 @@ public class OrderServiceImpl implements OrderService {
 
     @Resource
     private OrderFactory orderFactory;
+
+    @Override
+    public OrderInfoDTO getOrderInfoByOrderId(String orderId) {
+        OrderInfoDO orderInfoDO = orderInfoDao.getOrderInfoByOrderId(orderId);
+
+        if (Objects.isNull(orderInfoDO)) {
+            return null;
+        }
+
+        OrderInfoDTO orderInfoDTO = new OrderInfoDTO();
+        BeanUtils.copyProperties(orderInfoDO, orderInfoDTO);
+
+        return orderInfoDTO;
+    }
 
     @Override
     public OrderInfoDTO createOrder(CreateOrderDTO createOrder) {
@@ -70,11 +83,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void confirmOrder(ConfirmOrderDTO confirmOrder) {
-
-    }
-
-    @Override
     public void payOrder(PayOrderDTO payOrder) {
 
     }
@@ -82,20 +90,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<DoTransDTO> buildSplitProfit(List<InviteChainDTO> inviteChainList) {
         return null;
-    }
-
-    @Override
-    public OrderInfoDTO getOrderInfoByOrderId(String orderId) {
-        OrderInfoDO orderInfoDO = orderInfoDao.getOrderInfoByOrderId(orderId);
-
-        if (Objects.isNull(orderInfoDO)) {
-            return null;
-        }
-
-        OrderInfoDTO orderInfoDTO = new OrderInfoDTO();
-        BeanUtils.copyProperties(orderInfoDO, orderInfoDTO);
-
-        return orderInfoDTO;
     }
 
 }
