@@ -16,12 +16,24 @@ public class OrderDetailDO implements Serializable {
 
     private static final long serialVersionUID = -1589077009756433789L;
 
+    /**
+     * 主键
+     */
     private Long id;
 
+    /**
+     * 会员编号
+     */
     private String memberId;
 
+    /**
+     * 订单编号
+     */
     private String orderId;
 
+    /**
+     * 金额
+     */
     private BigDecimal amount;
 
     private String createBy;

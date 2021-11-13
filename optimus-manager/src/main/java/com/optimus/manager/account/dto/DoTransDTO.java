@@ -3,6 +3,8 @@ package com.optimus.manager.account.dto;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import com.optimus.util.constants.AccountEnum;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,6 +33,8 @@ public class DoTransDTO implements Serializable {
 
     /**
      * 变更类型
+     * 
+     * @see AccountEnum
      */
     private String changeType;
 

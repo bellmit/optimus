@@ -41,7 +41,7 @@ public class PlaceOrderResp implements Serializable {
     private String type;
 
     /**
-     * 类型所对应的消息
+     * 类型所对应的信息
      */
     private Object message;
 

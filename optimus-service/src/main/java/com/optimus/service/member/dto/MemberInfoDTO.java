@@ -29,6 +29,7 @@ public class MemberInfoDTO implements Serializable {
 
     /**
      * 会员类型
+     * 
      * @see MemberEnum
      */
     private String memberType;

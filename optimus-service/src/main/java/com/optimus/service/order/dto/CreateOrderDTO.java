@@ -44,6 +44,7 @@ public class CreateOrderDTO implements Serializable {
 
     /**
      * 订单类型
+     * 
      * @see OrderEnum
      */
     private String orderType;

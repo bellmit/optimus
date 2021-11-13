@@ -52,7 +52,7 @@ public class PayOrderDTO implements Serializable {
     private String behavior;
 
     /**
-     * 网关渠道返回消息
+     * 网关渠道返回信息
      */
     private String channelReturnMessage;
 

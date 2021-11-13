@@ -15,12 +15,24 @@ public class MemberAgentCodeRelDO implements Serializable {
 
     private static final long serialVersionUID = 2568884923022155298L;
 
+    /**
+     * 主键
+     */
     private Long id;
 
+    /**
+     * 会员编号
+     */
     private String memberId;
 
+    /**
+     * 下级会员编号
+     */
     private String subMemberId;
 
+    /**
+     * 层级
+     */
     private Integer memberLevel;
 
     private String createBy;

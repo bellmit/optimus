@@ -27,6 +27,9 @@ public class OrderInfoDTO implements Serializable {
      */
     private String supMemberId;
 
+    /**
+     * 码商会员编号
+     */
     private String codeMemberId;
 
     /**
@@ -34,18 +37,26 @@ public class OrderInfoDTO implements Serializable {
      */
     private String orderId;
 
+    /**
+     * 调用方订单编号
+     */
     private String callerOrderId;
 
+    /**
+     * 被调用方订单编号
+     */
     private String calleeOrderId;
 
     /**
      * 订单类型
+     * 
      * @see OrderEnum
      */
     private String orderType;
 
     /**
      * 订单状态
+     * 
      * @see OrderEnum
      */
     private String orderStatus;
@@ -75,22 +86,55 @@ public class OrderInfoDTO implements Serializable {
      */
     private Date payTime;
 
+    /**
+     * 分润状态
+     * 
+     * @see OrderEnum
+     */
     private String splitProfitStatus;
 
+    /**
+     * 行为
+     * 
+     * @see OrderEnum
+     */
     private String behavior;
 
+    /**
+     * 商户回调地址
+     */
     private String merchantCallbackUrl;
 
+    /**
+     * 商户回调次数
+     */
     private Short merchantCallbackCount;
 
+    /**
+     * 商户通知状态
+     * 
+     * @see OrderEnum
+     */
     private String merchantNotifyStatus;
 
+    /**
+     * 网关渠道编号
+     */
     private String channelCode;
 
+    /**
+     * 网关子渠道编号
+     */
     private String subChannelCode;
 
+    /**
+     * 网关渠道返回信息
+     */
     private String channelReturnMessage;
 
+    /**
+     * 网关渠道订单查询次数
+     */
     private Short channelOrderQueryCount;
 
 }

@@ -13,4 +13,5 @@ import java.io.Serializable;
 public class ConfirmForWithdrawResp implements Serializable {
 
     private static final long serialVersionUID = -7431021596457242460L;
+
 }

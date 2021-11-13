@@ -15,12 +15,24 @@ public class CommonSystemConfigDO implements Serializable {
 
     private static final long serialVersionUID = -4964796267082044767L;
 
+    /**
+     * 主键
+     */
     private Long id;
 
+    /**
+     * 键
+     */
     private String baseKey;
 
+    /**
+     * 值
+     */
     private String value;
 
+    /**
+     * 备注
+     */
     private String remark;
 
     private String createBy;

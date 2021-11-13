@@ -29,4 +29,5 @@ public class BaseCollectReq extends Req {
      * 调用方订单编号
      */
     private String callerOrderId;
+
 }

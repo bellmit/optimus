@@ -32,6 +32,7 @@ public class ConfirmOrderDTO implements Serializable {
 
     /**
      * 订单状态
+     * 
      * @see OrderEnum
      */
     private String orderStatus;
@@ -42,7 +43,7 @@ public class ConfirmOrderDTO implements Serializable {
     private String subChannelCode;
 
     /**
-     * 网关渠道返回消息
+     * 网关渠道返回信息
      */
     private String channelReturnMessage;
 

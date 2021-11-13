@@ -17,6 +17,9 @@ public class AccountInfoDO implements Serializable {
 
     private static final long serialVersionUID = 3292437107022937393L;
 
+    /**
+     * 主键
+     */
     private Long id;
 
     /**
