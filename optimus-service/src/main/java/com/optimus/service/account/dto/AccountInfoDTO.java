@@ -1,10 +1,11 @@
 package com.optimus.service.account.dto;
 
-import com.optimus.util.constants.AccountEnum;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+
+import com.optimus.util.constants.account.AccountTypeEnum;
 
 /**
  * 账户信息
@@ -29,7 +30,7 @@ public class AccountInfoDTO implements Serializable {
     /**
      * 账户类型
      * 
-     * @see AccountEnum
+     * @see AccountTypeEnum
      */
     private String accountType;
 

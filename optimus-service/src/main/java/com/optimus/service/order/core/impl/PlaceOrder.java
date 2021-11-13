@@ -1,14 +1,16 @@
-package com.optimus.service.order.core;
+package com.optimus.service.order.core.impl;
 
+import com.optimus.service.order.core.BaseOrder;
 import com.optimus.service.order.dto.PayOrderDTO;
-import org.springframework.stereotype.Service;
+
+import org.springframework.stereotype.Component;
 
 /**
  * 下单
  *
  * @author hongp
  */
-@Service
+@Component
 public class PlaceOrder extends BaseOrder {
 
     /**

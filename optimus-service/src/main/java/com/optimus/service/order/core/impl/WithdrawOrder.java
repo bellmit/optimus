@@ -1,15 +1,17 @@
-package com.optimus.service.order.core;
+package com.optimus.service.order.core.impl;
 
+import com.optimus.service.order.core.BaseOrder;
 import com.optimus.service.order.dto.PayOrderDTO;
-import org.springframework.stereotype.Service;
+
+import org.springframework.stereotype.Component;
 
 /**
- * 充值
+ * 提现
  *
  * @author hongp
  */
-@Service
-public class RechargeOrder extends BaseOrder {
+@Component
+public class WithdrawOrder extends BaseOrder {
 
     /**
      * 创建订单
@@ -30,5 +32,4 @@ public class RechargeOrder extends BaseOrder {
     public void payOrder(PayOrderDTO payOrder) {
 
     }
-
 }

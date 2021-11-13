@@ -3,7 +3,9 @@ package com.optimus.dao.domain;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.optimus.util.constants.MemberEnum;
+import com.optimus.util.constants.member.MemberDeleteFlagEnum;
+import com.optimus.util.constants.member.MemberStatusEnum;
+import com.optimus.util.constants.member.MemberTypeEnum;
 
 import lombok.Data;
 
@@ -60,14 +62,14 @@ public class MemberInfoDO implements Serializable {
     /**
      * 会员类型
      * 
-     * @see MemberEnum
+     * @see MemberTypeEnum
      */
     private String memberType;
 
     /**
      * 会员状态
      * 
-     * @see MemberEnum
+     * @see MemberStatusEnum
      */
     private String memberStatus;
 
@@ -78,6 +80,8 @@ public class MemberInfoDO implements Serializable {
 
     /**
      * 删除标识
+     * 
+     * @see MemberDeleteFlagEnum
      */
     private String deleteFlag;
 

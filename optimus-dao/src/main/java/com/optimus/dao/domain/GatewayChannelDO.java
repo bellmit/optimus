@@ -3,7 +3,7 @@ package com.optimus.dao.domain;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.optimus.util.constants.GatewayEnum;
+import com.optimus.util.constants.gateway.GatewayChannelTypeEnum;
 
 import lombok.Data;
 
@@ -35,7 +35,7 @@ public class GatewayChannelDO implements Serializable {
     /**
      * 网关渠道状态
      * 
-     * @see GatewayEnum
+     * @see GatewayChannelStatusEnum
      */
     private String channelStatus;
 
@@ -47,7 +47,7 @@ public class GatewayChannelDO implements Serializable {
     /**
      * 网关渠道类型
      * 
-     * @see GatewayEnum
+     * @see GatewayChannelTypeEnum
      */
     private String channelType;
 

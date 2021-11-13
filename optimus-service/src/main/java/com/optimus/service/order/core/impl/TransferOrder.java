@@ -1,15 +1,17 @@
-package com.optimus.service.order.core;
+package com.optimus.service.order.core.impl;
 
+import com.optimus.service.order.core.BaseOrder;
 import com.optimus.service.order.dto.PayOrderDTO;
-import org.springframework.stereotype.Service;
+
+import org.springframework.stereotype.Component;
 
 /**
- * 提现
+ * 划账
  *
  * @author hongp
  */
-@Service
-public class WithdrawOrder extends BaseOrder {
+@Component
+public class TransferOrder extends BaseOrder {
 
     /**
      * 创建订单

@@ -17,8 +17,8 @@ import com.optimus.service.member.dto.MemberInfoDTO;
 import com.optimus.util.DateUtil;
 import com.optimus.util.JsonUtil;
 import com.optimus.util.SignUtil;
-import com.optimus.util.constants.MemberEnum;
 import com.optimus.util.constants.RespCodeEnum;
+import com.optimus.util.constants.member.MemberStatusEnum;
 import com.optimus.util.exception.OptimusException;
 import com.optimus.util.req.Req;
 
@@ -155,7 +155,7 @@ public class ReqBodyConfig implements RequestBodyAdvice {
         }
 
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(memberId);
-        if (!StringUtils.pathEquals(memberInfo.getMemberStatus(), MemberEnum.MEMBER_STATUS_Y.getCode())) {
+        if (!StringUtils.pathEquals(memberInfo.getMemberStatus(), MemberStatusEnum.MEMBER_STATUS_Y.getCode())) {
             throw new OptimusException(RespCodeEnum.MEMBER_ERROR, "会员无效");
         }
 

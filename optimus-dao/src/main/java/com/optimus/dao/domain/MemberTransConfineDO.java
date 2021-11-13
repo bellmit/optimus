@@ -4,7 +4,11 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import com.optimus.util.constants.MemberEnum;
+import com.optimus.util.constants.member.MemberCollectFeeTypeEnum;
+import com.optimus.util.constants.member.MemberCollectFeeWayEnum;
+import com.optimus.util.constants.member.MemberFreezeBalanceSwitchEnum;
+import com.optimus.util.constants.member.MemberMerchantOrderSwitchEnum;
+import com.optimus.util.constants.member.MemberWithdrawFeeSwitchEnum;
 
 import lombok.Data;
 
@@ -31,21 +35,21 @@ public class MemberTransConfineDO implements Serializable {
     /**
      * 商户下单开关
      * 
-     * @see MemberEnum
+     * @see MemberMerchantOrderSwitchEnum
      */
     private String merchantOrderSwitch;
 
     /**
      * 提现手续费开关
      * 
-     * @see MemberEnum
+     * @see MemberWithdrawFeeSwitchEnum
      */
     private String withdrawFeeSwitch;
 
     /**
      * 码商冻结余额开关
      * 
-     * @see MemberEnum
+     * @see MemberFreezeBalanceSwitchEnum
      */
     private String freezeBalanceSwitch;
 
@@ -67,7 +71,7 @@ public class MemberTransConfineDO implements Serializable {
     /**
      * 收取手续费类型
      * 
-     * @see MemberEnum
+     * @see MemberCollectFeeTypeEnum
      */
     private String collectFeeType;
 
@@ -84,7 +88,7 @@ public class MemberTransConfineDO implements Serializable {
     /**
      * 手续费收取方式
      * 
-     * @see MemberEnum
+     * @see MemberCollectFeeWayEnum
      */
     private String collectFeeWay;
 

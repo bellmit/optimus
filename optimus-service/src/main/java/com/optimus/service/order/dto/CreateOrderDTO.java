@@ -4,7 +4,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
 
-import com.optimus.util.constants.OrderEnum;
+import com.optimus.util.constants.order.OrderTypeEnum;
+
 import lombok.Data;
 
 /**
@@ -45,7 +46,7 @@ public class CreateOrderDTO implements Serializable {
     /**
      * 订单类型
      * 
-     * @see OrderEnum
+     * @see OrderTypeEnum
      */
     private String orderType;
 

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import com.optimus.util.constants.AccountEnum;
+import com.optimus.util.constants.account.AccountTransEnum;
 
 import lombok.Data;
 
@@ -54,9 +54,9 @@ public class AccountLogDO implements Serializable {
     private BigDecimal afterChangeAmount;
 
     /**
-     * 变更类型
+     * 交易类型
      * 
-     * @see AccountEnum
+     * @see AccountTransEnum
      */
     private String changeType;
 

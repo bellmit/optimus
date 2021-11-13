@@ -1,27 +1,28 @@
 package com.optimus.service.order.impl;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Objects;
+
+import javax.annotation.Resource;
+
 import com.optimus.dao.domain.OrderInfoDO;
 import com.optimus.dao.mapper.OrderInfoDao;
 import com.optimus.manager.account.dto.DoTransDTO;
 import com.optimus.service.member.dto.InviteChainDTO;
 import com.optimus.service.order.OrderService;
 import com.optimus.service.order.core.BaseOrder;
-import com.optimus.service.order.core.OrderFactory;
+import com.optimus.service.order.core.factory.OrderFactory;
 import com.optimus.service.order.dto.ConfirmOrderDTO;
 import com.optimus.service.order.dto.CreateOrderDTO;
 import com.optimus.service.order.dto.OrderInfoDTO;
 import com.optimus.service.order.dto.PayOrderDTO;
 import com.optimus.util.DateUtil;
-import com.optimus.util.constants.OrderEnum;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.exception.OptimusException;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * 订单服务
@@ -37,11 +38,10 @@ public class OrderServiceImpl implements OrderService {
     @Resource
     private OrderFactory orderFactory;
 
-
     @Override
     public OrderInfoDTO createOrder(CreateOrderDTO createOrder) {
-        OrderEnum orderType = OrderEnum.valueOfType(createOrder.getOrderType());
-        BaseOrder baseOrder = orderFactory.getBaseOrder(orderType);
+
+        BaseOrder baseOrder = orderFactory.getOrderInstance(createOrder.getOrderType());
 
         if (Objects.isNull(baseOrder)) {
             throw new OptimusException(RespCodeEnum.ORDER_TYPE_ERROR);

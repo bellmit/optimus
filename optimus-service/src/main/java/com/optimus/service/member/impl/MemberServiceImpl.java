@@ -10,8 +10,8 @@ import com.optimus.dao.mapper.MemberInfoDao;
 import com.optimus.service.member.MemberService;
 import com.optimus.service.member.dto.InviteChainDTO;
 import com.optimus.service.member.dto.MemberInfoDTO;
-import com.optimus.util.constants.MemberEnum;
 import com.optimus.util.constants.RespCodeEnum;
+import com.optimus.util.constants.member.MemberDeleteFlagEnum;
 import com.optimus.util.exception.OptimusException;
 
 import org.springframework.beans.BeanUtils;
@@ -37,7 +37,7 @@ public class MemberServiceImpl implements MemberService {
         if (Objects.isNull(memberInfoDO)) {
             throw new OptimusException(RespCodeEnum.MEMBER_NO);
         }
-        if (!StringUtils.pathEquals(memberInfoDO.getDeleteFlag(), MemberEnum.DELETE_FLAG_ND.getCode())) {
+        if (!StringUtils.pathEquals(memberInfoDO.getDeleteFlag(), MemberDeleteFlagEnum.DELETE_FLAG_ND.getCode())) {
             throw new OptimusException(RespCodeEnum.MEMBER_NO);
         }
 

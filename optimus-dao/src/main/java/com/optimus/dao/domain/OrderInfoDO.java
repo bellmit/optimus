@@ -4,7 +4,11 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import com.optimus.util.constants.OrderEnum;
+import com.optimus.util.constants.order.OrderBehaviorEnum;
+import com.optimus.util.constants.order.OrderMerchantNotifyStatusEnum;
+import com.optimus.util.constants.order.OrderSplitProfitStatusEnum;
+import com.optimus.util.constants.order.OrderStatusEnum;
+import com.optimus.util.constants.order.OrderTypeEnum;
 
 import lombok.Data;
 
@@ -56,14 +60,14 @@ public class OrderInfoDO implements Serializable {
     /**
      * 订单类型
      * 
-     * @see OrderEnum
+     * @see OrderTypeEnum
      */
     private String orderType;
 
     /**
      * 订单状态
      * 
-     * @see OrderEnum
+     * @see OrderStatusEnum
      */
     private String orderStatus;
 
@@ -95,12 +99,14 @@ public class OrderInfoDO implements Serializable {
     /**
      * 分润状态
      * 
-     * @see OrderEnum
+     * @see OrderSplitProfitStatusEnum
      */
     private String splitProfitStatus;
 
     /**
      * 行为
+     * 
+     * @see OrderBehaviorEnum
      */
     private String behavior;
 
@@ -117,7 +123,7 @@ public class OrderInfoDO implements Serializable {
     /**
      * 商户通知状态
      * 
-     * @see OrderEnum
+     * @see OrderMerchantNotifyStatusEnum
      */
     private String merchantNotifyStatus;
 

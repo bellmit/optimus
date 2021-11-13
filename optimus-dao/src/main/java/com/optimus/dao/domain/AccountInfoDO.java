@@ -4,7 +4,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import com.optimus.util.constants.AccountEnum;
+import com.optimus.util.constants.account.AccountTypeEnum;
+
 import lombok.Data;
 
 /**
@@ -35,7 +36,7 @@ public class AccountInfoDO implements Serializable {
     /**
      * 账户类型
      * 
-     * @see AccountEnum
+     * @see AccountTypeEnum
      */
     private String accountType;
 
