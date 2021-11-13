@@ -3,6 +3,9 @@ package com.optimus.util.constants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * OrderEnum
  * 
@@ -64,5 +67,11 @@ public enum OrderEnum {
 
     private String code;
     private String memo;
+
+    private static final Map<String, OrderEnum> valueMap = new HashMap<>(OrderEnum.values().length);
+
+    public static  OrderEnum valueOfType(String type) {
+        return valueMap.get(type);
+    }
 
 }
