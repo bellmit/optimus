@@ -1,6 +1,5 @@
 package com.optimus.service.order.impl;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
@@ -16,7 +15,7 @@ import com.optimus.service.order.core.factory.OrderFactory;
 import com.optimus.service.order.dto.CreateOrderDTO;
 import com.optimus.service.order.dto.OrderInfoDTO;
 import com.optimus.service.order.dto.PayOrderDTO;
-import com.optimus.util.DateUtil;
+import com.optimus.util.GenerateUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.exception.OptimusException;
 
@@ -60,17 +59,9 @@ public class OrderServiceImpl implements OrderService {
             throw new OptimusException(RespCodeEnum.ORDER_TYPE_ERROR);
         }
 
-        PayOrderDTO payOrder = new PayOrderDTO();
-        payOrder.setMemberId(createOrder.getMemberId());
-        payOrder.setOrderId("");
-        payOrder.setActualAmount(new BigDecimal("0"));
-        payOrder.setOrderAmount(new BigDecimal("0"));
-        payOrder.setFee(new BigDecimal("0"));
-        payOrder.setPayTime(DateUtil.currentDate());
-        payOrder.setBehavior("");
-        payOrder.setChannelReturnMessage("");
+        createOrder.setOrderId(GenerateUtil.generate(createOrder.getOrderType()));
 
-        baseOrder.createOrder(payOrder);
+        baseOrder.createOrder(createOrder);
 
         // 验证上游订单是否重复
 

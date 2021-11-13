@@ -72,7 +72,7 @@ public class OrderInfoDTO implements Serializable {
     private BigDecimal orderAmount;
 
     /**
-     * 实付金额
+     * 实际金额
      */
     private BigDecimal actualAmount;
 

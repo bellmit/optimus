@@ -29,14 +29,14 @@ public class PayOrderDTO implements Serializable {
     private String orderId;
 
     /**
-     * 实付金额
-     */
-    private BigDecimal actualAmount;
-
-    /**
      * 订单金额
      */
     private BigDecimal orderAmount;
+
+    /**
+     * 实际金额
+     */
+    private BigDecimal actualAmount;
 
     /**
      * 手续费

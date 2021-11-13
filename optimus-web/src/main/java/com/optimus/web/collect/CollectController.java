@@ -89,6 +89,7 @@ public class CollectController {
         createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_R.getCode());
         createOrder.setOrderAmount(req.getAmount());
         createOrder.setCallerOrderId(req.getCallerOrderId());
+
         OrderInfoDTO orderInfo = orderService.createOrder(createOrder);
 
         // 返回信息
@@ -195,6 +196,7 @@ public class CollectController {
         createOrder.setMemberId(req.getMemberId());
         createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_W.getCode());
         createOrder.setOrderAmount(req.getAmount());
+
         orderService.createOrder(createOrder);
 
         // 返回信息
