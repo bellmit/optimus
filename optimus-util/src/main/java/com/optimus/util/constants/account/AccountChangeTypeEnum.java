@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum AccountChannelTypeEnum {
+public enum AccountChangeTypeEnum {
 
     /* ---------账户交易--------- */
 
