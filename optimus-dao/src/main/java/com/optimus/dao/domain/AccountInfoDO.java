@@ -31,6 +31,7 @@ public class AccountInfoDO implements Serializable {
 
     /**
      * 账户类型
+     * 
      * @see AccountEnum
      */
     private String accountType;

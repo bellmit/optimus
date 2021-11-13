@@ -28,6 +28,7 @@ public class AccountInfoDTO implements Serializable {
 
     /**
      * 账户类型
+     * 
      * @see AccountEnum
      */
     private String accountType;

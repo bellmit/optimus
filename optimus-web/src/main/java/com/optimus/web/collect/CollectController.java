@@ -168,8 +168,9 @@ public class CollectController {
         }
 
         // 验证账户余额是否充足
-        AccountInfoDTO accountInfo = accountService.getAccountInfoByMemberIdAndAccountType(req.getMemberId(), AccountEnum.ACCOUNT_TYPE_B.getCode());
-        if(accountInfo.getAmount().compareTo(BigDecimal.ZERO) <= 0){
+        AccountInfoDTO accountInfo = accountService.getAccountInfoByMemberIdAndAccountType(req.getMemberId(),
+                AccountEnum.ACCOUNT_TYPE_B.getCode());
+        if (accountInfo.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
             throw new OptimusException(RespCodeEnum.ACCOUNT_AMOUNT_ERROR);
         }
 
@@ -212,7 +213,7 @@ public class CollectController {
         }
 
         // 校验订单里面的会员编号
-        if(StringUtils.pathEquals(orderInfo.getMemberId(), req.getSubMemberId())){
+        if (StringUtils.pathEquals(orderInfo.getMemberId(), req.getSubMemberId())) {
             throw new OptimusException(RespCodeEnum.ORDER_ERROR);
         }
 
@@ -245,8 +246,9 @@ public class CollectController {
         checkMemberLevel(memberInfo, req.getSubDirectMemberId());
 
         // 验证账户余额是否充足
-        AccountInfoDTO accountInfo = accountService.getAccountInfoByMemberIdAndAccountType(req.getMemberId(), AccountEnum.ACCOUNT_TYPE_B.getCode());
-        if(accountInfo.getAmount().compareTo(BigDecimal.ZERO) <= 0){
+        AccountInfoDTO accountInfo = accountService.getAccountInfoByMemberIdAndAccountType(req.getMemberId(),
+                AccountEnum.ACCOUNT_TYPE_B.getCode());
+        if (accountInfo.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
             throw new OptimusException(RespCodeEnum.ACCOUNT_AMOUNT_ERROR);
         }
 
@@ -355,7 +357,7 @@ public class CollectController {
      * @param memberInfo
      * @param subDirectMemberId
      */
-    private void checkMemberLevel(MemberInfoDTO memberInfo,  String subDirectMemberId) {
+    private void checkMemberLevel(MemberInfoDTO memberInfo, String subDirectMemberId) {
         // 获取下级会员信息
         MemberInfoDTO subMemberInfo = memberService.getMemberInfoByMemberId(subDirectMemberId);
         if (Objects.isNull(subMemberInfo)) {
