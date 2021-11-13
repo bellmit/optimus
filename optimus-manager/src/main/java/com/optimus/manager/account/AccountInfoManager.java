@@ -12,7 +12,7 @@ import com.optimus.manager.account.dto.DoTransDTO;
 public interface AccountInfoManager {
 
     /**
-     * 做交易
+     * 账户交易
      * 
      * @param changeAmountList
      * @return

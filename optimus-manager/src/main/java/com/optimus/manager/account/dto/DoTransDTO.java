@@ -3,14 +3,14 @@ package com.optimus.manager.account.dto;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import com.optimus.util.constants.account.AccountTransEnum;
+import com.optimus.util.constants.account.AccountChannelTypeEnum;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 做交易DTO
+ * 账户交易DTO
  * 
  * @author sunxp
  */
@@ -32,9 +32,9 @@ public class DoTransDTO implements Serializable {
     private String orderId;
 
     /**
-     * 交易类型
+     * 账户变更类型
      * 
-     * @see AccountTransEnum
+     * @see AccountChannelTypeEnum
      */
     private String changeType;
 
