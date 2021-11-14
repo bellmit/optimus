@@ -5,7 +5,9 @@ import com.optimus.service.order.dto.OrderInfoDTO;
 import com.optimus.service.order.dto.PayOrderDTO;
 import com.optimus.util.DateUtil;
 import com.optimus.web.collect.req.ApplyForRechargeReq;
+import com.optimus.web.collect.req.ApplyForWithdrawReq;
 import com.optimus.web.collect.req.BaseCollectReq;
+import com.optimus.web.collect.req.TransferReq;
 
 /**
  * 收单转换器
@@ -17,42 +19,77 @@ public class CollectConvert {
     /**
      * 获取创建订单传输对象
      * 
-     * @param req
+     * @param req ApplyForRechargeReq
      * @return
      */
     public static CreateOrderDTO getCreateOrderDTO(ApplyForRechargeReq req) {
 
         CreateOrderDTO createOrder = new CreateOrderDTO();
+
         createOrder.setMemberId(req.getMemberId());
         createOrder.setOrderAmount(req.getAmount());
         createOrder.setCallerOrderId(req.getCallerOrderId());
 
         return createOrder;
+
     }
 
     /**
      * 获取创建订单传输对象
      * 
-     * @param baseCollectReq
-     * @param orderType
+     * @param req ApplyForWithdrawReq
      * @return
      */
-    public static CreateOrderDTO getCreateOrderDTO(BaseCollectReq baseCollectReq, String orderType) {
+    public static CreateOrderDTO getCreateOrderDTO(ApplyForWithdrawReq req) {
 
         CreateOrderDTO createOrder = new CreateOrderDTO();
 
-        createOrder.setMemberId(baseCollectReq.getMemberId());
-        createOrder.setOrderType(orderType);
-        createOrder.setOrderAmount(baseCollectReq.getAmount());
-        createOrder.setCallerOrderId(baseCollectReq.getCallerOrderId());
+        createOrder.setMemberId(req.getMemberId());
+        createOrder.setOrderAmount(req.getAmount());
 
         return createOrder;
+
+    }
+
+    /**
+     * 获取创建订单传输对象
+     * 
+     * @param req BaseCollectReq
+     * @return
+     */
+    public static CreateOrderDTO getCreateOrderDTO(BaseCollectReq req) {
+
+        CreateOrderDTO createOrder = new CreateOrderDTO();
+
+        createOrder.setMemberId(req.getMemberId());
+        createOrder.setOrderAmount(req.getAmount());
+        createOrder.setCallerOrderId(req.getCallerOrderId());
+
+        return createOrder;
+
+    }
+
+    /**
+     * 获取创建订单传输对象
+     * 
+     * @param req TransferReq
+     * @return
+     */
+    public static CreateOrderDTO getCreateOrderDTO(TransferReq req) {
+
+        CreateOrderDTO createOrder = new CreateOrderDTO();
+
+        createOrder.setMemberId(req.getMemberId());
+        createOrder.setOrderAmount(req.getAmount());
+
+        return createOrder;
+
     }
 
     /**
      * 获取支付订单传输对象
      * 
-     * @param orderInfo
+     * @param orderInfo OrderInfoDTO
      * @return
      */
     public static PayOrderDTO getPayOrderDTO(OrderInfoDTO orderInfo) {

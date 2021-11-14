@@ -154,7 +154,8 @@ public class CollectController {
         memberService.checkMemberLevel(memberInfo, req.getSubDirectMemberId());
 
         // 创建订单
-        CreateOrderDTO createOrder = CollectConvert.getCreateOrderDTO(req, OrderTypeEnum.ORDER_TYPE_R.getCode());
+        CreateOrderDTO createOrder = CollectConvert.getCreateOrderDTO(req);
+        createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_R.getCode());
 
         OrderInfoDTO orderInfo = orderService.createOrder(createOrder);
 
@@ -189,10 +190,8 @@ public class CollectController {
         }
 
         // 创建订单
-        CreateOrderDTO createOrder = new CreateOrderDTO();
-        createOrder.setMemberId(req.getMemberId());
+        CreateOrderDTO createOrder = CollectConvert.getCreateOrderDTO(req);
         createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_W.getCode());
-        createOrder.setOrderAmount(req.getAmount());
 
         orderService.createOrder(createOrder);
 
@@ -266,7 +265,8 @@ public class CollectController {
         }
 
         // 创建订单
-        CreateOrderDTO createOrder = CollectConvert.getCreateOrderDTO(req, OrderTypeEnum.ORDER_TYPE_W.getCode());
+        CreateOrderDTO createOrder = CollectConvert.getCreateOrderDTO(req);
+        createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_W.getCode());
 
         OrderInfoDTO orderInfo = orderService.createOrder(createOrder);
 
@@ -296,10 +296,9 @@ public class CollectController {
         }
 
         // 创建订单
-        CreateOrderDTO createOrder = new CreateOrderDTO();
-        createOrder.setMemberId(req.getMemberId());
+        CreateOrderDTO createOrder = CollectConvert.getCreateOrderDTO(req);
         createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_M.getCode());
-        createOrder.setOrderAmount(req.getAmount());
+
         OrderInfoDTO orderInfo = orderService.createOrder(createOrder);
 
         // 支付订单
