@@ -4,7 +4,6 @@ import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.exception.OptimusException;
 
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 
 /**
  * AssertUtil
@@ -24,10 +23,6 @@ public class AssertUtil {
 
         if (!ObjectUtils.isEmpty(object)) {
             return;
-        }
-
-        if (!StringUtils.hasLength(memo)) {
-            throw new OptimusException(respCodeEnum);
         }
 
         throw new OptimusException(respCodeEnum, memo);

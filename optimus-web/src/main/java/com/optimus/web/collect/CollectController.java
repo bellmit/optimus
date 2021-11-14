@@ -1,7 +1,6 @@
 package com.optimus.web.collect;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 
 import com.optimus.service.account.AccountService;
 import com.optimus.service.account.dto.AccountInfoDTO;
@@ -333,10 +332,9 @@ public class CollectController {
 
         // 验证会员交易限制
         MemberTransConfineDTO memberTransConfine = memberService.getMemberTransConfineByMemberId(req.getMemberId());
-        if (!Objects.isNull(memberTransConfine)
-                && !StringUtils.pathEquals(MemberMerchantOrderSwitchEnum.MERCHANT_ORDER_SWITCH_Y.getCode(),
-                        memberTransConfine.getMerchantOrderSwitch())) {
-            throw new OptimusException(RespCodeEnum.MEMBER_TRANS_PERMISSION_NOT, "商户下单开关已关闭");
+        if (!StringUtils.pathEquals(MemberMerchantOrderSwitchEnum.MERCHANT_ORDER_SWITCH_Y.getCode(),
+                memberTransConfine.getMerchantOrderSwitch())) {
+            throw new OptimusException(RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "商户下单开关已关闭");
         }
 
         // 验证主渠道

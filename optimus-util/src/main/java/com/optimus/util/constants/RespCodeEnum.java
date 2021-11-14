@@ -34,7 +34,7 @@ public enum RespCodeEnum {
 
     MEMBER_LEVEL_ERROR("2003", "会员层级不匹配"),
 
-    MEMBER_TRANS_PERMISSION_NOT("2004", "会员无交易权限"),
+    MEMBER_TRANS_PERMISSION_ERROR("2004", "会员交易限制异常"),
 
     /* ---------账户类编码--------- */
 

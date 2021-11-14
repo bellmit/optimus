@@ -1,7 +1,6 @@
 package com.optimus.service.member.impl;
 
 import java.util.List;
-import java.util.Objects;
 
 import javax.annotation.Resource;
 
@@ -59,9 +58,7 @@ public class MemberServiceImpl implements MemberService {
 
         MemberTransConfineDO memberTransConfineDO = memberTransConfineDao.getMemberTransConfineByMemberId(memberId);
 
-        if (Objects.isNull(memberTransConfineDO)) {
-            return null;
-        }
+        AssertUtil.notEmpty(memberTransConfineDO, RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "会员交易限制为空");
 
         MemberTransConfineDTO memberTransConfine = new MemberTransConfineDTO();
         BeanUtils.copyProperties(memberTransConfineDO, memberTransConfine);
