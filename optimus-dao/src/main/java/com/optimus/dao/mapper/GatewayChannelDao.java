@@ -18,6 +18,14 @@ public interface GatewayChannelDao {
     GatewayChannelDO getGatewayChannelById(Long id);
 
     /**
+     * 根据渠道编号查询网关渠道
+     * 
+     * @param channelCode
+     * @return
+     */
+    GatewayChannelDO getGatewayChannelByChannelCode(String channelCode);
+
+    /**
      * 新增一条网关渠道
      * 
      * @param gatewayChannelDO

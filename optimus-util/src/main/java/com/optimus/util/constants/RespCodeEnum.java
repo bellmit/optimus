@@ -34,6 +34,8 @@ public enum RespCodeEnum {
 
     MEMBER_LEVEL_ERROR("2003", "会员层级不匹配"),
 
+    MEMBER_TRANS_PERMISSION_NOT("2004", "会员无交易权限"),
+
     /* ---------账户类编码--------- */
 
     ACCOUNT_NO("3000", "账户不存在"),
@@ -42,13 +44,15 @@ public enum RespCodeEnum {
 
     /* ---------订单类编码--------- */
 
-    ORDER_NO("4000", "订单不存在"),
-    ORDER_ERROR("4001", "订单信息异常"),
+    ORDER_NO("4000", "订单不存在"), ORDER_ERROR("4001", "订单信息异常"),
+
     ORDER_TYPE_ERROR("4002", "订单类型异常"),
 
     /* ---------网关类编码--------- */
 
     GATEWAY_CHANNEL_NO("5000", "网关渠道不存在"),
+
+    GATEWAY_CHANNEL_ERROR("5001", "网关渠道信息异常"),
 
     ;
 

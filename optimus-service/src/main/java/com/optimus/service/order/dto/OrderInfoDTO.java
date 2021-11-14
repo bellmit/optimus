@@ -142,4 +142,14 @@ public class OrderInfoDTO implements Serializable {
      */
     private Short channelOrderQueryCount;
 
+    /**
+     * 调用渠道返回信息类型
+     */
+    private String type;
+
+    /**
+     * 调用渠道返回类型所对应的信息
+     */
+    private Object message;
+
 }

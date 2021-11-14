@@ -1,19 +1,24 @@
 package com.optimus.web.collect;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import com.optimus.service.account.AccountService;
 import com.optimus.service.account.dto.AccountInfoDTO;
 import com.optimus.service.gateway.GatewayService;
-import com.optimus.service.gateway.dto.MatchChannelDTO;
+import com.optimus.service.gateway.dto.GatewayChannelDTO;
 import com.optimus.service.member.MemberService;
 import com.optimus.service.member.dto.MemberInfoDTO;
+import com.optimus.service.member.dto.MemberTransConfineDTO;
 import com.optimus.service.order.OrderService;
 import com.optimus.service.order.dto.CreateOrderDTO;
 import com.optimus.service.order.dto.OrderInfoDTO;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.account.AccountTypeEnum;
+import com.optimus.util.constants.gateway.GatewayChannelGroupEnum;
+import com.optimus.util.constants.gateway.GatewayChannelStatusEnum;
+import com.optimus.util.constants.member.MemberMerchantOrderSwitchEnum;
 import com.optimus.util.constants.member.MemberTypeEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
 import com.optimus.util.exception.OptimusException;
@@ -320,19 +325,41 @@ public class CollectController {
         // 参数验证
         CollectValidate.validatePlaceOrder(req);
 
-        // 主渠道验证
-        // 有效性&类型
+        // 获取会员信息
+        MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
+        if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_B.getCode(), memberInfo.getMemberType())) {
+            throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为商户");
+        }
 
-        // 撮合渠道
-        String subChannelCode = gatewayService.matchChannel(new MatchChannelDTO());
-        if (!StringUtils.hasLength(subChannelCode)) {
+        // 验证会员交易限制
+        MemberTransConfineDTO memberTransConfine = memberService.getMemberTransConfineByMemberId(req.getMemberId());
+        if (!Objects.isNull(memberTransConfine)
+                && !StringUtils.pathEquals(MemberMerchantOrderSwitchEnum.MERCHANT_ORDER_SWITCH_Y.getCode(),
+                        memberTransConfine.getMerchantOrderSwitch())) {
+            throw new OptimusException(RespCodeEnum.MEMBER_TRANS_PERMISSION_NOT, "商户下单开关已关闭");
+        }
+
+        // 验证主渠道
+        GatewayChannelDTO gatewayChannel = gatewayService.getGatewayChannelByChannelCode(req.getChannelCode());
+        if (!StringUtils.pathEquals(GatewayChannelStatusEnum.GATEWAY_CHANNEL_STATUS_Y.getCode(),
+                gatewayChannel.getChannelStatus())) {
+            throw new OptimusException(RespCodeEnum.GATEWAY_CHANNEL_ERROR, "渠道未启用");
+        }
+        if (!StringUtils.pathEquals(GatewayChannelGroupEnum.GATEWAY_CHANNEL_GROUP_I.getCode(),
+                gatewayChannel.getChannelGroup())) {
+
+            String subChannelCode = gatewayService.matchChannel(gatewayChannel);
+            AssertUtil.notEmpty(subChannelCode, RespCodeEnum.GATEWAY_CHANNEL_ERROR, "未匹配到子通道");
 
         }
 
         // 下单
-        orderService.createOrder(new CreateOrderDTO());
+        CreateOrderDTO createOrder = CollectConvert.getCreateOrderDTO(req);
+        createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_C.getCode());
 
-        return new PlaceOrderResp();
+        OrderInfoDTO orderInfo = orderService.createOrder(createOrder);
+
+        return CollectConvert.getPlaceOrderResp(orderInfo);
 
     }
 

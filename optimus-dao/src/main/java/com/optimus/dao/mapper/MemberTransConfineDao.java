@@ -18,6 +18,14 @@ public interface MemberTransConfineDao {
     MemberTransConfineDO getMemberTransConfineById(Long id);
 
     /**
+     * 根据会员编号查询交易限制
+     * 
+     * @param memberId
+     * @return
+     */
+    MemberTransConfineDO getMemberTransConfineByMemberId(String memberId);
+
+    /**
      * 新增一条会员交易限制
      * 
      * @param memberTransConfineDO

@@ -27,6 +27,13 @@
     where ID = #{id,jdbcType=NUMERIC}
   </select>
 
+  <select id="getGatewayChannelByChannelCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_GATEWAY_CHANNEL
+    where CHANNEL_CODE = #{channelCode,jdbcType=VARCHAR}
+  </select>
+
   <insert id="addGatewayChannel" parameterType="com.optimus.dao.domain.GatewayChannelDO">
     insert into T_GATEWAY_CHANNEL
     <trim prefix="(" suffix=")" suffixOverrides=",">

@@ -35,6 +35,13 @@
     where ID = #{id,jdbcType=NUMERIC}
   </select>
 
+  <select id="getMemberTransConfineByMemberId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_MEMBER_TRANS_CONFINE
+    where MEMBER_ID = #{memberId,jdbcType=VARCHAR}
+  </select>
+
   <insert id="addMemberTransConfine" parameterType="com.optimus.dao.domain.MemberTransConfineDO">
     insert into T_MEMBER_TRANS_CONFINE
     <trim prefix="(" suffix=")" suffixOverrides=",">

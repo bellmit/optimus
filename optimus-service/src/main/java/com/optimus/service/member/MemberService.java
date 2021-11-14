@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.optimus.service.member.dto.InviteChainDTO;
 import com.optimus.service.member.dto.MemberInfoDTO;
+import com.optimus.service.member.dto.MemberTransConfineDTO;
 
 /**
  * 会员服务
@@ -19,6 +20,14 @@ public interface MemberService {
      * @return
      */
     MemberInfoDTO getMemberInfoByMemberId(String memberId);
+
+    /**
+     * 根据memberId查询交易限制
+     * 
+     * @param memberId
+     * @return
+     */
+    MemberTransConfineDTO getMemberTransConfineByMemberId(String memberId);
 
     /**
      * 验证上下级关系

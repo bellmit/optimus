@@ -3,6 +3,8 @@ package com.optimus.web.collect.resp;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import com.optimus.util.constants.order.OrderStatusEnum;
+
 import lombok.Data;
 
 /**
@@ -21,6 +23,13 @@ public class PlaceOrderResp implements Serializable {
     private String memberId;
 
     /**
+     * 订单状态
+     * 
+     * @see OrderStatusEnum
+     */
+    private String orderStatus;
+
+    /**
      * 订单编号
      */
     private String orderId;
@@ -33,15 +42,20 @@ public class PlaceOrderResp implements Serializable {
     /**
      * 订单金额
      */
-    private BigDecimal orderAmount;
+    private BigDecimal amount;
 
     /**
-     * 类型
+     * 实际金额
+     */
+    private BigDecimal actualAmount;
+
+    /**
+     * 调用渠道返回信息类型
      */
     private String type;
 
     /**
-     * 类型所对应的信息
+     * 调用渠道返回类型所对应的信息
      */
     private Object message;
 

@@ -22,6 +22,8 @@ public enum MemberTypeEnum {
 
     MEMBER_TYPE_A("A", "代理"),
 
+    MEMBER_TYPE_B("B", "商户"),
+
     MEMBER_TYPE_C("C", "码商"),
 
     ;

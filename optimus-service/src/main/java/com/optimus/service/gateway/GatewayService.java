@@ -1,6 +1,6 @@
 package com.optimus.service.gateway;
 
-import com.optimus.service.gateway.dto.MatchChannelDTO;
+import com.optimus.service.gateway.dto.GatewayChannelDTO;
 
 /**
  * 网关服务
@@ -10,11 +10,19 @@ import com.optimus.service.gateway.dto.MatchChannelDTO;
 public interface GatewayService {
 
     /**
+     * 根据渠道编号查询网关渠道
+     * 
+     * @param channelCode
+     * @return
+     */
+    GatewayChannelDTO getGatewayChannelByChannelCode(String channelCode);
+
+    /**
      * 匹配渠道
      * 
-     * @param matchChannel 匹配渠道DTO
+     * @param gatewayChannel 匹配渠道DTO
      * @return 子渠道编号
      */
-    String matchChannel(MatchChannelDTO matchChannel);
+    String matchChannel(GatewayChannelDTO gatewayChannel);
 
 }
