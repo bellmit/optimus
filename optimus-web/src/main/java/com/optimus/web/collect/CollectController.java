@@ -356,6 +356,7 @@ public class CollectController {
         // 下单
         CreateOrderDTO createOrder = CollectConvert.getCreateOrderDTO(req);
         createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_C.getCode());
+        createOrder.setSupMemberId(memberInfo.getSupDirectMemberId());
 
         OrderInfoDTO orderInfo = orderService.createOrder(createOrder);
 
