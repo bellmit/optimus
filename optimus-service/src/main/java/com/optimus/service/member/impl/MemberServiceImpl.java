@@ -1,7 +1,6 @@
 package com.optimus.service.member.impl;
 
 import java.util.List;
-import java.util.Objects;
 
 import javax.annotation.Resource;
 
@@ -10,6 +9,7 @@ import com.optimus.dao.mapper.MemberInfoDao;
 import com.optimus.service.member.MemberService;
 import com.optimus.service.member.dto.InviteChainDTO;
 import com.optimus.service.member.dto.MemberInfoDTO;
+import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.member.MemberDeleteFlagEnum;
 import com.optimus.util.exception.OptimusException;
@@ -34,9 +34,8 @@ public class MemberServiceImpl implements MemberService {
 
         MemberInfoDO memberInfoDO = memberInfoDao.getMemberInfoByMemberId(memberId);
 
-        if (Objects.isNull(memberInfoDO)) {
-            throw new OptimusException(RespCodeEnum.MEMBER_NO);
-        }
+        AssertUtil.notEmpty(memberInfoDO, RespCodeEnum.MEMBER_NO, null);
+
         if (!StringUtils.pathEquals(memberInfoDO.getDeleteFlag(), MemberDeleteFlagEnum.DELETE_FLAG_ND.getCode())) {
             throw new OptimusException(RespCodeEnum.MEMBER_NO);
         }
@@ -45,6 +44,20 @@ public class MemberServiceImpl implements MemberService {
         BeanUtils.copyProperties(memberInfoDO, memberInfo);
 
         return memberInfo;
+
+    }
+
+    @Override
+    public void checkMemberLevel(MemberInfoDTO memberInfo, String subDirectMemberId) {
+
+        MemberInfoDO subMemberInfo = memberInfoDao.getMemberInfoByMemberId(subDirectMemberId);
+
+        AssertUtil.notEmpty(subMemberInfo, RespCodeEnum.MEMBER_NO, "下级会员不存在");
+
+        // 验证上下级关系
+        if (!StringUtils.pathEquals(memberInfo.getMemberId(), subMemberInfo.getSupDirectMemberId())) {
+            throw new OptimusException(RespCodeEnum.MEMBER_LEVEL_ERROR);
+        }
 
     }
 

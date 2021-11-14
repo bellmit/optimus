@@ -2,8 +2,8 @@ package com.optimus.service.member;
 
 import java.util.List;
 
-import com.optimus.service.member.dto.MemberInfoDTO;
 import com.optimus.service.member.dto.InviteChainDTO;
+import com.optimus.service.member.dto.MemberInfoDTO;
 
 /**
  * 会员服务
@@ -19,6 +19,14 @@ public interface MemberService {
      * @return
      */
     MemberInfoDTO getMemberInfoByMemberId(String memberId);
+
+    /**
+     * 验证上下级关系
+     * 
+     * @param memberInfo
+     * @param subDirectMemberId
+     */
+    void checkMemberLevel(MemberInfoDTO memberInfo, String subDirectMemberId);
 
     /**
      * 构建邀请链

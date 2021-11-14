@@ -15,9 +15,9 @@ import com.optimus.service.order.core.factory.OrderFactory;
 import com.optimus.service.order.dto.CreateOrderDTO;
 import com.optimus.service.order.dto.OrderInfoDTO;
 import com.optimus.service.order.dto.PayOrderDTO;
+import com.optimus.util.AssertUtil;
 import com.optimus.util.GenerateUtil;
 import com.optimus.util.constants.RespCodeEnum;
-import com.optimus.util.exception.OptimusException;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -55,9 +55,7 @@ public class OrderServiceImpl implements OrderService {
 
         BaseOrder baseOrder = orderFactory.getOrderInstance(createOrder.getOrderType());
 
-        if (Objects.isNull(baseOrder)) {
-            throw new OptimusException(RespCodeEnum.ORDER_TYPE_ERROR);
-        }
+        AssertUtil.notEmpty(baseOrder, RespCodeEnum.ORDER_TYPE_ERROR, null);
 
         createOrder.setOrderId(GenerateUtil.generate(createOrder.getOrderType()));
 

@@ -14,6 +14,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.optimus.service.member.MemberService;
 import com.optimus.service.member.dto.MemberInfoDTO;
+import com.optimus.util.AssertUtil;
 import com.optimus.util.DateUtil;
 import com.optimus.util.JsonUtil;
 import com.optimus.util.SignUtil;
@@ -135,23 +136,17 @@ public class ReqBodyConfig implements RequestBodyAdvice {
         if (METHOD_NAME_LIST.contains(method)) {
             return;
         }
-        if (!StringUtils.hasLength(sign)) {
-            throw new OptimusException(RespCodeEnum.INVALID_PARAM, "签名串不能为空");
-        }
-        if (!StringUtils.hasLength(method)) {
-            throw new OptimusException(RespCodeEnum.INVALID_PARAM, "方法名不能为空");
-        }
-        if (timestamp == null) {
-            throw new OptimusException(RespCodeEnum.INVALID_PARAM, "时间戳不能为空");
-        }
+
+        AssertUtil.notEmpty(sign, RespCodeEnum.INVALID_PARAM, "签名串不能为空");
+        AssertUtil.notEmpty(method, RespCodeEnum.INVALID_PARAM, "方法名不能为空");
+        AssertUtil.notEmpty(timestamp, RespCodeEnum.INVALID_PARAM, "时间戳不能为空");
+        AssertUtil.notEmpty(memberId, RespCodeEnum.INVALID_PARAM, "会员编号不能为空");
+
         if (currentDate.compareTo(timestamp) < 0) {
             throw new OptimusException(RespCodeEnum.INVALID_PARAM, "时间戳大于当前时间");
         }
         if (DateUtil.offsetForMinute(currentDate, -1).compareTo(timestamp) > 0) {
             throw new OptimusException(RespCodeEnum.INVALID_PARAM, "时间戳已过期");
-        }
-        if (!StringUtils.hasLength(memberId)) {
-            throw new OptimusException(RespCodeEnum.INVALID_PARAM, "会员编号不能为空");
         }
 
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(memberId);

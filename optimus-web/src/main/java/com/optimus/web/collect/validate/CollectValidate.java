@@ -1,13 +1,11 @@
 package com.optimus.web.collect.validate;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 
+import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.exception.OptimusException;
 import com.optimus.web.collect.req.PlaceOrderReq;
-
-import org.springframework.util.StringUtils;
 
 /**
  * 收单Validate
@@ -23,32 +21,15 @@ public class CollectValidate {
      */
     public static void validatePlaceOrder(PlaceOrderReq placeOrderReq) {
 
-        if (Objects.isNull(placeOrderReq)) {
-            throw new OptimusException(RespCodeEnum.INVALID_PARAM, "入参对象不能为空");
-        }
-
-        if (!StringUtils.hasLength(placeOrderReq.getMemberId())) {
-            throw new OptimusException(RespCodeEnum.INVALID_PARAM, "会员编号不能为空");
-        }
-
-        if (!StringUtils.hasLength(placeOrderReq.getCallerOrderId())) {
-            throw new OptimusException(RespCodeEnum.INVALID_PARAM, "调用方订单号不能为空");
-        }
-
-        if (null == placeOrderReq.getOrderAmount()) {
-            throw new OptimusException(RespCodeEnum.INVALID_PARAM, "订单金额不能为空");
-        }
+        AssertUtil.notEmpty(placeOrderReq, RespCodeEnum.INVALID_PARAM, "入参对象不能为空");
+        AssertUtil.notEmpty(placeOrderReq.getMemberId(), RespCodeEnum.INVALID_PARAM, "会员编号不能为空");
+        AssertUtil.notEmpty(placeOrderReq.getCallerOrderId(), RespCodeEnum.INVALID_PARAM, "调用方订单号不能为空");
+        AssertUtil.notEmpty(placeOrderReq.getOrderAmount(), RespCodeEnum.INVALID_PARAM, "订单金额不能为空");
+        AssertUtil.notEmpty(placeOrderReq.getChannelCode(), RespCodeEnum.INVALID_PARAM, "网关渠道编号不能为空");
+        AssertUtil.notEmpty(placeOrderReq.getMerchantCallBackUrl(), RespCodeEnum.INVALID_PARAM, "商户回调地址不能为空");
 
         if (placeOrderReq.getOrderAmount().compareTo(BigDecimal.ZERO) <= 0) {
             throw new OptimusException(RespCodeEnum.INVALID_PARAM, "订单金额不合法");
-        }
-
-        if (!StringUtils.hasLength(placeOrderReq.getChannelCode())) {
-            throw new OptimusException(RespCodeEnum.INVALID_PARAM, "网关渠道编号不能为空");
-        }
-
-        if (!StringUtils.hasLength(placeOrderReq.getMerchantCallBackUrl())) {
-            throw new OptimusException(RespCodeEnum.INVALID_PARAM, "商户回调地址不能为空");
         }
 
     }

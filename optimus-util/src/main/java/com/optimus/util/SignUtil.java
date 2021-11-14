@@ -5,9 +5,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 import com.optimus.util.constants.RespCodeEnum;
-import com.optimus.util.exception.OptimusException;
 
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 
@@ -47,13 +45,8 @@ public class SignUtil {
      */
     public static String sign(Map<String, String> map, String key) {
 
-        if (CollectionUtils.isEmpty(map)) {
-            throw new OptimusException(RespCodeEnum.ERROR_SIGN, "签名参数不能为空");
-        }
-
-        if (!StringUtils.hasLength(key)) {
-            throw new OptimusException(RespCodeEnum.ERROR_SIGN, "密钥不能为空");
-        }
+        AssertUtil.notEmpty(map, RespCodeEnum.ERROR_SIGN, "签名参数不能为空");
+        AssertUtil.notEmpty(key, RespCodeEnum.ERROR_SIGN, "密钥不能为空");
 
         String[] keys = map.keySet().toArray(new String[0]);
         Arrays.sort(keys);
