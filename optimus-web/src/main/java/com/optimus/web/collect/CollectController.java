@@ -319,7 +319,7 @@ public class CollectController {
      * @return
      */
     @PostMapping("/placeOrder")
-    PlaceOrderResp placeOrder(@RequestBody PlaceOrderReq req) {
+    public PlaceOrderResp placeOrder(@RequestBody PlaceOrderReq req) {
 
         // 参数验证
         CollectValidate.validatePlaceOrder(req);
