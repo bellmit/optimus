@@ -13,7 +13,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 /**
- * 网关服务
+ * 网关Service实现
  * 
  * @author sunxp
  */

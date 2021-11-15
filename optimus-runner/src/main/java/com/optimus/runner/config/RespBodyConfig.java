@@ -30,12 +30,21 @@ public class RespBodyConfig implements ResponseBodyAdvice<Object> {
     public Object beforeBodyWrite(Object arg0, MethodParameter arg1, MediaType arg2,
             Class<? extends HttpMessageConverter<?>> arg3, ServerHttpRequest arg4, ServerHttpResponse arg5) {
 
+        String className = arg1.getMethod().getDeclaringClass().getSimpleName();
+        String methodName = arg1.getMethod().getName();
+
+        if (arg0 instanceof String) {
+            log.info("{}.{} resp is {}", className, methodName, arg0);
+            return arg0;
+        }
+
         if (arg0 instanceof Resp) {
+            log.info("{}.{} resp is {}", className, methodName, arg0);
             return arg0;
         }
 
         Resp<Object> resp = new Resp<>(arg0);
-        log.info("{}.{} is {}", arg1.getMethod().getDeclaringClass().getSimpleName(), arg1.getMethod().getName(), resp);
+        log.info("{}.{} resp is {}", className, methodName, resp);
 
         return resp;
     }

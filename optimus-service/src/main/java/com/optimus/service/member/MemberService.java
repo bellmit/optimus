@@ -7,7 +7,7 @@ import com.optimus.service.member.dto.MemberInfoDTO;
 import com.optimus.service.member.dto.MemberTransConfineDTO;
 
 /**
- * 会员服务
+ * 会员Service
  * 
  * @author sunxp
  */

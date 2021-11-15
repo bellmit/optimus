@@ -3,20 +3,16 @@ package com.optimus.runner.config;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.optimus.service.member.MemberService;
 import com.optimus.service.member.dto.MemberInfoDTO;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.DateUtil;
-import com.optimus.util.JsonUtil;
+import com.optimus.util.JacksonUtil;
 import com.optimus.util.SignUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.member.MemberStatusEnum;
@@ -45,12 +41,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ReqBodyConfig implements RequestBodyAdvice {
 
-    /** 特例方法集合 */
-    private static final List<String> METHOD_NAME_LIST = Arrays.asList("channelCallback");
-
-    /** 特例方法-渠道回调平台 */
-    private static final String CHANNEL_CALLBACK = "channelCallback";
-
     @Autowired
     private MemberService memberService;
 
@@ -69,19 +59,13 @@ public class ReqBodyConfig implements RequestBodyAdvice {
     public HttpInputMessage beforeBodyRead(HttpInputMessage arg0, MethodParameter arg1, Type arg2,
             Class<? extends HttpMessageConverter<?>> arg3) throws IOException {
 
-        Method method = arg1.getMethod();
-        InputStream inputStream = arg0.getBody();
-
-        byte[] bytes = new byte[inputStream.available()];
-        inputStream.read(bytes);
+        byte[] bytes = arg0.getBody().readAllBytes();
         String body = new String(bytes);
 
-        log.info("{}.{} param is {}", method.getDeclaringClass().getSimpleName(), method.getName(), body);
+        log.info("{}.{} param is {}", arg1.getMethod().getDeclaringClass().getSimpleName(), arg1.getMethod().getName(),
+                body);
 
-        JsonNode jsonNode = JsonUtil.toTree(body);
-
-        handleForBase(body, jsonNode);
-        handleForChannelCallback(body, jsonNode);
+        handleForSign(body);
 
         return new HttpInputMessage() {
 
@@ -119,29 +103,24 @@ public class ReqBodyConfig implements RequestBodyAdvice {
 
     /**
      * 
-     * 基础请求处理
+     * 验签处理
      * 
      * @param body
-     * @param jsonNode
      */
-    private void handleForBase(String body, JsonNode jsonNode) {
+    private void handleForSign(String body) {
 
-        Req req = JsonUtil.toBean(body, Req.class);
+        Req req = JacksonUtil.toBean(body, Req.class);
         String sign = req.getSign();
         String method = req.getMethod();
         Date timestamp = req.getTimestamp();
-        String memberId = jsonNode.get("memberId").asText();
-        Date currentDate = DateUtil.currentDate();
-
-        if (METHOD_NAME_LIST.contains(method)) {
-            return;
-        }
+        String memberId = JacksonUtil.toTree(body).get("memberId").asText();
 
         AssertUtil.notEmpty(sign, RespCodeEnum.INVALID_PARAM, "签名串不能为空");
         AssertUtil.notEmpty(method, RespCodeEnum.INVALID_PARAM, "方法名不能为空");
         AssertUtil.notEmpty(timestamp, RespCodeEnum.INVALID_PARAM, "时间戳不能为空");
         AssertUtil.notEmpty(memberId, RespCodeEnum.INVALID_PARAM, "会员编号不能为空");
 
+        Date currentDate = DateUtil.currentDate();
         if (currentDate.compareTo(timestamp) < 0) {
             throw new OptimusException(RespCodeEnum.INVALID_PARAM, "时间戳大于当前时间");
         }
@@ -154,26 +133,12 @@ public class ReqBodyConfig implements RequestBodyAdvice {
             throw new OptimusException(RespCodeEnum.MEMBER_ERROR, "会员无效");
         }
 
-        Map<String, String> map = JsonUtil.toBean(body, new TypeReference<Map<String, String>>() {
+        Map<String, Object> map = JacksonUtil.toBean(body, new TypeReference<Map<String, Object>>() {
         });
 
         String basisSign = SignUtil.sign(map, memberInfo.getMemberKey());
         if (!StringUtils.pathEquals(sign, basisSign)) {
             throw new OptimusException(RespCodeEnum.ERROR_SIGN);
-        }
-
-    }
-
-    /**
-     * 网关渠道回调平台请求处理
-     * 
-     * @param body
-     * @param jsonNode
-     */
-    private void handleForChannelCallback(String body, JsonNode jsonNode) {
-
-        if (!METHOD_NAME_LIST.contains(CHANNEL_CALLBACK)) {
-            return;
         }
 
     }

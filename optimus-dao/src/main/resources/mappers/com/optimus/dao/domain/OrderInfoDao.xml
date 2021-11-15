@@ -54,6 +54,25 @@
     where ORDER_ID = #{orderId,jdbcType=VARCHAR}
   </select>
 
+  <select id="listOrderInfoByOrderInfoQuerys" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_ORDER_INFO
+    <where>
+      <if test="memberId != null">
+        and MEMBER_ID = #{memberId,jdbcType=VARCHAR}
+      </if>
+      <if test="orderId != null">
+        and ORDER_ID = #{orderId,jdbcType=VARCHAR}
+      </if>
+      <if test="callerOrderId != null">
+        and CALLER_ORDER_ID = #{callerOrderId,jdbcType=VARCHAR}
+      </if>
+    </where>
+    offset ((#{page.pageNo,jdbcType=NUMERIC} - 1) * #{page.pageSize,jdbcType=NUMERIC}) rows
+    fetch next #{page.pageSize,jdbcType=NUMERIC} rows only
+  </select>
+
   <insert id="addOrderInfo" parameterType="com.optimus.dao.domain.OrderInfoDO">
     insert into T_ORDER_INFO
     <trim prefix="(" suffix=")" suffixOverrides=",">

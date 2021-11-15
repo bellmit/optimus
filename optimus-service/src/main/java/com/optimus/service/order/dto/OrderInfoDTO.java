@@ -13,7 +13,7 @@ import com.optimus.util.constants.order.OrderTypeEnum;
 import lombok.Data;
 
 /**
- * 订单信息
+ * 订单信息DTO
  *
  * @author hongp
  */

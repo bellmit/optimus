@@ -3,7 +3,7 @@ package com.optimus.service.gateway;
 import com.optimus.service.gateway.dto.GatewayChannelDTO;
 
 /**
- * 网关服务
+ * 网关Service
  * 
  * @author sunxp
  */

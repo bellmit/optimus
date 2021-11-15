@@ -8,6 +8,7 @@ import com.optimus.service.order.core.BaseOrder;
 import com.optimus.util.constants.order.OrderTypeEnum;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import groovy.lang.Singleton;
 
@@ -16,6 +17,7 @@ import groovy.lang.Singleton;
  *
  * @author hongp
  */
+@Component
 @Singleton
 public class OrderFactory {
 

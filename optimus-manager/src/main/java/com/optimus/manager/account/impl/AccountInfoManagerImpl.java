@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 账户信息Manager
+ * 账户信息Manager实现
  * 
  * @author sunxp
  */

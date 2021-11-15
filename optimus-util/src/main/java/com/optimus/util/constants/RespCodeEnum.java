@@ -44,7 +44,9 @@ public enum RespCodeEnum {
 
     /* ---------订单类编码--------- */
 
-    ORDER_NO("4000", "订单不存在"), ORDER_ERROR("4001", "订单信息异常"),
+    ORDER_NO("4000", "订单不存在"),
+
+    ORDER_ERROR("4001", "订单信息异常"),
 
     ORDER_TYPE_ERROR("4002", "订单类型异常"),
 
