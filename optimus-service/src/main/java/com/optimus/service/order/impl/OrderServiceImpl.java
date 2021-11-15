@@ -10,6 +10,7 @@ import com.optimus.dao.domain.OrderInfoDO;
 import com.optimus.dao.mapper.OrderInfoDao;
 import com.optimus.dao.query.OrderInfoQuery;
 import com.optimus.manager.account.dto.DoTransDTO;
+import com.optimus.manager.order.OrderManager;
 import com.optimus.service.member.dto.InviteChainDTO;
 import com.optimus.service.order.OrderService;
 import com.optimus.service.order.convert.OrderServiceConvert;
@@ -41,6 +42,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Resource
     private OrderInfoDao orderInfoDao;
+
+    @Resource
+    private OrderManager orderManager;
 
     @Override
     public OrderInfoDTO getOrderInfoByOrderId(String orderId) {
@@ -77,23 +81,25 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderInfoDTO createOrder(CreateOrderDTO createOrder) {
+        // 验证上游订单是否重复
+        orderManager.checkCallerOrderId(createOrder.getCallerOrderId());
 
+        // 根据订单类型获取处理工厂类
         BaseOrder baseOrder = orderFactory.getOrderInstance(createOrder.getOrderType());
 
+        // 通过是否取得工厂类型来校验订单类型是否支持
         AssertUtil.notEmpty(baseOrder, RespCodeEnum.ORDER_TYPE_ERROR, null);
 
+        // 生成订单号
         createOrder.setOrderId(GenerateUtil.generate(createOrder.getOrderType()));
 
-        baseOrder.createOrder(createOrder);
-
-        // 验证上游订单是否重复
-
-        // 根据订单类型处理订单金额
+        // 工厂处理订单信息
+        OrderInfoDTO orderInfo = baseOrder.createOrder(createOrder);
 
         // 落库
+        orderInfoDao.addOrderInfo(OrderServiceConvert.orderInfoDTOToOrderInfoDO(orderInfo));
 
-        // 回写参数赋值
-        return null;
+        return orderInfo;
     }
 
     @Override

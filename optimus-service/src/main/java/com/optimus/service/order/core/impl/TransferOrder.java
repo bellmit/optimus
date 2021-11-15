@@ -2,6 +2,7 @@ package com.optimus.service.order.core.impl;
 
 import com.optimus.service.order.core.BaseOrder;
 import com.optimus.service.order.dto.CreateOrderDTO;
+import com.optimus.service.order.dto.OrderInfoDTO;
 import com.optimus.service.order.dto.PayOrderDTO;
 
 import org.springframework.stereotype.Component;
@@ -18,10 +19,11 @@ public class TransferOrder extends BaseOrder {
      * 创建订单
      *
      * @param createOrder
+     * @return
      */
     @Override
-    public void createOrder(CreateOrderDTO createOrder) {
-
+    public OrderInfoDTO createOrder(CreateOrderDTO createOrder) {
+        return null;
     }
 
     /**

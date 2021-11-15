@@ -1,8 +1,12 @@
 package com.optimus.service.order.convert;
 
+import com.optimus.dao.domain.OrderInfoDO;
 import com.optimus.dao.query.OrderInfoQuery;
+import com.optimus.service.order.dto.CreateOrderDTO;
 import com.optimus.service.order.dto.OrderInfoDTO;
+import com.optimus.util.DateUtil;
 import com.optimus.util.page.Page;
+import org.springframework.beans.BeanUtils;
 
 /**
  * 订单Service转换器
@@ -29,6 +33,38 @@ public class OrderServiceConvert {
 
         return query;
 
+    }
+
+
+    /**
+     * OrderInfoDTO转DO
+     *
+     * @param orderInfo
+     * @return
+     */
+    public static OrderInfoDO orderInfoDTOToOrderInfoDO(OrderInfoDTO orderInfo) {
+
+        OrderInfoDO orderInfoDO = new OrderInfoDO();
+
+        BeanUtils.copyProperties(orderInfo, orderInfoDO);
+        orderInfoDO.setCreateTime(DateUtil.currentDate());
+        orderInfoDO.setUpdateTime(DateUtil.currentDate());
+        orderInfoDO.setOrderTime(DateUtil.currentDate());
+
+        return orderInfoDO;
+    }
+
+
+    /**
+     * createOrderDTODTO转OrderInfoDTO
+     *
+     * @param createOrderDTO
+     * @return
+     */
+    public static OrderInfoDTO createOrderDTOToOrderInfoDTO(CreateOrderDTO createOrderDTO) {
+        OrderInfoDTO orderInfoDTO = new OrderInfoDTO();
+        BeanUtils.copyProperties(createOrderDTO, orderInfoDTO);
+        return orderInfoDTO;
     }
 
 }

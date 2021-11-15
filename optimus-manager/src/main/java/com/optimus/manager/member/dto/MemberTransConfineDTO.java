@@ -1,15 +1,10 @@
-package com.optimus.service.member.dto;
+package com.optimus.manager.member.dto;
+
+import com.optimus.util.constants.member.*;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-
-import com.optimus.util.constants.member.MemberCollectFeeTypeEnum;
-import com.optimus.util.constants.member.MemberCollectFeeWayEnum;
-import com.optimus.util.constants.member.MemberFreezeBalanceSwitchEnum;
-import com.optimus.util.constants.member.MemberMerchantOrderSwitchEnum;
-import com.optimus.util.constants.member.MemberWithdrawFeeSwitchEnum;
-
-import lombok.Data;
 
 /**
  * 会员交易限制DTO

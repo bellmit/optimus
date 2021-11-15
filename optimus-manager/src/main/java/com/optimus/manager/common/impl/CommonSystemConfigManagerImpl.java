@@ -13,6 +13,8 @@ import org.springframework.util.StringUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
+import javax.annotation.Resource;
+
 /**
  * 系统配置Manager实现
  * 
@@ -22,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CommonSystemConfigManagerImpl implements CommonSystemConfigManager {
 
-    @Autowired
+    @Resource
     private CommonSystemConfigDao commonSystemConfigDao;
 
     @Override
