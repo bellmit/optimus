@@ -1,9 +1,5 @@
 package com.optimus.manager.member.impl;
 
-import java.math.BigDecimal;
-
-import javax.annotation.Resource;
-
 import com.optimus.dao.domain.MemberTransConfineDO;
 import com.optimus.dao.mapper.MemberTransConfineDao;
 import com.optimus.manager.member.MemberManager;
@@ -12,10 +8,13 @@ import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.member.MemberCollectFeeTypeEnum;
 import com.optimus.util.constants.member.MemberWithdrawFeeSwitchEnum;
-
+import com.optimus.util.exception.OptimusException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+
+import javax.annotation.Resource;
+import java.math.BigDecimal;
 
 
 /**
@@ -38,18 +37,22 @@ public class MemberManagerImpl implements MemberManager {
             return BigDecimal.ZERO;
         }
 
-        MemberCollectFeeTypeEnum feeType = MemberCollectFeeTypeEnum.valueOf(memberTransConfine.getCollectFeeType());
+        AssertUtil.notEmpty(memberTransConfine.getCollectFeeType(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "手续费类型未配置");
 
-        switch (feeType) {
-            case COLLECT_FEE_TYPE_R:
-                return orderAmount.multiply(memberTransConfine.getRatioCollectFee());
-            case COLLECT_FEE_TYPE_S:
-                return memberTransConfine.getSingleCollectFee();
-            case COLLECT_FEE_TYPE_SR:
-                return orderAmount.multiply(memberTransConfine.getRatioCollectFee()).add(memberTransConfine.getSingleCollectFee());
-            default:
-                return BigDecimal.ZERO;
+        if (StringUtils.pathEquals(MemberCollectFeeTypeEnum.COLLECT_FEE_TYPE_R.getCode(), memberTransConfine.getCollectFeeType())) {
+            return orderAmount.multiply(memberTransConfine.getRatioCollectFee());
         }
+
+        if (StringUtils.pathEquals(MemberCollectFeeTypeEnum.COLLECT_FEE_TYPE_S.getCode(), memberTransConfine.getCollectFeeType())) {
+            return memberTransConfine.getSingleCollectFee();
+        }
+
+        if (StringUtils.pathEquals(MemberCollectFeeTypeEnum.COLLECT_FEE_TYPE_SR.getCode(), memberTransConfine.getCollectFeeType())) {
+            return orderAmount.multiply(memberTransConfine.getRatioCollectFee()).add(memberTransConfine.getSingleCollectFee());
+        }
+
+        throw new OptimusException(RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "手续费类型不匹配");
+
     }
 
     @Override
