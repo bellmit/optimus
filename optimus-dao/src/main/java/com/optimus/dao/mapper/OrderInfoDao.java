@@ -1,6 +1,9 @@
 package com.optimus.dao.mapper;
 
+import java.util.List;
+
 import com.optimus.dao.domain.OrderInfoDO;
+import com.optimus.dao.query.OrderInfoQuery;
 
 /**
  * 订单信息Dao
@@ -24,6 +27,14 @@ public interface OrderInfoDao {
      * @return OrderInfoDO
      */
     OrderInfoDO getOrderInfoByOrderId(String orderId);
+
+    /**
+     * 根据OrderInfoQuery查询订单信息
+     * 
+     * @param query
+     * @return
+     */
+    List<OrderInfoDO> listOrderInfoByOrderInfoQuerys(OrderInfoQuery query);
 
     /**
      * 新增一条订单信息

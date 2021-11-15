@@ -7,11 +7,11 @@ import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.exception.OptimusException;
 
 /**
- * JsonUtil
+ * JacksonUtil
  * 
  * @author sunxp
  */
-public class JsonUtil {
+public class JacksonUtil {
 
     private static ObjectMapper objectMapper;
 
@@ -21,7 +21,7 @@ public class JsonUtil {
      * @param objectMapper
      */
     public static void setObjectMapper(ObjectMapper objectMapper) {
-        JsonUtil.objectMapper = objectMapper;
+        JacksonUtil.objectMapper = objectMapper;
     }
 
     /**

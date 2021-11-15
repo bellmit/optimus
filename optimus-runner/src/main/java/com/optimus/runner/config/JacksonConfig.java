@@ -1,7 +1,7 @@
 package com.optimus.runner.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.optimus.util.JsonUtil;
+import com.optimus.util.JacksonUtil;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -31,7 +31,7 @@ public class JacksonConfig {
     public ObjectMapper jacksonObjectMapper(Jackson2ObjectMapperBuilder builder) {
 
         ObjectMapper objectMapper = builder.createXmlMapper(false).build();
-        JsonUtil.setObjectMapper(objectMapper);
+        JacksonUtil.setObjectMapper(objectMapper);
 
         return objectMapper;
 

@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 /**
- * 会员服务
+ * 会员Service实现
  * 
  * @author sunxp
  */

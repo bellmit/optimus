@@ -21,7 +21,7 @@ import com.optimus.util.constants.member.MemberMerchantOrderSwitchEnum;
 import com.optimus.util.constants.member.MemberTypeEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
 import com.optimus.util.exception.OptimusException;
-import com.optimus.web.collect.convert.CollectConvert;
+import com.optimus.web.collect.convert.CollectControllerConvert;
 import com.optimus.web.collect.req.ApplyForRechargeReq;
 import com.optimus.web.collect.req.ApplyForWithdrawReq;
 import com.optimus.web.collect.req.ConfirmForRechargeReq;
@@ -48,7 +48,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 收单web
+ * 收单Controller
  *
  * @author hongp
  */
@@ -86,7 +86,7 @@ public class CollectController {
         }
 
         // 创建订单
-        CreateOrderDTO createOrder = CollectConvert.getCreateOrderDTO(req);
+        CreateOrderDTO createOrder = CollectControllerConvert.getCreateOrderDTO(req);
         createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_R.getCode());
 
         OrderInfoDTO orderInfo = orderService.createOrder(createOrder);
@@ -132,7 +132,7 @@ public class CollectController {
         AssertUtil.notEmpty(orderInfo, RespCodeEnum.ORDER_NO, null);
 
         // 支付订单
-        CollectConvert.getPayOrderDTO(orderInfo);
+        CollectControllerConvert.getPayOrderDTO(orderInfo);
 
         return new ConfirmForRechargeResp();
     }
@@ -158,13 +158,13 @@ public class CollectController {
         memberService.checkMemberLevel(memberInfo, req.getSubDirectMemberId());
 
         // 创建订单
-        CreateOrderDTO createOrder = CollectConvert.getCreateOrderDTO(req);
+        CreateOrderDTO createOrder = CollectControllerConvert.getCreateOrderDTO(req);
         createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_R.getCode());
 
         OrderInfoDTO orderInfo = orderService.createOrder(createOrder);
 
         // 支付订单
-        orderService.payOrder(CollectConvert.getPayOrderDTO(orderInfo));
+        orderService.payOrder(CollectControllerConvert.getPayOrderDTO(orderInfo));
 
         return new RechargeResp();
     }
@@ -194,7 +194,7 @@ public class CollectController {
         }
 
         // 创建订单
-        CreateOrderDTO createOrder = CollectConvert.getCreateOrderDTO(req);
+        CreateOrderDTO createOrder = CollectControllerConvert.getCreateOrderDTO(req);
         createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_W.getCode());
 
         orderService.createOrder(createOrder);
@@ -234,7 +234,7 @@ public class CollectController {
         }
 
         // 支付订单
-        orderService.payOrder(CollectConvert.getPayOrderDTO(orderInfo));
+        orderService.payOrder(CollectControllerConvert.getPayOrderDTO(orderInfo));
 
         return new ConfirmForWithdrawResp();
 
@@ -269,13 +269,13 @@ public class CollectController {
         }
 
         // 创建订单
-        CreateOrderDTO createOrder = CollectConvert.getCreateOrderDTO(req);
+        CreateOrderDTO createOrder = CollectControllerConvert.getCreateOrderDTO(req);
         createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_W.getCode());
 
         OrderInfoDTO orderInfo = orderService.createOrder(createOrder);
 
         // 支付订单
-        orderService.payOrder(CollectConvert.getPayOrderDTO(orderInfo));
+        orderService.payOrder(CollectControllerConvert.getPayOrderDTO(orderInfo));
 
         return new WithdrawResp();
 
@@ -300,13 +300,13 @@ public class CollectController {
         }
 
         // 创建订单
-        CreateOrderDTO createOrder = CollectConvert.getCreateOrderDTO(req);
+        CreateOrderDTO createOrder = CollectControllerConvert.getCreateOrderDTO(req);
         createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_M.getCode());
 
         OrderInfoDTO orderInfo = orderService.createOrder(createOrder);
 
         // 支付订单
-        orderService.payOrder(CollectConvert.getPayOrderDTO(orderInfo));
+        orderService.payOrder(CollectControllerConvert.getPayOrderDTO(orderInfo));
 
         return new TransferResp();
 
@@ -319,7 +319,7 @@ public class CollectController {
      * @return
      */
     @PostMapping("/placeOrder")
-    PlaceOrderResp placeOrder(@RequestBody PlaceOrderReq req) {
+    public PlaceOrderResp placeOrder(@RequestBody PlaceOrderReq req) {
 
         // 参数验证
         CollectValidate.validatePlaceOrder(req);
@@ -352,13 +352,13 @@ public class CollectController {
         }
 
         // 下单
-        CreateOrderDTO createOrder = CollectConvert.getCreateOrderDTO(req);
+        CreateOrderDTO createOrder = CollectControllerConvert.getCreateOrderDTO(req);
         createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_C.getCode());
         createOrder.setSupMemberId(memberInfo.getSupDirectMemberId());
 
         OrderInfoDTO orderInfo = orderService.createOrder(createOrder);
 
-        return CollectConvert.getPlaceOrderResp(orderInfo);
+        return CollectControllerConvert.getPlaceOrderResp(orderInfo);
 
     }
 

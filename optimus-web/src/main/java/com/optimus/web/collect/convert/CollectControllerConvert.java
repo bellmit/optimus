@@ -12,11 +12,11 @@ import com.optimus.web.collect.req.TransferReq;
 import com.optimus.web.collect.resp.PlaceOrderResp;
 
 /**
- * 收单转换器
+ * 收单Controller转换器
  * 
  * @author sunxp
  */
-public class CollectConvert {
+public class CollectControllerConvert {
 
     /**
      * 获取网关渠道传输对象

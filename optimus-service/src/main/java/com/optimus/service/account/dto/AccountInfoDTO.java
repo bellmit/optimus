@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import com.optimus.util.constants.account.AccountTypeEnum;
 
 /**
- * 账户信息
+ * 账户信息DTO
  *
  * @author hongp
  */

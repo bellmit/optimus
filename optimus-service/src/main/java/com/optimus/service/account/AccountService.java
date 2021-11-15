@@ -3,7 +3,7 @@ package com.optimus.service.account;
 import com.optimus.service.account.dto.AccountInfoDTO;
 
 /**
- * 账户服务
+ * 账户Service
  *
  * @author sunxp
  */

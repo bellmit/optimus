@@ -7,9 +7,10 @@ import com.optimus.service.member.dto.InviteChainDTO;
 import com.optimus.service.order.dto.CreateOrderDTO;
 import com.optimus.service.order.dto.OrderInfoDTO;
 import com.optimus.service.order.dto.PayOrderDTO;
+import com.optimus.util.page.Page;
 
 /**
- * 订单服务
+ * 订单Service
  *
  * @author sunxp
  */
@@ -23,6 +24,15 @@ public interface OrderService {
      * @return OrderInfoDTO
      */
     OrderInfoDTO getOrderInfoByOrderId(String orderId);
+
+    /**
+     * 根据OrderInfoQuery查询订单信息
+     * 
+     * @param orderInfo
+     * @param page
+     * @return
+     */
+    List<OrderInfoDTO> listOrderInfoByOrderInfoQuerys(OrderInfoDTO orderInfo, Page page);
 
     /**
      * 创建订单

@@ -3,6 +3,7 @@ package com.optimus.util;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 
 import com.optimus.util.constants.RespCodeEnum;
 
@@ -43,7 +44,7 @@ public class SignUtil {
      * @param key
      * @return
      */
-    public static String sign(Map<String, String> map, String key) {
+    public static String sign(Map<String, Object> map, String key) {
 
         AssertUtil.notEmpty(map, RespCodeEnum.ERROR_SIGN, "签名参数不能为空");
         AssertUtil.notEmpty(key, RespCodeEnum.ERROR_SIGN, "密钥不能为空");
@@ -60,13 +61,13 @@ public class SignUtil {
                 continue;
             }
 
-            String value = map.get(item);
+            Object value = map.get(item);
 
             if (StringUtils.hasLength(item)) {
                 sb.append(item);
             }
 
-            if (StringUtils.hasLength(value)) {
+            if (!Objects.isNull(value)) {
                 sb.append(value);
             }
 
