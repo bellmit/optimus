@@ -1,4 +1,5 @@
 package com.optimus.service.order.core.impl;
+
 import java.math.BigDecimal;
 
 import com.optimus.manager.member.MemberManager;
@@ -10,6 +11,7 @@ import com.optimus.service.order.core.BaseOrder;
 import com.optimus.service.order.dto.CreateOrderDTO;
 import com.optimus.service.order.dto.OrderInfoDTO;
 import com.optimus.service.order.dto.PayOrderDTO;
+import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.account.AccountTypeEnum;
 import com.optimus.util.constants.member.MemberCollectFeeWayEnum;
@@ -55,9 +57,14 @@ public class WithdrawOrder extends BaseOrder {
         MemberTransConfineDTO memberTransConfine = memberManager.getMemberTransConfineByMemberId(createOrder.getMemberId());
         BigDecimal fee = memberManager.getFee(createOrder.getOrderAmount(), memberTransConfine);
         orderInfo.setFee(fee);
-        if(StringUtils.pathEquals(MemberCollectFeeWayEnum.COLLECT_FEE_WAY_A.getCode(), memberTransConfine.getCollectFeeWay())){
+
+        AssertUtil.notEmpty(memberTransConfine.getCollectFeeWay(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "手续费收取方式未配置");
+
+        if (StringUtils.pathEquals(MemberCollectFeeWayEnum.COLLECT_FEE_WAY_A.getCode(), memberTransConfine.getCollectFeeWay())) {
             orderInfo.setActualAmount(orderInfo.getOrderAmount());
-        } else if (StringUtils.pathEquals(MemberCollectFeeWayEnum.COLLECT_FEE_WAY_B.getCode(), memberTransConfine.getCollectFeeWay())){
+        }
+
+        if (StringUtils.pathEquals(MemberCollectFeeWayEnum.COLLECT_FEE_WAY_B.getCode(), memberTransConfine.getCollectFeeWay())) {
             orderInfo.setActualAmount(orderInfo.getOrderAmount().add(fee));
         }
 

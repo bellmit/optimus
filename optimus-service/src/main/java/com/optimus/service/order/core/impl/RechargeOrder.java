@@ -1,5 +1,6 @@
 package com.optimus.service.order.core.impl;
 
+import com.optimus.service.order.convert.OrderServiceConvert;
 import com.optimus.service.order.core.BaseOrder;
 import com.optimus.service.order.dto.CreateOrderDTO;
 import com.optimus.service.order.dto.OrderInfoDTO;
@@ -23,7 +24,9 @@ public class RechargeOrder extends BaseOrder {
      */
     @Override
     public OrderInfoDTO createOrder(CreateOrderDTO createOrder) {
-        return null;
+        OrderInfoDTO orderInfo = OrderServiceConvert.createOrderDTOToOrderInfoDTO(createOrder);
+        orderInfo.setActualAmount(createOrder.getOrderAmount());
+        return orderInfo;
     }
 
     /**
