@@ -1,4 +1,5 @@
 package com.optimus.service.order.core.impl;
+
 import java.math.BigDecimal;
 
 import com.optimus.manager.member.MemberManager;
@@ -59,11 +60,11 @@ public class WithdrawOrder extends BaseOrder {
 
         AssertUtil.notEmpty(memberTransConfine.getCollectFeeWay(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "手续费收取方式未配置");
 
-        if(StringUtils.pathEquals(MemberCollectFeeWayEnum.COLLECT_FEE_WAY_A.getCode(), memberTransConfine.getCollectFeeWay())){
+        if (StringUtils.pathEquals(MemberCollectFeeWayEnum.COLLECT_FEE_WAY_A.getCode(), memberTransConfine.getCollectFeeWay())) {
             orderInfo.setActualAmount(orderInfo.getOrderAmount());
         }
 
-        if (StringUtils.pathEquals(MemberCollectFeeWayEnum.COLLECT_FEE_WAY_B.getCode(), memberTransConfine.getCollectFeeWay())){
+        if (StringUtils.pathEquals(MemberCollectFeeWayEnum.COLLECT_FEE_WAY_B.getCode(), memberTransConfine.getCollectFeeWay())) {
             orderInfo.setActualAmount(orderInfo.getOrderAmount().add(fee));
         }
 
