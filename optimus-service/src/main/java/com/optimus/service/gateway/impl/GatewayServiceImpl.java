@@ -76,6 +76,8 @@ public class GatewayServiceImpl implements GatewayService {
     @Override
     public String handleForChannelCallback(HandleForChannelCallbackDTO handleForChannelCallback) {
 
+        // 验证IP
+
         // 调用脚本解析渠道参数为模版对象
         AnalysisChannelMessageDTO analysisChannelMessage = gatewayManager
                 .analysisChannelMessage(handleForChannelCallback.getMessage());
@@ -83,7 +85,7 @@ public class GatewayServiceImpl implements GatewayService {
 
         // 验证订单及子渠道合法性
 
-        // 若成功，则更新订单信息
+        // 更新订单信息
 
         // 异步分润
 

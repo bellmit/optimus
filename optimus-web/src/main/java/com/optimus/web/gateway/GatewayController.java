@@ -42,7 +42,7 @@ public class GatewayController {
         String ip = GatewayControllerConvert.getRemoteIp(req);
         AssertUtil.notEmpty(ip, RespCodeEnum.INVALID_IP, "远程客户端IP不能为空");
 
-        // 查询子渠道并验证调用IP
+        // 查询子渠道
         GatewaySubChannelDTO gatewaySubChannel = gatewayService.getGatewaySubChannelBySubChannelCode(subChannelCode);
 
         // 处理参数
