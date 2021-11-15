@@ -29,4 +29,21 @@ public class AssertUtil {
 
     }
 
+    /**
+     * empty
+     *
+     * @param object
+     * @param respCodeEnum
+     * @param memo
+     */
+    public static void empty(Object object, RespCodeEnum respCodeEnum, String memo) {
+
+        if (ObjectUtils.isEmpty(object)) {
+            return;
+        }
+
+        throw new OptimusException(respCodeEnum, memo);
+
+    }
+
 }

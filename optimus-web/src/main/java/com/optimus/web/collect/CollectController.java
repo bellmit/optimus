@@ -1,20 +1,15 @@
 package com.optimus.web.collect;
 
-import java.math.BigDecimal;
-
-import com.optimus.service.account.AccountService;
-import com.optimus.service.account.dto.AccountInfoDTO;
+import com.optimus.manager.member.dto.MemberTransConfineDTO;
 import com.optimus.service.gateway.GatewayService;
 import com.optimus.service.gateway.dto.GatewayChannelDTO;
 import com.optimus.service.member.MemberService;
 import com.optimus.service.member.dto.MemberInfoDTO;
-import com.optimus.service.member.dto.MemberTransConfineDTO;
 import com.optimus.service.order.OrderService;
 import com.optimus.service.order.dto.CreateOrderDTO;
 import com.optimus.service.order.dto.OrderInfoDTO;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
-import com.optimus.util.constants.account.AccountTypeEnum;
 import com.optimus.util.constants.gateway.GatewayChannelGroupEnum;
 import com.optimus.util.constants.gateway.GatewayChannelStatusEnum;
 import com.optimus.util.constants.member.MemberMerchantOrderSwitchEnum;
@@ -22,24 +17,9 @@ import com.optimus.util.constants.member.MemberTypeEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
 import com.optimus.util.exception.OptimusException;
 import com.optimus.web.collect.convert.CollectControllerConvert;
-import com.optimus.web.collect.req.ApplyForRechargeReq;
-import com.optimus.web.collect.req.ApplyForWithdrawReq;
-import com.optimus.web.collect.req.ConfirmForRechargeReq;
-import com.optimus.web.collect.req.ConfirmForWithdrawReq;
-import com.optimus.web.collect.req.PlaceOrderReq;
-import com.optimus.web.collect.req.RechargeReq;
-import com.optimus.web.collect.req.TransferReq;
-import com.optimus.web.collect.req.WithdrawReq;
-import com.optimus.web.collect.resp.ApplyForRechargeResp;
-import com.optimus.web.collect.resp.ApplyForWithdrawResp;
-import com.optimus.web.collect.resp.ConfirmForRechargeResp;
-import com.optimus.web.collect.resp.ConfirmForWithdrawResp;
-import com.optimus.web.collect.resp.PlaceOrderResp;
-import com.optimus.web.collect.resp.RechargeResp;
-import com.optimus.web.collect.resp.TransferResp;
-import com.optimus.web.collect.resp.WithdrawResp;
+import com.optimus.web.collect.req.*;
+import com.optimus.web.collect.resp.*;
 import com.optimus.web.collect.validate.CollectValidate;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -64,9 +44,6 @@ public class CollectController {
 
     @Autowired
     private MemberService memberService;
-
-    @Autowired
-    private AccountService accountService;
 
     /**
      * 申请充值
@@ -186,13 +163,6 @@ public class CollectController {
             throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为代理或管理");
         }
 
-        // 验证账户余额是否充足
-        AccountInfoDTO accountInfo = accountService.getAccountInfoByMemberIdAndAccountType(req.getMemberId(),
-                AccountTypeEnum.ACCOUNT_TYPE_B.getCode());
-        if (accountInfo.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new OptimusException(RespCodeEnum.ACCOUNT_AMOUNT_ERROR);
-        }
-
         // 创建订单
         CreateOrderDTO createOrder = CollectControllerConvert.getCreateOrderDTO(req);
         createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_W.getCode());
@@ -260,13 +230,6 @@ public class CollectController {
 
         // 验证上下级关系
         memberService.checkMemberLevel(memberInfo, req.getSubDirectMemberId());
-
-        // 验证账户余额是否充足
-        AccountInfoDTO accountInfo = accountService.getAccountInfoByMemberIdAndAccountType(req.getMemberId(),
-                AccountTypeEnum.ACCOUNT_TYPE_B.getCode());
-        if (accountInfo.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new OptimusException(RespCodeEnum.ACCOUNT_AMOUNT_ERROR);
-        }
 
         // 创建订单
         CreateOrderDTO createOrder = CollectControllerConvert.getCreateOrderDTO(req);

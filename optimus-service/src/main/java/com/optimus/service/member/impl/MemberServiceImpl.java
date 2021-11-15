@@ -1,29 +1,26 @@
 package com.optimus.service.member.impl;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
 import com.optimus.dao.domain.MemberInfoDO;
-import com.optimus.dao.domain.MemberTransConfineDO;
 import com.optimus.dao.mapper.MemberInfoDao;
-import com.optimus.dao.mapper.MemberTransConfineDao;
+import com.optimus.manager.member.MemberManager;
+import com.optimus.manager.member.dto.MemberTransConfineDTO;
 import com.optimus.service.member.MemberService;
 import com.optimus.service.member.dto.InviteChainDTO;
 import com.optimus.service.member.dto.MemberInfoDTO;
-import com.optimus.service.member.dto.MemberTransConfineDTO;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.member.MemberDeleteFlagEnum;
 import com.optimus.util.exception.OptimusException;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
+import java.util.List;
+
 /**
  * 会员Service实现
- * 
+ *
  * @author sunxp
  */
 @Service
@@ -33,7 +30,7 @@ public class MemberServiceImpl implements MemberService {
     private MemberInfoDao memberInfoDao;
 
     @Resource
-    private MemberTransConfineDao memberTransConfineDao;
+    private MemberManager memberManager;
 
     @Override
     public MemberInfoDTO getMemberInfoByMemberId(String memberId) {
@@ -55,16 +52,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberTransConfineDTO getMemberTransConfineByMemberId(String memberId) {
-
-        MemberTransConfineDO memberTransConfineDO = memberTransConfineDao.getMemberTransConfineByMemberId(memberId);
-
-        AssertUtil.notEmpty(memberTransConfineDO, RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "会员交易限制为空");
-
-        MemberTransConfineDTO memberTransConfine = new MemberTransConfineDTO();
-        BeanUtils.copyProperties(memberTransConfineDO, memberTransConfine);
-
-        return memberTransConfine;
-
+        return memberManager.getMemberTransConfineByMemberId(memberId);
     }
 
     @Override

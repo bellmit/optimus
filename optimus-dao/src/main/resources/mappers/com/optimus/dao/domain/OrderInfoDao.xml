@@ -54,6 +54,13 @@
     where ORDER_ID = #{orderId,jdbcType=VARCHAR}
   </select>
 
+  <select id="getOrderInfoByCallerOrderId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_ORDER_INFO
+    where CALLER_ORDER_ID = #{callerOrderId,jdbcType=VARCHAR}
+  </select>
+
   <select id="listOrderInfoByOrderInfoQuerys" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />

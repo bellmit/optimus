@@ -52,6 +52,8 @@ public enum RespCodeEnum {
 
     ORDER_TYPE_ERROR("4002", "订单类型异常"),
 
+    ORDER_EXIST_ERROR("4003", "订单已存在"),
+
     /* ---------网关类编码--------- */
 
     GATEWAY_CHANNEL_NO("5000", "网关渠道不存在"),

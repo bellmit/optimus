@@ -2,9 +2,9 @@ package com.optimus.service.member;
 
 import java.util.List;
 
+import com.optimus.manager.member.dto.MemberTransConfineDTO;
 import com.optimus.service.member.dto.InviteChainDTO;
 import com.optimus.service.member.dto.MemberInfoDTO;
-import com.optimus.service.member.dto.MemberTransConfineDTO;
 
 /**
  * 会员Service

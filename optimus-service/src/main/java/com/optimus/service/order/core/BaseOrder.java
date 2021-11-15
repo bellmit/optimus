@@ -1,6 +1,7 @@
 package com.optimus.service.order.core;
 
 import com.optimus.service.order.dto.CreateOrderDTO;
+import com.optimus.service.order.dto.OrderInfoDTO;
 import com.optimus.service.order.dto.PayOrderDTO;
 
 /**
@@ -14,8 +15,9 @@ public abstract class BaseOrder {
      * 创建订单
      *
      * @param createOrder
+     * @return OrderInfoDTO
      */
-    public abstract void createOrder(CreateOrderDTO createOrder);
+    public abstract OrderInfoDTO createOrder(CreateOrderDTO createOrder);
 
     /**
      * 支付订单
