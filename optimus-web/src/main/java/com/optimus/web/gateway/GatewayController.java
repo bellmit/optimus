@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * 网关Controller
- * 
+ *
  * @author sunxp
  */
 @RestController
@@ -24,7 +24,7 @@ public class GatewayController {
 
     /**
      * 渠道回调
-     * 
+     *
      * @return
      */
     @RequestMapping(value = "/channelCallback", method = { RequestMethod.GET, RequestMethod.POST })
