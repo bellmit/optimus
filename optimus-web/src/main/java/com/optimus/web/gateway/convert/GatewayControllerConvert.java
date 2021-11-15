@@ -8,8 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.optimus.util.JacksonUtil;
+import com.optimus.util.constants.BaseEnum;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.exception.OptimusException;
+
+import org.springframework.util.StringUtils;
 
 /**
  * 网关Controller转换器
@@ -59,6 +62,62 @@ public class GatewayControllerConvert {
         map.put("body", JacksonUtil.toTree(body));
 
         return JacksonUtil.toString(map);
+
+    }
+
+    /**
+     * 获取远程IP
+     * 
+     * @param req
+     * @return
+     */
+    public static String getRemoteIp(HttpServletRequest req) {
+
+        // Squid
+        String ip = req.getHeader("X-Forwarded-For");
+
+        // Apache
+        if (!StringUtils.hasLength(ip) || BaseEnum.UNKNOWN.getCode().equalsIgnoreCase(ip)) {
+            ip = req.getHeader("Proxy-Client-IP");
+        }
+
+        // Weblogic
+        if (!StringUtils.hasLength(ip) || BaseEnum.UNKNOWN.getCode().equalsIgnoreCase(ip)) {
+            ip = req.getHeader("WL-Proxy-Client-IP");
+        }
+
+        // Nginx
+        if (!StringUtils.hasLength(ip) || BaseEnum.UNKNOWN.getCode().equalsIgnoreCase(ip)) {
+            ip = req.getHeader("X-Real-IP");
+        }
+
+        // 其他
+        if (!StringUtils.hasLength(ip) || BaseEnum.UNKNOWN.getCode().equalsIgnoreCase(ip)) {
+            ip = req.getHeader("HTTP_CLIENT_IP");
+        }
+
+        if (StringUtils.hasLength(ip)) {
+
+            String[] ips = ip.split(",");
+
+            for (String item : ips) {
+
+                if (BaseEnum.UNKNOWN.getCode().equalsIgnoreCase(item)) {
+                    continue;
+                }
+
+                ip = item;
+                break;
+
+            }
+
+        }
+
+        if (!StringUtils.hasLength(ip) || BaseEnum.UNKNOWN.getCode().equalsIgnoreCase(ip)) {
+            ip = req.getRemoteAddr();
+        }
+
+        return ip;
 
     }
 
