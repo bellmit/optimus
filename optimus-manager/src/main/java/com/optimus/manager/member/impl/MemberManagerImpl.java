@@ -1,5 +1,9 @@
 package com.optimus.manager.member.impl;
 
+import java.math.BigDecimal;
+
+import javax.annotation.Resource;
+
 import com.optimus.dao.domain.MemberTransConfineDO;
 import com.optimus.dao.mapper.MemberTransConfineDao;
 import com.optimus.manager.member.MemberManager;
@@ -8,13 +12,10 @@ import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.member.MemberCollectFeeTypeEnum;
 import com.optimus.util.constants.member.MemberWithdrawFeeSwitchEnum;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-
-import javax.annotation.Resource;
-import java.math.BigDecimal;
 
 
 /**
@@ -23,7 +24,6 @@ import java.math.BigDecimal;
  * @author hongp
  */
 @Component
-@Slf4j
 public class MemberManagerImpl implements MemberManager {
 
     @Resource

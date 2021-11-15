@@ -1,14 +1,14 @@
 package com.optimus.manager.order.impl;
 
+import javax.annotation.Resource;
+
 import com.optimus.dao.domain.OrderInfoDO;
 import com.optimus.dao.mapper.OrderInfoDao;
 import com.optimus.manager.order.OrderManager;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
+import org.springframework.stereotype.Component;
 
 /**
  * 订单manager实现
@@ -16,7 +16,6 @@ import javax.annotation.Resource;
  * @author hongp
  */
 @Component
-@Slf4j
 public class OrderManagerImpl implements OrderManager {
 
     @Resource
