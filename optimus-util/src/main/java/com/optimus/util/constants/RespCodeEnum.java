@@ -58,6 +58,8 @@ public enum RespCodeEnum {
 
     GATEWAY_CHANNEL_ERROR("5001", "网关渠道信息异常"),
 
+    GATEWAY_ANALYSIS_ERROR("5002", "网关渠道消息解析异常"),
+
     ;
 
     private String code;
