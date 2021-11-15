@@ -2,6 +2,8 @@ package com.optimus.web.gateway;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.optimus.util.AssertUtil;
+import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.web.gateway.convert.GatewayControllerConvert;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +29,10 @@ public class GatewayController {
      */
     @RequestMapping(value = "/channelCallback", method = { RequestMethod.GET, RequestMethod.POST })
     public String channelCallback(HttpServletRequest req) {
+
+        // 获取远程客户端IP
+        String ip = GatewayControllerConvert.getRemoteIp(req);
+        AssertUtil.notEmpty(ip, RespCodeEnum.INVALID_IP, "远程客户端IP不能为空");
 
         // 处理参数
         String parameter = GatewayControllerConvert.getAllParameter(req);
