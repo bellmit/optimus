@@ -1,22 +1,21 @@
 package com.optimus.service.member.impl;
 
+import javax.annotation.Resource;
+
 import com.optimus.dao.domain.MemberInfoDO;
 import com.optimus.dao.mapper.MemberInfoDao;
 import com.optimus.manager.member.MemberManager;
 import com.optimus.manager.member.dto.MemberTransConfineDTO;
 import com.optimus.service.member.MemberService;
-import com.optimus.service.member.dto.InviteChainDTO;
 import com.optimus.service.member.dto.MemberInfoDTO;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.member.MemberDeleteFlagEnum;
 import com.optimus.util.exception.OptimusException;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
-import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * 会员Service实现
@@ -67,11 +66,6 @@ public class MemberServiceImpl implements MemberService {
             throw new OptimusException(RespCodeEnum.MEMBER_LEVEL_ERROR);
         }
 
-    }
-
-    @Override
-    public List<InviteChainDTO> buildInviteChain(String memberId) {
-        return null;
     }
 
 }

@@ -2,8 +2,6 @@ package com.optimus.service.order;
 
 import java.util.List;
 
-import com.optimus.manager.account.dto.DoTransDTO;
-import com.optimus.service.member.dto.InviteChainDTO;
 import com.optimus.service.order.dto.CreateOrderDTO;
 import com.optimus.service.order.dto.OrderInfoDTO;
 import com.optimus.service.order.dto.PayOrderDTO;
@@ -52,15 +50,5 @@ public interface OrderService {
      * @param payOrder
      */
     void payOrder(PayOrderDTO payOrder);
-
-    /**
-     * 构建交易信息
-     *
-     * 适用场景-网关渠道回调成功
-     *
-     * @param inviteChainList
-     * @return
-     */
-    List<DoTransDTO> buildSplitProfit(List<InviteChainDTO> inviteChainList);
 
 }
