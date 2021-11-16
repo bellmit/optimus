@@ -9,9 +9,7 @@ import javax.annotation.Resource;
 import com.optimus.dao.domain.OrderInfoDO;
 import com.optimus.dao.mapper.OrderInfoDao;
 import com.optimus.dao.query.OrderInfoQuery;
-import com.optimus.manager.account.dto.DoTransDTO;
 import com.optimus.manager.order.OrderManager;
-import com.optimus.service.member.dto.InviteChainDTO;
 import com.optimus.service.order.OrderService;
 import com.optimus.service.order.convert.OrderServiceConvert;
 import com.optimus.service.order.core.BaseOrder;
@@ -105,11 +103,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void payOrder(PayOrderDTO payOrder) {
 
-    }
-
-    @Override
-    public List<DoTransDTO> buildSplitProfit(List<InviteChainDTO> inviteChainList) {
-        return null;
     }
 
 }
