@@ -23,6 +23,7 @@ import com.optimus.util.AssertUtil;
 import com.optimus.util.BeanUtil;
 import com.optimus.util.GenerateUtil;
 import com.optimus.util.constants.RespCodeEnum;
+import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.page.Page;
 
 import org.springframework.beans.BeanUtils;
@@ -95,6 +96,7 @@ public class OrderServiceImpl implements OrderService {
 
         // 工厂处理订单信息
         OrderInfoDTO orderInfo = baseOrder.createOrder(createOrder);
+        orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_NP.getCode());
 
         // 落库
         orderInfoDao.addOrderInfo(OrderServiceConvert.getOrderInfoDO(orderInfo));
@@ -104,6 +106,15 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void payOrder(PayOrderDTO payOrder) {
+
+        // 根据订单类型获取处理工厂类
+        BaseOrder baseOrder = orderFactory.getOrderInstance(payOrder.getOrderType());
+
+        // 通过是否取得工厂类型来校验订单类型是否支持
+        AssertUtil.notEmpty(baseOrder, RespCodeEnum.ORDER_TYPE_ERROR, null);
+
+        // 工厂处理订单信息
+        baseOrder.payOrder(payOrder);
 
     }
 

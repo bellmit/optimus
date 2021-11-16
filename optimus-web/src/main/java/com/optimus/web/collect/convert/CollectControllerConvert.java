@@ -4,11 +4,7 @@ import com.optimus.service.order.dto.CreateOrderDTO;
 import com.optimus.service.order.dto.OrderInfoDTO;
 import com.optimus.service.order.dto.PayOrderDTO;
 import com.optimus.util.DateUtil;
-import com.optimus.web.collect.req.ApplyForRechargeReq;
-import com.optimus.web.collect.req.ApplyForWithdrawReq;
-import com.optimus.web.collect.req.BaseCollectReq;
-import com.optimus.web.collect.req.PlaceOrderReq;
-import com.optimus.web.collect.req.TransferReq;
+import com.optimus.web.collect.req.*;
 import com.optimus.web.collect.resp.PlaceOrderResp;
 
 /**
@@ -77,14 +73,32 @@ public class CollectControllerConvert {
     /**
      * 获取创建订单传输对象
      * 
-     * @param req BaseCollectReq
+     * @param req WithdrawReq
      * @return
      */
-    public static CreateOrderDTO getCreateOrderDTO(BaseCollectReq req) {
+    public static CreateOrderDTO getCreateOrderDTO(WithdrawReq req) {
 
         CreateOrderDTO createOrder = new CreateOrderDTO();
 
-        createOrder.setMemberId(req.getMemberId());
+        createOrder.setMemberId(req.getSubDirectMemberId());
+        createOrder.setOrderAmount(req.getAmount());
+        createOrder.setCallerOrderId(req.getCallerOrderId());
+
+        return createOrder;
+
+    }
+
+    /**
+     * 获取创建订单传输对象
+     *
+     * @param req RechargeReq
+     * @return
+     */
+    public static CreateOrderDTO getCreateOrderDTO(RechargeReq req) {
+
+        CreateOrderDTO createOrder = new CreateOrderDTO();
+
+        createOrder.setMemberId(req.getSubDirectMemberId());
         createOrder.setOrderAmount(req.getAmount());
         createOrder.setCallerOrderId(req.getCallerOrderId());
 
@@ -125,6 +139,7 @@ public class CollectControllerConvert {
         payOrder.setOrderAmount(orderInfo.getOrderAmount());
         payOrder.setFee(orderInfo.getFee());
         payOrder.setPayTime(DateUtil.currentDate());
+        payOrder.setOrderType(orderInfo.getOrderType());
 
         return payOrder;
 

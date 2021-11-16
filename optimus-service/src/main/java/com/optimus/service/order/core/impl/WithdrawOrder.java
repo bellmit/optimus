@@ -1,7 +1,5 @@
 package com.optimus.service.order.core.impl;
 
-import java.math.BigDecimal;
-
 import com.optimus.manager.member.MemberManager;
 import com.optimus.manager.member.dto.MemberTransConfineDTO;
 import com.optimus.service.account.AccountService;
@@ -16,10 +14,11 @@ import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.account.AccountTypeEnum;
 import com.optimus.util.constants.member.MemberCollectFeeWayEnum;
 import com.optimus.util.exception.OptimusException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+
+import java.math.BigDecimal;
 
 /**
  * 提现
@@ -78,6 +77,8 @@ public class WithdrawOrder extends BaseOrder {
      */
     @Override
     public void payOrder(PayOrderDTO payOrder) {
+
+        //
 
     }
 }

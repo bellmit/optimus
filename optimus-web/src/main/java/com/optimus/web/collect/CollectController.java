@@ -8,6 +8,7 @@ import com.optimus.service.member.dto.MemberInfoDTO;
 import com.optimus.service.order.OrderService;
 import com.optimus.service.order.dto.CreateOrderDTO;
 import com.optimus.service.order.dto.OrderInfoDTO;
+import com.optimus.service.order.dto.PayOrderDTO;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.gateway.GatewayChannelGroupEnum;
@@ -160,7 +161,7 @@ public class CollectController {
         // 验证会员类型
         if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType())
                 || !StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_M.getCode(), memberInfo.getMemberType())) {
-            throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为代理或管理");
+            throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为代理或管理!");
         }
 
         // 创建订单
@@ -204,7 +205,9 @@ public class CollectController {
         }
 
         // 支付订单
-        orderService.payOrder(CollectControllerConvert.getPayOrderDTO(orderInfo));
+        PayOrderDTO payOrder = CollectControllerConvert.getPayOrderDTO(orderInfo);
+        payOrder.setSuperMemberInfo(memberInfo);
+        orderService.payOrder(payOrder);
 
         return new ConfirmForWithdrawResp();
 
@@ -225,7 +228,7 @@ public class CollectController {
         // 验证会员类型
         if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType())
                 || !StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_C.getCode(), memberInfo.getMemberType())) {
-            throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为代理或码商");
+            throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为代理或码商!");
         }
 
         // 验证上下级关系
@@ -238,7 +241,9 @@ public class CollectController {
         OrderInfoDTO orderInfo = orderService.createOrder(createOrder);
 
         // 支付订单
-        orderService.payOrder(CollectControllerConvert.getPayOrderDTO(orderInfo));
+        PayOrderDTO payOrder = CollectControllerConvert.getPayOrderDTO(orderInfo);
+        payOrder.setSuperMemberInfo(memberInfo);
+        orderService.payOrder(payOrder);
 
         return new WithdrawResp();
 

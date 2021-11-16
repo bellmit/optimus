@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.optimus.service.member.dto.MemberInfoDTO;
 import com.optimus.util.constants.order.OrderBehaviorEnum;
 
+import com.optimus.util.constants.order.OrderTypeEnum;
 import lombok.Data;
 
 /**
@@ -27,6 +29,13 @@ public class PayOrderDTO implements Serializable {
      * 订单编号
      */
     private String orderId;
+
+    /**
+     * 订单类型
+     *
+     * @see OrderTypeEnum
+     */
+    private String orderType;
 
     /**
      * 订单金额
@@ -59,5 +68,10 @@ public class PayOrderDTO implements Serializable {
      * 网关渠道返回信息
      */
     private String channelReturnMessage;
+
+    /**
+     * 上级会员信息
+     */
+    private MemberInfoDTO superMemberInfo;
 
 }
