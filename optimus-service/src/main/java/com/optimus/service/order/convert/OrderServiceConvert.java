@@ -6,6 +6,7 @@ import com.optimus.service.order.dto.CreateOrderDTO;
 import com.optimus.service.order.dto.OrderInfoDTO;
 import com.optimus.util.DateUtil;
 import com.optimus.util.page.Page;
+
 import org.springframework.beans.BeanUtils;
 
 /**
@@ -35,14 +36,13 @@ public class OrderServiceConvert {
 
     }
 
-
     /**
      * OrderInfoDTO转DO
      *
      * @param orderInfo
      * @return
      */
-    public static OrderInfoDO orderInfoDTOToOrderInfoDO(OrderInfoDTO orderInfo) {
+    public static OrderInfoDO getOrderInfoDO(OrderInfoDTO orderInfo) {
 
         OrderInfoDO orderInfoDO = new OrderInfoDO();
 
@@ -54,17 +54,16 @@ public class OrderServiceConvert {
         return orderInfoDO;
     }
 
-
     /**
      * createOrderDTODTO转OrderInfoDTO
      *
-     * @param createOrderDTO
+     * @param createOrder
      * @return
      */
-    public static OrderInfoDTO createOrderDTOToOrderInfoDTO(CreateOrderDTO createOrderDTO) {
-        OrderInfoDTO orderInfoDTO = new OrderInfoDTO();
-        BeanUtils.copyProperties(createOrderDTO, orderInfoDTO);
-        return orderInfoDTO;
+    public static OrderInfoDTO getOrderInfoDTO(CreateOrderDTO createOrder) {
+        OrderInfoDTO orderInfo = new OrderInfoDTO();
+        BeanUtils.copyProperties(createOrder, orderInfo);
+        return orderInfo;
     }
 
 }

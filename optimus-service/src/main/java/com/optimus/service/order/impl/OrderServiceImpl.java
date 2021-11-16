@@ -97,7 +97,7 @@ public class OrderServiceImpl implements OrderService {
         OrderInfoDTO orderInfo = baseOrder.createOrder(createOrder);
 
         // 落库
-        orderInfoDao.addOrderInfo(OrderServiceConvert.orderInfoDTOToOrderInfoDO(orderInfo));
+        orderInfoDao.addOrderInfo(OrderServiceConvert.getOrderInfoDO(orderInfo));
 
         return orderInfo;
     }

@@ -3,7 +3,6 @@ package com.optimus.service.gateway.dto;
 import java.io.Serializable;
 
 import com.optimus.util.constants.gateway.GatewayChannelStatusEnum;
-import com.optimus.util.constants.gateway.GatewayChannelTypeEnum;
 
 import lombok.Data;
 
@@ -41,8 +40,6 @@ public class GatewayChannelDTO implements Serializable {
 
     /**
      * 网关渠道类型
-     * 
-     * @see GatewayChannelTypeEnum
      */
     private String channelType;
 

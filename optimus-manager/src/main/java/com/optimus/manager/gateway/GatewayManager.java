@@ -1,6 +1,7 @@
 package com.optimus.manager.gateway;
 
-import com.optimus.manager.gateway.dto.AnalysisChannelMessageDTO;
+import com.optimus.manager.gateway.dto.InputChannelMessageDTO;
+import com.optimus.manager.gateway.dto.OutputChannelMessageDTO;
 
 /**
  * 网关Manager
@@ -12,9 +13,9 @@ public interface GatewayManager {
     /**
      * 解析渠道消息
      * 
-     * @param message
+     * @param input
      * @return
      */
-    AnalysisChannelMessageDTO analysisChannelMessage(String message);
+    OutputChannelMessageDTO analysisChannelMessage(InputChannelMessageDTO input);
 
 }

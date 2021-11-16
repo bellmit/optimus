@@ -3,27 +3,26 @@ package com.optimus.manager.gateway.dto;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import com.optimus.util.constants.order.OrderStatusEnum;
+
 import lombok.Data;
 
 /**
- * 解析渠道消息
+ * 渠道消息输出DTO
  * 
  * @author sunxp
  */
 @Data
-public class AnalysisChannelMessageDTO implements Serializable {
+public class OutputChannelMessageDTO implements Serializable {
 
     private static final long serialVersionUID = -5836828589921241921L;
 
     /**
-     * 返回码
+     * 订单状态
+     * 
+     * @see OrderStatusEnum
      */
-    private String code;
-
-    /**
-     * 返回描述
-     */
-    private String memo;
+    private String orderStatus;
 
     /**
      * 订单编号
@@ -46,8 +45,18 @@ public class AnalysisChannelMessageDTO implements Serializable {
     private BigDecimal actualAmount;
 
     /**
-     * 消息
+     * 描述
      */
-    private String message;
+    private String memo;
+
+    /**
+     * 调用渠道返回消息类型
+     */
+    private String type;
+
+    /**
+     * 调用渠道返回类型所对应的消息
+     */
+    private Object message;
 
 }

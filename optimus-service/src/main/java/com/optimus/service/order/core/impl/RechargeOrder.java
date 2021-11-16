@@ -24,7 +24,7 @@ public class RechargeOrder extends BaseOrder {
      */
     @Override
     public OrderInfoDTO createOrder(CreateOrderDTO createOrder) {
-        OrderInfoDTO orderInfo = OrderServiceConvert.createOrderDTOToOrderInfoDTO(createOrder);
+        OrderInfoDTO orderInfo = OrderServiceConvert.getOrderInfoDTO(createOrder);
         orderInfo.setActualAmount(createOrder.getOrderAmount());
         return orderInfo;
     }

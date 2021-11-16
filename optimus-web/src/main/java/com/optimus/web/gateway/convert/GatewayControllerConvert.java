@@ -7,8 +7,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.optimus.manager.gateway.dto.InputChannelMessageDTO;
 import com.optimus.service.gateway.dto.GatewaySubChannelDTO;
-import com.optimus.service.gateway.dto.HandleForChannelCallbackDTO;
 import com.optimus.util.JacksonUtil;
 import com.optimus.util.constants.BaseEnum;
 import com.optimus.util.constants.RespCodeEnum;
@@ -129,16 +129,15 @@ public class GatewayControllerConvert {
      * @param gatewaySubChannel
      * @return
      */
-    public static HandleForChannelCallbackDTO getHandleForChannelCallbackDTO(GatewaySubChannelDTO gatewaySubChannel) {
+    public static InputChannelMessageDTO getHandleForChannelCallbackDTO(GatewaySubChannelDTO gatewaySubChannel) {
 
-        HandleForChannelCallbackDTO handleForChannelCallback = new HandleForChannelCallbackDTO();
+        InputChannelMessageDTO input = new InputChannelMessageDTO();
 
-        handleForChannelCallback.setBizContent(gatewaySubChannel.getBizContent());
-        handleForChannelCallback.setCallbackIp(gatewaySubChannel.getCallbackIp());
-        handleForChannelCallback.setImplPath(gatewaySubChannel.getImplPath());
-        handleForChannelCallback.setImplType(gatewaySubChannel.getImplType());
+        input.setBizContent(gatewaySubChannel.getBizContent());
+        input.setImplPath(gatewaySubChannel.getImplPath());
+        input.setImplType(gatewaySubChannel.getImplType());
 
-        return handleForChannelCallback;
+        return input;
 
     }
 

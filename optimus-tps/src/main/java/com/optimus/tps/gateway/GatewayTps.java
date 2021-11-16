@@ -1,5 +1,6 @@
 package com.optimus.tps.gateway;
 
+import com.optimus.tps.gateway.req.AnalysisChannelMessageReq;
 import com.optimus.tps.gateway.resp.AnalysisChannelMessageResp;
 
 /**
@@ -12,9 +13,9 @@ public interface GatewayTps {
     /**
      * 解析渠道消息
      * 
-     * @param message
+     * @param req
      * @return
      */
-    AnalysisChannelMessageResp analysisChannelMessage(String message);
+    AnalysisChannelMessageResp analysisChannelMessage(AnalysisChannelMessageReq req);
 
 }

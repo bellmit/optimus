@@ -1,8 +1,10 @@
 package com.optimus.manager.gateway.impl;
 
 import com.optimus.manager.gateway.GatewayManager;
-import com.optimus.manager.gateway.dto.AnalysisChannelMessageDTO;
+import com.optimus.manager.gateway.dto.InputChannelMessageDTO;
+import com.optimus.manager.gateway.dto.OutputChannelMessageDTO;
 import com.optimus.tps.gateway.GatewayTps;
+import com.optimus.tps.gateway.req.AnalysisChannelMessageReq;
 import com.optimus.tps.gateway.resp.AnalysisChannelMessageResp;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
@@ -21,15 +23,18 @@ public class GatewayManagerImpl implements GatewayManager {
     private GatewayTps gatewayTps;
 
     @Override
-    public AnalysisChannelMessageDTO analysisChannelMessage(String message) {
+    public OutputChannelMessageDTO analysisChannelMessage(InputChannelMessageDTO input) {
 
-        AnalysisChannelMessageResp analysisChannelMessageResp = gatewayTps.analysisChannelMessage(message);
-        AssertUtil.notEmpty(analysisChannelMessageResp, RespCodeEnum.GATEWAY_ANALYSIS_ERROR, null);
+        AnalysisChannelMessageReq req = new AnalysisChannelMessageReq();
+        BeanUtils.copyProperties(input, req);
 
-        AnalysisChannelMessageDTO analysisChannelMessage = new AnalysisChannelMessageDTO();
-        BeanUtils.copyProperties(analysisChannelMessageResp, analysisChannelMessage);
+        AnalysisChannelMessageResp resp = gatewayTps.analysisChannelMessage(req);
+        AssertUtil.notEmpty(resp, RespCodeEnum.GATEWAY_ANALYSIS_ERROR, null);
 
-        return analysisChannelMessage;
+        OutputChannelMessageDTO message = new OutputChannelMessageDTO();
+        BeanUtils.copyProperties(resp, message);
+
+        return message;
 
     }
 

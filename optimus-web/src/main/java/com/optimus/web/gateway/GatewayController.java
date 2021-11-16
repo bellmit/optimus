@@ -2,14 +2,16 @@ package com.optimus.web.gateway;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.optimus.manager.gateway.dto.InputChannelMessageDTO;
 import com.optimus.service.gateway.GatewayService;
 import com.optimus.service.gateway.dto.GatewaySubChannelDTO;
-import com.optimus.service.gateway.dto.HandleForChannelCallbackDTO;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
+import com.optimus.util.exception.OptimusException;
 import com.optimus.web.gateway.convert.GatewayControllerConvert;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,17 +47,20 @@ public class GatewayController {
         // 查询子渠道
         GatewaySubChannelDTO gatewaySubChannel = gatewayService.getGatewaySubChannelBySubChannelCode(subChannelCode);
 
+        // 验证IP
+        if (!StringUtils.pathEquals(ip, gatewaySubChannel.getCallbackIp())) {
+            throw new OptimusException(RespCodeEnum.INVALID_IP, "调用方IP不匹配");
+        }
+
         // 处理参数
-        String parameter = GatewayControllerConvert.getAllParameter(req);
-        log.info("channelCallback parameter is {}", parameter);
+        String message = GatewayControllerConvert.getAllParameter(req);
+        log.info("channelCallback message is {}", message);
 
         // 处理渠道回调
-        HandleForChannelCallbackDTO handleForChannelCallback = GatewayControllerConvert
-                .getHandleForChannelCallbackDTO(gatewaySubChannel);
-        handleForChannelCallback.setIp(ip);
-        handleForChannelCallback.setMessage(parameter);
+        InputChannelMessageDTO input = GatewayControllerConvert.getHandleForChannelCallbackDTO(gatewaySubChannel);
+        input.setMessage(message);
 
-        return gatewayService.handleForChannelCallback(handleForChannelCallback);
+        return gatewayService.handleForChannelCallback(input);
 
     }
 

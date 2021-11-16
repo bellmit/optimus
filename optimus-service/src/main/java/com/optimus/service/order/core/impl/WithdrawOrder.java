@@ -51,7 +51,7 @@ public class WithdrawOrder extends BaseOrder {
             throw new OptimusException(RespCodeEnum.ACCOUNT_AMOUNT_ERROR);
         }
 
-        OrderInfoDTO orderInfo = OrderServiceConvert.createOrderDTOToOrderInfoDTO(createOrder);
+        OrderInfoDTO orderInfo = OrderServiceConvert.getOrderInfoDTO(createOrder);
 
         // 验证会员交易限制
         MemberTransConfineDTO memberTransConfine = memberManager.getMemberTransConfineByMemberId(createOrder.getMemberId());

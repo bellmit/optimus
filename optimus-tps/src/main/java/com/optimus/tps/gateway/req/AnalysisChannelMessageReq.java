@@ -1,23 +1,18 @@
-package com.optimus.service.gateway.dto;
+package com.optimus.tps.gateway.req;
 
 import java.io.Serializable;
 
 import lombok.Data;
 
 /**
- * 渠道回调处理DTO
+ * 解析渠道消息Req
  * 
  * @author sunxp
  */
 @Data
-public class HandleForChannelCallbackDTO implements Serializable {
+public class AnalysisChannelMessageReq implements Serializable {
 
-    private static final long serialVersionUID = -265856734735774963L;
-
-    /**
-     * IP
-     */
-    private String ip;
+    private static final long serialVersionUID = 7393413432717045888L;
 
     /**
      * 渠道消息
@@ -33,11 +28,6 @@ public class HandleForChannelCallbackDTO implements Serializable {
      * 实现路径
      */
     private String implPath;
-
-    /**
-     * 网关渠道回调IP
-     */
-    private String callbackIp;
 
     /**
      * 业务大字段

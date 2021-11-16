@@ -1,8 +1,8 @@
 package com.optimus.service.gateway;
 
+import com.optimus.manager.gateway.dto.InputChannelMessageDTO;
 import com.optimus.service.gateway.dto.GatewayChannelDTO;
 import com.optimus.service.gateway.dto.GatewaySubChannelDTO;
-import com.optimus.service.gateway.dto.HandleForChannelCallbackDTO;
 
 /**
  * 网关Service
@@ -38,9 +38,9 @@ public interface GatewayService {
     /**
      * 处理渠道回调
      * 
-     * @param handleForChannelCallback
+     * @param input
      * @return
      */
-    String handleForChannelCallback(HandleForChannelCallbackDTO handleForChannelCallback);
+    String handleForChannelCallback(InputChannelMessageDTO input);
 
 }
