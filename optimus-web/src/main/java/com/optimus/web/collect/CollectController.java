@@ -306,10 +306,12 @@ public class CollectController {
                 gatewayChannel.getChannelStatus())) {
             throw new OptimusException(RespCodeEnum.GATEWAY_CHANNEL_ERROR, "渠道未启用");
         }
+
+        String subChannelCode = null;
         if (!StringUtils.pathEquals(GatewayChannelGroupEnum.GATEWAY_CHANNEL_GROUP_I.getCode(),
                 gatewayChannel.getChannelGroup())) {
 
-            String subChannelCode = gatewayService.matchChannel(gatewayChannel);
+            subChannelCode = gatewayService.matchChannel(gatewayChannel);
             AssertUtil.notEmpty(subChannelCode, RespCodeEnum.GATEWAY_CHANNEL_ERROR, "未匹配到子通道");
 
         }
@@ -318,6 +320,7 @@ public class CollectController {
         CreateOrderDTO createOrder = CollectControllerConvert.getCreateOrderDTO(req);
         createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_C.getCode());
         createOrder.setSupMemberId(memberInfo.getSupDirectMemberId());
+        createOrder.setSubChannelCode(subChannelCode);
 
         OrderInfoDTO orderInfo = orderService.createOrder(createOrder);
 
