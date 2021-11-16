@@ -13,9 +13,10 @@ public interface OrderTps {
      * 订单通知
      * 
      * @param req
+     * @param key
      * @param noticeUrl
      * @return
      */
-    String orderNotice(OrderNoticeReq req, String noticeUrl);
+    String orderNotice(OrderNoticeReq req, String key, String noticeUrl);
 
 }
