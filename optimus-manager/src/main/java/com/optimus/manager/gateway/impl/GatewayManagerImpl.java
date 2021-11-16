@@ -1,40 +1,38 @@
 package com.optimus.manager.gateway.impl;
 
 import com.optimus.manager.gateway.GatewayManager;
-import com.optimus.manager.gateway.dto.InputChannelMessageDTO;
-import com.optimus.manager.gateway.dto.OutputChannelMessageDTO;
+import com.optimus.manager.gateway.convert.GatewayManagerConvert;
+import com.optimus.manager.gateway.dto.ExecuteScriptInputDTO;
+import com.optimus.manager.gateway.dto.ExecuteScriptOutputDTO;
 import com.optimus.tps.gateway.GatewayTps;
-import com.optimus.tps.gateway.req.AnalysisChannelMessageReq;
-import com.optimus.tps.gateway.resp.AnalysisChannelMessageResp;
+import com.optimus.tps.gateway.req.ExecuteScriptReq;
+import com.optimus.tps.gateway.resp.ExecuteScriptResp;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * 网关Manager实现
  * 
  * @author sunxp
  */
+@Component
 public class GatewayManagerImpl implements GatewayManager {
 
     @Autowired
     private GatewayTps gatewayTps;
 
     @Override
-    public OutputChannelMessageDTO analysisChannelMessage(InputChannelMessageDTO input) {
+    public ExecuteScriptOutputDTO executeScript(ExecuteScriptInputDTO input) {
 
-        AnalysisChannelMessageReq req = new AnalysisChannelMessageReq();
-        BeanUtils.copyProperties(input, req);
+        ExecuteScriptReq req = GatewayManagerConvert.getExecuteScriptReq(input);
 
-        AnalysisChannelMessageResp resp = gatewayTps.analysisChannelMessage(req);
+        ExecuteScriptResp resp = gatewayTps.executeScript(req);
         AssertUtil.notEmpty(resp, RespCodeEnum.GATEWAY_ANALYSIS_ERROR, null);
 
-        OutputChannelMessageDTO message = new OutputChannelMessageDTO();
-        BeanUtils.copyProperties(resp, message);
-
-        return message;
+        return GatewayManagerConvert.getExecuteScriptOutputDTO(resp);
 
     }
 

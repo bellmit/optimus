@@ -7,7 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.optimus.manager.gateway.dto.InputChannelMessageDTO;
+import com.optimus.manager.gateway.dto.ExecuteScriptInputDTO;
 import com.optimus.service.gateway.dto.GatewaySubChannelDTO;
 import com.optimus.util.JacksonUtil;
 import com.optimus.util.constants.BaseEnum;
@@ -129,9 +129,9 @@ public class GatewayControllerConvert {
      * @param gatewaySubChannel
      * @return
      */
-    public static InputChannelMessageDTO getHandleForChannelCallbackDTO(GatewaySubChannelDTO gatewaySubChannel) {
+    public static ExecuteScriptInputDTO getExecuteScriptInputDTO(GatewaySubChannelDTO gatewaySubChannel) {
 
-        InputChannelMessageDTO input = new InputChannelMessageDTO();
+        ExecuteScriptInputDTO input = new ExecuteScriptInputDTO();
 
         input.setBizContent(gatewaySubChannel.getBizContent());
         input.setImplPath(gatewaySubChannel.getImplPath());

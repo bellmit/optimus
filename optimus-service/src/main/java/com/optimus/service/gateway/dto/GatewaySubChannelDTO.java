@@ -28,7 +28,7 @@ public class GatewaySubChannelDTO implements Serializable {
     private String channelCode;
 
     /**
-     * 网关子渠道编号
+     * 网关子渠道名称
      */
     private String channelName;
 
@@ -38,6 +38,11 @@ public class GatewaySubChannelDTO implements Serializable {
      * @see GatewayChannelStatusEnum
      */
     private String channelStatus;
+
+    /**
+     * 分类
+     */
+    private String classify;
 
     /**
      * 面额类型

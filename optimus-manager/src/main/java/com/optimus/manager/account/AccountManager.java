@@ -5,18 +5,18 @@ import java.util.List;
 import com.optimus.manager.account.dto.DoTransDTO;
 
 /**
- * 账户信息Manager
+ * 账户Manager
  * 
  * @author sunxp
  */
-public interface AccountInfoManager {
+public interface AccountManager {
 
     /**
      * 账户交易
      * 
-     * @param changeAmountList
+     * @param doTransList
      * @return
      */
-    boolean doTrans(List<DoTransDTO> changeAmountList);
+    boolean doTrans(List<DoTransDTO> doTransList);
 
 }

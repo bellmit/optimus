@@ -1,7 +1,7 @@
 package com.optimus.tps.gateway;
 
-import com.optimus.tps.gateway.req.AnalysisChannelMessageReq;
-import com.optimus.tps.gateway.resp.AnalysisChannelMessageResp;
+import com.optimus.tps.gateway.req.ExecuteScriptReq;
+import com.optimus.tps.gateway.resp.ExecuteScriptResp;
 
 /**
  * 网关Tps
@@ -11,11 +11,11 @@ import com.optimus.tps.gateway.resp.AnalysisChannelMessageResp;
 public interface GatewayTps {
 
     /**
-     * 解析渠道消息
+     * 执行脚本
      * 
      * @param req
      * @return
      */
-    AnalysisChannelMessageResp analysisChannelMessage(AnalysisChannelMessageReq req);
+    ExecuteScriptResp executeScript(ExecuteScriptReq req);
 
 }

@@ -2,7 +2,7 @@ package com.optimus.web.gateway;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.optimus.manager.gateway.dto.InputChannelMessageDTO;
+import com.optimus.manager.gateway.dto.ExecuteScriptInputDTO;
 import com.optimus.service.gateway.GatewayService;
 import com.optimus.service.gateway.dto.GatewaySubChannelDTO;
 import com.optimus.util.AssertUtil;
@@ -57,7 +57,7 @@ public class GatewayController {
         log.info("channelCallback message is {}", message);
 
         // 处理渠道回调
-        InputChannelMessageDTO input = GatewayControllerConvert.getHandleForChannelCallbackDTO(gatewaySubChannel);
+        ExecuteScriptInputDTO input = GatewayControllerConvert.getExecuteScriptInputDTO(gatewaySubChannel);
         input.setMessage(message);
 
         return gatewayService.handleForChannelCallback(input);

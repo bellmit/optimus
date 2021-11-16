@@ -1,8 +1,8 @@
 package com.optimus.tps.gateway.impl;
 
 import com.optimus.tps.gateway.GatewayTps;
-import com.optimus.tps.gateway.req.AnalysisChannelMessageReq;
-import com.optimus.tps.gateway.resp.AnalysisChannelMessageResp;
+import com.optimus.tps.gateway.req.ExecuteScriptReq;
+import com.optimus.tps.gateway.resp.ExecuteScriptResp;
 
 import org.springframework.stereotype.Component;
 
@@ -15,9 +15,9 @@ import org.springframework.stereotype.Component;
 public class GatewayTpsImpl implements GatewayTps {
 
     @Override
-    public AnalysisChannelMessageResp analysisChannelMessage(AnalysisChannelMessageReq req) {
+    public ExecuteScriptResp executeScript(ExecuteScriptReq req) {
 
-        return new AnalysisChannelMessageResp();
+        return new ExecuteScriptResp();
 
     }
 

@@ -2,7 +2,7 @@ package com.optimus.manager.account.impl;
 
 import java.util.List;
 
-import com.optimus.manager.account.AccountInfoManager;
+import com.optimus.manager.account.AccountManager;
 import com.optimus.manager.account.dto.DoTransDTO;
 
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Component
 @Slf4j
-public class AccountInfoManagerImpl implements AccountInfoManager {
+public class AccountManagerImpl implements AccountManager {
 
     @Override
     public boolean doTrans(List<DoTransDTO> doTransList) {

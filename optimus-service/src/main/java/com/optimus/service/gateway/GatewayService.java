@@ -1,6 +1,6 @@
 package com.optimus.service.gateway;
 
-import com.optimus.manager.gateway.dto.InputChannelMessageDTO;
+import com.optimus.manager.gateway.dto.ExecuteScriptInputDTO;
 import com.optimus.service.gateway.dto.GatewayChannelDTO;
 import com.optimus.service.gateway.dto.GatewaySubChannelDTO;
 
@@ -41,6 +41,6 @@ public interface GatewayService {
      * @param input
      * @return
      */
-    String handleForChannelCallback(InputChannelMessageDTO input);
+    String handleForChannelCallback(ExecuteScriptInputDTO input);
 
 }

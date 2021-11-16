@@ -22,4 +22,14 @@ public class PlaceOrderReq extends BaseCollectReq {
      */
     private String merchantCallBackUrl;
 
+    /**
+     * 商户客户端IP
+     */
+    private String clientIp;
+
+    /**
+     * 商户重定向地址
+     */
+    private String redirectUrl;
+
 }

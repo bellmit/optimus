@@ -32,6 +32,8 @@ public class CollectControllerConvert {
         createOrder.setOrderAmount(req.getAmount());
         createOrder.setChannelCode(req.getChannelCode());
         createOrder.setMerchantCallBackUrl(req.getMerchantCallBackUrl());
+        createOrder.setClientIp(req.getClientIp());
+        createOrder.setRedirectUrl(req.getRedirectUrl());
 
         return createOrder;
 

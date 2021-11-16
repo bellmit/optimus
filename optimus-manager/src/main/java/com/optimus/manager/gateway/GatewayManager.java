@@ -1,7 +1,7 @@
 package com.optimus.manager.gateway;
 
-import com.optimus.manager.gateway.dto.InputChannelMessageDTO;
-import com.optimus.manager.gateway.dto.OutputChannelMessageDTO;
+import com.optimus.manager.gateway.dto.ExecuteScriptInputDTO;
+import com.optimus.manager.gateway.dto.ExecuteScriptOutputDTO;
 
 /**
  * 网关Manager
@@ -11,11 +11,11 @@ import com.optimus.manager.gateway.dto.OutputChannelMessageDTO;
 public interface GatewayManager {
 
     /**
-     * 解析渠道消息
+     * 执行脚本
      * 
      * @param input
      * @return
      */
-    OutputChannelMessageDTO analysisChannelMessage(InputChannelMessageDTO input);
+    ExecuteScriptOutputDTO executeScript(ExecuteScriptInputDTO input);
 
 }

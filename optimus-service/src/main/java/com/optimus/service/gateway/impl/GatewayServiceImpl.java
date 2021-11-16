@@ -7,8 +7,8 @@ import com.optimus.dao.domain.GatewaySubChannelDO;
 import com.optimus.dao.mapper.GatewayChannelDao;
 import com.optimus.dao.mapper.GatewaySubChannelDao;
 import com.optimus.manager.gateway.GatewayManager;
-import com.optimus.manager.gateway.dto.InputChannelMessageDTO;
-import com.optimus.manager.gateway.dto.OutputChannelMessageDTO;
+import com.optimus.manager.gateway.dto.ExecuteScriptInputDTO;
+import com.optimus.manager.gateway.dto.ExecuteScriptOutputDTO;
 import com.optimus.service.gateway.GatewayService;
 import com.optimus.service.gateway.dto.GatewayChannelDTO;
 import com.optimus.service.gateway.dto.GatewaySubChannelDTO;
@@ -74,11 +74,11 @@ public class GatewayServiceImpl implements GatewayService {
     }
 
     @Override
-    public String handleForChannelCallback(InputChannelMessageDTO input) {
+    public String handleForChannelCallback(ExecuteScriptInputDTO input) {
 
-        // 调用脚本解析渠道参数为模版对象
-        OutputChannelMessageDTO message = gatewayManager.analysisChannelMessage(input);
-        log.info("analysisChannelMessage is {}", message);
+        // 执行脚本
+        ExecuteScriptOutputDTO output = gatewayManager.executeScript(input);
+        log.info("analysisChannelMessage is {}", output);
 
         // 验证订单及子渠道合法性
 
@@ -88,7 +88,7 @@ public class GatewayServiceImpl implements GatewayService {
 
         // 异步通知商户
 
-        return message.getMemo();
+        return output.getMemo();
 
     }
 

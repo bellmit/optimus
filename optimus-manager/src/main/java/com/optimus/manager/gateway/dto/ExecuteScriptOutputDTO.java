@@ -8,12 +8,12 @@ import com.optimus.util.constants.order.OrderStatusEnum;
 import lombok.Data;
 
 /**
- * 渠道消息输出DTO
+ * 网关脚本输出DTO
  * 
  * @author sunxp
  */
 @Data
-public class OutputChannelMessageDTO implements Serializable {
+public class ExecuteScriptOutputDTO implements Serializable {
 
     private static final long serialVersionUID = -5836828589921241921L;
 

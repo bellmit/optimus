@@ -8,6 +8,7 @@
     <result column="CHANNEL_CODE" jdbcType="VARCHAR" property="channelCode" />
     <result column="CHANNEL_NAME" jdbcType="VARCHAR" property="channelName" />
     <result column="CHANNEL_STATUS" jdbcType="VARCHAR" property="channelStatus" />
+    <result column="CLASSIFY" jdbcType="VARCHAR" property="classify" />
     <result column="FACE_VALUE_TYPE" jdbcType="VARCHAR" property="faceValueType" />
     <result column="FACE_VALUE" jdbcType="VARCHAR" property="faceValue" />
     <result column="WEIGHT" jdbcType="NUMERIC" property="weight" />
@@ -23,9 +24,9 @@
   </resultMap>
 
   <sql id="Base_Column_List">
-    ID, PARENT_CHANNEL_CODE, CHANNEL_CODE, CHANNEL_NAME, CHANNEL_STATUS, FACE_VALUE_TYPE, 
-    FACE_VALUE, WEIGHT, FATIGUE, IMPL_TYPE, IMPL_PATH, CALLBACK_IP, BIZ_CONTENT, 
-    CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME
+    ID, PARENT_CHANNEL_CODE, CHANNEL_CODE, CHANNEL_NAME, CHANNEL_STATUS, CLASSIFY, 
+    FACE_VALUE_TYPE, FACE_VALUE, WEIGHT, FATIGUE, IMPL_TYPE, IMPL_PATH, CALLBACK_IP, 
+    BIZ_CONTENT, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME
   </sql>
 
   <select id="getGatewaySubChannelById" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -59,6 +60,9 @@
       </if>
       <if test="channelStatus != null">
         CHANNEL_STATUS,
+      </if>
+      <if test="classify != null">
+        CLASSIFY,
       </if>
       <if test="faceValueType != null">
         FACE_VALUE_TYPE,
@@ -108,6 +112,8 @@
       </if>
       <if test="channelStatus != null"> #{channelStatus,jdbcType=VARCHAR},
       </if>
+      <if test="classify != null"> #{classify,jdbcType=VARCHAR},
+      </if>
       <if test="faceValueType != null"> #{faceValueType,jdbcType=VARCHAR},
       </if>
       <if test="faceValue != null"> #{faceValue,jdbcType=VARCHAR},
@@ -149,6 +155,9 @@
       </if>
       <if test="channelStatus != null">
         CHANNEL_STATUS = #{channelStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="classify != null">
+        CLASSIFY = #{classify,jdbcType=VARCHAR},
       </if>
       <if test="faceValueType != null">
         FACE_VALUE_TYPE = #{faceValueType,jdbcType=VARCHAR},
