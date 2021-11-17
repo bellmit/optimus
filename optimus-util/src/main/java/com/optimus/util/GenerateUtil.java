@@ -45,7 +45,6 @@ public class GenerateUtil {
     private static String infix() {
 
         Long value = System.currentTimeMillis();
-
         return String.format(INFIX_COVER, value);
 
     }
@@ -63,10 +62,8 @@ public class GenerateUtil {
         Integer r = POINT.incrementAndGet();
 
         if (r.compareTo(MAX) > 0) {
-
             POINT.set(tlr.nextInt(MIN, MAX));
             r = POINT.get();
-
         }
 
         return String.format(SUFFIX_COVER, l) + String.format(SUFFIX_COVER, r);

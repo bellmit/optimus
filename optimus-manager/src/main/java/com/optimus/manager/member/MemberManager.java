@@ -14,8 +14,10 @@ public interface MemberManager {
     /**
      * 获取手续费
      *
-     * @param orderAmount        订单金额
-     * @param memberTransConfine 交易限制
+     * @param orderAmount
+     *            订单金额
+     * @param memberTransConfine
+     *            交易限制
      * @return
      */
     BigDecimal getFee(BigDecimal orderAmount, MemberTransConfineDTO memberTransConfine);

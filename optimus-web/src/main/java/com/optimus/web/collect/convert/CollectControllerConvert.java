@@ -4,7 +4,12 @@ import com.optimus.service.order.dto.CreateOrderDTO;
 import com.optimus.service.order.dto.OrderInfoDTO;
 import com.optimus.service.order.dto.PayOrderDTO;
 import com.optimus.util.DateUtil;
-import com.optimus.web.collect.req.*;
+import com.optimus.web.collect.req.ApplyForRechargeReq;
+import com.optimus.web.collect.req.ApplyForWithdrawReq;
+import com.optimus.web.collect.req.PlaceOrderReq;
+import com.optimus.web.collect.req.RechargeReq;
+import com.optimus.web.collect.req.TransferReq;
+import com.optimus.web.collect.req.WithdrawReq;
 import com.optimus.web.collect.resp.PlaceOrderResp;
 
 /**
@@ -26,7 +31,6 @@ public class CollectControllerConvert {
         createOrder.setMemberId(req.getMemberId());
         createOrder.setCallerOrderId(req.getCallerOrderId());
         createOrder.setOrderAmount(req.getAmount());
-        createOrder.setChannelCode(req.getChannelCode());
         createOrder.setMerchantCallBackUrl(req.getMerchantCallBackUrl());
         createOrder.setClientIp(req.getClientIp());
         createOrder.setRedirectUrl(req.getRedirectUrl());
@@ -38,7 +42,8 @@ public class CollectControllerConvert {
     /**
      * 获取创建订单传输对象
      * 
-     * @param req ApplyForRechargeReq
+     * @param req
+     *            ApplyForRechargeReq
      * @return
      */
     public static CreateOrderDTO getCreateOrderDTO(ApplyForRechargeReq req) {
@@ -56,7 +61,8 @@ public class CollectControllerConvert {
     /**
      * 获取创建订单传输对象
      * 
-     * @param req ApplyForWithdrawReq
+     * @param req
+     *            ApplyForWithdrawReq
      * @return
      */
     public static CreateOrderDTO getCreateOrderDTO(ApplyForWithdrawReq req) {
@@ -73,7 +79,8 @@ public class CollectControllerConvert {
     /**
      * 获取创建订单传输对象
      * 
-     * @param req WithdrawReq
+     * @param req
+     *            WithdrawReq
      * @return
      */
     public static CreateOrderDTO getCreateOrderDTO(WithdrawReq req) {
@@ -91,7 +98,8 @@ public class CollectControllerConvert {
     /**
      * 获取创建订单传输对象
      *
-     * @param req RechargeReq
+     * @param req
+     *            RechargeReq
      * @return
      */
     public static CreateOrderDTO getCreateOrderDTO(RechargeReq req) {
@@ -109,7 +117,8 @@ public class CollectControllerConvert {
     /**
      * 获取创建订单传输对象
      * 
-     * @param req TransferReq
+     * @param req
+     *            TransferReq
      * @return
      */
     public static CreateOrderDTO getCreateOrderDTO(TransferReq req) {
@@ -126,7 +135,8 @@ public class CollectControllerConvert {
     /**
      * 获取支付订单传输对象
      * 
-     * @param orderInfo OrderInfoDTO
+     * @param orderInfo
+     *            OrderInfoDTO
      * @return
      */
     public static PayOrderDTO getPayOrderDTO(OrderInfoDTO orderInfo) {

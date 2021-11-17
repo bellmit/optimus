@@ -12,12 +12,15 @@ import com.optimus.manager.gateway.dto.ExecuteScriptOutputDTO;
 import com.optimus.service.gateway.GatewayService;
 import com.optimus.service.gateway.dto.GatewayChannelDTO;
 import com.optimus.service.gateway.dto.GatewaySubChannelDTO;
+import com.optimus.service.gateway.dto.MatchChannelDTO;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
+import com.optimus.util.constants.gateway.GatewayChannelGroupEnum;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -56,8 +59,7 @@ public class GatewayServiceImpl implements GatewayService {
     @Override
     public GatewaySubChannelDTO getGatewaySubChannelBySubChannelCode(String channelCode) {
 
-        GatewaySubChannelDO gatewaySubChannelDO = gatewaySubChannelDao
-                .getGatewaySubChannelBySubChannelCode(channelCode);
+        GatewaySubChannelDO gatewaySubChannelDO = gatewaySubChannelDao.getGatewaySubChannelBySubChannelCode(channelCode);
 
         AssertUtil.notEmpty(gatewaySubChannelDO, RespCodeEnum.GATEWAY_CHANNEL_NO, null);
 
@@ -69,8 +71,24 @@ public class GatewayServiceImpl implements GatewayService {
     }
 
     @Override
-    public String matchChannel(GatewayChannelDTO gatewayChannel) {
-        return null;
+    public MatchChannelDTO matchChannel(GatewayChannelDTO gatewayChannel, String memberId) {
+
+        MatchChannelDTO matchChannel = new MatchChannelDTO();
+
+        if (StringUtils.pathEquals(GatewayChannelGroupEnum.GATEWAY_CHANNEL_GROUP_I.getCode(), gatewayChannel.getChannelGroup())) {
+            return matchChannel;
+        }
+
+        // 查询码商列表
+
+        // 查询子渠道列表
+
+        // 选取子渠道
+
+        AssertUtil.notEmpty(matchChannel, RespCodeEnum.GATEWAY_CHANNEL_ERROR, "未匹配到子通道");
+
+        return matchChannel;
+
     }
 
     @Override
@@ -82,7 +100,7 @@ public class GatewayServiceImpl implements GatewayService {
 
         // 验证订单及子渠道合法性
 
-        // 更新订单信息
+        // 支付订单
 
         // 异步分润
 

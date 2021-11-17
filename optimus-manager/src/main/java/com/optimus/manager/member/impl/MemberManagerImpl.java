@@ -16,7 +16,6 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 
-
 /**
  * 用户manager实现
  *
@@ -32,8 +31,7 @@ public class MemberManagerImpl implements MemberManager {
     public BigDecimal getFee(BigDecimal orderAmount, MemberTransConfineDTO memberTransConfine) {
 
         // 验证会员交易限制
-        if (!StringUtils.pathEquals(MemberWithdrawFeeSwitchEnum.WITHDRAW_FEE_SWITCH_Y.getCode(),
-                memberTransConfine.getWithdrawFeeSwitch())) {
+        if (!StringUtils.pathEquals(MemberWithdrawFeeSwitchEnum.WITHDRAW_FEE_SWITCH_Y.getCode(), memberTransConfine.getWithdrawFeeSwitch())) {
             return BigDecimal.ZERO;
         }
 

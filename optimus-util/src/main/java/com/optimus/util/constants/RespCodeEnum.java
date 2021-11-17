@@ -48,11 +48,13 @@ public enum RespCodeEnum {
 
     ORDER_NO("4000", "订单不存在"),
 
-    ORDER_ERROR("4001", "订单信息异常"),
+    ORDER_EXIST_ERROR("4001", "订单已存在"),
 
-    ORDER_TYPE_ERROR("4002", "订单类型异常"),
+    ORDER_PLACE_ERROR("4002", "下单失败"),
 
-    ORDER_EXIST_ERROR("4003", "订单已存在"),
+    ORDER_ERROR("4003", "订单信息异常"),
+
+    ORDER_TYPE_ERROR("4004", "订单类型异常"),
 
     /* ---------网关类编码--------- */
 

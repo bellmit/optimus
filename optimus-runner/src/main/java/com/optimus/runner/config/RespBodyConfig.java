@@ -27,8 +27,7 @@ public class RespBodyConfig implements ResponseBodyAdvice<Object> {
      * beforeBodyWrite
      */
     @Override
-    public Object beforeBodyWrite(Object arg0, MethodParameter arg1, MediaType arg2,
-            Class<? extends HttpMessageConverter<?>> arg3, ServerHttpRequest arg4, ServerHttpResponse arg5) {
+    public Object beforeBodyWrite(Object arg0, MethodParameter arg1, MediaType arg2, Class<? extends HttpMessageConverter<?>> arg3, ServerHttpRequest arg4, ServerHttpResponse arg5) {
 
         String className = arg1.getMethod().getDeclaringClass().getSimpleName();
         String methodName = arg1.getMethod().getName();

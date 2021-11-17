@@ -54,8 +54,7 @@ public class WithdrawOrder extends BaseOrder {
     public OrderInfoDTO createOrder(CreateOrderDTO createOrder) {
 
         // 验证账户余额是否充足
-        AccountInfoDTO accountInfo = accountService.getAccountInfoByMemberIdAndAccountType(createOrder.getMemberId(),
-                AccountTypeEnum.ACCOUNT_TYPE_B.getCode());
+        AccountInfoDTO accountInfo = accountService.getAccountInfoByMemberIdAndAccountType(createOrder.getMemberId(), AccountTypeEnum.ACCOUNT_TYPE_B.getCode());
         if (accountInfo.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
             throw new OptimusException(RespCodeEnum.ACCOUNT_AMOUNT_ERROR);
         }
@@ -64,6 +63,7 @@ public class WithdrawOrder extends BaseOrder {
 
         // 验证会员交易限制
         MemberTransConfineDTO memberTransConfine = memberManager.getMemberTransConfineByMemberId(createOrder.getMemberId());
+
         BigDecimal fee = memberManager.getFee(createOrder.getOrderAmount(), memberTransConfine);
         orderInfo.setFee(fee);
 
@@ -110,7 +110,7 @@ public class WithdrawOrder extends BaseOrder {
         doTransList.add(sysTrans);
 
         // 如果上级是码商，则需要上级也需减一笔
-        if(StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_C.getCode(), superMemberInfo.getMemberType())){
+        if (StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_C.getCode(), superMemberInfo.getMemberType())) {
             DoTransDTO superTrans = new DoTransDTO();
             superTrans.setMemberId(superMemberInfo.getMemberId());
             superTrans.setOrderId(payOrder.getOrderId());
@@ -122,4 +122,5 @@ public class WithdrawOrder extends BaseOrder {
 
         accountManager.doTrans(doTransList);
     }
+
 }

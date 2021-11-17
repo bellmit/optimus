@@ -25,8 +25,7 @@ public interface AccountInfoDao {
      * @param accountType
      * @return OrderInfoDTO
      */
-    AccountInfoDO getAccountInfoByMemberIdAndAccountType(@Param("memberId") String memberId,
-            @Param("accountType") String accountType);
+    AccountInfoDO getAccountInfoByMemberIdAndAccountType(@Param("memberId") String memberId, @Param("accountType") String accountType);
 
     /**
      * 新增一条账户信息

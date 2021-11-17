@@ -22,8 +22,7 @@ public class RestTemplateConfig {
     public RestTemplate restTemplate(ClientHttpRequestFactory factory) {
 
         RestTemplate restTemplate = new RestTemplate(factory);
-        restTemplate.getMessageConverters().set(1,
-                new StringHttpMessageConverter(Charset.forName(StandardCharsets.UTF_8.toString())));
+        restTemplate.getMessageConverters().set(1, new StringHttpMessageConverter(Charset.forName(StandardCharsets.UTF_8.toString())));
 
         return restTemplate;
 

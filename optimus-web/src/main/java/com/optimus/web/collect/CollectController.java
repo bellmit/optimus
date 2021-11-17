@@ -3,6 +3,7 @@ package com.optimus.web.collect;
 import com.optimus.manager.member.dto.MemberTransConfineDTO;
 import com.optimus.service.gateway.GatewayService;
 import com.optimus.service.gateway.dto.GatewayChannelDTO;
+import com.optimus.service.gateway.dto.MatchChannelDTO;
 import com.optimus.service.member.MemberService;
 import com.optimus.service.member.dto.MemberInfoDTO;
 import com.optimus.service.order.OrderService;
@@ -11,16 +12,30 @@ import com.optimus.service.order.dto.OrderInfoDTO;
 import com.optimus.service.order.dto.PayOrderDTO;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
-import com.optimus.util.constants.gateway.GatewayChannelGroupEnum;
 import com.optimus.util.constants.gateway.GatewayChannelStatusEnum;
 import com.optimus.util.constants.member.MemberMerchantOrderSwitchEnum;
 import com.optimus.util.constants.member.MemberTypeEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
 import com.optimus.util.exception.OptimusException;
 import com.optimus.web.collect.convert.CollectControllerConvert;
-import com.optimus.web.collect.req.*;
-import com.optimus.web.collect.resp.*;
+import com.optimus.web.collect.req.ApplyForRechargeReq;
+import com.optimus.web.collect.req.ApplyForWithdrawReq;
+import com.optimus.web.collect.req.ConfirmForRechargeReq;
+import com.optimus.web.collect.req.ConfirmForWithdrawReq;
+import com.optimus.web.collect.req.PlaceOrderReq;
+import com.optimus.web.collect.req.RechargeReq;
+import com.optimus.web.collect.req.TransferReq;
+import com.optimus.web.collect.req.WithdrawReq;
+import com.optimus.web.collect.resp.ApplyForRechargeResp;
+import com.optimus.web.collect.resp.ApplyForWithdrawResp;
+import com.optimus.web.collect.resp.ConfirmForRechargeResp;
+import com.optimus.web.collect.resp.ConfirmForWithdrawResp;
+import com.optimus.web.collect.resp.PlaceOrderResp;
+import com.optimus.web.collect.resp.RechargeResp;
+import com.optimus.web.collect.resp.TransferResp;
+import com.optimus.web.collect.resp.WithdrawResp;
 import com.optimus.web.collect.validate.CollectValidate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -127,8 +142,7 @@ public class CollectController {
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
 
         // 验证会员类型
-        if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType())
-                || !StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_C.getCode(), memberInfo.getMemberType())) {
+        if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType()) || !StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_C.getCode(), memberInfo.getMemberType())) {
             throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为代理或码商");
         }
 
@@ -159,8 +173,7 @@ public class CollectController {
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
 
         // 验证会员类型
-        if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType())
-                || !StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_M.getCode(), memberInfo.getMemberType())) {
+        if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType()) || !StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_M.getCode(), memberInfo.getMemberType())) {
             throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为代理或管理");
         }
 
@@ -226,8 +239,7 @@ public class CollectController {
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
 
         // 验证会员类型
-        if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType())
-                || !StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_C.getCode(), memberInfo.getMemberType())) {
+        if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType()) || !StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_C.getCode(), memberInfo.getMemberType())) {
             throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为代理或码商");
         }
 
@@ -262,8 +274,7 @@ public class CollectController {
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
 
         // 验证会员类型
-        if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType())
-                || !StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_M.getCode(), memberInfo.getMemberType())) {
+        if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType()) || !StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_M.getCode(), memberInfo.getMemberType())) {
             throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为代理或管理");
         }
 
@@ -300,32 +311,26 @@ public class CollectController {
 
         // 验证会员交易限制
         MemberTransConfineDTO memberTransConfine = memberService.getMemberTransConfineByMemberId(req.getMemberId());
-        if (!StringUtils.pathEquals(MemberMerchantOrderSwitchEnum.MERCHANT_ORDER_SWITCH_Y.getCode(),
-                memberTransConfine.getMerchantOrderSwitch())) {
+        if (!StringUtils.pathEquals(MemberMerchantOrderSwitchEnum.MERCHANT_ORDER_SWITCH_Y.getCode(), memberTransConfine.getMerchantOrderSwitch())) {
             throw new OptimusException(RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "商户下单开关已关闭");
         }
 
         // 验证主渠道
         GatewayChannelDTO gatewayChannel = gatewayService.getGatewayChannelByChannelCode(req.getChannelCode());
-        if (!StringUtils.pathEquals(GatewayChannelStatusEnum.GATEWAY_CHANNEL_STATUS_Y.getCode(),
-                gatewayChannel.getChannelStatus())) {
+        if (!StringUtils.pathEquals(GatewayChannelStatusEnum.GATEWAY_CHANNEL_STATUS_Y.getCode(), gatewayChannel.getChannelStatus())) {
             throw new OptimusException(RespCodeEnum.GATEWAY_CHANNEL_ERROR, "渠道未启用");
         }
 
-        String subChannelCode = null;
-        if (!StringUtils.pathEquals(GatewayChannelGroupEnum.GATEWAY_CHANNEL_GROUP_I.getCode(),
-                gatewayChannel.getChannelGroup())) {
-
-            subChannelCode = gatewayService.matchChannel(gatewayChannel);
-            AssertUtil.notEmpty(subChannelCode, RespCodeEnum.GATEWAY_CHANNEL_ERROR, "未匹配到子通道");
-
-        }
+        // 匹配子渠道
+        MatchChannelDTO gatewaySubChannel = gatewayService.matchChannel(gatewayChannel, memberInfo.getSupDirectMemberId());
 
         // 下单
         CreateOrderDTO createOrder = CollectControllerConvert.getCreateOrderDTO(req);
         createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_C.getCode());
         createOrder.setSupMemberId(memberInfo.getSupDirectMemberId());
-        createOrder.setSubChannelCode(subChannelCode);
+        createOrder.setCodeMemberId(gatewaySubChannel.getCodeMemberId());
+        createOrder.setMemberTransConfine(memberTransConfine);
+        createOrder.setGatewaySubChannel(gatewaySubChannel.getGatewaySubChannel());
 
         OrderInfoDTO orderInfo = orderService.createOrder(createOrder);
 

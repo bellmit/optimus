@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
 
+import com.optimus.manager.member.dto.MemberTransConfineDTO;
+import com.optimus.service.gateway.dto.GatewaySubChannelDTO;
 import com.optimus.util.constants.order.OrderTypeEnum;
 
 import lombok.Data;
@@ -66,16 +68,6 @@ public class CreateOrderDTO implements Serializable {
     private String merchantCallBackUrl;
 
     /**
-     * 网关渠道编号
-     */
-    private String channelCode;
-
-    /**
-     * 网关子渠道编号
-     */
-    private String subChannelCode;
-
-    /**
      * 商户客户端IP
      */
     private String clientIp;
@@ -84,5 +76,15 @@ public class CreateOrderDTO implements Serializable {
      * 商户重定向地址
      */
     private String redirectUrl;
+
+    /**
+     * 会员交易限制
+     */
+    private MemberTransConfineDTO memberTransConfine;
+
+    /**
+     * 网关子渠道
+     */
+    private GatewaySubChannelDTO gatewaySubChannel;
 
 }

@@ -3,6 +3,7 @@ package com.optimus.service.gateway;
 import com.optimus.manager.gateway.dto.ExecuteScriptInputDTO;
 import com.optimus.service.gateway.dto.GatewayChannelDTO;
 import com.optimus.service.gateway.dto.GatewaySubChannelDTO;
+import com.optimus.service.gateway.dto.MatchChannelDTO;
 
 /**
  * 网关Service
@@ -30,10 +31,11 @@ public interface GatewayService {
     /**
      * 匹配渠道
      * 
-     * @param gatewayChannel 匹配渠道DTO
-     * @return 子渠道编号
+     * @param gatewayChannel
+     * @param memberId
+     * @return
      */
-    String matchChannel(GatewayChannelDTO gatewayChannel);
+    MatchChannelDTO matchChannel(GatewayChannelDTO gatewayChannel, String memberId);
 
     /**
      * 处理渠道回调

@@ -80,13 +80,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderInfoDTO createOrder(CreateOrderDTO createOrder) {
+
         // 验证上游订单是否重复
         orderManager.checkCallerOrderId(createOrder.getCallerOrderId());
 
         // 根据订单类型获取处理工厂类
         BaseOrder baseOrder = orderFactory.getOrderInstance(createOrder.getOrderType());
-
-        // 通过是否取得工厂类型来校验订单类型是否支持
         AssertUtil.notEmpty(baseOrder, RespCodeEnum.ORDER_TYPE_ERROR, null);
 
         // 生成订单号
@@ -100,6 +99,7 @@ public class OrderServiceImpl implements OrderService {
         orderInfoDao.addOrderInfo(OrderServiceConvert.getOrderInfoDO(orderInfo));
 
         return orderInfo;
+
     }
 
     @Override
@@ -107,8 +107,6 @@ public class OrderServiceImpl implements OrderService {
 
         // 根据订单类型获取处理工厂类
         BaseOrder baseOrder = orderFactory.getOrderInstance(payOrder.getOrderType());
-
-        // 通过是否取得工厂类型来校验订单类型是否支持
         AssertUtil.notEmpty(baseOrder, RespCodeEnum.ORDER_TYPE_ERROR, null);
 
         // 工厂处理订单信息

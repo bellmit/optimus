@@ -30,4 +30,5 @@ public class OrderManagerImpl implements OrderManager {
         // 校验订单是否存在
         AssertUtil.empty(orderInfo, RespCodeEnum.ORDER_EXIST_ERROR, null);
     }
+
 }

@@ -56,14 +56,12 @@ public class ReqBodyConfig implements RequestBodyAdvice {
      * beforeBodyRead
      */
     @Override
-    public HttpInputMessage beforeBodyRead(HttpInputMessage arg0, MethodParameter arg1, Type arg2,
-            Class<? extends HttpMessageConverter<?>> arg3) throws IOException {
+    public HttpInputMessage beforeBodyRead(HttpInputMessage arg0, MethodParameter arg1, Type arg2, Class<? extends HttpMessageConverter<?>> arg3) throws IOException {
 
         byte[] bytes = arg0.getBody().readAllBytes();
         String body = new String(bytes);
 
-        log.info("{}.{} param is {}", arg1.getMethod().getDeclaringClass().getSimpleName(), arg1.getMethod().getName(),
-                body);
+        log.info("{}.{} param is {}", arg1.getMethod().getDeclaringClass().getSimpleName(), arg1.getMethod().getName(), body);
 
         handleForSign(body);
 
@@ -87,8 +85,7 @@ public class ReqBodyConfig implements RequestBodyAdvice {
      * afterBodyRead
      */
     @Override
-    public Object afterBodyRead(Object arg0, HttpInputMessage arg1, MethodParameter arg2, Type arg3,
-            Class<? extends HttpMessageConverter<?>> arg4) {
+    public Object afterBodyRead(Object arg0, HttpInputMessage arg1, MethodParameter arg2, Type arg3, Class<? extends HttpMessageConverter<?>> arg4) {
         return arg0;
     }
 
@@ -96,8 +93,7 @@ public class ReqBodyConfig implements RequestBodyAdvice {
      * handleEmptyBody
      */
     @Override
-    public Object handleEmptyBody(Object arg0, HttpInputMessage arg1, MethodParameter arg2, Type arg3,
-            Class<? extends HttpMessageConverter<?>> arg4) {
+    public Object handleEmptyBody(Object arg0, HttpInputMessage arg1, MethodParameter arg2, Type arg3, Class<? extends HttpMessageConverter<?>> arg4) {
         return arg0;
     }
 
