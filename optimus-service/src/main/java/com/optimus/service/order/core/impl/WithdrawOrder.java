@@ -55,7 +55,7 @@ public class WithdrawOrder extends BaseOrder {
 
         // 验证账户余额是否充足
         AccountInfoDTO accountInfo = accountService.getAccountInfoByMemberIdAndAccountType(createOrder.getMemberId(), AccountTypeEnum.ACCOUNT_TYPE_B.getCode());
-        if (accountInfo.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+        if (accountInfo.getAmount().compareTo(createOrder.getOrderAmount()) < 0) {
             throw new OptimusException(RespCodeEnum.ACCOUNT_AMOUNT_ERROR);
         }
 

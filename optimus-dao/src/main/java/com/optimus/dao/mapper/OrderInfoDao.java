@@ -1,20 +1,21 @@
 package com.optimus.dao.mapper;
 
-import java.util.List;
-
 import com.optimus.dao.domain.OrderInfoDO;
 import com.optimus.dao.query.OrderInfoQuery;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 订单信息Dao
- * 
+ *
  * @author sunxp
  */
 public interface OrderInfoDao {
 
     /**
      * 根据主键查询订单信息
-     * 
+     *
      * @param id
      * @return
      */
@@ -38,7 +39,7 @@ public interface OrderInfoDao {
 
     /**
      * 根据OrderInfoQuery查询订单信息
-     * 
+     *
      * @param query
      * @return
      */
@@ -46,7 +47,7 @@ public interface OrderInfoDao {
 
     /**
      * 新增一条订单信息
-     * 
+     *
      * @param orderInfoDO
      * @return
      */
@@ -54,10 +55,19 @@ public interface OrderInfoDao {
 
     /**
      * 更新订单信息
-     * 
+     *
      * @param orderInfoDO
      * @return
      */
     int updateOrderInfo(OrderInfoDO orderInfoDO);
+
+    /**
+     * 根据订单号更新订单状态
+     *
+     * @param orderId
+     * @param orderStatus
+     * @return
+     */
+    int updateStatusByOrderId(@Param("orderId") String orderId, @Param("orderStatus") String orderStatus);
 
 }
