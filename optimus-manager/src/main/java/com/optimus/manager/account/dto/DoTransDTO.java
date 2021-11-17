@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 import com.optimus.util.constants.account.AccountChangeTypeEnum;
+import com.optimus.util.constants.order.OrderTypeEnum;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,6 +31,13 @@ public class DoTransDTO implements Serializable {
      * 订单编号
      */
     private String orderId;
+
+    /**
+     * 订单类型
+     * 
+     * @see OrderTypeEnum
+     */
+    private String orderType;
 
     /**
      * 账户变更类型
