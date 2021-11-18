@@ -14,13 +14,17 @@ public enum OrderStatusEnum {
 
     /* ---------订单状态--------- */
 
-    ORDER_STATUS_NP("NP", "等待支付(->HU/AP/OF)"),
+    // ->HU/AP/OF
+    ORDER_STATUS_NP("NP", "等待支付"),
 
-    ORDER_STATUS_HU("HU", "订单挂起(->AP)"),
+    // ->AP
+    ORDER_STATUS_HU("HU", "订单挂起"),
 
     ORDER_STATUS_AP("AP", "订单成功"),
 
     ORDER_STATUS_AF("AF", "订单失败"),
+
+    ORDER_STATUS_AC("AC", "订单关闭"),
 
     ;
 
