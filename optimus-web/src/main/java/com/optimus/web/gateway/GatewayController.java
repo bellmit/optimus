@@ -19,7 +19,6 @@ import com.optimus.util.exception.OptimusException;
 import com.optimus.web.gateway.convert.GatewayControllerConvert;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -69,9 +68,7 @@ public class GatewayController {
 
         // 验证子渠道合法性
         OrderInfoDTO orderInfo = orderService.getOrderInfoByOrderId(output.getOrderId());
-        if (!StringUtils.pathEquals(orderInfo.getSubChannelCode(), subChannelCode)) {
-            throw new OptimusException(RespCodeEnum.ORDER_ERROR, "订单子渠道信息异常");
-        }
+        AssertUtil.notEquals(orderInfo.getSubChannelCode(), subChannelCode, RespCodeEnum.ORDER_ERROR, "订单子渠道信息异常");
 
         // 支付
         PayOrderDTO payOrder = GatewayControllerConvert.getPayOrderDTO(output);

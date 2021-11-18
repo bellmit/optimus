@@ -75,9 +75,7 @@ public class CollectController {
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
 
         // 验证会员类型
-        if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType())) {
-            throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为代理");
-        }
+        AssertUtil.notEquals(MemberTypeEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType(), RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为代理");
 
         // 创建订单
         CreateOrderDTO createOrder = CollectControllerConvert.getCreateOrderDTO(req);
@@ -110,19 +108,13 @@ public class CollectController {
         AssertUtil.notEmpty(orderInfo, RespCodeEnum.ORDER_NO, null);
 
         // 验证会员类型
-        if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_S.getCode(), memberInfo.getMemberType())) {
-            throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为平台");
-        }
+        AssertUtil.notEquals(MemberTypeEnum.MEMBER_TYPE_S.getCode(), memberInfo.getMemberType(), RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为平台");
 
         // 验证订单里面的会员编号
-        if (StringUtils.pathEquals(orderInfo.getMemberId(), req.getSubMemberId())) {
-            throw new OptimusException(RespCodeEnum.ORDER_ERROR);
-        }
+        AssertUtil.notEquals(orderInfo.getMemberId(), req.getSubMemberId(), RespCodeEnum.ORDER_ERROR, null);
 
         // 验证订单状态
-        if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_NP.getCode(), orderInfo.getOrderStatus())) {
-            throw new OptimusException(RespCodeEnum.ORDER_ERROR, "订单状态异常");
-        }
+        AssertUtil.notEquals(OrderStatusEnum.ORDER_STATUS_NP.getCode(), orderInfo.getOrderStatus(), RespCodeEnum.ORDER_ERROR, "订单状态异常");
 
         // 支付订单
         PayOrderDTO payOrder = CollectControllerConvert.getPayOrderDTO(orderInfo);
@@ -183,7 +175,7 @@ public class CollectController {
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
 
         // 验证会员类型
-        if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType()) || !StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_M.getCode(), memberInfo.getMemberType())) {
+        if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType()) && !StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_M.getCode(), memberInfo.getMemberType())) {
             throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为代理或管理");
         }
 
@@ -213,24 +205,17 @@ public class CollectController {
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
 
         // 验证会员类型
-        if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_S.getCode(), memberInfo.getMemberType())) {
-            throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为平台");
-        }
+        AssertUtil.notEquals(MemberTypeEnum.MEMBER_TYPE_S.getCode(), memberInfo.getMemberType(), RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为平台");
 
         // 获取订单信息
         OrderInfoDTO orderInfo = orderService.getOrderInfoByOrderId(req.getOrderId());
-
         AssertUtil.notEmpty(orderInfo, RespCodeEnum.ORDER_NO, null);
 
         // 验证订单里面的会员编号
-        if (StringUtils.pathEquals(orderInfo.getMemberId(), req.getSubMemberId())) {
-            throw new OptimusException(RespCodeEnum.ORDER_ERROR);
-        }
+        AssertUtil.notEquals(orderInfo.getMemberId(), req.getSubMemberId(), RespCodeEnum.ORDER_ERROR, null);
 
         // 验证订单状态
-        if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_NP.getCode(), orderInfo.getOrderStatus())) {
-            throw new OptimusException(RespCodeEnum.ORDER_ERROR, "订单状态异常");
-        }
+        AssertUtil.notEquals(OrderStatusEnum.ORDER_STATUS_NP.getCode(), orderInfo.getOrderStatus(), RespCodeEnum.ORDER_ERROR, "订单状态异常");
 
         // 支付订单
         PayOrderDTO payOrder = CollectControllerConvert.getPayOrderDTO(orderInfo);
@@ -254,7 +239,7 @@ public class CollectController {
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
 
         // 验证会员类型
-        if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType()) || !StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_C.getCode(), memberInfo.getMemberType())) {
+        if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType()) && !StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_C.getCode(), memberInfo.getMemberType())) {
             throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为代理或码商");
         }
 
@@ -321,21 +306,15 @@ public class CollectController {
 
         // 获取会员信息
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
-        if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_B.getCode(), memberInfo.getMemberType())) {
-            throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为商户");
-        }
+        AssertUtil.notEquals(MemberTypeEnum.MEMBER_TYPE_B.getCode(), memberInfo.getMemberType(), RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为商户");
 
         // 验证会员交易限制
         MemberTransConfineDTO memberTransConfine = memberService.getMemberTransConfineByMemberId(req.getMemberId());
-        if (!StringUtils.pathEquals(MemberMerchantOrderSwitchEnum.MERCHANT_ORDER_SWITCH_Y.getCode(), memberTransConfine.getMerchantOrderSwitch())) {
-            throw new OptimusException(RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "商户下单开关已关闭");
-        }
+        AssertUtil.notEquals(MemberMerchantOrderSwitchEnum.MERCHANT_ORDER_SWITCH_Y.getCode(), memberTransConfine.getMerchantOrderSwitch(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "商户下单开关已关闭");
 
         // 验证主渠道
         GatewayChannelDTO gatewayChannel = gatewayService.getGatewayChannelByChannelCode(req.getChannelCode());
-        if (!StringUtils.pathEquals(GatewayChannelStatusEnum.GATEWAY_CHANNEL_STATUS_Y.getCode(), gatewayChannel.getChannelStatus())) {
-            throw new OptimusException(RespCodeEnum.GATEWAY_CHANNEL_ERROR, "渠道未启用");
-        }
+        AssertUtil.notEquals(GatewayChannelStatusEnum.GATEWAY_CHANNEL_STATUS_Y.getCode(), gatewayChannel.getChannelStatus(), RespCodeEnum.GATEWAY_CHANNEL_ERROR, "渠道未启用");
 
         // 匹配子渠道
         MatchChannelDTO gatewaySubChannel = gatewayService.matchChannel(gatewayChannel, memberInfo.getSupDirectMemberId());

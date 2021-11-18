@@ -11,12 +11,10 @@ import com.optimus.service.member.dto.MemberInfoDTO;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.member.MemberDeleteFlagEnum;
-import com.optimus.util.exception.OptimusException;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 /**
  * 会员Service实现
@@ -38,10 +36,7 @@ public class MemberServiceImpl implements MemberService {
         MemberInfoDO memberInfoDO = memberInfoDao.getMemberInfoByMemberId(memberId);
 
         AssertUtil.notEmpty(memberInfoDO, RespCodeEnum.MEMBER_NO, null);
-
-        if (!StringUtils.pathEquals(memberInfoDO.getDeleteFlag(), MemberDeleteFlagEnum.DELETE_FLAG_ND.getCode())) {
-            throw new OptimusException(RespCodeEnum.MEMBER_NO);
-        }
+        AssertUtil.notEquals(MemberDeleteFlagEnum.DELETE_FLAG_ND.getCode(), memberInfoDO.getDeleteFlag(), RespCodeEnum.MEMBER_NO, null);
 
         MemberInfoDTO memberInfo = new MemberInfoDTO();
         BeanUtils.copyProperties(memberInfoDO, memberInfo);
@@ -59,13 +54,10 @@ public class MemberServiceImpl implements MemberService {
     public void checkMemberLevel(MemberInfoDTO memberInfo, String subDirectMemberId) {
 
         MemberInfoDO subMemberInfo = memberInfoDao.getMemberInfoByMemberId(subDirectMemberId);
-
         AssertUtil.notEmpty(subMemberInfo, RespCodeEnum.MEMBER_NO, "下级会员不存在");
 
         // 验证上下级关系
-        if (!StringUtils.pathEquals(memberInfo.getMemberId(), subMemberInfo.getSupDirectMemberId())) {
-            throw new OptimusException(RespCodeEnum.MEMBER_ERROR, "上下级关系异常");
-        }
+        AssertUtil.notEquals(memberInfo.getMemberId(), subMemberInfo.getSupDirectMemberId(), RespCodeEnum.MEMBER_ERROR, "上下级关系异常");
 
     }
 

@@ -25,7 +25,6 @@ import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdvice;
 
@@ -125,17 +124,13 @@ public class ReqBodyConfig implements RequestBodyAdvice {
         }
 
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(memberId);
-        if (!StringUtils.pathEquals(memberInfo.getMemberStatus(), MemberStatusEnum.MEMBER_STATUS_Y.getCode())) {
-            throw new OptimusException(RespCodeEnum.MEMBER_ERROR, "会员无效");
-        }
+        AssertUtil.notEquals(MemberStatusEnum.MEMBER_STATUS_Y.getCode(), memberInfo.getMemberStatus(), RespCodeEnum.MEMBER_ERROR, "会员无效");
 
         Map<String, Object> map = JacksonUtil.toBean(body, new TypeReference<Map<String, Object>>() {
         });
 
         String basisSign = SignUtil.sign(map, memberInfo.getMemberKey());
-        if (!StringUtils.pathEquals(sign, basisSign)) {
-            throw new OptimusException(RespCodeEnum.ERROR_SIGN);
-        }
+        AssertUtil.notEquals(sign, basisSign, RespCodeEnum.ERROR_SIGN, null);
 
     }
 

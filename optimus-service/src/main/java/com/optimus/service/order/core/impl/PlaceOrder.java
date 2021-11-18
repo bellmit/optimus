@@ -65,9 +65,14 @@ public class PlaceOrder extends BaseOrder {
         ExecuteScriptOutputDTO output = gatewayManager.executeScript(input);
         if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_AP.getCode(), output.getOrderStatus())) {
 
-            // 构建订单DTO
+            // 下单成功将订单状态致为订单失败
+            orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_AF.getCode());
+            return orderInfo;
 
         }
+
+        // 下单成功将订单状态致为等待支付
+        orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_NP.getCode());
 
         // 判断是否需要冻结码商余额
 
@@ -94,8 +99,18 @@ public class PlaceOrder extends BaseOrder {
 
         // 查询关系链
 
+        // 释放冻结余额标识
+        // boolean flag = true;
+
         // 更新订单状态
         int update = orderInfoDao.updateStatusByOrderIdAndOrderStatus(payOrder.getOrderId(), orderStatus, OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());
+        if (update != 1) {
+            // 无需释放冻结余额
+            // flag = false;
+            // 使用订单挂起状态再次更新
+            update = orderInfoDao.updateStatusByOrderIdAndOrderStatus(payOrder.getOrderId(), orderStatus, OrderStatusEnum.ORDER_STATUS_HU.getCode(), DateUtil.currentDate());
+        }
+
         if (update != 1) {
             throw new OptimusException(RespCodeEnum.ORDER_ERROR, "订单状态异常");
         }
