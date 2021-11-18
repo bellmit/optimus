@@ -6,6 +6,7 @@ import com.optimus.manager.account.AccountManager;
 import com.optimus.manager.account.dto.DoTransDTO;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AccountManagerImpl implements AccountManager {
 
+    @Transactional(rollbackFor = { Exception.class, Error.class })
     @Override
     public boolean doTrans(List<DoTransDTO> doTransList) {
 
