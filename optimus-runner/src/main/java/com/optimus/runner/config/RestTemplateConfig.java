@@ -18,6 +18,10 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class RestTemplateConfig {
 
+    private static final int CONNECT_TIMEOUT = 10000;
+
+    private static final int READ_TIMEOUT = 5000;
+
     @Bean
     public RestTemplate restTemplate(ClientHttpRequestFactory factory) {
 
@@ -33,8 +37,8 @@ public class RestTemplateConfig {
 
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
 
-        factory.setConnectTimeout(5000);
-        factory.setReadTimeout(5000);
+        factory.setConnectTimeout(CONNECT_TIMEOUT);
+        factory.setReadTimeout(READ_TIMEOUT);
 
         return factory;
 

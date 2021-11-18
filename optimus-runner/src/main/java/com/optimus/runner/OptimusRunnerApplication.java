@@ -2,7 +2,6 @@ package com.optimus.runner;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  * OptimusRunnerApplication
@@ -10,7 +9,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
  * @author sunxp
  */
 @SpringBootApplication(scanBasePackages = "com.optimus")
-@EnableAsync
 public class OptimusRunnerApplication {
 
 	public static void main(String[] args) {
