@@ -42,16 +42,6 @@ public class ExecuteScriptInputDTO implements Serializable {
     private Date orderTime;
 
     /**
-     * 商户客户端IP
-     */
-    private String clientIp;
-
-    /**
-     * 商户重定向地址
-     */
-    private String redirectUrl;
-
-    /**
      * 实现类型
      */
     private String implType;
@@ -62,13 +52,23 @@ public class ExecuteScriptInputDTO implements Serializable {
     private String implPath;
 
     /**
-     * 业务大字段
+     * 商户客户端IP[商户下单时传入]
+     */
+    private String clientIp;
+
+    /**
+     * 商户重定向地址[商户下单时传入]
+     */
+    private String redirectUrl;
+
+    /**
+     * 业务大字段[网关子渠道表存储的信息]
      */
     private String bizContent;
 
     /**
-     * 渠道消息
+     * 参数[渠道回调时传入的参数]
      */
-    private String message;
+    private String args;
 
 }

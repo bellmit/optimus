@@ -111,7 +111,7 @@ public class OrderInfoDO implements Serializable {
     private String behavior;
 
     /**
-     * 商户回调地址
+     * 商户回调地址[商户下单时传入]
      */
     private String merchantCallbackUrl;
 

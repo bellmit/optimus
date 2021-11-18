@@ -121,7 +121,7 @@ public class CollectController {
 
         // 验证订单状态
         if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_NP.getCode(), orderInfo.getOrderStatus())) {
-            throw new OptimusException(RespCodeEnum.ORDER_STATUTS_ERROR);
+            throw new OptimusException(RespCodeEnum.ORDER_ERROR, "订单状态异常");
         }
 
         // 支付订单
@@ -229,7 +229,7 @@ public class CollectController {
 
         // 验证订单状态
         if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_NP.getCode(), orderInfo.getOrderStatus())) {
-            throw new OptimusException(RespCodeEnum.ORDER_STATUTS_ERROR);
+            throw new OptimusException(RespCodeEnum.ORDER_ERROR, "订单状态异常");
         }
 
         // 支付订单

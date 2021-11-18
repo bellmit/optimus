@@ -18,13 +18,6 @@ public class ExecuteScriptOutputDTO implements Serializable {
     private static final long serialVersionUID = -5836828589921241921L;
 
     /**
-     * 订单状态
-     * 
-     * @see OrderStatusEnum
-     */
-    private String orderStatus;
-
-    /**
      * 订单编号
      */
     private String orderId;
@@ -33,6 +26,13 @@ public class ExecuteScriptOutputDTO implements Serializable {
      * 被调用方订单编号
      */
     private String calleeOrderId;
+
+    /**
+     * 订单状态
+     * 
+     * @see OrderStatusEnum
+     */
+    private String orderStatus;
 
     /**
      * 订单金额
@@ -45,18 +45,13 @@ public class ExecuteScriptOutputDTO implements Serializable {
     private BigDecimal actualAmount;
 
     /**
-     * 描述
+     * 描述[渠道回调时返回渠道描述]
      */
     private String memo;
 
     /**
-     * 调用渠道返回消息类型
+     * 网关渠道返回信息[商户下单后返回商户]
      */
-    private String type;
-
-    /**
-     * 调用渠道返回类型所对应的消息
-     */
-    private Object message;
+    private String channelReturnMessage;
 
 }

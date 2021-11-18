@@ -86,7 +86,7 @@ public class OrderServiceImpl implements OrderService {
 
         // 根据订单类型获取处理工厂类
         BaseOrder baseOrder = orderFactory.getOrderInstance(createOrder.getOrderType());
-        AssertUtil.notEmpty(baseOrder, RespCodeEnum.ORDER_TYPE_ERROR, null);
+        AssertUtil.notEmpty(baseOrder, RespCodeEnum.ORDER_ERROR, "订单类型异常");
 
         // 生成订单号
         createOrder.setOrderId(GenerateUtil.generate(createOrder.getOrderType()));
@@ -107,7 +107,7 @@ public class OrderServiceImpl implements OrderService {
 
         // 根据订单类型获取处理工厂类
         BaseOrder baseOrder = orderFactory.getOrderInstance(payOrder.getOrderType());
-        AssertUtil.notEmpty(baseOrder, RespCodeEnum.ORDER_TYPE_ERROR, null);
+        AssertUtil.notEmpty(baseOrder, RespCodeEnum.ORDER_ERROR, "订单类型异常");
 
         // 工厂处理订单信息
         baseOrder.payOrder(payOrder);

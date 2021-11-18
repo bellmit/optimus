@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.optimus.manager.gateway.dto.ExecuteScriptInputDTO;
+import com.optimus.manager.gateway.dto.ExecuteScriptOutputDTO;
 import com.optimus.service.gateway.dto.GatewaySubChannelDTO;
+import com.optimus.service.order.dto.PayOrderDTO;
 import com.optimus.util.JacksonUtil;
 import com.optimus.util.constants.BaseEnum;
 import com.optimus.util.constants.RespCodeEnum;
@@ -29,7 +31,7 @@ public class GatewayControllerConvert {
      * @param req
      * @return
      */
-    public static String getAllParameter(HttpServletRequest req) {
+    public static String getAllArgs(HttpServletRequest req) {
 
         // 获取Header参数
         Map<String, Object> headerMap = new HashMap<>(32);
@@ -124,7 +126,7 @@ public class GatewayControllerConvert {
     }
 
     /**
-     * 获取处理渠道消息DTO
+     * 获取执行脚本输入DTO
      * 
      * @param gatewaySubChannel
      * @return
@@ -138,6 +140,20 @@ public class GatewayControllerConvert {
         input.setImplType(gatewaySubChannel.getImplType());
 
         return input;
+
+    }
+
+    public static PayOrderDTO getPayOrderDTO(ExecuteScriptOutputDTO output) {
+
+        PayOrderDTO payOrder = new PayOrderDTO();
+
+        payOrder.setOrderId(output.getOrderId());
+        payOrder.setCalleeOrderId(output.getCalleeOrderId());
+        payOrder.setOrderStatus(output.getOrderStatus());
+        payOrder.setOrderAmount(output.getAmount());
+        payOrder.setActualAmount(output.getActualAmount());
+
+        return payOrder;
 
     }
 

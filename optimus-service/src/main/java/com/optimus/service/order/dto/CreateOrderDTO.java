@@ -68,17 +68,17 @@ public class CreateOrderDTO implements Serializable {
     private Date orderTime;
 
     /**
-     * 商户回调地址
-     */
-    private String merchantCallBackUrl;
-
-    /**
-     * 商户客户端IP
+     * 商户客户端IP[商户下单时传入]
      */
     private String clientIp;
 
     /**
-     * 商户重定向地址
+     * 商户回调地址[商户下单时传入]
+     */
+    private String merchantCallBackUrl;
+
+    /**
+     * 商户重定向地址[商户下单时传入]
      */
     private String redirectUrl;
 

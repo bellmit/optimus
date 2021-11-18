@@ -34,9 +34,7 @@ public enum RespCodeEnum {
 
     MEMBER_TYPE_ERROR("2002", "会员类型不匹配"),
 
-    MEMBER_LEVEL_ERROR("2003", "会员层级不匹配"),
-
-    MEMBER_TRANS_PERMISSION_ERROR("2004", "会员交易限制异常"),
+    MEMBER_TRANS_PERMISSION_ERROR("2003", "会员交易限制异常"),
 
     /* ---------账户类编码--------- */
 
@@ -54,17 +52,13 @@ public enum RespCodeEnum {
 
     ORDER_ERROR("4003", "订单信息异常"),
 
-    ORDER_STATUTS_ERROR("4004", "订单状态异常"),
-
-    ORDER_TYPE_ERROR("4005", "订单类型异常"),
-
     /* ---------网关类编码--------- */
 
     GATEWAY_CHANNEL_NO("5000", "网关渠道不存在"),
 
     GATEWAY_CHANNEL_ERROR("5001", "网关渠道信息异常"),
 
-    GATEWAY_ANALYSIS_ERROR("5002", "网关渠道消息解析异常"),
+    GATEWAY_EXECUTE_SCRIPT_ERROR("5002", "网关渠道脚本执行异常"),
 
     ;
 

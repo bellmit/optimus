@@ -3,6 +3,9 @@ package com.optimus.service.order.core.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
+
+import com.optimus.dao.mapper.OrderInfoDao;
 import com.optimus.manager.account.AccountManager;
 import com.optimus.manager.account.dto.DoTransDTO;
 import com.optimus.manager.gateway.GatewayManager;
@@ -13,7 +16,10 @@ import com.optimus.service.order.core.BaseOrder;
 import com.optimus.service.order.dto.CreateOrderDTO;
 import com.optimus.service.order.dto.OrderInfoDTO;
 import com.optimus.service.order.dto.PayOrderDTO;
+import com.optimus.util.DateUtil;
+import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
+import com.optimus.util.exception.OptimusException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,6 +41,9 @@ public class PlaceOrder extends BaseOrder {
 
     @Autowired
     private GatewayManager gatewayManager;
+
+    @Resource
+    private OrderInfoDao orderInfoDao;
 
     /**
      * 创建订单
@@ -76,6 +85,24 @@ public class PlaceOrder extends BaseOrder {
      */
     @Override
     public void payOrder(PayOrderDTO payOrder) {
+
+        // 验证订单状态[只能为成功或失败]
+        String orderStatus = payOrder.getOrderStatus();
+        if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_AP.getCode(), orderStatus) && !StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_AF.getCode(), orderStatus)) {
+            throw new OptimusException(RespCodeEnum.ORDER_ERROR, "订单状态只能为成功或失败");
+        }
+
+        // 查询关系链
+
+        // 更新订单状态
+        int update = orderInfoDao.updateStatusByOrderIdAndOrderStatus(payOrder.getOrderId(), orderStatus, OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());
+        if (update != 1) {
+            throw new OptimusException(RespCodeEnum.ORDER_ERROR, "订单状态异常");
+        }
+
+        // 异步分润
+
+        // 异步通知商户
 
     }
 

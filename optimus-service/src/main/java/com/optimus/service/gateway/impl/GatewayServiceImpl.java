@@ -22,15 +22,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * 网关Service实现
  * 
  * @author sunxp
  */
 @Service
-@Slf4j
 public class GatewayServiceImpl implements GatewayService {
 
     @Autowired
@@ -92,22 +89,8 @@ public class GatewayServiceImpl implements GatewayService {
     }
 
     @Override
-    public String handleForChannelCallback(ExecuteScriptInputDTO input) {
-
-        // 执行脚本
-        ExecuteScriptOutputDTO output = gatewayManager.executeScript(input);
-        log.info("analysisChannelMessage is {}", output);
-
-        // 验证订单及子渠道合法性
-
-        // 支付订单
-
-        // 异步分润
-
-        // 异步通知商户
-
-        return output.getMemo();
-
+    public ExecuteScriptOutputDTO executeScript(ExecuteScriptInputDTO input) {
+        return gatewayManager.executeScript(input);
     }
 
 }

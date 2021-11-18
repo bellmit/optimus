@@ -164,8 +164,7 @@ public class CollectControllerConvert {
         resp.setCallerOrderId(orderInfo.getCallerOrderId());
         resp.setAmount(orderInfo.getOrderAmount());
         resp.setActualAmount(orderInfo.getActualAmount());
-        resp.setType(orderInfo.getType());
-        resp.setMessage(orderInfo.getMessage());
+        resp.setChannelReturnMessage(orderInfo.getChannelReturnMessage());
 
         return resp;
 

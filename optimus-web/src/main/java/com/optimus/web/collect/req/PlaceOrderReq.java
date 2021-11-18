@@ -18,17 +18,17 @@ public class PlaceOrderReq extends BaseCollectReq {
     private String channelCode;
 
     /**
-     * 商户回调地址
+     * 商户回调地址[商户下单时传入]
      */
     private String merchantCallBackUrl;
 
     /**
-     * 商户客户端IP
+     * 商户客户端IP[商户下单时传入]
      */
     private String clientIp;
 
     /**
-     * 商户重定向地址
+     * 商户重定向地址[商户下单时传入]
      */
     private String redirectUrl;
 

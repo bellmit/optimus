@@ -106,7 +106,7 @@ public class OrderInfoDTO implements Serializable {
     private String behavior;
 
     /**
-     * 商户回调地址
+     * 商户回调地址[商户下单时传入]
      */
     private String merchantCallbackUrl;
 
@@ -133,7 +133,7 @@ public class OrderInfoDTO implements Serializable {
     private String subChannelCode;
 
     /**
-     * 网关渠道返回信息
+     * 网关渠道返回信息[商户下单后返回商户]
      */
     private String channelReturnMessage;
 
@@ -141,25 +141,5 @@ public class OrderInfoDTO implements Serializable {
      * 网关渠道订单查询次数
      */
     private Short channelOrderQueryCount;
-
-    /**
-     * 调用渠道返回信息类型
-     */
-    private String type;
-
-    /**
-     * 调用渠道返回类型所对应的信息
-     */
-    private Object message;
-
-    /**
-     * 商户客户端IP
-     */
-    private String clientIp;
-
-    /**
-     * 商户重定向地址
-     */
-    private String redirectUrl;
 
 }

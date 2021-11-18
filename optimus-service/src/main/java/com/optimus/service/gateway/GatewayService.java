@@ -1,6 +1,7 @@
 package com.optimus.service.gateway;
 
 import com.optimus.manager.gateway.dto.ExecuteScriptInputDTO;
+import com.optimus.manager.gateway.dto.ExecuteScriptOutputDTO;
 import com.optimus.service.gateway.dto.GatewayChannelDTO;
 import com.optimus.service.gateway.dto.GatewaySubChannelDTO;
 import com.optimus.service.gateway.dto.MatchChannelDTO;
@@ -38,11 +39,11 @@ public interface GatewayService {
     MatchChannelDTO matchChannel(GatewayChannelDTO gatewayChannel, String memberId);
 
     /**
-     * 处理渠道回调
+     * 执行脚本
      * 
      * @param input
      * @return
      */
-    String handleForChannelCallback(ExecuteScriptInputDTO input);
+    ExecuteScriptOutputDTO executeScript(ExecuteScriptInputDTO input);
 
 }

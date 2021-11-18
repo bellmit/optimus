@@ -7,6 +7,7 @@ import java.util.Date;
 import com.optimus.service.member.dto.MemberInfoDTO;
 import com.optimus.util.constants.order.OrderBehaviorEnum;
 import com.optimus.util.constants.order.OrderConfirmTypeEnum;
+import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.constants.order.OrderTransferTypeEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
 
@@ -28,9 +29,31 @@ public class PayOrderDTO implements Serializable {
     private String memberId;
 
     /**
+     * 上级会员号
+     */
+    private String supMemberId;
+
+    /**
+     * 码商会员编号
+     */
+    private String codeMemberId;
+
+    /**
      * 订单编号
      */
     private String orderId;
+
+    /**
+     * 被调用方订单编号
+     */
+    private String calleeOrderId;
+
+    /**
+     * 订单状态
+     * 
+     * @see OrderStatusEnum
+     */
+    private String orderStatus;
 
     /**
      * 订单类型
@@ -67,12 +90,7 @@ public class PayOrderDTO implements Serializable {
     private String behavior;
 
     /**
-     * 网关渠道返回信息
-     */
-    private String channelReturnMessage;
-
-    /**
-     * 划账类型 type[类型：余额-预付款/预付款-余额]
+     * 划账类型
      *
      * @see OrderTransferTypeEnum
      */

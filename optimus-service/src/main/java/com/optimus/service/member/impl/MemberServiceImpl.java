@@ -64,7 +64,7 @@ public class MemberServiceImpl implements MemberService {
 
         // 验证上下级关系
         if (!StringUtils.pathEquals(memberInfo.getMemberId(), subMemberInfo.getSupDirectMemberId())) {
-            throw new OptimusException(RespCodeEnum.MEMBER_LEVEL_ERROR);
+            throw new OptimusException(RespCodeEnum.MEMBER_ERROR, "上下级关系异常");
         }
 
     }

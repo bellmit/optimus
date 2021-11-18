@@ -82,7 +82,7 @@ public class GatewaySubChannelDTO implements Serializable {
     private String callbackIp;
 
     /**
-     * 业务大字段
+     * 业务大字段[网关子渠道表存储的信息]
      */
     private String bizContent;
 

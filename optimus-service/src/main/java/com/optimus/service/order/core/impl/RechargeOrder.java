@@ -76,7 +76,7 @@ public class RechargeOrder extends BaseOrder {
         // 更新订单状态
         int update = orderInfoDao.updateStatusByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_AP.getCode(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), date);
         if (update != 1) {
-            throw new OptimusException(RespCodeEnum.ORDER_STATUTS_ERROR);
+            throw new OptimusException(RespCodeEnum.ORDER_ERROR, "订单状态异常");
         }
 
         // 通过

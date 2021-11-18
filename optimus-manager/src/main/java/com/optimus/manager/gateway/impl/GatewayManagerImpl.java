@@ -30,7 +30,7 @@ public class GatewayManagerImpl implements GatewayManager {
         ExecuteScriptReq req = GatewayManagerConvert.getExecuteScriptReq(input);
 
         ExecuteScriptResp resp = gatewayTps.executeScript(req);
-        AssertUtil.notEmpty(resp, RespCodeEnum.GATEWAY_ANALYSIS_ERROR, null);
+        AssertUtil.notEmpty(resp, RespCodeEnum.GATEWAY_EXECUTE_SCRIPT_ERROR, null);
 
         return GatewayManagerConvert.getExecuteScriptOutputDTO(resp);
 

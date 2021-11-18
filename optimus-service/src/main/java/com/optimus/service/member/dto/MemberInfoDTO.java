@@ -2,6 +2,7 @@ package com.optimus.service.member.dto;
 
 import java.io.Serializable;
 
+import com.optimus.util.constants.member.MemberStatusEnum;
 import com.optimus.util.constants.member.MemberTypeEnum;
 
 import lombok.Data;
@@ -37,6 +38,8 @@ public class MemberInfoDTO implements Serializable {
 
     /**
      * 会员状态
+     * 
+     * @see MemberStatusEnum
      */
     private String memberStatus;
 
