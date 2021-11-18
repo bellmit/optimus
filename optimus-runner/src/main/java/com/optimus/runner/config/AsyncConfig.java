@@ -17,7 +17,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @EnableAsync
 public class AsyncConfig {
 
-    private static final String THREAD_NAME_PREFIX = "async-task-";
+    private static final String THREAD_NAME_PREFIX = "optimus-async-";
 
     private static final int MAX_POOL_SIZE = 20;
 
