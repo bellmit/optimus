@@ -58,6 +58,11 @@ public class CreateOrderDTO implements Serializable {
     private BigDecimal orderAmount;
 
     /**
+     * 实际金额
+     */
+    private BigDecimal actualAmount;
+
+    /**
      * 订单时间
      */
     private Date orderTime;

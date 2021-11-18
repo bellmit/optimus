@@ -14,6 +14,7 @@ import com.optimus.util.constants.member.MemberDeleteFlagEnum;
 import com.optimus.util.exception.OptimusException;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -28,7 +29,7 @@ public class MemberServiceImpl implements MemberService {
     @Resource
     private MemberInfoDao memberInfoDao;
 
-    @Resource
+    @Autowired
     private MemberManager memberManager;
 
     @Override

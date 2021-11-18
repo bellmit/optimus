@@ -308,10 +308,12 @@
     where ID = #{id,jdbcType=NUMERIC}
   </update>
 
-  <update id="updateOrderInfo" >
+  <update id="updateStatusByOrderIdAndOrderStatus">
     update T_ORDER_INFO
-    set  ORDER_STATUS = #{orderStatus,jdbcType=VARCHAR},
+    set ORDER_STATUS = #{orderStatus,jdbcType=VARCHAR},
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
     where ORDER_ID = #{orderId,jdbcType=VARCHAR}
+    and ORDER_STATUS = #{originOrderStatus,jdbcType=VARCHAR}
   </update>
 
 </mapper>

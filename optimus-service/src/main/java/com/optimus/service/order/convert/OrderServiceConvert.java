@@ -5,8 +5,11 @@ import com.optimus.dao.query.OrderInfoQuery;
 import com.optimus.manager.account.dto.DoTransDTO;
 import com.optimus.service.order.dto.CreateOrderDTO;
 import com.optimus.service.order.dto.OrderInfoDTO;
+import com.optimus.service.order.dto.PayOrderDTO;
 import com.optimus.util.DateUtil;
+import com.optimus.util.constants.account.AccountChangeTypeEnum;
 import com.optimus.util.page.Page;
+
 import org.springframework.beans.BeanUtils;
 
 /**
@@ -67,25 +70,45 @@ public class OrderServiceConvert {
     }
 
     /**
-     * 获取订单查询对象
-     *
-     * @param orderInfo
-     * @param page
-     * @return
+     * 获取账户交易DTO
+     * 
+     * @param accountChangeTypeEnum
+     * @param createOrder
+     * @param remark
+     * @return DoTransDTO
      */
+    public static DoTransDTO getDoTransDTO(AccountChangeTypeEnum accountChangeTypeEnum, CreateOrderDTO createOrder, String remark) {
+
+        DoTransDTO doTrans = new DoTransDTO();
+
+        doTrans.setChangeType(accountChangeTypeEnum.getCode());
+        doTrans.setMemberId(createOrder.getMemberId());
+        doTrans.setOrderId(createOrder.getOrderId());
+        doTrans.setOrderType(createOrder.getOrderType());
+        doTrans.setAmount(createOrder.getActualAmount());
+
+        return doTrans;
+
+    }
+
     /**
      * 获取账户交易DTO
      *
-     * @param memberId  会员编号
-     * @param orderId   订单编号
-     * @param orderType 订单类型
+     * @param accountChangeTypeEnum
+     * @param payOrder
+     * @param remark
      * @return DoTransDTO
      */
-    public static DoTransDTO getDoTransDTO(String memberId, String orderId, String orderType) {
+    public static DoTransDTO getDoTransDTO(AccountChangeTypeEnum accountChangeTypeEnum, PayOrderDTO payOrder, String remark) {
+
         DoTransDTO doTrans = new DoTransDTO();
-        doTrans.setMemberId(memberId);
-        doTrans.setOrderId(orderId);
-        doTrans.setOrderType(orderType);
+
+        doTrans.setChangeType(accountChangeTypeEnum.getCode());
+        doTrans.setMemberId(payOrder.getMemberId());
+        doTrans.setOrderId(payOrder.getOrderId());
+        doTrans.setOrderType(payOrder.getOrderType());
+        doTrans.setAmount(payOrder.getActualAmount());
+
         return doTrans;
 
     }

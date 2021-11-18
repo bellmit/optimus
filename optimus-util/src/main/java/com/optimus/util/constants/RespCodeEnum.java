@@ -54,7 +54,9 @@ public enum RespCodeEnum {
 
     ORDER_ERROR("4003", "订单信息异常"),
 
-    ORDER_TYPE_ERROR("4004", "订单类型异常"),
+    ORDER_STATUTS_ERROR("4004", "订单状态异常"),
+
+    ORDER_TYPE_ERROR("4005", "订单类型异常"),
 
     /* ---------网关类编码--------- */
 

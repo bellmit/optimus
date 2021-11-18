@@ -1,15 +1,16 @@
 package com.optimus.service.order.dto;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
+
 import com.optimus.service.member.dto.MemberInfoDTO;
 import com.optimus.util.constants.order.OrderBehaviorEnum;
 import com.optimus.util.constants.order.OrderConfirmTypeEnum;
 import com.optimus.util.constants.order.OrderTransferTypeEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
-import lombok.Data;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
+import lombok.Data;
 
 /**
  * 支付订单DTO
@@ -71,16 +72,6 @@ public class PayOrderDTO implements Serializable {
     private String channelReturnMessage;
 
     /**
-     * 上级会员信息
-     */
-    private MemberInfoDTO superMemberInfo;
-
-    /**
-     * 会员信息
-     */
-    private MemberInfoDTO memberInfo;
-
-    /**
      * 划账类型 type[类型：余额-预付款/预付款-余额]
      *
      * @see OrderTransferTypeEnum
@@ -92,6 +83,16 @@ public class PayOrderDTO implements Serializable {
      *
      * @see OrderConfirmTypeEnum
      */
-    private String orderConfirmType;
+    private String confirmType;
+
+    /**
+     * 上级会员信息
+     */
+    private MemberInfoDTO superMemberInfo;
+
+    /**
+     * 会员信息
+     */
+    private MemberInfoDTO memberInfo;
 
 }

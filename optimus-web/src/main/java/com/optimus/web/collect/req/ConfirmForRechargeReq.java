@@ -1,6 +1,7 @@
 package com.optimus.web.collect.req;
 
 import com.optimus.util.constants.order.OrderConfirmTypeEnum;
+
 import lombok.Data;
 
 /**
@@ -28,6 +29,6 @@ public class ConfirmForRechargeReq extends BaseCollectReq {
      *
      * @see OrderConfirmTypeEnum
      */
-    private String orderConfirmType;
+    private String confirmType;
 
 }

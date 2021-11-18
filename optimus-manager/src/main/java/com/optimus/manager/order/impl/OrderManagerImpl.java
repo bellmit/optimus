@@ -27,7 +27,7 @@ public class OrderManagerImpl implements OrderManager {
         // 查询订单信息
         OrderInfoDO orderInfo = orderInfoDao.getOrderInfoByCallerOrderId(callerOrderId);
 
-        // 校验订单是否存在
+        // 验证订单是否存在
         AssertUtil.empty(orderInfo, RespCodeEnum.ORDER_EXIST_ERROR, null);
     }
 

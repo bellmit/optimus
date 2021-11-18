@@ -1,5 +1,9 @@
 package com.optimus.service.order.core.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.optimus.manager.account.AccountManager;
 import com.optimus.manager.account.dto.DoTransDTO;
 import com.optimus.manager.member.MemberManager;
@@ -19,13 +23,10 @@ import com.optimus.util.constants.account.AccountTypeEnum;
 import com.optimus.util.constants.member.MemberCollectFeeWayEnum;
 import com.optimus.util.constants.member.MemberTypeEnum;
 import com.optimus.util.exception.OptimusException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 提现
@@ -109,7 +110,7 @@ public class WithdrawOrder extends BaseOrder {
         sysTrans.setRemark("提现手续费");
         doTransList.add(sysTrans);
 
-        // 如果上级是码商，则需要上级也需减一笔
+        // 如果上级是码商,则需要上级也需减一笔
         if (StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_C.getCode(), superMemberInfo.getMemberType())) {
             DoTransDTO superTrans = new DoTransDTO();
             superTrans.setMemberId(superMemberInfo.getMemberId());

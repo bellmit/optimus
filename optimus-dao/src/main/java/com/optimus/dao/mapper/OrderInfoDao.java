@@ -1,10 +1,12 @@
 package com.optimus.dao.mapper;
 
+import java.util.Date;
+import java.util.List;
+
 import com.optimus.dao.domain.OrderInfoDO;
 import com.optimus.dao.query.OrderInfoQuery;
-import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 订单信息Dao
@@ -62,12 +64,14 @@ public interface OrderInfoDao {
     int updateOrderInfo(OrderInfoDO orderInfoDO);
 
     /**
-     * 根据订单号更新订单状态
+     * 根据订单号和订单状态更新订单状态
      *
      * @param orderId
      * @param orderStatus
+     * @param originOrderStatus
+     * @param updateTime
      * @return
      */
-    int updateStatusByOrderId(@Param("orderId") String orderId, @Param("orderStatus") String orderStatus);
+    int updateStatusByOrderIdAndOrderStatus(@Param("orderId") String orderId, @Param("orderStatus") String orderStatus, @Param("originOrderStatus") String originOrderStatus, @Param("updateTime") Date updateTime);
 
 }

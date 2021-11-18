@@ -1,6 +1,5 @@
 package com.optimus.web.collect;
 
-import com.optimus.dao.domain.MemberInfoDO;
 import com.optimus.manager.member.dto.MemberTransConfineDTO;
 import com.optimus.service.gateway.GatewayService;
 import com.optimus.service.gateway.dto.GatewayChannelDTO;
@@ -16,6 +15,7 @@ import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.gateway.GatewayChannelStatusEnum;
 import com.optimus.util.constants.member.MemberMerchantOrderSwitchEnum;
 import com.optimus.util.constants.member.MemberTypeEnum;
+import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
 import com.optimus.util.exception.OptimusException;
 import com.optimus.web.collect.convert.CollectControllerConvert;
@@ -114,9 +114,14 @@ public class CollectController {
             throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为平台");
         }
 
-        // 校验订单里面的会员编号
+        // 验证订单里面的会员编号
         if (StringUtils.pathEquals(orderInfo.getMemberId(), req.getSubMemberId())) {
             throw new OptimusException(RespCodeEnum.ORDER_ERROR);
+        }
+
+        // 验证订单状态
+        if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_NP.getCode(), orderInfo.getOrderStatus())) {
+            throw new OptimusException(RespCodeEnum.ORDER_STATUTS_ERROR);
         }
 
         // 支付订单
@@ -159,7 +164,7 @@ public class CollectController {
 
         // 支付订单
         PayOrderDTO payOrder = CollectControllerConvert.getPayOrderDTO(orderInfo);
-        // 这里注意，由于后面的订单信息的会员ID是下级的，所以这里会员信息看作是上级会员
+        // 注意:由于后面的订单信息的会员ID是下级的,所以这里会员信息看作是上级会员
         payOrder.setSuperMemberInfo(memberInfo);
         orderService.payOrder(payOrder);
 
@@ -217,9 +222,14 @@ public class CollectController {
 
         AssertUtil.notEmpty(orderInfo, RespCodeEnum.ORDER_NO, null);
 
-        // 校验订单里面的会员编号
+        // 验证订单里面的会员编号
         if (StringUtils.pathEquals(orderInfo.getMemberId(), req.getSubMemberId())) {
             throw new OptimusException(RespCodeEnum.ORDER_ERROR);
+        }
+
+        // 验证订单状态
+        if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_NP.getCode(), orderInfo.getOrderStatus())) {
+            throw new OptimusException(RespCodeEnum.ORDER_STATUTS_ERROR);
         }
 
         // 支付订单
