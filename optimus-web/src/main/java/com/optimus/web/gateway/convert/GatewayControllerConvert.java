@@ -143,6 +143,12 @@ public class GatewayControllerConvert {
 
     }
 
+    /**
+     * 获取支付订单传输对象
+     * 
+     * @param output
+     * @return
+     */
     public static PayOrderDTO getPayOrderDTO(ExecuteScriptOutputDTO output) {
 
         PayOrderDTO payOrder = new PayOrderDTO();

@@ -155,6 +155,12 @@ public class CollectControllerConvert {
 
     }
 
+    /**
+     * 获取下单响应对象
+     * 
+     * @param orderInfo
+     * @return
+     */
     public static PlaceOrderResp getPlaceOrderResp(OrderInfoDTO orderInfo) {
 
         PlaceOrderResp resp = new PlaceOrderResp();

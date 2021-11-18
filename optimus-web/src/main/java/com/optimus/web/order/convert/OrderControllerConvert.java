@@ -29,6 +29,12 @@ public class OrderControllerConvert {
 
     }
 
+    /**
+     * 获取查询订单响应对象
+     * 
+     * @param orderInfo
+     * @return
+     */
     public static QueryOrderInfoResp getQueryOrderInfoResp(OrderInfoDTO orderInfo) {
 
         QueryOrderInfoResp resp = new QueryOrderInfoResp();
