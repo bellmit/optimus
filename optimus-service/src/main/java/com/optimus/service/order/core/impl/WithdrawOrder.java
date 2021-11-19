@@ -1,5 +1,12 @@
 package com.optimus.service.order.core.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import javax.annotation.Resource;
+
 import com.optimus.dao.mapper.OrderInfoDao;
 import com.optimus.manager.account.AccountManager;
 import com.optimus.manager.account.dto.DoTransDTO;
@@ -21,15 +28,10 @@ import com.optimus.util.constants.member.MemberCollectFeeWayEnum;
 import com.optimus.util.constants.order.OrderConfirmTypeEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.exception.OptimusException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-
-import javax.annotation.Resource;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * 提现
@@ -70,24 +72,25 @@ public class WithdrawOrder extends BaseOrder {
 
         // 验证会员交易限制
         MemberTransConfineDTO memberTransConfine = memberManager.getMemberTransConfineByMemberId(createOrder.getMemberId());
+        AssertUtil.notEmpty(memberTransConfine.getCollectFeeWay(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "手续费收取方式未配置");
 
         // 计算手续费
         BigDecimal fee = memberManager.getFee(createOrder.getOrderAmount(), memberTransConfine);
         orderInfo.setFee(fee);
 
-        // 手续费收取方式不能为空
-        AssertUtil.notEmpty(memberTransConfine.getCollectFeeWay(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "手续费收取方式未配置");
-        // 手续费收取方式，到账余额方式，实际金额与订单金额一致
+        // 手续费收取方式为到账余额:实际金额与订单金额一致
         if (StringUtils.pathEquals(MemberCollectFeeWayEnum.COLLECT_FEE_WAY_A.getCode(), memberTransConfine.getCollectFeeWay())) {
             orderInfo.setActualAmount(orderInfo.getOrderAmount());
         }
 
-        // 手续费收取方式，余额方式，实际金额=订单金额+手续费
+        // 手续费收取方式为余额:实际金额=订单金额+手续费
         if (StringUtils.pathEquals(MemberCollectFeeWayEnum.COLLECT_FEE_WAY_B.getCode(), memberTransConfine.getCollectFeeWay())) {
             orderInfo.setActualAmount(orderInfo.getOrderAmount().add(fee));
         }
 
+        // 记账
         List<DoTransDTO> doTransList = new ArrayList<>();
+
         // 减一笔余额
         DoTransDTO bMinus = OrderServiceConvert.getDoTransDTO(AccountChangeTypeEnum.B_MINUS, orderInfo, "余额户到冻结户");
         doTransList.add(bMinus);
@@ -98,7 +101,7 @@ public class WithdrawOrder extends BaseOrder {
 
         boolean doTrans = accountManager.doTrans(doTransList);
 
-        // 账户变更失败,冻结余额异常
+        // 账户交易失败,冻结余额异常
         if (!doTrans) {
             throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "冻结余额异常");
         }
@@ -128,7 +131,7 @@ public class WithdrawOrder extends BaseOrder {
 
             boolean doTrans = accountManager.doTrans(doTransList);
 
-            // 账户变更失败,回滚订单状态
+            // 账户交易失败
             if (!doTrans) {
                 throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "冻结余额异常");
             }
@@ -142,7 +145,7 @@ public class WithdrawOrder extends BaseOrder {
         DoTransDTO fMinus = OrderServiceConvert.getDoTransDTO(AccountChangeTypeEnum.F_MINUS, payOrder, "冻结户到余额户");
         doTransList.add(fMinus);
 
-        // 如果有手续费，则平台加一笔手续费
+        // 如果有手续费,则平台加一笔手续费
         if (Objects.nonNull(payOrder.getFee()) && payOrder.getFee().compareTo(BigDecimal.ZERO) > 0) {
             // 平台加一笔
             DoTransDTO sysTrans = new DoTransDTO();
@@ -155,10 +158,11 @@ public class WithdrawOrder extends BaseOrder {
 
         boolean doTrans = accountManager.doTrans(doTransList);
 
-        // 账户变更失败,回滚订单状态
+        // 账户交易失败,回滚订单状态
         if (!doTrans) {
             orderInfoDao.updateStatusByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), OrderStatusEnum.ORDER_STATUS_AP.getCode(), DateUtil.currentDate());
         }
+
     }
 
 }

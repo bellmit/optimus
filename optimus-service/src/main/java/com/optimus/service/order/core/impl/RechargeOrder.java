@@ -93,7 +93,7 @@ public class RechargeOrder extends BaseOrder {
 
         boolean doTrans = accountManager.doTrans(doTransList);
 
-        // 账户变更失败,回滚订单状态
+        // 账户交易失败,回滚订单状态
         if (!doTrans) {
             orderInfoDao.updateStatusByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), OrderStatusEnum.ORDER_STATUS_AP.getCode(), DateUtil.currentDate());
         }
