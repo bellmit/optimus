@@ -42,6 +42,8 @@ public enum RespCodeEnum {
 
     ACCOUNT_AMOUNT_ERROR("3001", "账户余额不足"),
 
+    ACCOUNT_TRANSACTION_ERROR("3002", "账户交易异常"),
+
     /* ---------订单类编码--------- */
 
     ORDER_NO("4000", "订单不存在"),

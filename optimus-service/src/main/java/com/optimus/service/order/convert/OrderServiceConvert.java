@@ -115,6 +115,28 @@ public class OrderServiceConvert {
     }
 
     /**
+     * 获取账户交易DTO
+     *
+     * @param accountChangeTypeEnum
+     * @param orderInfo
+     * @param remark
+     * @return DoTransDTO
+     */
+    public static DoTransDTO getDoTransDTO(AccountChangeTypeEnum accountChangeTypeEnum, OrderInfoDTO orderInfo, String remark) {
+
+        DoTransDTO doTrans = new DoTransDTO();
+
+        doTrans.setChangeType(accountChangeTypeEnum.getCode());
+        doTrans.setMemberId(orderInfo.getMemberId());
+        doTrans.setOrderId(orderInfo.getOrderId());
+        doTrans.setOrderType(orderInfo.getOrderType());
+        doTrans.setAmount(orderInfo.getActualAmount());
+
+        return doTrans;
+
+    }
+
+    /**
      * 获取执行脚本输入DTO
      * 
      * @param createOrder
