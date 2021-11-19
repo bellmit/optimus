@@ -71,15 +71,18 @@ public class WithdrawOrder extends BaseOrder {
         // 验证会员交易限制
         MemberTransConfineDTO memberTransConfine = memberManager.getMemberTransConfineByMemberId(createOrder.getMemberId());
 
+        // 计算手续费
         BigDecimal fee = memberManager.getFee(createOrder.getOrderAmount(), memberTransConfine);
         orderInfo.setFee(fee);
 
+        // 手续费收取方式不能为空
         AssertUtil.notEmpty(memberTransConfine.getCollectFeeWay(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "手续费收取方式未配置");
-
+        // 手续费收取方式，到账余额方式，实际金额与订单金额一致
         if (StringUtils.pathEquals(MemberCollectFeeWayEnum.COLLECT_FEE_WAY_A.getCode(), memberTransConfine.getCollectFeeWay())) {
             orderInfo.setActualAmount(orderInfo.getOrderAmount());
         }
 
+        // 手续费收取方式，余额方式，实际金额=订单金额+手续费
         if (StringUtils.pathEquals(MemberCollectFeeWayEnum.COLLECT_FEE_WAY_B.getCode(), memberTransConfine.getCollectFeeWay())) {
             orderInfo.setActualAmount(orderInfo.getOrderAmount().add(fee));
         }
@@ -123,10 +126,12 @@ public class WithdrawOrder extends BaseOrder {
             DoTransDTO fMinus = OrderServiceConvert.getDoTransDTO(AccountChangeTypeEnum.F_MINUS, payOrder, "冻结户到余额户");
             doTransList.add(fMinus);
 
-            accountManager.doTrans(doTransList);
+            boolean doTrans = accountManager.doTrans(doTransList);
 
-            // 更新订单状态
-            orderInfoDao.updateStatusByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_AC.getCode(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());
+            // 账户变更失败,回滚订单状态
+            if (!doTrans) {
+                throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "冻结余额异常");
+            }
             return;
         }
 
