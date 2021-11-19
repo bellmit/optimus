@@ -40,11 +40,6 @@
 				<version>${optimus.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.optimus.tps</groupId>
-				<artifactId>optimus-tps</artifactId>
-				<version>${optimus.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>com.optimus.dao</groupId>
 				<artifactId>optimus-dao</artifactId>
 				<version>${optimus.version}</version>
@@ -153,7 +148,6 @@
 
 	<modules>
 		<module>optimus-util</module>
-		<module>optimus-tps</module>
 		<module>optimus-dao</module>
 		<module>optimus-manager</module>
 		<module>optimus-service</module>

@@ -24,10 +24,6 @@
 			<groupId>com.optimus.dao</groupId>
 			<artifactId>optimus-dao</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>com.optimus.tps</groupId>
-			<artifactId>optimus-tps</artifactId>
-		</dependency>
 	</dependencies>
 
 </project>

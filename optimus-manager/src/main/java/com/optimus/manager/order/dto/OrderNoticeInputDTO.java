@@ -1,4 +1,4 @@
-package com.optimus.tps.order.req;
+package com.optimus.manager.order.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -8,12 +8,12 @@ import com.optimus.util.constants.order.OrderStatusEnum;
 import lombok.Data;
 
 /**
- * 订单通知Req
+ * 订单通知输入DTO
  * 
  * @author sunxp
  */
 @Data
-public class OrderNoticeReq implements Serializable {
+public class OrderNoticeInputDTO implements Serializable {
 
     private static final long serialVersionUID = 3304557384990623101L;
 
