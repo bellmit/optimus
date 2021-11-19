@@ -14,11 +14,13 @@ import com.optimus.service.order.dto.PayOrderDTO;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.order.OrderBehaviorEnum;
+import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
 import com.optimus.util.exception.OptimusException;
 import com.optimus.web.gateway.convert.GatewayControllerConvert;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -69,6 +71,11 @@ public class GatewayController {
         // 验证子渠道合法性
         OrderInfoDTO orderInfo = orderService.getOrderInfoByOrderId(output.getOrderId());
         AssertUtil.notEquals(orderInfo.getSubChannelCode(), subChannelCode, RespCodeEnum.ORDER_ERROR, "订单子渠道信息异常");
+
+        // 原订单状态只能为等待支付或订单挂起
+        if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_NP.getCode(), orderInfo.getOrderStatus()) && !StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_HU.getCode(), orderInfo.getOrderStatus())) {
+            throw new OptimusException(RespCodeEnum.ORDER_ERROR, "原订单状态不合法");
+        }
 
         // 支付
         PayOrderDTO payOrder = GatewayControllerConvert.getPayOrderDTO(output);
