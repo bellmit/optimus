@@ -1,10 +1,5 @@
 package com.optimus.service.order.core.impl;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
 import com.optimus.dao.mapper.OrderInfoDao;
 import com.optimus.manager.account.AccountManager;
 import com.optimus.manager.account.dto.DoTransDTO;
@@ -12,7 +7,6 @@ import com.optimus.manager.member.MemberManager;
 import com.optimus.manager.member.dto.MemberTransConfineDTO;
 import com.optimus.service.account.AccountService;
 import com.optimus.service.account.dto.AccountInfoDTO;
-import com.optimus.service.member.dto.MemberInfoDTO;
 import com.optimus.service.order.convert.OrderServiceConvert;
 import com.optimus.service.order.core.BaseOrder;
 import com.optimus.service.order.dto.CreateOrderDTO;
@@ -24,16 +18,18 @@ import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.account.AccountChangeTypeEnum;
 import com.optimus.util.constants.account.AccountTypeEnum;
 import com.optimus.util.constants.member.MemberCollectFeeWayEnum;
-import com.optimus.util.constants.member.MemberTypeEnum;
 import com.optimus.util.constants.order.OrderConfirmTypeEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.exception.OptimusException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * 提现
