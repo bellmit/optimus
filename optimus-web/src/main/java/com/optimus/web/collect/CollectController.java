@@ -317,15 +317,16 @@ public class CollectController {
         AssertUtil.notEquals(GatewayChannelStatusEnum.GATEWAY_CHANNEL_STATUS_Y.getCode(), gatewayChannel.getChannelStatus(), RespCodeEnum.GATEWAY_CHANNEL_ERROR, "渠道未启用");
 
         // 匹配子渠道
-        MatchChannelDTO gatewaySubChannel = gatewayService.matchChannel(gatewayChannel, memberInfo.getSupDirectMemberId());
+        MatchChannelDTO matchChannel = gatewayService.matchChannel(gatewayChannel, memberInfo.getSupDirectMemberId());
 
         // 下单
         CreateOrderDTO createOrder = CollectControllerConvert.getCreateOrderDTO(req);
         createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_C.getCode());
         createOrder.setSupMemberId(memberInfo.getSupDirectMemberId());
-        createOrder.setCodeMemberId(gatewaySubChannel.getCodeMemberId());
+        createOrder.setCodeMemberId(matchChannel.getCodeMemberId());
         createOrder.setMemberTransConfine(memberTransConfine);
-        createOrder.setGatewaySubChannel(gatewaySubChannel.getGatewaySubChannel());
+        createOrder.setGatewayChannel(gatewayChannel);
+        createOrder.setGatewaySubChannel(matchChannel.getGatewaySubChannel());
 
         OrderInfoDTO orderInfo = orderService.createOrder(createOrder);
 

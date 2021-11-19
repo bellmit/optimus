@@ -82,7 +82,7 @@ public class GatewayServiceImpl implements GatewayService {
 
         // 选取子渠道
 
-        AssertUtil.notEmpty(matchChannel, RespCodeEnum.GATEWAY_CHANNEL_ERROR, "未匹配到子通道");
+        AssertUtil.notEmpty(matchChannel, RespCodeEnum.GATEWAY_CHANNEL_ERROR, "未匹配到子渠道");
 
         return matchChannel;
 

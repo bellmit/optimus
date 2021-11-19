@@ -18,6 +18,11 @@ public class ExecuteScriptOutputDTO implements Serializable {
     private static final long serialVersionUID = -5836828589921241921L;
 
     /**
+     * 码商会员编号[自研渠道必须返回]
+     */
+    private String codeMemberId;
+
+    /**
      * 订单编号
      */
     private String orderId;

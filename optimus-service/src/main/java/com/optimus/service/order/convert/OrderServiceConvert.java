@@ -3,6 +3,7 @@ package com.optimus.service.order.convert;
 import com.optimus.dao.domain.OrderInfoDO;
 import com.optimus.dao.query.OrderInfoQuery;
 import com.optimus.manager.account.dto.DoTransDTO;
+import com.optimus.manager.gateway.dto.ExecuteScriptInputDTO;
 import com.optimus.service.order.dto.CreateOrderDTO;
 import com.optimus.service.order.dto.OrderInfoDTO;
 import com.optimus.service.order.dto.PayOrderDTO;
@@ -40,7 +41,7 @@ public class OrderServiceConvert {
     }
 
     /**
-     * OrderInfoDTO转DO
+     * 获取订单信息DTO
      *
      * @param orderInfo
      * @return
@@ -58,7 +59,7 @@ public class OrderServiceConvert {
     }
 
     /**
-     * createOrderDTODTO转OrderInfoDTO
+     * 获取订单信息DTO
      *
      * @param createOrder
      * @return
@@ -110,6 +111,28 @@ public class OrderServiceConvert {
         doTrans.setAmount(payOrder.getActualAmount());
 
         return doTrans;
+
+    }
+
+    /**
+     * 获取执行脚本输入DTO
+     * 
+     * @param createOrder
+     * @return
+     */
+    public static ExecuteScriptInputDTO getExecuteScriptInputDTO(CreateOrderDTO createOrder) {
+
+        ExecuteScriptInputDTO input = new ExecuteScriptInputDTO();
+        input.setOrderId(createOrder.getOrderId());
+        input.setAmount(createOrder.getOrderAmount());
+        input.setOrderTime(createOrder.getOrderTime());
+        input.setImplType(createOrder.getGatewaySubChannel().getImplType());
+        input.setImplPath(createOrder.getGatewaySubChannel().getImplPath());
+        input.setClientIp(createOrder.getClientIp());
+        input.setRedirectUrl(createOrder.getRedirectUrl());
+        input.setBizContent(createOrder.getGatewaySubChannel().getBizContent());
+
+        return input;
 
     }
 

@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 
 import com.optimus.manager.member.dto.MemberTransConfineDTO;
+import com.optimus.service.gateway.dto.GatewayChannelDTO;
 import com.optimus.service.gateway.dto.GatewaySubChannelDTO;
 import com.optimus.util.constants.order.OrderTypeEnum;
 
@@ -86,6 +87,11 @@ public class CreateOrderDTO implements Serializable {
      * 会员交易限制
      */
     private MemberTransConfineDTO memberTransConfine;
+
+    /**
+     * 网关渠道
+     */
+    private GatewayChannelDTO gatewayChannel;
 
     /**
      * 网关子渠道

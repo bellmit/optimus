@@ -9,7 +9,6 @@ import com.optimus.dao.mapper.OrderInfoDao;
 import com.optimus.manager.account.AccountManager;
 import com.optimus.manager.account.dto.DoTransDTO;
 import com.optimus.manager.gateway.GatewayManager;
-import com.optimus.manager.gateway.dto.ExecuteScriptInputDTO;
 import com.optimus.manager.gateway.dto.ExecuteScriptOutputDTO;
 import com.optimus.service.order.convert.OrderServiceConvert;
 import com.optimus.service.order.core.BaseOrder;
@@ -18,6 +17,9 @@ import com.optimus.service.order.dto.OrderInfoDTO;
 import com.optimus.service.order.dto.PayOrderDTO;
 import com.optimus.util.DateUtil;
 import com.optimus.util.constants.RespCodeEnum;
+import com.optimus.util.constants.account.AccountChangeTypeEnum;
+import com.optimus.util.constants.gateway.GatewayChannelGroupEnum;
+import com.optimus.util.constants.member.MemberFreezeBalanceSwitchEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.exception.OptimusException;
 
@@ -25,15 +27,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * 下单
  *
  * @author hongp
  */
 @Component
-@Slf4j
 public class PlaceOrder extends BaseOrder {
 
     @Autowired
@@ -54,31 +53,49 @@ public class PlaceOrder extends BaseOrder {
     @Override
     public OrderInfoDTO createOrder(CreateOrderDTO createOrder) {
 
-        log.info("createOrder is {}", createOrder);
+        // 执行脚本
+        ExecuteScriptOutputDTO output = gatewayManager.executeScript(OrderServiceConvert.getExecuteScriptInputDTO(createOrder));
 
         // 获取OrderInfoDTO
         OrderInfoDTO orderInfo = OrderServiceConvert.getOrderInfoDTO(createOrder);
+        orderInfo.setCalleeOrderId(output.getCalleeOrderId());
+        orderInfo.setOrderStatus(output.getOrderStatus());
+        orderInfo.setActualAmount(output.getActualAmount());
+        orderInfo.setChannelReturnMessage(output.getChannelReturnMessage());
 
-        // 执行脚本
-        ExecuteScriptInputDTO input = new ExecuteScriptInputDTO();
-
-        ExecuteScriptOutputDTO output = gatewayManager.executeScript(input);
-        if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_AP.getCode(), output.getOrderStatus())) {
-
-            // 下单成功将订单状态致为订单失败
+        // 下单成功状态为等待支付
+        if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_NP.getCode(), orderInfo.getOrderStatus())) {
             orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_AF.getCode());
             return orderInfo;
-
         }
 
-        // 下单成功将订单状态致为等待支付
-        orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_NP.getCode());
+        // 自研渠道获取渠道会员编号
+        if (StringUtils.pathEquals(GatewayChannelGroupEnum.GATEWAY_CHANNEL_GROUP_I.getCode(), createOrder.getGatewayChannel().getChannelGroup())) {
+            orderInfo.setCodeMemberId(output.getCodeMemberId());
+        }
+        if (!StringUtils.hasLength(orderInfo.getCodeMemberId())) {
+            orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_AF.getCode());
+            return orderInfo;
+        }
 
-        // 判断是否需要冻结码商余额
+        // 明确不冻结码商余额
+        if (StringUtils.pathEquals(MemberFreezeBalanceSwitchEnum.FREEZE_BALANCE_SWITCH_N.getCode(), createOrder.getMemberTransConfine().getFreezeBalanceSwitch())) {
+            return orderInfo;
+        }
+
+        // 注意:记账前修改createOrder相关属性值,后续不可再用orderInfo对象做持久化
+        createOrder.setMemberId(orderInfo.getCodeMemberId());
+        createOrder.setActualAmount(orderInfo.getActualAmount());
 
         // 记账
         List<DoTransDTO> doTransList = new ArrayList<>();
-        accountManager.doTrans(doTransList);
+        OrderServiceConvert.getDoTransDTO(AccountChangeTypeEnum.B_MINUS, createOrder, "下单扣减余额户");
+        OrderServiceConvert.getDoTransDTO(AccountChangeTypeEnum.F_PLUS, createOrder, "下单增加冻结户");
+
+        boolean doTrans = accountManager.doTrans(doTransList);
+        if (!doTrans) {
+            orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_AF.getCode());
+        }
 
         return orderInfo;
     }

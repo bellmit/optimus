@@ -18,11 +18,9 @@ public class ExecuteScriptResp implements Serializable {
     private static final long serialVersionUID = 5196941168862327683L;
 
     /**
-     * 订单状态
-     * 
-     * @see OrderStatusEnum
+     * 码商会员编号[自研渠道必须返回]
      */
-    private String orderStatus;
+    private String codeMemberId;
 
     /**
      * 订单编号
@@ -38,6 +36,13 @@ public class ExecuteScriptResp implements Serializable {
      * 订单金额
      */
     private BigDecimal amount;
+
+    /**
+     * 订单状态
+     * 
+     * @see OrderStatusEnum
+     */
+    private String orderStatus;
 
     /**
      * 实际金额
