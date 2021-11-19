@@ -108,10 +108,10 @@ public class PlaceOrder extends BaseOrder {
     @Override
     public void payOrder(PayOrderDTO payOrder) {
 
-        // 验证订单状态[只能为成功或失败]
+        // 验证订单状态[只能为成功]
         String orderStatus = payOrder.getOrderStatus();
-        if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_AP.getCode(), orderStatus) && !StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_AF.getCode(), orderStatus)) {
-            throw new OptimusException(RespCodeEnum.ORDER_ERROR, "订单状态只能为成功或失败");
+        if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_AP.getCode(), orderStatus)) {
+            throw new OptimusException(RespCodeEnum.ORDER_ERROR, "订单状态只能为成功");
         }
 
         // 查询关系链
