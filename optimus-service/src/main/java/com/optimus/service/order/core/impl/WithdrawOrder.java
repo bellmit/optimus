@@ -62,17 +62,18 @@ public class WithdrawOrder extends BaseOrder {
     @Override
     public OrderInfoDTO createOrder(CreateOrderDTO createOrder) {
 
+        // 验证会员交易限制
+        MemberTransConfineDTO memberTransConfine = memberManager.getMemberTransConfineByMemberId(createOrder.getMemberId());
+        AssertUtil.notEmpty(memberTransConfine.getCollectFeeWay(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "手续费收取方式未配置");
+
         // 验证账户余额是否充足
         AccountInfoDTO accountInfo = accountService.getAccountInfoByMemberIdAndAccountType(createOrder.getMemberId(), AccountTypeEnum.ACCOUNT_TYPE_B.getCode());
         if (accountInfo.getAmount().compareTo(createOrder.getOrderAmount()) < 0) {
             throw new OptimusException(RespCodeEnum.ACCOUNT_AMOUNT_ERROR);
         }
 
+        // 获取订单对象
         OrderInfoDTO orderInfo = OrderServiceConvert.getOrderInfoDTO(createOrder);
-
-        // 验证会员交易限制
-        MemberTransConfineDTO memberTransConfine = memberManager.getMemberTransConfineByMemberId(createOrder.getMemberId());
-        AssertUtil.notEmpty(memberTransConfine.getCollectFeeWay(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "手续费收取方式未配置");
 
         // 计算手续费
         BigDecimal fee = memberManager.getFee(createOrder.getOrderAmount(), memberTransConfine);

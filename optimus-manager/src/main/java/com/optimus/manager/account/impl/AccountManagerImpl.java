@@ -11,9 +11,11 @@ import com.optimus.manager.account.AccountManager;
 import com.optimus.manager.account.convert.AccountManagerConvert;
 import com.optimus.manager.account.dto.DoTransDTO;
 import com.optimus.manager.account.validate.AccountManagerValidate;
+import com.optimus.util.DateUtil;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -60,10 +62,16 @@ public class AccountManagerImpl implements AccountManager {
         }
 
         // 更新账户
-
-        // 根据订单类型判断是否需要回滚
+        int update = accountInfoDao.updateAccountInfoForTrans(accountInfoList, DateUtil.currentDate());
+        if (update != accountInfoList.size()) {
+            log.info("doTrans updateAccountInfoForTrans is {}, update is {}", accountInfoList.size(), update);
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return false;
+        }
 
         // 查询账户交易后的数据
+        List<Long> idList = accountInfoList.stream().map(AccountInfoDO::getId).collect(Collectors.toList());
+        accountInfoList = accountInfoDao.listAccountInfoByIdLists(idList);
 
         // 记录账户日志
 

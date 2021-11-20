@@ -34,6 +34,15 @@
     and ACCOUNT_TYPE = #{accountType,jdbcType=VARCHAR}
   </select>
 
+  <select id="listAccountInfoByIdLists" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_ACCOUNT_INFO
+    where ID in
+    <foreach collection="idList" item="item" open="(" close=")" separator=","> #{item,jdbcType=NUMERIC}
+    </foreach>
+  </select>
+
   <select id="listAccountInfoByMemberIdLists" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
@@ -125,6 +134,22 @@
       </if>
     </set>
     where ID = #{id,jdbcType=NUMERIC}
+  </update>
+
+  <update id="updateAccountInfoForTrans">
+    update T_ACCOUNT_INFO
+    <set>
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      <trim prefix="AMOUNT = case" suffix="end">
+        <foreach collection="accountInfoList" item="item">
+          when ID = #{item.id,jdbcType=NUMERIC} then AMOUNT + #{item.amount,jdbcType=NUMERIC}
+        </foreach>
+        else AMOUNT
+      </trim>
+    </set>
+    where ID in
+    <foreach collection="accountInfoList" item="item" open="(" close=")" separator=","> #{item.id,jdbcType=NUMERIC}
+    </foreach>
   </update>
 
 </mapper>

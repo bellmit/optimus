@@ -1,5 +1,6 @@
 package com.optimus.dao.mapper;
 
+import java.util.Date;
 import java.util.List;
 
 import com.optimus.dao.domain.AccountInfoDO;
@@ -31,12 +32,20 @@ public interface AccountInfoDao {
     AccountInfoDO getAccountInfoByMemberIdAndAccountType(@Param("memberId") String memberId, @Param("accountType") String accountType);
 
     /**
+     * 根据ID集合查询账户信息
+     * 
+     * @param idList
+     * @return
+     */
+    List<AccountInfoDO> listAccountInfoByIdLists(@Param("idList") List<Long> idList);
+
+    /**
      * 根据会员编号集合查询账户信息
      * 
      * @param memberIdList
      * @return
      */
-    List<AccountInfoDO> listAccountInfoByMemberIdLists(List<String> memberIdList);
+    List<AccountInfoDO> listAccountInfoByMemberIdLists(@Param("memberIdList") List<String> memberIdList);
 
     /**
      * 新增一条账户信息
@@ -53,5 +62,14 @@ public interface AccountInfoDao {
      * @return
      */
     int updateAccountInfo(AccountInfoDO accountInfoDO);
+
+    /**
+     * 更新账户信息[账户交易]
+     * 
+     * @param accountInfoList
+     * @param updateTime
+     * @return
+     */
+    int updateAccountInfoForTrans(@Param("accountInfoList") List<AccountInfoDO> accountInfoList, @Param("updateTime") Date updateTime);
 
 }
