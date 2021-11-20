@@ -1,6 +1,9 @@
 package com.optimus.dao.mapper;
 
+import java.util.List;
+
 import com.optimus.dao.domain.AccountInfoDO;
+
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -26,6 +29,14 @@ public interface AccountInfoDao {
      * @return OrderInfoDTO
      */
     AccountInfoDO getAccountInfoByMemberIdAndAccountType(@Param("memberId") String memberId, @Param("accountType") String accountType);
+
+    /**
+     * 根据会员编号集合查询账户信息
+     * 
+     * @param memberIdList
+     * @return
+     */
+    List<AccountInfoDO> listAccountInfoByMemberIdLists(List<String> memberIdList);
 
     /**
      * 新增一条账户信息

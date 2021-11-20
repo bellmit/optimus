@@ -34,6 +34,15 @@
     and ACCOUNT_TYPE = #{accountType,jdbcType=VARCHAR}
   </select>
 
+  <select id="listAccountInfoByMemberIdLists" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_ACCOUNT_INFO
+    where MEMBER_ID in
+    <foreach collection="memberIdList" item="item" open="(" close=")" separator=","> #{item,jdbcType=VARCHAR}
+    </foreach>
+  </select>
+
   <insert id="addAccountInfo" parameterType="com.optimus.dao.domain.AccountInfoDO">
     insert into T_ACCOUNT_INFO
     <trim prefix="(" suffix=")" suffixOverrides=",">

@@ -61,7 +61,7 @@
     where CALLER_ORDER_ID = #{callerOrderId,jdbcType=VARCHAR}
   </select>
 
-  <select id="listOrderInfoByOrderInfoQuerys" resultMap="BaseResultMap">
+  <select id="listOrderInfoByOrderInfoQuerys" parameterType="com.optimus.dao.query.OrderInfoQuery" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from T_ORDER_INFO
