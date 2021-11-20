@@ -103,6 +103,37 @@
     </trim>
   </insert>
 
+  <insert id="addBatchAccountLog">
+    insert into T_ACCOUNT_LOG
+    (
+      ACCOUNT_ID,
+      ORDER_ID,
+      FLOW,
+      AMOUNT,
+      BEFORE_CHANGE_AMOUNT,
+      AFTER_CHANGE_AMOUNT,
+      CHANGE_TYPE,
+      REMARK,
+      CREATE_TIME,
+      UPDATE_TIME
+    ) 
+    values
+    <foreach collection="accountLogList" item="item" separator=",">
+      (
+        #{item.accountId,jdbcType=VARCHAR},
+        #{item.orderId,jdbcType=VARCHAR},
+        #{item.flow,jdbcType=VARCHAR},
+        #{item.amount,jdbcType=NUMERIC},
+        #{item.beforeChangeAmount,jdbcType=NUMERIC},
+        #{item.afterChangeAmount,jdbcType=NUMERIC},
+        #{item.changeType,jdbcType=VARCHAR},
+        #{item.remark,jdbcType=VARCHAR},
+        #{item.createTime,jdbcType=TIMESTAMP},
+        #{item.updateTime,jdbcType=TIMESTAMP}
+      )
+    </foreach>
+  </insert>
+
   <update id="updateAccountLog" parameterType="com.optimus.dao.domain.AccountLogDO">
     update T_ACCOUNT_LOG
     <set>

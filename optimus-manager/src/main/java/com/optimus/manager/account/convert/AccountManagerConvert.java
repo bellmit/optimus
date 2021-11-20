@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.optimus.dao.domain.AccountInfoDO;
+import com.optimus.dao.domain.AccountLogDO;
 import com.optimus.manager.account.dto.DoTransDTO;
+import com.optimus.util.DateUtil;
 import com.optimus.util.constants.account.AccountFlowEnum;
 
 import org.springframework.util.StringUtils;
@@ -21,27 +23,13 @@ public class AccountManagerConvert {
     /**
      * 获取账户信息集合
      * 
-     * @param list
+     * @param accountInfoDOList
      * @param doTransList
      * @return
      */
-    public static List<AccountInfoDO> getAccountInfoDOList(List<AccountInfoDO> list, List<DoTransDTO> doTransList) {
+    public static List<AccountInfoDO> getAccountInfoDOList(List<AccountInfoDO> accountInfoDOList, List<DoTransDTO> doTransList) {
 
-        Map<String, AccountInfoDO> accountInfoMap = new HashMap<>(128);
-
-        for (AccountInfoDO item : list) {
-
-            String memberId = item.getMemberId();
-            String accountType = item.getAccountType();
-            String key = memberId + accountType;
-
-            if (accountInfoMap.containsKey(key)) {
-                continue;
-            }
-
-            accountInfoMap.put(key, item);
-
-        }
+        Map<String, AccountInfoDO> accountInfoMap = buildAccountInfoMap(accountInfoDOList);
 
         List<AccountInfoDO> accountInfoList = new ArrayList<>();
         AccountInfoDO accountInfo = null;
@@ -55,13 +43,16 @@ public class AccountManagerConvert {
             String key = memberId + accountType;
 
             if (!accountInfoMap.containsKey(key)) {
-                continue;
+                return null;
+            }
+
+            if (AccountFlowEnum.instanceOfSymbol(symbol) == null) {
+                return null;
             }
 
             accountInfo = accountInfoMap.get(key);
-            if (StringUtils.pathEquals(AccountFlowEnum.ACCOUNT_FLOW_I.getCode(), symbol)) {
-                accountInfo.setAmount(item.getAmount());
-            }
+
+            accountInfo.setAmount(item.getAmount());
             if (StringUtils.pathEquals(AccountFlowEnum.ACCOUNT_FLOW_S.getCode(), symbol)) {
                 accountInfo.setAmount(item.getAmount().negate());
             }
@@ -75,6 +66,92 @@ public class AccountManagerConvert {
         }
 
         return accountInfoList;
+
+    }
+
+    /**
+     * 获取账户日志集合
+     * 
+     * @param accountInfoList
+     * @param doTransList
+     * @return
+     */
+    public static List<AccountLogDO> getAccountLogDOList(List<AccountInfoDO> accountInfoList, List<DoTransDTO> doTransList) {
+
+        Map<String, AccountInfoDO> accountInfoMap = buildAccountInfoMap(accountInfoList);
+
+        List<AccountLogDO> accountLogList = new ArrayList<>();
+        AccountLogDO accountLog = null;
+
+        for (DoTransDTO item : doTransList) {
+
+            String memberId = item.getMemberId();
+            String changeType = item.getChangeType();
+            String accountType = changeType.substring(0, changeType.length() - 1);
+            String symbol = changeType.substring(changeType.length() - 1, changeType.length());
+            String key = memberId + accountType;
+
+            if (AccountFlowEnum.instanceOfSymbol(symbol) == null) {
+                return null;
+            }
+
+            AccountInfoDO accountInfo = accountInfoMap.get(key);
+
+            accountLog = new AccountLogDO();
+
+            accountLog.setAccountId(accountInfo.getAccountId());
+            accountLog.setOrderId(item.getOrderId());
+            accountLog.setAmount(item.getAmount());
+            accountLog.setBeforeChangeAmount(accountInfo.getAmount().subtract(item.getAmount()));
+            accountLog.setAfterChangeAmount(accountInfo.getAmount());
+            accountLog.setChangeType(changeType);
+            accountLog.setRemark(item.getRemark());
+            accountLog.setCreateTime(DateUtil.currentDate());
+            accountLog.setUpdateTime(DateUtil.currentDate());
+
+            AccountFlowEnum accountFlowEnum = AccountFlowEnum.instanceOfSymbol(symbol);
+            if (accountFlowEnum == null) {
+                return null;
+            }
+            accountLog.setFlow(accountFlowEnum.getCode());
+
+            accountLogList.add(accountLog);
+
+        }
+
+        if (accountLogList.size() != doTransList.size()) {
+            return null;
+        }
+
+        return accountLogList;
+
+    }
+
+    /**
+     * 构建账户信息Map
+     * 
+     * @param accountInfoList
+     * @return
+     */
+    private static Map<String, AccountInfoDO> buildAccountInfoMap(List<AccountInfoDO> accountInfoList) {
+
+        Map<String, AccountInfoDO> accountInfoMap = new HashMap<>(128);
+
+        for (AccountInfoDO item : accountInfoList) {
+
+            String memberId = item.getMemberId();
+            String accountType = item.getAccountType();
+            String key = memberId + accountType;
+
+            if (accountInfoMap.containsKey(key)) {
+                continue;
+            }
+
+            accountInfoMap.put(key, item);
+
+        }
+
+        return accountInfoMap;
 
     }
 

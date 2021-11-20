@@ -1,6 +1,10 @@
 package com.optimus.dao.mapper;
 
+import java.util.List;
+
 import com.optimus.dao.domain.AccountLogDO;
+
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 账户日志Dao
@@ -24,6 +28,14 @@ public interface AccountLogDao {
      * @return
      */
     int addAccountLog(AccountLogDO accountLogDO);
+
+    /**
+     * 批量新增账户日志
+     * 
+     * @param accountLogList
+     * @return
+     */
+    int addBatchAccountLog(@Param("accountLogList") List<AccountLogDO> accountLogList);
 
     /**
      * 更新账户日志记录

@@ -6,7 +6,9 @@ import java.util.stream.Collectors;
 import javax.annotation.Resource;
 
 import com.optimus.dao.domain.AccountInfoDO;
+import com.optimus.dao.domain.AccountLogDO;
 import com.optimus.dao.mapper.AccountInfoDao;
+import com.optimus.dao.mapper.AccountLogDao;
 import com.optimus.manager.account.AccountManager;
 import com.optimus.manager.account.convert.AccountManagerConvert;
 import com.optimus.manager.account.dto.DoTransDTO;
@@ -32,6 +34,9 @@ public class AccountManagerImpl implements AccountManager {
 
     @Resource
     private AccountInfoDao accountInfoDao;
+
+    @Resource
+    private AccountLogDao accountLogDao;
 
     @Transactional(rollbackFor = { Exception.class, Error.class })
     @Override
@@ -60,6 +65,7 @@ public class AccountManagerImpl implements AccountManager {
             log.info("doTrans getAccountInfoDOList is {}", accountInfoList);
             return false;
         }
+        log.info("doTrans getAccountInfoDOList is {}", accountInfoList);
 
         // 更新账户
         int update = accountInfoDao.updateAccountInfoForTrans(accountInfoList, DateUtil.currentDate());
@@ -72,10 +78,20 @@ public class AccountManagerImpl implements AccountManager {
         // 查询账户交易后的数据
         List<Long> idList = accountInfoList.stream().map(AccountInfoDO::getId).collect(Collectors.toList());
         accountInfoList = accountInfoDao.listAccountInfoByIdLists(idList);
+        log.info("doTrans listAccountInfoByIdLists is {}", accountInfoList);
 
         // 记录账户日志
+        List<AccountLogDO> accountLogList = AccountManagerConvert.getAccountLogDOList(accountInfoList, doTransList);
+        if (CollectionUtils.isEmpty(accountLogList)) {
+            log.info("doTrans getAccountLogDOList is {}", accountLogList);
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return false;
+        }
+        log.info("doTrans getAccountLogDOList is {}", accountLogList);
 
-        return false;
+        accountLogDao.addBatchAccountLog(accountLogList);
+
+        return true;
 
     }
 
