@@ -26,6 +26,11 @@ public class MemberAgentCodeRelDO implements Serializable {
     private String memberId;
 
     /**
+     * 祖先会员编号[同一链路上的祖先码商]
+     */
+    private String ancestorMemberId;
+
+    /**
      * 下级会员编号
      */
     private String subMemberId;
