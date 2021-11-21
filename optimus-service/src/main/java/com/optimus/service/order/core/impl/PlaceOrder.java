@@ -10,6 +10,8 @@ import com.optimus.manager.account.AccountManager;
 import com.optimus.manager.account.dto.DoTransDTO;
 import com.optimus.manager.gateway.GatewayManager;
 import com.optimus.manager.gateway.dto.ExecuteScriptOutputDTO;
+import com.optimus.manager.member.MemberManager;
+import com.optimus.manager.member.dto.MemberTransConfineDTO;
 import com.optimus.service.order.convert.OrderServiceConvert;
 import com.optimus.service.order.core.BaseOrder;
 import com.optimus.service.order.dto.CreateOrderDTO;
@@ -34,6 +36,9 @@ import org.springframework.util.StringUtils;
  */
 @Component
 public class PlaceOrder extends BaseOrder {
+
+    @Autowired
+    private MemberManager memberManager;
 
     @Autowired
     private AccountManager accountManager;
@@ -79,18 +84,19 @@ public class PlaceOrder extends BaseOrder {
         }
 
         // 明确不冻结码商余额
-        if (StringUtils.pathEquals(MemberFreezeBalanceSwitchEnum.FREEZE_BALANCE_SWITCH_N.getCode(), createOrder.getMemberTransConfine().getFreezeBalanceSwitch())) {
+        MemberTransConfineDTO memberTransConfine = memberManager.getMemberTransConfineByMemberId(orderInfo.getCodeMemberId());
+        if (StringUtils.pathEquals(MemberFreezeBalanceSwitchEnum.FREEZE_BALANCE_SWITCH_N.getCode(), memberTransConfine.getFreezeBalanceSwitch())) {
             return orderInfo;
         }
 
-        // 注意:记账前修改createOrder相关属性值,后续不可再用orderInfo对象做持久化
+        // 赋值:码商会员编号和实际金额
         createOrder.setMemberId(orderInfo.getCodeMemberId());
         createOrder.setActualAmount(orderInfo.getActualAmount());
 
         // 记账
         List<DoTransDTO> doTransList = new ArrayList<>();
-        OrderServiceConvert.getDoTransDTO(AccountChangeTypeEnum.B_MINUS, createOrder, "下单扣减余额户");
-        OrderServiceConvert.getDoTransDTO(AccountChangeTypeEnum.F_PLUS, createOrder, "下单增加冻结户");
+        doTransList.add(OrderServiceConvert.getDoTransDTO(AccountChangeTypeEnum.B_MINUS, createOrder, "下单扣减余额户"));
+        doTransList.add(OrderServiceConvert.getDoTransDTO(AccountChangeTypeEnum.F_PLUS, createOrder, "下单增加冻结户"));
 
         boolean doTrans = accountManager.doTrans(doTransList);
         if (!doTrans) {

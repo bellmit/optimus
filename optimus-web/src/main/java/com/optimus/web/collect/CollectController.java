@@ -324,7 +324,6 @@ public class CollectController {
         createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_C.getCode());
         createOrder.setSupMemberId(memberInfo.getSupDirectMemberId());
         createOrder.setCodeMemberId(matchChannel.getCodeMemberId());
-        createOrder.setMemberTransConfine(memberTransConfine);
         createOrder.setGatewayChannel(gatewayChannel);
         createOrder.setGatewaySubChannel(matchChannel.getGatewaySubChannel());
 
