@@ -21,7 +21,6 @@ import com.optimus.util.exception.OptimusException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import org.springframework.util.CollectionUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -136,9 +135,7 @@ public class AccountManagerImpl implements AccountManager {
         log.info("addBatchAccountLog accountLogList is {}", accountLogList);
 
         // 验证获得的账户日志
-        if (CollectionUtils.isEmpty(accountLogList)) {
-            throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易构造账户日志异常");
-        }
+        AssertUtil.empty(accountLogList, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易构造账户日志异常");
 
         // 记录账户日志
         accountLogDao.addBatchAccountLog(accountLogList);

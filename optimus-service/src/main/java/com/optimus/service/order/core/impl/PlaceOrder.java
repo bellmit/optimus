@@ -17,6 +17,7 @@ import com.optimus.service.order.core.BaseOrder;
 import com.optimus.service.order.dto.CreateOrderDTO;
 import com.optimus.service.order.dto.OrderInfoDTO;
 import com.optimus.service.order.dto.PayOrderDTO;
+import com.optimus.util.AssertUtil;
 import com.optimus.util.DateUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.account.AccountChangeTypeEnum;
@@ -116,9 +117,7 @@ public class PlaceOrder extends BaseOrder {
 
         // 验证订单状态[只能为成功]
         String orderStatus = payOrder.getOrderStatus();
-        if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_AP.getCode(), orderStatus)) {
-            throw new OptimusException(RespCodeEnum.ORDER_ERROR, "订单状态只能为成功");
-        }
+        AssertUtil.notEquals(OrderStatusEnum.ORDER_STATUS_AP.getCode(), orderStatus, RespCodeEnum.ORDER_ERROR, "订单状态只能为成功");
 
         // 查询关系链
 

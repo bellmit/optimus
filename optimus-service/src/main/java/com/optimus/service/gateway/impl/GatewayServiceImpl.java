@@ -6,6 +6,7 @@ import com.optimus.dao.domain.GatewayChannelDO;
 import com.optimus.dao.domain.GatewaySubChannelDO;
 import com.optimus.dao.mapper.GatewayChannelDao;
 import com.optimus.dao.mapper.GatewaySubChannelDao;
+import com.optimus.dao.mapper.MemberAgentCodeRelDao;
 import com.optimus.manager.gateway.GatewayManager;
 import com.optimus.manager.gateway.dto.ExecuteScriptInputDTO;
 import com.optimus.manager.gateway.dto.ExecuteScriptOutputDTO;
@@ -38,6 +39,9 @@ public class GatewayServiceImpl implements GatewayService {
 
     @Resource
     private GatewaySubChannelDao gatewaySubChannelDao;
+
+    @Resource
+    private MemberAgentCodeRelDao memberAgentCodeRelDao;
 
     @Override
     public GatewayChannelDTO getGatewayChannelByChannelCode(String channelCode) {
@@ -75,6 +79,8 @@ public class GatewayServiceImpl implements GatewayService {
         if (StringUtils.pathEquals(GatewayChannelGroupEnum.GATEWAY_CHANNEL_GROUP_I.getCode(), gatewayChannel.getChannelGroup())) {
             return matchChannel;
         }
+
+        // 查询代理的一级码商列表
 
         // 查询码商列表
 

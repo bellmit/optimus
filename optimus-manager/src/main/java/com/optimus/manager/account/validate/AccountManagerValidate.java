@@ -6,13 +6,11 @@ import java.util.List;
 import java.util.Set;
 
 import com.optimus.manager.account.dto.DoTransDTO;
+import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.account.AccountChangeTypeEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
 import com.optimus.util.exception.OptimusException;
-
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 /**
  * 账户Manager验证
@@ -28,9 +26,7 @@ public class AccountManagerValidate {
      */
     public static void validateDoTrans(List<DoTransDTO> doTransList) {
 
-        if (CollectionUtils.isEmpty(doTransList)) {
-            throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易入参不能为空");
-        }
+        AssertUtil.notEmpty(doTransList, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易入参不能为空");
 
         // 账户交易重复性
         Set<String> maSet = new HashSet<>();
@@ -47,32 +43,17 @@ public class AccountManagerValidate {
             String remark = item.getRemark();
 
             // 非空验证
-            if (!StringUtils.hasLength(memberId)) {
-                throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易会员编号不能为空");
-            }
-            if (!StringUtils.hasLength(orderId)) {
-                throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易订单编号不能为空");
-            }
-            if (!StringUtils.hasLength(orderType)) {
-                throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易订单类型不能为空");
-            }
-            if (!StringUtils.hasLength(changeType)) {
-                throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易变更类型不能为空");
-            }
-            if (amount == null) {
-                throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易金额不能为空");
-            }
-            if (!StringUtils.hasLength(remark)) {
-                throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易备注不能为空");
-            }
+            AssertUtil.empty(memberId, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易会员编号不能为空");
+            AssertUtil.empty(orderId, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易订单编号不能为空");
+            AssertUtil.empty(orderType, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易订单类型不能为空");
+            AssertUtil.empty(changeType, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易变更类型不能为空");
+            AssertUtil.empty(amount, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易金额不能为空");
+            AssertUtil.empty(remark, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易备注不能为空");
 
             // 合法性验证
-            if (OrderTypeEnum.instanceOf(orderType) == null) {
-                throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易非法的订单类型");
-            }
-            if (AccountChangeTypeEnum.instanceOf(changeType) == null) {
-                throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易非法的变更类型");
-            }
+            AssertUtil.empty(OrderTypeEnum.instanceOf(orderType), RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易非法的订单类型");
+            AssertUtil.empty(AccountChangeTypeEnum.instanceOf(changeType), RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易非法的变更类型");
+
             if (amount.compareTo(BigDecimal.ZERO) < 0) {
                 throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易金额不能小于0");
             }
