@@ -3,6 +3,7 @@ package com.optimus.web.collect.validate;
 import java.math.BigDecimal;
 
 import com.optimus.util.AssertUtil;
+import com.optimus.util.constants.BaseEnum;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.exception.OptimusException;
 import com.optimus.web.collect.req.PlaceOrderReq;
@@ -30,6 +31,10 @@ public class CollectValidate {
 
         if (req.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
             throw new OptimusException(RespCodeEnum.INVALID_PARAM, "订单金额不合法");
+        }
+
+        if (req.getAmount().scale() > Integer.parseInt(BaseEnum.SCALE_TWO.getCode())) {
+            throw new OptimusException(RespCodeEnum.INVALID_PARAM, "订单金额精度为小数点后两位");
         }
 
     }

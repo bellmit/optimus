@@ -6,7 +6,7 @@
     <id column="ID" jdbcType="NUMERIC" property="id" />
     <result column="MEMBER_ID" jdbcType="VARCHAR" property="memberId" />
     <result column="LOGIN_NAME" jdbcType="VARCHAR" property="loginName" />
-    <result column="LOGIN_PASSWARD" jdbcType="VARCHAR" property="loginPassward" />
+    <result column="LOGIN_PASSWORD" jdbcType="VARCHAR" property="loginPassword" />
     <result column="MEMBER_KEY" jdbcType="VARCHAR" property="memberKey" />
     <result column="MOBILE" jdbcType="VARCHAR" property="mobile" />
     <result column="EMAIL" jdbcType="VARCHAR" property="email" />
@@ -22,7 +22,7 @@
   </resultMap>
 
   <sql id="Base_Column_List">
-    ID, MEMBER_ID, LOGIN_NAME, LOGIN_PASSWARD, MEMBER_KEY, MOBILE, EMAIL, SHOW_NAME, 
+    ID, MEMBER_ID, LOGIN_NAME, LOGIN_PASSWORD, MEMBER_KEY, MOBILE, EMAIL, SHOW_NAME, 
     MEMBER_TYPE, MEMBER_STATUS, SUP_DIRECT_MEMBER_ID, DELETE_FLAG, CREATE_BY, 
     CREATE_TIME, UPDATE_BY, UPDATE_TIME
   </sql>
@@ -53,8 +53,8 @@
       <if test="loginName != null">
         LOGIN_NAME,
       </if>
-      <if test="loginPassward != null">
-        LOGIN_PASSWARD,
+      <if test="loginPassword != null">
+        LOGIN_PASSWORD,
       </if>
       <if test="memberKey != null">
         MEMBER_KEY,
@@ -100,7 +100,7 @@
       </if>
       <if test="loginName != null"> #{loginName,jdbcType=VARCHAR},
       </if>
-      <if test="loginPassward != null"> #{loginPassward,jdbcType=VARCHAR},
+      <if test="loginPassword != null"> #{loginPassword,jdbcType=VARCHAR},
       </if>
       <if test="memberKey != null"> #{memberKey,jdbcType=VARCHAR},
       </if>
@@ -138,8 +138,8 @@
       <if test="loginName != null">
         LOGIN_NAME = #{loginName,jdbcType=VARCHAR},
       </if>
-      <if test="loginPassward != null">
-        LOGIN_PASSWARD = #{loginPassward,jdbcType=VARCHAR},
+      <if test="loginPassword != null">
+        LOGIN_PASSWORD = #{loginPassword,jdbcType=VARCHAR},
       </if>
       <if test="memberKey != null">
         MEMBER_KEY = #{memberKey,jdbcType=VARCHAR},

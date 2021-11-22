@@ -16,6 +16,10 @@ public enum BaseEnum {
 
     UNKNOWN("unknown", "未知"),
 
+    SCALE_TWO("2", "精度2"),
+
+    SCALE_FOUR("4", "精度4"),
+
     ;
 
     private String code;

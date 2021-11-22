@@ -37,7 +37,7 @@ public class MemberInfoDO implements Serializable {
     /**
      * 登录密码
      */
-    private String loginPassward;
+    private String loginPassword;
 
     /**
      * 会员密钥

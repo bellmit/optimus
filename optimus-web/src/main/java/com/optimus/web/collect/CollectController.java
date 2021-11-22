@@ -319,6 +319,8 @@ public class CollectController {
         // 匹配子渠道
         MatchChannelDTO matchChannel = gatewayService.matchChannel(memberInfo, gatewayChannel);
 
+        // 验证码商余额是否充足
+
         // 下单
         CreateOrderDTO createOrder = CollectControllerConvert.getCreateOrderDTO(req);
         createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_C.getCode());
