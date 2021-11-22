@@ -6,14 +6,14 @@ import com.optimus.dao.domain.GatewayChannelDO;
 import com.optimus.dao.domain.GatewaySubChannelDO;
 import com.optimus.dao.mapper.GatewayChannelDao;
 import com.optimus.dao.mapper.GatewaySubChannelDao;
-import com.optimus.dao.mapper.MemberAgentCodeRelDao;
 import com.optimus.manager.gateway.GatewayManager;
 import com.optimus.manager.gateway.dto.ExecuteScriptInputDTO;
 import com.optimus.manager.gateway.dto.ExecuteScriptOutputDTO;
+import com.optimus.manager.gateway.dto.GatewayChannelDTO;
+import com.optimus.manager.gateway.dto.GatewaySubChannelDTO;
+import com.optimus.manager.gateway.dto.MatchChannelDTO;
+import com.optimus.manager.member.dto.MemberInfoDTO;
 import com.optimus.service.gateway.GatewayService;
-import com.optimus.service.gateway.dto.GatewayChannelDTO;
-import com.optimus.service.gateway.dto.GatewaySubChannelDTO;
-import com.optimus.service.gateway.dto.MatchChannelDTO;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.gateway.GatewayChannelGroupEnum;
@@ -39,9 +39,6 @@ public class GatewayServiceImpl implements GatewayService {
 
     @Resource
     private GatewaySubChannelDao gatewaySubChannelDao;
-
-    @Resource
-    private MemberAgentCodeRelDao memberAgentCodeRelDao;
 
     @Override
     public GatewayChannelDTO getGatewayChannelByChannelCode(String channelCode) {
@@ -72,25 +69,17 @@ public class GatewayServiceImpl implements GatewayService {
     }
 
     @Override
-    public MatchChannelDTO matchChannel(GatewayChannelDTO gatewayChannel, String memberId) {
-
-        MatchChannelDTO matchChannel = new MatchChannelDTO();
+    public MatchChannelDTO matchChannel(MemberInfoDTO memberInfo, GatewayChannelDTO gatewayChannel) {
 
         if (StringUtils.pathEquals(GatewayChannelGroupEnum.GATEWAY_CHANNEL_GROUP_I.getCode(), gatewayChannel.getChannelGroup())) {
-            return matchChannel;
+            return gatewayManager.insideMatch(memberInfo, gatewayChannel);
         }
 
-        // 查询代理的一级码商列表
+        if (StringUtils.pathEquals(GatewayChannelGroupEnum.GATEWAY_CHANNEL_GROUP_O.getCode(), gatewayChannel.getChannelGroup())) {
+            return gatewayManager.outsideMatch(memberInfo, gatewayChannel);
+        }
 
-        // 查询码商列表
-
-        // 查询子渠道列表
-
-        // 选取子渠道
-
-        AssertUtil.notEmpty(matchChannel, RespCodeEnum.GATEWAY_CHANNEL_ERROR, "未匹配到子渠道");
-
-        return matchChannel;
+        return null;
 
     }
 

@@ -124,7 +124,7 @@ public class AccountManagerImpl implements AccountManager {
     private void addBatchAccountLog(List<AccountInfoDO> accountInfoDOList, List<DoTransDTO> doTransList) {
 
         // 获得账户主键集合
-        List<Long> idList = accountInfoDOList.stream().map(AccountInfoDO::getId).collect(Collectors.toList());
+        List<Long> idList = accountInfoDOList.stream().map(AccountInfoDO::getId).distinct().collect(Collectors.toList());
 
         // 查询账户交易后的数据
         List<AccountInfoDO> accountInfoList = accountInfoDao.listAccountInfoByIdLists(idList);

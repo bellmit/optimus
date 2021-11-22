@@ -1,12 +1,13 @@
-package com.optimus.service.order.dto;
+package com.optimus.manager.order.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
 
+import com.optimus.manager.gateway.dto.GatewayChannelDTO;
+import com.optimus.manager.gateway.dto.GatewaySubChannelDTO;
+import com.optimus.manager.member.dto.MemberChannelDTO;
 import com.optimus.manager.member.dto.MemberTransConfineDTO;
-import com.optimus.service.gateway.dto.GatewayChannelDTO;
-import com.optimus.service.gateway.dto.GatewaySubChannelDTO;
 import com.optimus.util.constants.order.OrderTypeEnum;
 
 import lombok.Data;
@@ -82,6 +83,11 @@ public class CreateOrderDTO implements Serializable {
      * 商户重定向地址[商户下单时传入]
      */
     private String redirectUrl;
+
+    /**
+     * 会员渠道
+     */
+    private MemberChannelDTO memberChannel;
 
     /**
      * 会员交易限制

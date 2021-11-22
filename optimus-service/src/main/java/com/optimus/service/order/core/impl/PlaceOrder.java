@@ -12,11 +12,11 @@ import com.optimus.manager.gateway.GatewayManager;
 import com.optimus.manager.gateway.dto.ExecuteScriptOutputDTO;
 import com.optimus.manager.member.MemberManager;
 import com.optimus.manager.member.dto.MemberTransConfineDTO;
-import com.optimus.service.order.convert.OrderServiceConvert;
+import com.optimus.manager.order.convert.OrderManagerConvert;
+import com.optimus.manager.order.dto.CreateOrderDTO;
+import com.optimus.manager.order.dto.OrderInfoDTO;
+import com.optimus.manager.order.dto.PayOrderDTO;
 import com.optimus.service.order.core.BaseOrder;
-import com.optimus.service.order.dto.CreateOrderDTO;
-import com.optimus.service.order.dto.OrderInfoDTO;
-import com.optimus.service.order.dto.PayOrderDTO;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.DateUtil;
 import com.optimus.util.constants.RespCodeEnum;
@@ -60,10 +60,10 @@ public class PlaceOrder extends BaseOrder {
     public OrderInfoDTO createOrder(CreateOrderDTO createOrder) {
 
         // 执行脚本
-        ExecuteScriptOutputDTO output = gatewayManager.executeScript(OrderServiceConvert.getExecuteScriptInputDTO(createOrder));
+        ExecuteScriptOutputDTO output = gatewayManager.executeScript(OrderManagerConvert.getExecuteScriptInputDTO(createOrder));
 
         // 获取OrderInfoDTO
-        OrderInfoDTO orderInfo = OrderServiceConvert.getOrderInfoDTO(createOrder);
+        OrderInfoDTO orderInfo = OrderManagerConvert.getOrderInfoDTO(createOrder);
         orderInfo.setCalleeOrderId(output.getCalleeOrderId());
         orderInfo.setOrderStatus(output.getOrderStatus());
         orderInfo.setActualAmount(output.getActualAmount());
@@ -96,8 +96,8 @@ public class PlaceOrder extends BaseOrder {
 
         // 记账
         List<DoTransDTO> doTransList = new ArrayList<>();
-        doTransList.add(OrderServiceConvert.getDoTransDTO(AccountChangeTypeEnum.B_MINUS, createOrder, "下单扣减余额户"));
-        doTransList.add(OrderServiceConvert.getDoTransDTO(AccountChangeTypeEnum.F_PLUS, createOrder, "下单增加冻结户"));
+        doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_MINUS, createOrder, "下单扣减余额户"));
+        doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_PLUS, createOrder, "下单增加冻结户"));
 
         boolean doTrans = accountManager.doTrans(doTransList);
         if (!doTrans) {

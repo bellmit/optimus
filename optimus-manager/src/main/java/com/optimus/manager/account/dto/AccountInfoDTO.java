@@ -1,11 +1,11 @@
-package com.optimus.service.account.dto;
-
-import lombok.Data;
+package com.optimus.manager.account.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 import com.optimus.util.constants.account.AccountTypeEnum;
+
+import lombok.Data;
 
 /**
  * 账户信息DTO

@@ -10,13 +10,13 @@ import com.optimus.dao.domain.OrderInfoDO;
 import com.optimus.dao.mapper.OrderInfoDao;
 import com.optimus.dao.query.OrderInfoQuery;
 import com.optimus.manager.order.OrderManager;
+import com.optimus.manager.order.convert.OrderManagerConvert;
+import com.optimus.manager.order.dto.CreateOrderDTO;
+import com.optimus.manager.order.dto.OrderInfoDTO;
+import com.optimus.manager.order.dto.PayOrderDTO;
 import com.optimus.service.order.OrderService;
-import com.optimus.service.order.convert.OrderServiceConvert;
 import com.optimus.service.order.core.BaseOrder;
 import com.optimus.service.order.core.factory.OrderFactory;
-import com.optimus.service.order.dto.CreateOrderDTO;
-import com.optimus.service.order.dto.OrderInfoDTO;
-import com.optimus.service.order.dto.PayOrderDTO;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.BeanUtil;
 import com.optimus.util.GenerateUtil;
@@ -66,7 +66,7 @@ public class OrderServiceImpl implements OrderService {
             page = new Page();
         }
 
-        OrderInfoQuery query = OrderServiceConvert.getOrderInfoQuery(orderInfo, page);
+        OrderInfoQuery query = OrderManagerConvert.getOrderInfoQuery(orderInfo, page);
 
         List<OrderInfoDO> orderInfoDOList = orderInfoDao.listOrderInfoByOrderInfoQuerys(query);
         AssertUtil.notEmpty(orderInfoDOList, RespCodeEnum.ORDER_NO, null);
@@ -96,7 +96,7 @@ public class OrderServiceImpl implements OrderService {
         orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_NP.getCode());
 
         // 落库
-        orderInfoDao.addOrderInfo(OrderServiceConvert.getOrderInfoDO(orderInfo));
+        orderInfoDao.addOrderInfo(OrderManagerConvert.getOrderInfoDO(orderInfo));
 
         return orderInfo;
 

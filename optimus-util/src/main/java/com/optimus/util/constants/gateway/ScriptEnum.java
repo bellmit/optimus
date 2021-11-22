@@ -1,4 +1,4 @@
-package com.optimus.util.constants;
+package com.optimus.util.constants.gateway;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

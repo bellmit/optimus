@@ -22,6 +22,11 @@ public class ExecuteScriptInputDTO implements Serializable {
     private String scriptMethod;
 
     /**
+     * 会员编号[商户会员编号]
+     */
+    private String memberId;
+
+    /**
      * 订单编号
      */
     private String orderId;
@@ -35,6 +40,11 @@ public class ExecuteScriptInputDTO implements Serializable {
      * 订单金额
      */
     private BigDecimal amount;
+
+    /**
+     * 费率[自研通道需将商户费率下传]
+     */
+    private BigDecimal rate;
 
     /**
      * 订单时间

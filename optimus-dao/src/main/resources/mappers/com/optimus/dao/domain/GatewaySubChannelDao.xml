@@ -43,6 +43,24 @@
     where CHANNEL_CODE = #{channelCode,jdbcType=VARCHAR}
   </select>
 
+  <select id="listGatewaySubChannelByParentChannelCodeAndChannelStatuss" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_GATEWAY_SUB_CHANNEL
+    where PARENT_CHANNEL_CODE = #{parentChannelCode,jdbcType=VARCHAR}
+    and CHANNEL_STATUS = #{channelStatus,jdbcType=VARCHAR}
+  </select>
+
+  <select id="listGatewaySubChannelBySubChannelCodeListAndChannelStatuss" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_GATEWAY_SUB_CHANNEL
+    where CHANNEL_CODE in 
+    <foreach collection="channelCodeList" item="item" open="(" close=")" separator=","> #{item,jdbcType=VARCHAR}
+    </foreach>
+    and CHANNEL_STATUS = #{channelStatus,jdbcType=VARCHAR}
+  </select>
+
   <insert id="addGatewaySubChannel" parameterType="com.optimus.dao.domain.GatewaySubChannelDO">
     insert into T_GATEWAY_SUB_CHANNEL
     <trim prefix="(" suffix=")" suffixOverrides=",">

@@ -2,8 +2,9 @@ package com.optimus.service.account.impl;
 
 import com.optimus.dao.domain.AccountInfoDO;
 import com.optimus.dao.mapper.AccountInfoDao;
+import com.optimus.manager.account.dto.AccountInfoDTO;
 import com.optimus.service.account.AccountService;
-import com.optimus.service.account.dto.AccountInfoDTO;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 

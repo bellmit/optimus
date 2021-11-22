@@ -8,11 +8,11 @@ import javax.annotation.Resource;
 import com.optimus.dao.mapper.OrderInfoDao;
 import com.optimus.manager.account.AccountManager;
 import com.optimus.manager.account.dto.DoTransDTO;
-import com.optimus.service.order.convert.OrderServiceConvert;
+import com.optimus.manager.order.convert.OrderManagerConvert;
+import com.optimus.manager.order.dto.CreateOrderDTO;
+import com.optimus.manager.order.dto.OrderInfoDTO;
+import com.optimus.manager.order.dto.PayOrderDTO;
 import com.optimus.service.order.core.BaseOrder;
-import com.optimus.service.order.dto.CreateOrderDTO;
-import com.optimus.service.order.dto.OrderInfoDTO;
-import com.optimus.service.order.dto.PayOrderDTO;
 import com.optimus.util.DateUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.account.AccountChangeTypeEnum;
@@ -48,7 +48,7 @@ public class RechargeOrder extends BaseOrder {
     @Override
     public OrderInfoDTO createOrder(CreateOrderDTO createOrder) {
 
-        OrderInfoDTO orderInfo = OrderServiceConvert.getOrderInfoDTO(createOrder);
+        OrderInfoDTO orderInfo = OrderManagerConvert.getOrderInfoDTO(createOrder);
         orderInfo.setActualAmount(createOrder.getOrderAmount());
 
         return orderInfo;
@@ -80,14 +80,14 @@ public class RechargeOrder extends BaseOrder {
         List<DoTransDTO> doTransList = new ArrayList<>();
 
         // 加一笔余额
-        DoTransDTO bPlus = OrderServiceConvert.getDoTransDTO(AccountChangeTypeEnum.B_PLUS, payOrder, "充值");
+        DoTransDTO bPlus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_PLUS, payOrder, "充值");
         doTransList.add(bPlus);
 
         // 如果是码商给下级充值,则码商自己需要减一笔余额
         // 若superMemberInfo为空,则作为异常处理
         if (StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_C.getCode(), payOrder.getSuperMemberInfo().getMemberType())) {
             // 减一笔余额
-            DoTransDTO bMinus = OrderServiceConvert.getDoTransDTO(AccountChangeTypeEnum.B_MINUS, payOrder, "充值扣减");
+            DoTransDTO bMinus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_MINUS, payOrder, "充值扣减");
             doTransList.add(bMinus);
         }
 

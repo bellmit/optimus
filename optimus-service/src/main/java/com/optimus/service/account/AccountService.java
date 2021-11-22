@@ -1,6 +1,6 @@
 package com.optimus.service.account;
 
-import com.optimus.service.account.dto.AccountInfoDTO;
+import com.optimus.manager.account.dto.AccountInfoDTO;
 
 /**
  * 账户Service

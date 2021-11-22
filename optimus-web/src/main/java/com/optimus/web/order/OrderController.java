@@ -2,8 +2,8 @@ package com.optimus.web.order;
 
 import java.util.List;
 
+import com.optimus.manager.order.dto.OrderInfoDTO;
 import com.optimus.service.order.OrderService;
-import com.optimus.service.order.dto.OrderInfoDTO;
 import com.optimus.web.order.convert.OrderControllerConvert;
 import com.optimus.web.order.req.QueryOrderInfoReq;
 import com.optimus.web.order.resp.QueryOrderInfoResp;

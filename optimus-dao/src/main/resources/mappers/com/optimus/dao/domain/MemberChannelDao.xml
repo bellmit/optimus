@@ -15,15 +15,34 @@
   </resultMap>
 
   <sql id="Base_Column_List">
-    ID, MEMBER_ID, CHANNEL_CODE, SUB_CHANNEL_CODE, RATE, CREATE_BY, CREATE_TIME, UPDATE_BY, 
-    UPDATE_TIME
+    ID, MEMBER_ID, CHANNEL_CODE, SUB_CHANNEL_CODE, RATE, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME
   </sql>
 
-  <select id="getMemberChannelById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="getMemberChannelById" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from T_MEMBER_CHANNEL
     where ID = #{id,jdbcType=NUMERIC}
+  </select>
+
+  <select id="listMemberChannelByMemberIdListAndChannelCodes" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_MEMBER_CHANNEL
+    where MEMBER_ID in
+    <foreach collection="memberIdList" item="item" open="(" close=")" separator=","> #{item,jdbcType=VARCHAR}
+    </foreach>
+    and CHANNEL_CODE = #{channelCode,jdbcType=VARCHAR}
+  </select>
+
+  <select id="listMemberChannelByMemberIdListAndSubChannelCodes" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_MEMBER_CHANNEL
+    where MEMBER_ID in
+    <foreach collection="memberIdList" item="item" open="(" close=")" separator=","> #{item,jdbcType=VARCHAR}
+    </foreach>
+    and SUB_CHANNEL_CODE = #{subChannelCode,jdbcType=VARCHAR}
   </select>
 
   <insert id="addMemberChannel" parameterType="com.optimus.dao.domain.MemberChannelDO">

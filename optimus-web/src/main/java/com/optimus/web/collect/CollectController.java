@@ -1,15 +1,15 @@
 package com.optimus.web.collect;
 
+import com.optimus.manager.gateway.dto.GatewayChannelDTO;
+import com.optimus.manager.gateway.dto.MatchChannelDTO;
+import com.optimus.manager.member.dto.MemberInfoDTO;
 import com.optimus.manager.member.dto.MemberTransConfineDTO;
+import com.optimus.manager.order.dto.CreateOrderDTO;
+import com.optimus.manager.order.dto.OrderInfoDTO;
+import com.optimus.manager.order.dto.PayOrderDTO;
 import com.optimus.service.gateway.GatewayService;
-import com.optimus.service.gateway.dto.GatewayChannelDTO;
-import com.optimus.service.gateway.dto.MatchChannelDTO;
 import com.optimus.service.member.MemberService;
-import com.optimus.service.member.dto.MemberInfoDTO;
 import com.optimus.service.order.OrderService;
-import com.optimus.service.order.dto.CreateOrderDTO;
-import com.optimus.service.order.dto.OrderInfoDTO;
-import com.optimus.service.order.dto.PayOrderDTO;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.gateway.GatewayChannelStatusEnum;
@@ -317,7 +317,7 @@ public class CollectController {
         AssertUtil.notEquals(GatewayChannelStatusEnum.GATEWAY_CHANNEL_STATUS_Y.getCode(), gatewayChannel.getChannelStatus(), RespCodeEnum.GATEWAY_CHANNEL_ERROR, "渠道未启用");
 
         // 匹配子渠道
-        MatchChannelDTO matchChannel = gatewayService.matchChannel(gatewayChannel, memberInfo.getSupDirectMemberId());
+        MatchChannelDTO matchChannel = gatewayService.matchChannel(memberInfo, gatewayChannel);
 
         // 下单
         CreateOrderDTO createOrder = CollectControllerConvert.getCreateOrderDTO(req);

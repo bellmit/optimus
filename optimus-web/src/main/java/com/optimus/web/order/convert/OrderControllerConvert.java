@@ -1,6 +1,6 @@
 package com.optimus.web.order.convert;
 
-import com.optimus.service.order.dto.OrderInfoDTO;
+import com.optimus.manager.order.dto.OrderInfoDTO;
 import com.optimus.web.order.req.QueryOrderInfoReq;
 import com.optimus.web.order.resp.QueryOrderInfoResp;
 

@@ -1,8 +1,8 @@
 package com.optimus.web.collect.convert;
 
-import com.optimus.service.order.dto.CreateOrderDTO;
-import com.optimus.service.order.dto.OrderInfoDTO;
-import com.optimus.service.order.dto.PayOrderDTO;
+import com.optimus.manager.order.dto.CreateOrderDTO;
+import com.optimus.manager.order.dto.OrderInfoDTO;
+import com.optimus.manager.order.dto.PayOrderDTO;
 import com.optimus.util.DateUtil;
 import com.optimus.web.collect.req.ApplyForRechargeReq;
 import com.optimus.web.collect.req.ApplyForWithdrawReq;

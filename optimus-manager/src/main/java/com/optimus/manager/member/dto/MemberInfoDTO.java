@@ -1,4 +1,4 @@
-package com.optimus.service.member.dto;
+package com.optimus.manager.member.dto;
 
 import java.io.Serializable;
 

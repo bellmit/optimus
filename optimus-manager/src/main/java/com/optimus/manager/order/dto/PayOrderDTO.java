@@ -1,10 +1,10 @@
-package com.optimus.service.order.dto;
+package com.optimus.manager.order.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import com.optimus.service.member.dto.MemberInfoDTO;
+import com.optimus.manager.member.dto.MemberInfoDTO;
 import com.optimus.util.constants.order.OrderBehaviorEnum;
 import com.optimus.util.constants.order.OrderConfirmTypeEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;

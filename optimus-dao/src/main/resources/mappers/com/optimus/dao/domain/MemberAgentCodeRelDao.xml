@@ -26,6 +26,24 @@
     where ID = #{id,jdbcType=NUMERIC}
   </select>
 
+  <select id="listMemberAgentCodeRelByMemberIdAndMemberLevels" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_MEMBER_AGENT_CODE_REL
+    where MEMBER_ID = #{memberId,jdbcType=VARCHAR}
+    and MEMBER_LEVEL = #{memberLevel,jdbcType=NUMERIC}
+  </select>
+
+  <select id="listMemberAgentCodeRelByMemberIdAndAncestorMemberIdLists" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_MEMBER_AGENT_CODE_REL
+    where MEMBER_ID = #{memberId,jdbcType=VARCHAR}
+    and ANCESTOR_MEMBER_ID in
+    <foreach collection="ancestorMemberIdList" item="item" open="(" close=")" separator=","> #{item,jdbcType=VARCHAR}
+    </foreach>
+  </select>
+
   <insert id="addMemberAgentCodeRel" parameterType="com.optimus.dao.domain.MemberAgentCodeRelDO">
     insert into T_MEMBER_AGENT_CODE_REL
     <trim prefix="(" suffix=")" suffixOverrides=",">

@@ -1,7 +1,8 @@
-package com.optimus.service.gateway.dto;
+package com.optimus.manager.gateway.dto;
 
 import java.io.Serializable;
 
+import com.optimus.util.constants.gateway.GatewayChannelGroupEnum;
 import com.optimus.util.constants.gateway.GatewayChannelStatusEnum;
 
 import lombok.Data;
@@ -35,6 +36,8 @@ public class GatewayChannelDTO implements Serializable {
 
     /**
      * 网关渠道分组
+     * 
+     * @see GatewayChannelGroupEnum
      */
     private String channelGroup;
 

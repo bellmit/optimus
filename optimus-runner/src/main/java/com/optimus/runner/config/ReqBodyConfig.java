@@ -8,8 +8,8 @@ import java.util.Date;
 import java.util.Map;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.optimus.manager.member.dto.MemberInfoDTO;
 import com.optimus.service.member.MemberService;
-import com.optimus.service.member.dto.MemberInfoDTO;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.DateUtil;
 import com.optimus.util.JacksonUtil;

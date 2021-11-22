@@ -1,4 +1,4 @@
-package com.optimus.service.order.dto;
+package com.optimus.manager.order.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

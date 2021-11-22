@@ -1,4 +1,4 @@
-package com.optimus.service.gateway.dto;
+package com.optimus.manager.gateway.dto;
 
 import java.io.Serializable;
 

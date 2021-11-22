@@ -1,24 +1,26 @@
-package com.optimus.service.order.convert;
+package com.optimus.manager.order.convert;
 
 import com.optimus.dao.domain.OrderInfoDO;
 import com.optimus.dao.query.OrderInfoQuery;
 import com.optimus.manager.account.dto.DoTransDTO;
 import com.optimus.manager.gateway.dto.ExecuteScriptInputDTO;
-import com.optimus.service.order.dto.CreateOrderDTO;
-import com.optimus.service.order.dto.OrderInfoDTO;
-import com.optimus.service.order.dto.PayOrderDTO;
+import com.optimus.manager.order.dto.CreateOrderDTO;
+import com.optimus.manager.order.dto.OrderInfoDTO;
+import com.optimus.manager.order.dto.PayOrderDTO;
 import com.optimus.util.DateUtil;
 import com.optimus.util.constants.account.AccountChangeTypeEnum;
+import com.optimus.util.constants.order.OrderTypeEnum;
 import com.optimus.util.page.Page;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.util.StringUtils;
 
 /**
- * 订单Service转换器
+ * 订单Manager转换器
  *
  * @author sunxp
  */
-public class OrderServiceConvert {
+public class OrderManagerConvert {
 
     /**
      * 获取订单查询对象
@@ -145,14 +147,19 @@ public class OrderServiceConvert {
     public static ExecuteScriptInputDTO getExecuteScriptInputDTO(CreateOrderDTO createOrder) {
 
         ExecuteScriptInputDTO input = new ExecuteScriptInputDTO();
+        input.setMemberId(createOrder.getMemberId());
         input.setOrderId(createOrder.getOrderId());
         input.setAmount(createOrder.getOrderAmount());
         input.setOrderTime(createOrder.getOrderTime());
-        input.setImplType(createOrder.getGatewaySubChannel().getImplType());
-        input.setImplPath(createOrder.getGatewaySubChannel().getImplPath());
         input.setClientIp(createOrder.getClientIp());
         input.setRedirectUrl(createOrder.getRedirectUrl());
-        input.setBizContent(createOrder.getGatewaySubChannel().getBizContent());
+
+        if (StringUtils.pathEquals(OrderTypeEnum.ORDER_TYPE_C.getCode(), createOrder.getOrderType())) {
+            input.setRate(createOrder.getMemberChannel().getRate());
+            input.setImplType(createOrder.getGatewaySubChannel().getImplType());
+            input.setImplPath(createOrder.getGatewaySubChannel().getImplPath());
+            input.setBizContent(createOrder.getGatewaySubChannel().getBizContent());
+        }
 
         return input;
 

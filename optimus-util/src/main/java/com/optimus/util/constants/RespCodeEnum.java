@@ -36,6 +36,8 @@ public enum RespCodeEnum {
 
     MEMBER_TRANS_PERMISSION_ERROR("2003", "会员交易限制异常"),
 
+    MEMBER_CHANNEL_ERROR("2004", "会员渠道异常"),
+
     /* ---------账户类编码--------- */
 
     ACCOUNT_NO("3000", "账户不存在"),

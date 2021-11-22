@@ -1,7 +1,7 @@
 package com.optimus.service.member;
 
+import com.optimus.manager.member.dto.MemberInfoDTO;
 import com.optimus.manager.member.dto.MemberTransConfineDTO;
-import com.optimus.service.member.dto.MemberInfoDTO;
 
 /**
  * 会员Service
