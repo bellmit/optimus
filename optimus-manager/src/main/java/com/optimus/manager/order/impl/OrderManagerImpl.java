@@ -22,7 +22,7 @@ import org.springframework.web.client.RestTemplate;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 订单manager实现
+ * 订单managerImpl
  *
  * @author hongp
  */
@@ -61,7 +61,7 @@ public class OrderManagerImpl implements OrderManager {
 
             input.setSign(SignUtil.sign(map, key));
 
-            // Post请求
+            // Post
             ResponseEntity<String> resp = restTemplate.postForEntity(noticeUrl, input, String.class);
 
             return resp.getBody();

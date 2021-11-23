@@ -1,7 +1,6 @@
 package com.optimus.manager.gateway.dto;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 import lombok.Data;
 
@@ -19,11 +18,6 @@ public class MatchChannelDTO implements Serializable {
      * 码商会员编号
      */
     private String codeMemberId;
-
-    /**
-     * 费率[自研通道需将商户费率下传]
-     */
-    private BigDecimal rate;
 
     /**
      * 网关子渠道DTO

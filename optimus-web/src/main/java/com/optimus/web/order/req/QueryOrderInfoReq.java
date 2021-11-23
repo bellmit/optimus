@@ -5,7 +5,7 @@ import com.optimus.util.req.Req;
 import lombok.Data;
 
 /**
- * 查询订单信息请求对象
+ * 查询订单信息Req
  * 
  * @author sunxp
  */

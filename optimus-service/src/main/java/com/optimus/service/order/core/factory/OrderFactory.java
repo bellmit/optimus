@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import groovy.lang.Singleton;
 
 /**
- * 订单处理工厂
+ * 订单Factory
  *
  * @author hongp
  */

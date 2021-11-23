@@ -7,7 +7,7 @@ import com.optimus.util.constants.order.OrderStatusEnum;
 import lombok.Data;
 
 /**
- * 查询订单信息响应对象
+ * 查询订单信息Resp
  * 
  * @author sunxp
  */

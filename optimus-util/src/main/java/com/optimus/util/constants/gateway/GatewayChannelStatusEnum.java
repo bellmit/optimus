@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 网关渠道状态枚举
+ * 网关渠道状态Enum
  * 
  * @author sunxp
  */

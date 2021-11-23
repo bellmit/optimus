@@ -8,7 +8,7 @@ import com.optimus.util.constants.order.OrderStatusEnum;
 import lombok.Data;
 
 /**
- * PlaceOrderResp
+ * 下单Resp
  * 
  * @author sunxp
  */

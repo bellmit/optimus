@@ -2,126 +2,197 @@ package com.optimus.manager.gateway.convert;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import java.util.Map.Entry;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 import com.optimus.dao.domain.GatewaySubChannelDO;
 import com.optimus.dao.domain.MemberChannelDO;
+import com.optimus.dao.domain.MemberInfoDO;
+import com.optimus.dao.query.GatewaySubChannelQuery;
+import com.optimus.dao.query.MemberChannelQuery;
+import com.optimus.dao.query.MemberInfoQuery;
+import com.optimus.manager.gateway.dto.GatewayChannelDTO;
 import com.optimus.manager.gateway.dto.GatewaySubChannelDTO;
 import com.optimus.manager.gateway.dto.MatchChannelDTO;
 import com.optimus.manager.member.dto.MemberInfoDTO;
-import com.optimus.util.constants.gateway.GatewayChannelGroupEnum;
+import com.optimus.util.constants.gateway.GatewayChannelStatusEnum;
+import com.optimus.util.constants.gateway.GatewayFaceValueTypeEnum;
+import com.optimus.util.constants.member.MemberDeleteFlagEnum;
+import com.optimus.util.constants.member.MemberStatusEnum;
+import com.optimus.util.constants.member.MemberTypeEnum;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * 网关Manager转换器
+ * 网关ManagerConvert
  * 
  * @author sunxp
  */
 public class GatewayManagerConvert {
 
     /**
-     * 获取会员渠道DTO列表
+     * 获取会员信息Query
      * 
-     * @param memberInfo
      * @param memberChannelList
      * @return
      */
-    public static List<MemberChannelDO> getMemberChannelDTOList(MemberInfoDTO memberInfo, List<MemberChannelDO> memberChannelDOList) {
+    public static MemberInfoQuery getMemberInfoQuery(List<MemberChannelDO> memberChannelList) {
 
-        Map<String, MemberChannelDO> memberChannelMap = memberChannelDOList.stream().filter(e -> StringUtils.pathEquals(memberInfo.getMemberId(), e.getMemberId())).collect(Collectors.toMap(MemberChannelDO::getSubChannelCode, e -> e));
+        MemberInfoQuery query = new MemberInfoQuery();
+        query.setMemberIdList(memberChannelList.stream().map(MemberChannelDO::getMemberId).collect(Collectors.toList()));
+        query.setMemberStatus(MemberStatusEnum.MEMBER_STATUS_Y.getCode());
+        query.setDeleteFlag(MemberDeleteFlagEnum.DELETE_FLAG_ND.getCode());
 
-        List<MemberChannelDO> memberChannelList = new ArrayList<>();
-
-        for (MemberChannelDO item : memberChannelDOList) {
-
-            String memberId = item.getMemberId();
-            BigDecimal rate = item.getRate();
-
-            if (StringUtils.pathEquals(memberInfo.getMemberId(), memberId)) {
-                continue;
-            }
-
-            MemberChannelDO memberChannel = memberChannelMap.get(item.getSubChannelCode());
-            if (Objects.isNull(memberChannel) || Objects.isNull(memberChannel.getRate())) {
-                continue;
-            }
-
-            if (memberChannel.getRate().compareTo(rate) < 0) {
-                continue;
-            }
-
-            memberChannelList.add(item);
-
-        }
-
-        return memberChannelList;
+        return query;
 
     }
 
     /**
-     * 获取一个子渠道实例
+     * 获取会员渠道Query
      * 
+     * @param memberInfo
      * @param gatewaySubChannelList
      * @return
      */
-    public static GatewaySubChannelDO getGatewaySubChannelDO(List<GatewaySubChannelDO> gatewaySubChannelList) {
+    public static MemberChannelQuery getMemberChannelQuery(MemberInfoDTO memberInfo, List<GatewaySubChannelDO> gatewaySubChannelList) {
 
-        Collections.shuffle(gatewaySubChannelList);
+        MemberChannelQuery query = new MemberChannelQuery();
 
+        query.setAgentMemberId(memberInfo.getSupDirectMemberId());
+        query.setMemberType(MemberTypeEnum.MEMBER_TYPE_C.getCode());
+        query.setSubChannelCodeList(gatewaySubChannelList.stream().map(GatewaySubChannelDO::getChannelCode).distinct().collect(Collectors.toList()));
+
+        return query;
+    }
+
+    /**
+     * 获取网关子渠道Query
+     * 
+     * @param memberInfo
+     * @param gatewayChannel
+     * @return
+     */
+    public static GatewaySubChannelQuery getGatewaySubChannelQuery(MemberInfoDTO memberInfo, GatewayChannelDTO gatewayChannel) {
+
+        GatewaySubChannelQuery query = new GatewaySubChannelQuery();
+
+        query.setAgentMemberId(memberInfo.getSupDirectMemberId());
+        query.setParentChannelCode(gatewayChannel.getChannelCode());
+        query.setChannelStatus(GatewayChannelStatusEnum.GATEWAY_CHANNEL_STATUS_Y.getCode());
+
+        return query;
+
+    }
+
+    /**
+     * 获取可用的网关子渠道集合
+     * 
+     * @param list
+     * @param amount
+     * @return
+     */
+    public static List<GatewaySubChannelDO> getGatewaySubChannelList(List<GatewaySubChannelDO> list, BigDecimal amount) {
+
+        List<GatewaySubChannelDO> gatewaySubChannelList = new ArrayList<>();
+
+        // 面额筛选
+        for (GatewaySubChannelDO item : list) {
+
+            boolean flag = false;
+
+            String[] faceValues = item.getFaceValue().split(",");
+
+            if (StringUtils.pathEquals(GatewayFaceValueTypeEnum.GATEWAY_FACE_VALUE_TYPE_F.getCode(), item.getFaceValueType())) {
+                long count = Arrays.asList(faceValues).stream().filter(e -> new BigDecimal(e).compareTo(amount) == 0).count();
+                flag = (count > 0) ? true : false;
+            }
+
+            if (StringUtils.pathEquals(GatewayFaceValueTypeEnum.GATEWAY_FACE_VALUE_TYPE_S.getCode(), item.getFaceValueType())) {
+                BigDecimal l = new BigDecimal(faceValues[0]);
+                BigDecimal r = new BigDecimal(faceValues[1]);
+                flag = (l.compareTo(amount) <= 0 && amount.compareTo(r) <= 0) ? true : false;
+            }
+
+            if (flag) {
+                gatewaySubChannelList.add(item);
+            }
+
+        }
+
+        if (CollectionUtils.isEmpty(gatewaySubChannelList)) {
+            return gatewaySubChannelList;
+        }
+
+        // 随机加权
+        Map<Short, List<GatewaySubChannelDO>> map = gatewaySubChannelList.stream().collect(Collectors.groupingBy(GatewaySubChannelDO::getWeight));
+        Iterator<Entry<Short, List<GatewaySubChannelDO>>> iterator = map.entrySet().iterator();
+
+        int random = ThreadLocalRandom.current().nextInt(BigDecimal.TEN.intValue());
         double temp = BigDecimal.ZERO.doubleValue();
-        double random = ThreadLocalRandom.current().nextDouble(BigDecimal.TEN.intValue());
 
-        for (GatewaySubChannelDO item : gatewaySubChannelList) {
+        while (iterator.hasNext()) {
 
-            double real = item.getWeight().doubleValue();
+            Entry<Short, List<GatewaySubChannelDO>> entry = iterator.next();
+            double real = entry.getValue().get(0).getWeight().doubleValue();
 
             if (random > temp && random <= (temp + real)) {
-                return item;
+                gatewaySubChannelList = entry.getValue();
+                break;
             }
 
             temp += real;
 
         }
 
-        return null;
+        return gatewaySubChannelList;
+
+    }
+
+    public static MatchChannelDTO getMatchChannelDTO(List<GatewaySubChannelDO> gatewaySubChannelList) {
+
+        Collections.shuffle(gatewaySubChannelList);
+
+        GatewaySubChannelDTO gatewaySubChannel = new GatewaySubChannelDTO();
+        BeanUtils.copyProperties(gatewaySubChannelList.get(0), gatewaySubChannel);
+
+        MatchChannelDTO matchChannel = new MatchChannelDTO();
+        matchChannel.setGatewaySubChannel(gatewaySubChannel);
+
+        return matchChannel;
 
     }
 
     /**
      * 获取匹配渠道DTO
      * 
+     * @param memberInfoList
      * @param memberChannelList
-     * @param gatewaySubChannelDO
-     * @param channelGroup
+     * @param gatewaySubChannelList
      * @return
      */
-    public static MatchChannelDTO getMatchChannelDTO(List<MemberChannelDO> memberChannelList, GatewaySubChannelDO gatewaySubChannelDO, String channelGroup) {
+    public static MatchChannelDTO getMatchChannelDTO(List<MemberInfoDO> memberInfoList, List<MemberChannelDO> memberChannelList, List<GatewaySubChannelDO> gatewaySubChannelList) {
 
-        memberChannelList = memberChannelList.stream().filter(e -> StringUtils.pathEquals(gatewaySubChannelDO.getChannelCode(), e.getSubChannelCode())).collect(Collectors.toList());
+        Collections.shuffle(memberInfoList);
+        Collections.shuffle(memberChannelList);
 
-        int index = ThreadLocalRandom.current().nextInt(memberChannelList.size());
-        MemberChannelDO memberChannel = memberChannelList.get(index);
+        String codeMemberId = memberInfoList.get(0).getMemberId();
+        MemberChannelDO memberChannel = memberChannelList.stream().filter(e -> StringUtils.pathEquals(e.getMemberId(), codeMemberId)).findFirst().get();
+        GatewaySubChannelDO gatewaySubChannelDO = gatewaySubChannelList.stream().filter(e -> StringUtils.pathEquals(e.getChannelCode(), memberChannel.getSubChannelCode())).findFirst().get();
 
         GatewaySubChannelDTO gatewaySubChannel = new GatewaySubChannelDTO();
         BeanUtils.copyProperties(gatewaySubChannelDO, gatewaySubChannel);
 
         MatchChannelDTO matchChannel = new MatchChannelDTO();
+        matchChannel.setCodeMemberId(codeMemberId);
         matchChannel.setGatewaySubChannel(gatewaySubChannel);
-
-        if (StringUtils.pathEquals(GatewayChannelGroupEnum.GATEWAY_CHANNEL_GROUP_I.getCode(), channelGroup)) {
-            matchChannel.setRate(memberChannel.getRate());
-        }
-
-        if (StringUtils.pathEquals(GatewayChannelGroupEnum.GATEWAY_CHANNEL_GROUP_O.getCode(), channelGroup)) {
-            matchChannel.setCodeMemberId(memberChannel.getMemberId());
-        }
 
         return matchChannel;
 

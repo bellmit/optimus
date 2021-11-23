@@ -5,7 +5,7 @@ import com.optimus.util.constants.order.OrderConfirmTypeEnum;
 import lombok.Data;
 
 /**
- * 确认充值请求
+ * 确认充值Req
  *
  * @author hongp
  */

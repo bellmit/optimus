@@ -7,6 +7,8 @@
     <result column="MEMBER_ID" jdbcType="VARCHAR" property="memberId" />
     <result column="CHANNEL_CODE" jdbcType="VARCHAR" property="channelCode" />
     <result column="SUB_CHANNEL_CODE" jdbcType="VARCHAR" property="subChannelCode" />
+    <result column="AGENT_MEMBER_ID" jdbcType="VARCHAR" property="agentMemberId" />
+    <result column="MEMBER_TYPE" jdbcType="VARCHAR" property="memberType" />
     <result column="RATE" jdbcType="NUMERIC" property="rate" />
     <result column="CREATE_BY" jdbcType="VARCHAR" property="createBy" />
     <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
@@ -15,34 +17,27 @@
   </resultMap>
 
   <sql id="Base_Column_List">
-    ID, MEMBER_ID, CHANNEL_CODE, SUB_CHANNEL_CODE, RATE, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME
+    ID, MEMBER_ID, CHANNEL_CODE, SUB_CHANNEL_CODE, AGENT_MEMBER_ID, MEMBER_TYPE, 
+    RATE, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME
   </sql>
 
-  <select id="getMemberChannelById" resultMap="BaseResultMap">
+  <select id="getMemberChannelById" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from T_MEMBER_CHANNEL
     where ID = #{id,jdbcType=NUMERIC}
   </select>
 
-  <select id="listMemberChannelByMemberIdListAndChannelCodes" resultMap="BaseResultMap">
-    select 
+  <select id="listMemberChannelTopByMemberChannelQuerys" resultMap="BaseResultMap">
+    select top 100
     <include refid="Base_Column_List" />
     from T_MEMBER_CHANNEL
-    where MEMBER_ID in
-    <foreach collection="memberIdList" item="item" open="(" close=")" separator=","> #{item,jdbcType=VARCHAR}
+    where AGENT_MEMBER_ID = #{memberChannelQuery.agentMemberId,jdbcType=VARCHAR}
+    and MEMBER_TYPE = #{memberChannelQuery.memberType,jdbcType=VARCHAR}
+    and SUB_CHANNEL_CODE in
+    <foreach collection="memberChannelQuery.subChannelCodeList" item="item" open="(" close=")" separator=","> #{item,jdbcType=VARCHAR}
     </foreach>
-    and CHANNEL_CODE = #{channelCode,jdbcType=VARCHAR}
-  </select>
-
-  <select id="listMemberChannelByMemberIdListAndSubChannelCodes" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from T_MEMBER_CHANNEL
-    where MEMBER_ID in
-    <foreach collection="memberIdList" item="item" open="(" close=")" separator=","> #{item,jdbcType=VARCHAR}
-    </foreach>
-    and SUB_CHANNEL_CODE = #{subChannelCode,jdbcType=VARCHAR}
+    and 1 >= CAST(CHECKSUM(NEWID(), id) &amp; 0x7fffffff AS float) / CAST (0x7fffffff AS int)
   </select>
 
   <insert id="addMemberChannel" parameterType="com.optimus.dao.domain.MemberChannelDO">
@@ -59,6 +54,12 @@
       </if>
       <if test="subChannelCode != null">
         SUB_CHANNEL_CODE,
+      </if>
+      <if test="agentMemberId != null">
+        AGENT_MEMBER_ID,
+      </if>
+      <if test="memberType != null">
+        MEMBER_TYPE,
       </if>
       <if test="rate != null">
         RATE,
@@ -85,6 +86,10 @@
       </if>
       <if test="subChannelCode != null"> #{subChannelCode,jdbcType=VARCHAR},
       </if>
+      <if test="agentMemberId != null"> #{agentMemberId,jdbcType=VARCHAR},
+      </if>
+      <if test="memberType != null"> #{memberType,jdbcType=VARCHAR},
+      </if>
       <if test="rate != null"> #{rate,jdbcType=NUMERIC},
       </if>
       <if test="createBy != null"> #{createBy,jdbcType=VARCHAR},
@@ -109,6 +114,12 @@
       </if>
       <if test="subChannelCode != null">
         SUB_CHANNEL_CODE = #{subChannelCode,jdbcType=VARCHAR},
+      </if>
+      <if test="agentMemberId != null">
+        AGENT_MEMBER_ID = #{agentMemberId,jdbcType=VARCHAR},
+      </if>
+      <if test="memberType != null">
+        MEMBER_TYPE = #{memberType,jdbcType=VARCHAR},
       </if>
       <if test="rate != null">
         RATE = #{rate,jdbcType=NUMERIC},

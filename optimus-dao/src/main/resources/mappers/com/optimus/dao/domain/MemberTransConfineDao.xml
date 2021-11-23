@@ -5,8 +5,9 @@
   <resultMap id="BaseResultMap" type="com.optimus.dao.domain.MemberTransConfineDO">
     <id column="ID" jdbcType="NUMERIC" property="id" />
     <result column="MEMBER_ID" jdbcType="VARCHAR" property="memberId" />
-    <result column="MERCHANT_ORDER_SWITCH" jdbcType="VARCHAR" property="merchantOrderSwitch" />
     <result column="WITHDRAW_FEE_SWITCH" jdbcType="VARCHAR" property="withdrawFeeSwitch" />
+    <result column="MERCHANT_ORDER_SWITCH" jdbcType="VARCHAR" property="merchantOrderSwitch" />
+    <result column="CODE_BALANCE_SWITCH" jdbcType="VARCHAR" property="codeBalanceSwitch" />
     <result column="FREEZE_BALANCE_SWITCH" jdbcType="VARCHAR" property="freezeBalanceSwitch" />
     <result column="RELEASE_FREEZE_BALANCE_AGING" jdbcType="NUMERIC" property="releaseFreezeBalanceAging" />
     <result column="SINGLE_MIN_AMOUNT" jdbcType="NUMERIC" property="singleMinAmount" />
@@ -22,10 +23,9 @@
   </resultMap>
 
   <sql id="Base_Column_List">
-    ID, MEMBER_ID, MERCHANT_ORDER_SWITCH, WITHDRAW_FEE_SWITCH, FREEZE_BALANCE_SWITCH, 
-    RELEASE_FREEZE_BALANCE_AGING, SINGLE_MIN_AMOUNT, SINGLE_MAX_AMOUNT, COLLECT_FEE_TYPE, 
-    SINGLE_COLLECT_FEE, RATIO_COLLECT_FEE, COLLECT_FEE_WAY, CREATE_BY, CREATE_TIME, UPDATE_BY, 
-    UPDATE_TIME
+    ID, MEMBER_ID, WITHDRAW_FEE_SWITCH, MERCHANT_ORDER_SWITCH, CODE_BALANCE_SWITCH, FREEZE_BALANCE_SWITCH, 
+    RELEASE_FREEZE_BALANCE_AGING, SINGLE_MIN_AMOUNT, SINGLE_MAX_AMOUNT, COLLECT_FEE_TYPE, SINGLE_COLLECT_FEE, 
+    RATIO_COLLECT_FEE, COLLECT_FEE_WAY, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME
   </sql>
 
   <select id="getMemberTransConfineById" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -51,11 +51,14 @@
       <if test="memberId != null">
         MEMBER_ID,
       </if>
+      <if test="withdrawFeeSwitch != null">
+        WITHDRAW_FEE_SWITCH,
+      </if>
       <if test="merchantOrderSwitch != null">
         MERCHANT_ORDER_SWITCH,
       </if>
-      <if test="withdrawFeeSwitch != null">
-        WITHDRAW_FEE_SWITCH,
+      <if test="codeBalanceSwitch != null">
+        CODE_BALANCE_SWITCH,
       </if>
       <if test="freezeBalanceSwitch != null">
         FREEZE_BALANCE_SWITCH,
@@ -99,9 +102,11 @@
       </if>
       <if test="memberId != null"> #{memberId,jdbcType=VARCHAR},
       </if>
+      <if test="withdrawFeeSwitch != null"> #{withdrawFeeSwitch,jdbcType=VARCHAR},
+      </if>
       <if test="merchantOrderSwitch != null"> #{merchantOrderSwitch,jdbcType=VARCHAR},
       </if>
-      <if test="withdrawFeeSwitch != null"> #{withdrawFeeSwitch,jdbcType=VARCHAR},
+      <if test="codeBalanceSwitch != null"> #{codeBalanceSwitch,jdbcType=VARCHAR},
       </if>
       <if test="freezeBalanceSwitch != null"> #{freezeBalanceSwitch,jdbcType=VARCHAR},
       </if>
@@ -136,11 +141,14 @@
       <if test="memberId != null">
         MEMBER_ID = #{memberId,jdbcType=VARCHAR},
       </if>
+      <if test="withdrawFeeSwitch != null">
+        WITHDRAW_FEE_SWITCH = #{withdrawFeeSwitch,jdbcType=VARCHAR},
+      </if>
       <if test="merchantOrderSwitch != null">
         MERCHANT_ORDER_SWITCH = #{merchantOrderSwitch,jdbcType=VARCHAR},
       </if>
-      <if test="withdrawFeeSwitch != null">
-        WITHDRAW_FEE_SWITCH = #{withdrawFeeSwitch,jdbcType=VARCHAR},
+      <if test="codeBalanceSwitch != null">
+        CODE_BALANCE_SWITCH = #{codeBalanceSwitch,jdbcType=VARCHAR},
       </if>
       <if test="freezeBalanceSwitch != null">
         FREEZE_BALANCE_SWITCH = #{freezeBalanceSwitch,jdbcType=VARCHAR},

@@ -6,7 +6,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 /**
- * 收单基础请求
+ * 收单基础Req
  *
  * @author hongp
  */

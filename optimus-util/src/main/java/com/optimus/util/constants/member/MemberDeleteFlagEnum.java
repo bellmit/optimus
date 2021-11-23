@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 会员删除标识枚举
+ * 会员删除标识Enum
  * 
  * @author sunxp
  */

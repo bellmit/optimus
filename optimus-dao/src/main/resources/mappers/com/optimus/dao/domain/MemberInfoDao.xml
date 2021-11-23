@@ -41,6 +41,17 @@
     where MEMBER_ID = #{memberId,jdbcType=VARCHAR}
   </select>
 
+  <select id="listMemberInfoByMemberInfoQuerys" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_MEMBER_INFO
+    where MEMBER_ID in
+    <foreach collection="memberInfoQuery.memberIdList" item="item" open="(" close=")" separator=","> #{item,jdbcType=VARCHAR}
+    </foreach>
+    and MEMBER_STATUS = #{memberInfoQuery.memberStatus,jdbcType=VARCHAR}
+    and DELETE_FLAG = #{memberInfoQuery.deleteFlag,jdbcType=VARCHAR}
+  </select>
+
   <insert id="addMemberInfo" parameterType="com.optimus.dao.domain.MemberInfoDO">
     insert into T_MEMBER_INFO
     <trim prefix="(" suffix=")" suffixOverrides=",">

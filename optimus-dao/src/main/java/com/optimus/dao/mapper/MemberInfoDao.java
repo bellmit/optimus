@@ -1,6 +1,11 @@
 package com.optimus.dao.mapper;
 
+import java.util.List;
+
 import com.optimus.dao.domain.MemberInfoDO;
+import com.optimus.dao.query.MemberInfoQuery;
+
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 会员信息Dao
@@ -24,6 +29,14 @@ public interface MemberInfoDao {
      * @return
      */
     MemberInfoDO getMemberInfoByMemberId(String memberId);
+
+    /**
+     * 根据会员Query查询会员信息集合
+     * 
+     * @param query
+     * @return
+     */
+    List<MemberInfoDO> listMemberInfoByMemberInfoQuerys(@Param("memberInfoQuery") MemberInfoQuery query);
 
     /**
      * 新增一条会员信息

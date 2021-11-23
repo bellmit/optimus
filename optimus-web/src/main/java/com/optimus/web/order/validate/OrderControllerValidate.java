@@ -5,14 +5,14 @@ import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.web.order.req.QueryOrderInfoReq;
 
 /**
- * 订单Controller验证器
+ * 订单ControllerValidate
  * 
  * @author sunxp
  */
-public class OrderValidate {
+public class OrderControllerValidate {
 
     /**
-     * 验证查询订单信息入参对象
+     * 验证查询订单信息入参
      * 
      * @param req
      */

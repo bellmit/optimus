@@ -7,7 +7,7 @@ import com.optimus.util.page.Page;
 import lombok.Data;
 
 /**
- * 订单信息条件Query
+ * 订单信息Query
  * 
  * @author sunxp
  */

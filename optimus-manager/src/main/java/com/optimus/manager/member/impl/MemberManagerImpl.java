@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 /**
- * 用户manager实现
+ * 用户managerImpl
  *
  * @author hongp
  */

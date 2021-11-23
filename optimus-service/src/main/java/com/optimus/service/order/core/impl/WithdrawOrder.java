@@ -17,7 +17,6 @@ import com.optimus.manager.order.convert.OrderManagerConvert;
 import com.optimus.manager.order.dto.CreateOrderDTO;
 import com.optimus.manager.order.dto.OrderInfoDTO;
 import com.optimus.manager.order.dto.PayOrderDTO;
-import com.optimus.service.account.AccountService;
 import com.optimus.service.order.core.BaseOrder;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.DateUtil;
@@ -42,9 +41,6 @@ import org.springframework.util.StringUtils;
 public class WithdrawOrder extends BaseOrder {
 
     @Autowired
-    private AccountService accountService;
-
-    @Autowired
     private MemberManager memberManager;
 
     @Autowired
@@ -67,12 +63,12 @@ public class WithdrawOrder extends BaseOrder {
         AssertUtil.notEmpty(memberTransConfine.getCollectFeeWay(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "手续费收取方式未配置");
 
         // 验证账户余额是否充足
-        AccountInfoDTO accountInfo = accountService.getAccountInfoByMemberIdAndAccountType(createOrder.getMemberId(), AccountTypeEnum.ACCOUNT_TYPE_B.getCode());
+        AccountInfoDTO accountInfo = accountManager.getAccountInfoByMemberIdAndAccountType(createOrder.getMemberId(), AccountTypeEnum.ACCOUNT_TYPE_B.getCode());
         if (accountInfo.getAmount().compareTo(createOrder.getOrderAmount()) < 0) {
             throw new OptimusException(RespCodeEnum.ACCOUNT_AMOUNT_ERROR);
         }
 
-        // 获取订单对象
+        // 获取订单信息DTO
         OrderInfoDTO orderInfo = OrderManagerConvert.getOrderInfoDTO(createOrder);
 
         // 计算手续费

@@ -1,5 +1,7 @@
 package com.optimus.service.gateway.impl;
 
+import java.math.BigDecimal;
+
 import javax.annotation.Resource;
 
 import com.optimus.dao.domain.GatewayChannelDO;
@@ -17,6 +19,7 @@ import com.optimus.service.gateway.GatewayService;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.gateway.GatewayChannelGroupEnum;
+import com.optimus.util.exception.OptimusException;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 /**
- * 网关Service实现
+ * 网关ServiceImpl
  * 
  * @author sunxp
  */
@@ -69,17 +72,17 @@ public class GatewayServiceImpl implements GatewayService {
     }
 
     @Override
-    public MatchChannelDTO matchChannel(MemberInfoDTO memberInfo, GatewayChannelDTO gatewayChannel) {
+    public MatchChannelDTO matchChannel(MemberInfoDTO memberInfo, GatewayChannelDTO gatewayChannel, BigDecimal amount) {
 
         if (StringUtils.pathEquals(GatewayChannelGroupEnum.GATEWAY_CHANNEL_GROUP_I.getCode(), gatewayChannel.getChannelGroup())) {
-            return gatewayManager.insideMatch(memberInfo, gatewayChannel);
+            return gatewayManager.insideMatch(memberInfo, gatewayChannel, amount);
         }
 
         if (StringUtils.pathEquals(GatewayChannelGroupEnum.GATEWAY_CHANNEL_GROUP_O.getCode(), gatewayChannel.getChannelGroup())) {
-            return gatewayManager.outsideMatch(memberInfo, gatewayChannel);
+            return gatewayManager.outsideMatch(memberInfo, gatewayChannel, amount);
         }
 
-        return null;
+        throw new OptimusException(RespCodeEnum.GATEWAY_CHANNEL_ERROR, "网关渠道分组不合法");
 
     }
 

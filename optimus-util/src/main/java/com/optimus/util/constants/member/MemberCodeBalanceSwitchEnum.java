@@ -4,19 +4,19 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 会员商户下单开关Enum
+ * 码商余额限制开关Enum
  * 
  * @author sunxp
  */
 @Getter
 @AllArgsConstructor
-public enum MemberMerchantOrderSwitchEnum {
+public enum MemberCodeBalanceSwitchEnum {
 
-    /* ---------会员商户下单开关--------- */
+    /* ---------码商余额限制开关--------- */
 
-    MERCHANT_ORDER_SWITCH_Y("Y", "开启"),
+    CODE_BALANCE_SWITCH_Y("Y", "开启"),
 
-    MERCHANT_ORDER_SWITCH_N("N", "关闭"),
+    CODE_BALANCE_SWITCH_N("N", "关闭"),
 
     ;
 

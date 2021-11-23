@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 会员收取手续费类型枚举
+ * 会员收取手续费类型Enum
  * 
  * @author sunxp
  */

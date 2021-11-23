@@ -14,12 +14,13 @@ import com.optimus.manager.order.dto.PayOrderDTO;
 import com.optimus.util.JacksonUtil;
 import com.optimus.util.constants.BaseEnum;
 import com.optimus.util.constants.RespCodeEnum;
+import com.optimus.util.constants.gateway.ScriptEnum;
 import com.optimus.util.exception.OptimusException;
 
 import org.springframework.util.StringUtils;
 
 /**
- * 网关Controller转换器
+ * 网关ControllerConvert
  * 
  * @author sunxp
  */
@@ -135,6 +136,7 @@ public class GatewayControllerConvert {
 
         ExecuteScriptInputDTO input = new ExecuteScriptInputDTO();
 
+        input.setScriptMethod(ScriptEnum.PARSE.getCode());
         input.setBizContent(gatewaySubChannel.getBizContent());
         input.setImplPath(gatewaySubChannel.getImplPath());
         input.setImplType(gatewaySubChannel.getImplType());
@@ -144,7 +146,7 @@ public class GatewayControllerConvert {
     }
 
     /**
-     * 获取支付订单传输对象
+     * 获取支付订单DTO
      * 
      * @param output
      * @return

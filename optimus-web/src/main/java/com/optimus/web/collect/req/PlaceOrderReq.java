@@ -3,7 +3,7 @@ package com.optimus.web.collect.req;
 import lombok.Data;
 
 /**
- * 下单
+ * 下单Req
  * 
  * @author sunxp
  */

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.optimus.util.constants.member.MemberCodeBalanceSwitchEnum;
 import com.optimus.util.constants.member.MemberCollectFeeTypeEnum;
 import com.optimus.util.constants.member.MemberCollectFeeWayEnum;
 import com.optimus.util.constants.member.MemberFreezeBalanceSwitchEnum;
@@ -45,6 +46,13 @@ public class MemberTransConfineDO implements Serializable {
      * @see MemberWithdrawFeeSwitchEnum
      */
     private String withdrawFeeSwitch;
+
+    /**
+     * 码商余额限制开关
+     * 
+     * @see MemberCodeBalanceSwitchEnum
+     */
+    private String codeBalanceSwitch;
 
     /**
      * 码商冻结余额开关

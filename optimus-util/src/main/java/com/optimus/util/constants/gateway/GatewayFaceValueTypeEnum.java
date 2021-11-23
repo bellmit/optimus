@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 网关渠道支持的面额类型枚举
+ * 网关渠道支持的面额类型Enum
  * 
  * @author sunxp
  */

@@ -13,7 +13,7 @@ import com.optimus.util.constants.order.OrderTypeEnum;
 import com.optimus.util.exception.OptimusException;
 
 /**
- * 账户Manager验证
+ * 账户ManagerValidate
  * 
  * @author sunxp
  */

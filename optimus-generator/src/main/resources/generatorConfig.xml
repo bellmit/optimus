@@ -71,11 +71,6 @@
             <columnOverride column="ID" javaType="java.lang.Long" />
         </table> -->
 
-        <!-- <table tableName="T_MEMBER_AGENT_CODE_REL" domainObjectName="MemberAgentCodeRelDO" mapperName="MemberAgentCodeRelDao" enableInsert="true" enableSelectByPrimaryKey="true" enableSelectByExample="false" enableUpdateByPrimaryKey="true" enableDeleteByPrimaryKey="false" enableDeleteByExample="false" enableCountByExample="false" enableUpdateByExample="false">
-            <property name="useActualColumnNames" value="false" />
-            <columnOverride column="ID" javaType="java.lang.Long" />
-        </table> -->
-
         <!-- <table tableName="T_MEMBER_CHANNEL" domainObjectName="MemberChannelDO" mapperName="MemberChannelDao" enableInsert="true" enableSelectByPrimaryKey="true" enableSelectByExample="false" enableUpdateByPrimaryKey="true" enableDeleteByPrimaryKey="false" enableDeleteByExample="false" enableCountByExample="false" enableUpdateByExample="false">
             <property name="useActualColumnNames" value="false" />
             <columnOverride column="ID" javaType="java.lang.Long" />

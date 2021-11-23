@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 订单划账类型枚举
+ * 订单划账类型Enum
  * 
  * @author sunxp
  */

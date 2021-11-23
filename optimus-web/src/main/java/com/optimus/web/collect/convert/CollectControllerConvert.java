@@ -13,14 +13,14 @@ import com.optimus.web.collect.req.WithdrawReq;
 import com.optimus.web.collect.resp.PlaceOrderResp;
 
 /**
- * 收单Controller转换器
+ * 收单ControllerConvert
  * 
  * @author sunxp
  */
 public class CollectControllerConvert {
 
     /**
-     * 获取网关渠道传输对象
+     * 获取网关渠道DTO
      * 
      * @param req
      * @return
@@ -40,7 +40,7 @@ public class CollectControllerConvert {
     }
 
     /**
-     * 获取创建订单传输对象
+     * 获取创建订单DTO
      * 
      * @param req
      *            ApplyForRechargeReq
@@ -59,7 +59,7 @@ public class CollectControllerConvert {
     }
 
     /**
-     * 获取创建订单传输对象
+     * 获取创建订单DTO
      * 
      * @param req
      *            ApplyForWithdrawReq
@@ -77,7 +77,7 @@ public class CollectControllerConvert {
     }
 
     /**
-     * 获取创建订单传输对象
+     * 获取创建订单DTO
      * 
      * @param req
      *            WithdrawReq
@@ -96,7 +96,7 @@ public class CollectControllerConvert {
     }
 
     /**
-     * 获取创建订单传输对象
+     * 获取创建订单DTO
      *
      * @param req
      *            RechargeReq
@@ -115,7 +115,7 @@ public class CollectControllerConvert {
     }
 
     /**
-     * 获取创建订单传输对象
+     * 获取创建订单DTO
      * 
      * @param req
      *            TransferReq
@@ -133,7 +133,7 @@ public class CollectControllerConvert {
     }
 
     /**
-     * 获取支付订单传输对象
+     * 获取支付订单DTO
      * 
      * @param orderInfo
      *            OrderInfoDTO
@@ -156,7 +156,7 @@ public class CollectControllerConvert {
     }
 
     /**
-     * 获取下单响应对象
+     * 获取下单Resp
      * 
      * @param orderInfo
      * @return

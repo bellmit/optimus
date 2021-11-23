@@ -1,6 +1,7 @@
 package com.optimus.manager.account.impl;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
@@ -11,6 +12,7 @@ import com.optimus.dao.mapper.AccountInfoDao;
 import com.optimus.dao.mapper.AccountLogDao;
 import com.optimus.manager.account.AccountManager;
 import com.optimus.manager.account.convert.AccountManagerConvert;
+import com.optimus.manager.account.dto.AccountInfoDTO;
 import com.optimus.manager.account.dto.DoTransDTO;
 import com.optimus.manager.account.validate.AccountManagerValidate;
 import com.optimus.util.AssertUtil;
@@ -18,6 +20,7 @@ import com.optimus.util.DateUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.exception.OptimusException;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -25,7 +28,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 账户信息Manager实现
+ * 账户信息ManagerImpl
  * 
  * @author sunxp
  */
@@ -39,6 +42,21 @@ public class AccountManagerImpl implements AccountManager {
     @Resource
     private AccountLogDao accountLogDao;
 
+    @Override
+    public AccountInfoDTO getAccountInfoByMemberIdAndAccountType(String memberId, String accountType) {
+
+        AccountInfoDO accountInfoDO = accountInfoDao.getAccountInfoByMemberIdAndAccountType(memberId, accountType);
+
+        if (Objects.isNull(accountInfoDO)) {
+            return null;
+        }
+
+        AccountInfoDTO accountInfo = new AccountInfoDTO();
+        BeanUtils.copyProperties(accountInfoDO, accountInfo);
+
+        return accountInfo;
+    }
+
     @Transactional(rollbackFor = { Exception.class, Error.class })
     @Override
     public boolean doTrans(List<DoTransDTO> doTransList) {
@@ -47,7 +65,7 @@ public class AccountManagerImpl implements AccountManager {
 
             log.info("doTrans doTransList is {}", doTransList);
 
-            // 账户交易参数验证
+            // 验证账户交易参数
             AccountManagerValidate.validateDoTrans(doTransList);
 
             // 构造账户信息

@@ -3,7 +3,7 @@ package com.optimus.web.collect.req;
 import lombok.Data;
 
 /**
- * 提现请求
+ * 提现Req
  *
  * @author hongp
  */

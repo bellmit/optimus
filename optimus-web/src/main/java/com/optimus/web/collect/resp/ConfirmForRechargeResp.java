@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * 确认充值结果信息
+ * 确认充值Resp
  *
  * @author hongp
  */

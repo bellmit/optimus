@@ -1,10 +1,16 @@
 package com.optimus.manager.member.dto;
 
-import com.optimus.util.constants.member.*;
-import lombok.Data;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
+
+import com.optimus.util.constants.member.MemberCodeBalanceSwitchEnum;
+import com.optimus.util.constants.member.MemberCollectFeeTypeEnum;
+import com.optimus.util.constants.member.MemberCollectFeeWayEnum;
+import com.optimus.util.constants.member.MemberFreezeBalanceSwitchEnum;
+import com.optimus.util.constants.member.MemberMerchantOrderSwitchEnum;
+import com.optimus.util.constants.member.MemberWithdrawFeeSwitchEnum;
+
+import lombok.Data;
 
 /**
  * 会员交易限制DTO
@@ -34,6 +40,13 @@ public class MemberTransConfineDTO implements Serializable {
      * @see MemberWithdrawFeeSwitchEnum
      */
     private String withdrawFeeSwitch;
+
+    /**
+     * 码商余额限制开关
+     * 
+     * @see MemberCodeBalanceSwitchEnum
+     */
+    private String codeBalanceSwitch;
 
     /**
      * 码商冻结余额开关

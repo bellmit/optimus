@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 订单分润状态枚举
+ * 订单分润状态Enum
  * 
  * @author sunxp
  */

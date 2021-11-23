@@ -31,7 +31,7 @@ public class SignUtil {
      * 
      * 签名过程:
      * 
-     * 对所有API请求参数[不含sign],依据参数名称的ASCII码表的顺序排序
+     * 对所有API参数[不含sign],依据参数名称的ASCII码表的顺序排序
      * 
      * 将已排序好的参数名和参数值拼装在一起[前后加key]
      * 

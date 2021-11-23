@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * RespCodeEnum
+ * 响应码Enum
  * 
  * @author sunxp
  */

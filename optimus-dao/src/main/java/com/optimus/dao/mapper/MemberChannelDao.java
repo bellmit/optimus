@@ -3,6 +3,7 @@ package com.optimus.dao.mapper;
 import java.util.List;
 
 import com.optimus.dao.domain.MemberChannelDO;
+import com.optimus.dao.query.MemberChannelQuery;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -22,22 +23,12 @@ public interface MemberChannelDao {
     MemberChannelDO getMemberChannelById(Long id);
 
     /**
-     * 根据会员编号列表和渠道编号查询会员渠道
+     * 根据会员渠道Query随机查询会员渠道头N条
      * 
-     * @param memberIdList
-     * @param channelCode
+     * @param query
      * @return
      */
-    List<MemberChannelDO> listMemberChannelByMemberIdListAndChannelCodes(@Param("memberIdList") List<String> memberIdList, @Param("channelCode") String channelCode);
-
-    /**
-     * 根据会员编号列表和渠道编号查询会员渠道
-     * 
-     * @param memberIdList
-     * @param subChannelCode
-     * @return
-     */
-    List<MemberChannelDO> listMemberChannelByMemberIdListAndSubChannelCodes(@Param("memberIdList") List<String> memberIdList, @Param("subChannelCode") String subChannelCode);
+    List<MemberChannelDO> listMemberChannelTopByMemberChannelQuerys(@Param("memberChannelQuery") MemberChannelQuery query);
 
     /**
      * 新增一条会员渠道

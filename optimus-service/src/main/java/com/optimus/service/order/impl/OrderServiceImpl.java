@@ -29,7 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * 订单Service实现
+ * 订单ServiceImpl
  *
  * @author sunxp
  */

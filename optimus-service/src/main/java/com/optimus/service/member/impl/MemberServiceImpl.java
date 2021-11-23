@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * 会员Service实现
+ * 会员ServiceImpl
  *
  * @author sunxp
  */

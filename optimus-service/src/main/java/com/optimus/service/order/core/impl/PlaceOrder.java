@@ -1,5 +1,6 @@
 package com.optimus.service.order.core.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import javax.annotation.Resource;
 
 import com.optimus.dao.mapper.OrderInfoDao;
 import com.optimus.manager.account.AccountManager;
+import com.optimus.manager.account.dto.AccountInfoDTO;
 import com.optimus.manager.account.dto.DoTransDTO;
 import com.optimus.manager.gateway.GatewayManager;
 import com.optimus.manager.gateway.dto.ExecuteScriptOutputDTO;
@@ -21,7 +23,9 @@ import com.optimus.util.AssertUtil;
 import com.optimus.util.DateUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.account.AccountChangeTypeEnum;
+import com.optimus.util.constants.account.AccountTypeEnum;
 import com.optimus.util.constants.gateway.GatewayChannelGroupEnum;
+import com.optimus.util.constants.member.MemberCodeBalanceSwitchEnum;
 import com.optimus.util.constants.member.MemberFreezeBalanceSwitchEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.exception.OptimusException;
@@ -59,33 +63,21 @@ public class PlaceOrder extends BaseOrder {
     @Override
     public OrderInfoDTO createOrder(CreateOrderDTO createOrder) {
 
+        // 验证码商余额是否充足
+        MemberTransConfineDTO memberTransConfine = checkCodeBalance(createOrder);
+
         // 执行脚本
         ExecuteScriptOutputDTO output = gatewayManager.executeScript(OrderManagerConvert.getExecuteScriptInputDTO(createOrder));
 
-        // 获取OrderInfoDTO
-        OrderInfoDTO orderInfo = OrderManagerConvert.getOrderInfoDTO(createOrder);
-        orderInfo.setCalleeOrderId(output.getCalleeOrderId());
-        orderInfo.setOrderStatus(output.getOrderStatus());
-        orderInfo.setActualAmount(output.getActualAmount());
-        orderInfo.setChannelReturnMessage(output.getChannelReturnMessage());
+        // 获取订单信息DTO
+        OrderInfoDTO orderInfo = OrderManagerConvert.getOrderInfoDTO(createOrder, output);
 
-        // 下单成功状态为等待支付
+        // 验证下单状态
         if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_NP.getCode(), orderInfo.getOrderStatus())) {
-            orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_AF.getCode());
             return orderInfo;
         }
 
-        // 自研渠道获取渠道会员编号
-        if (StringUtils.pathEquals(GatewayChannelGroupEnum.GATEWAY_CHANNEL_GROUP_I.getCode(), createOrder.getGatewayChannel().getChannelGroup())) {
-            orderInfo.setCodeMemberId(output.getCodeMemberId());
-        }
-        if (!StringUtils.hasLength(orderInfo.getCodeMemberId())) {
-            orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_AF.getCode());
-            return orderInfo;
-        }
-
-        // 明确不冻结码商余额
-        MemberTransConfineDTO memberTransConfine = memberManager.getMemberTransConfineByMemberId(orderInfo.getCodeMemberId());
+        // 不冻结码商余额
         if (StringUtils.pathEquals(MemberFreezeBalanceSwitchEnum.FREEZE_BALANCE_SWITCH_N.getCode(), memberTransConfine.getFreezeBalanceSwitch())) {
             return orderInfo;
         }
@@ -140,6 +132,42 @@ public class PlaceOrder extends BaseOrder {
         // 异步分润
 
         // 异步通知商户
+
+    }
+
+    /**
+     * 验证码商余额是否充足
+     * 
+     * @param createOrder
+     * @return
+     */
+    private MemberTransConfineDTO checkCodeBalance(CreateOrderDTO createOrder) {
+
+        String codeMemberId = createOrder.getCodeMemberId();
+        String channelGroup = createOrder.getGatewayChannel().getChannelGroup();
+        BigDecimal orderAmount = createOrder.getOrderAmount();
+
+        // 查询码商会员交易限制
+        MemberTransConfineDTO memberTransConfine = memberManager.getMemberTransConfineByMemberId(codeMemberId);
+        AssertUtil.notEmpty(memberTransConfine.getCodeBalanceSwitch(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "码商余额限制开关未配置");
+
+        // 自研渠道不验证码商余额
+        if (StringUtils.pathEquals(GatewayChannelGroupEnum.GATEWAY_CHANNEL_GROUP_I.getCode(), channelGroup)) {
+            return memberTransConfine;
+        }
+
+        // 不限制码商余额
+        if (StringUtils.pathEquals(MemberCodeBalanceSwitchEnum.CODE_BALANCE_SWITCH_N.getCode(), memberTransConfine.getCodeBalanceSwitch())) {
+            return memberTransConfine;
+        }
+
+        // 查询码商余额
+        AccountInfoDTO accountInfo = accountManager.getAccountInfoByMemberIdAndAccountType(codeMemberId, AccountTypeEnum.ACCOUNT_TYPE_B.getCode());
+        if (accountInfo.getAmount().compareTo(orderAmount) < 0) {
+            throw new OptimusException(RespCodeEnum.ACCOUNT_AMOUNT_ERROR);
+        }
+
+        return memberTransConfine;
 
     }
 

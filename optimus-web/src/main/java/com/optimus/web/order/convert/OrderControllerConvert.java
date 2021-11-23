@@ -5,7 +5,7 @@ import com.optimus.web.order.req.QueryOrderInfoReq;
 import com.optimus.web.order.resp.QueryOrderInfoResp;
 
 /**
- * 订单Controller转换器
+ * 订单ControllerConvert
  * 
  * @author sunxp
  */
@@ -30,7 +30,7 @@ public class OrderControllerConvert {
     }
 
     /**
-     * 获取查询订单响应对象
+     * 获取查询订单Resp
      * 
      * @param orderInfo
      * @return

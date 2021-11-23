@@ -9,11 +9,11 @@ import com.optimus.util.exception.OptimusException;
 import com.optimus.web.collect.req.PlaceOrderReq;
 
 /**
- * 收单Controller验证器
+ * 收单ControllerValidate
  * 
  * @author sunxp
  */
-public class CollectValidate {
+public class CollectControllerValidate {
 
     /**
      * 验证商户下单

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 会员类型枚举
+ * 会员类型Enum
  * 
  * @author sunxp
  */

@@ -7,7 +7,7 @@ import com.optimus.service.order.OrderService;
 import com.optimus.web.order.convert.OrderControllerConvert;
 import com.optimus.web.order.req.QueryOrderInfoReq;
 import com.optimus.web.order.resp.QueryOrderInfoResp;
-import com.optimus.web.order.validate.OrderValidate;
+import com.optimus.web.order.validate.OrderControllerValidate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +36,7 @@ public class OrderController {
     @GetMapping("/queryOrderInfo")
     public QueryOrderInfoResp queryOrderInfo(@RequestBody QueryOrderInfoReq req) {
 
-        OrderValidate.validateQueryOrderInfo(req);
+        OrderControllerValidate.validateQueryOrderInfo(req);
 
         OrderInfoDTO orderInfo = OrderControllerConvert.getOrderInfoDTO(req);
 

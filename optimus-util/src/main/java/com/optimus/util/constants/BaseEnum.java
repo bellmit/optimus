@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * BaseEnum
+ * 基础Enum
  * 
  * @author sunxp
  */

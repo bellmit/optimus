@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.optimus.util.constants.member.MemberTypeEnum;
+
 import lombok.Data;
 
 /**
@@ -35,6 +37,18 @@ public class MemberChannelDO implements Serializable {
      * 网关子渠道编号
      */
     private String subChannelCode;
+
+    /**
+     * 代理会员编号
+     */
+    private String agentMemberId;
+
+    /**
+     * 会员类型[冗余一份用以匹配渠道]
+     * 
+     * @see MemberTypeEnum
+     */
+    private String memberType;
 
     /**
      * 费率

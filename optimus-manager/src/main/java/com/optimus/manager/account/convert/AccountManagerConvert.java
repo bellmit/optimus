@@ -14,7 +14,7 @@ import com.optimus.util.constants.account.AccountFlowEnum;
 import org.springframework.util.StringUtils;
 
 /**
- * 账户Manager转换器
+ * 账户ManagerConvert
  * 
  * @author sunxp
  */

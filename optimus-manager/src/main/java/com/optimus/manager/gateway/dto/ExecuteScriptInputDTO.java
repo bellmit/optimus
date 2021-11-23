@@ -42,11 +42,6 @@ public class ExecuteScriptInputDTO implements Serializable {
     private BigDecimal amount;
 
     /**
-     * 费率[自研通道需将商户费率下传]
-     */
-    private BigDecimal rate;
-
-    /**
      * 订单时间
      */
     private Date orderTime;

@@ -5,7 +5,7 @@ import com.optimus.util.constants.order.OrderTransferTypeEnum;
 import lombok.Data;
 
 /**
- * 划账请求
+ * 划账Req
  *
  * @author hongp
  */

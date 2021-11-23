@@ -4,11 +4,15 @@ import com.optimus.dao.domain.OrderInfoDO;
 import com.optimus.dao.query.OrderInfoQuery;
 import com.optimus.manager.account.dto.DoTransDTO;
 import com.optimus.manager.gateway.dto.ExecuteScriptInputDTO;
+import com.optimus.manager.gateway.dto.ExecuteScriptOutputDTO;
 import com.optimus.manager.order.dto.CreateOrderDTO;
 import com.optimus.manager.order.dto.OrderInfoDTO;
 import com.optimus.manager.order.dto.PayOrderDTO;
 import com.optimus.util.DateUtil;
 import com.optimus.util.constants.account.AccountChangeTypeEnum;
+import com.optimus.util.constants.gateway.GatewayChannelGroupEnum;
+import com.optimus.util.constants.gateway.ScriptEnum;
+import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
 import com.optimus.util.page.Page;
 
@@ -16,14 +20,14 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * 订单Manager转换器
+ * 订单ManagerConvert
  *
  * @author sunxp
  */
 public class OrderManagerConvert {
 
     /**
-     * 获取订单查询对象
+     * 获取订单Query
      *
      * @param orderInfo
      * @param page
@@ -70,6 +74,41 @@ public class OrderManagerConvert {
         OrderInfoDTO orderInfo = new OrderInfoDTO();
         BeanUtils.copyProperties(createOrder, orderInfo);
         return orderInfo;
+    }
+
+    /**
+     * 获取订单信息DTO
+     *
+     * @param createOrder
+     * @param output
+     * @return
+     */
+    public static OrderInfoDTO getOrderInfoDTO(CreateOrderDTO createOrder, ExecuteScriptOutputDTO output) {
+
+        OrderInfoDTO orderInfo = new OrderInfoDTO();
+        BeanUtils.copyProperties(createOrder, orderInfo);
+
+        orderInfo.setCalleeOrderId(output.getCalleeOrderId());
+        orderInfo.setOrderStatus(output.getOrderStatus());
+        orderInfo.setActualAmount(output.getActualAmount());
+        orderInfo.setChannelReturnMessage(output.getChannelReturnMessage());
+
+        if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_NP.getCode(), orderInfo.getOrderStatus())) {
+            orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_AF.getCode());
+            return orderInfo;
+        }
+
+        if (StringUtils.pathEquals(GatewayChannelGroupEnum.GATEWAY_CHANNEL_GROUP_I.getCode(), createOrder.getGatewayChannel().getChannelGroup())) {
+            orderInfo.setCodeMemberId(output.getCodeMemberId());
+        }
+
+        if (!StringUtils.hasLength(orderInfo.getCodeMemberId())) {
+            orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_AF.getCode());
+            return orderInfo;
+        }
+
+        return orderInfo;
+
     }
 
     /**
@@ -141,21 +180,23 @@ public class OrderManagerConvert {
     /**
      * 获取执行脚本输入DTO
      * 
+     * 创建订单
+     * 
      * @param createOrder
      * @return
      */
     public static ExecuteScriptInputDTO getExecuteScriptInputDTO(CreateOrderDTO createOrder) {
 
         ExecuteScriptInputDTO input = new ExecuteScriptInputDTO();
+        input.setScriptMethod(ScriptEnum.CREATE.getCode());
         input.setMemberId(createOrder.getMemberId());
         input.setOrderId(createOrder.getOrderId());
         input.setAmount(createOrder.getOrderAmount());
         input.setOrderTime(createOrder.getOrderTime());
-        input.setClientIp(createOrder.getClientIp());
-        input.setRedirectUrl(createOrder.getRedirectUrl());
 
         if (StringUtils.pathEquals(OrderTypeEnum.ORDER_TYPE_C.getCode(), createOrder.getOrderType())) {
-            input.setRate(createOrder.getMemberChannel().getRate());
+            input.setClientIp(createOrder.getClientIp());
+            input.setRedirectUrl(createOrder.getRedirectUrl());
             input.setImplType(createOrder.getGatewaySubChannel().getImplType());
             input.setImplPath(createOrder.getGatewaySubChannel().getImplPath());
             input.setBizContent(createOrder.getGatewaySubChannel().getBizContent());

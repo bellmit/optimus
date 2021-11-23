@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * ScriptEnum
+ * 脚本Enum
  * 
  * @author sunxp
  */

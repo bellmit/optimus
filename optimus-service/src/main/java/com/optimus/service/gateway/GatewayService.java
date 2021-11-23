@@ -1,5 +1,7 @@
 package com.optimus.service.gateway;
 
+import java.math.BigDecimal;
+
 import com.optimus.manager.gateway.dto.ExecuteScriptInputDTO;
 import com.optimus.manager.gateway.dto.ExecuteScriptOutputDTO;
 import com.optimus.manager.gateway.dto.GatewayChannelDTO;
@@ -35,9 +37,10 @@ public interface GatewayService {
      * 
      * @param memberInfo
      * @param gatewayChannel
+     * @param amount
      * @return
      */
-    MatchChannelDTO matchChannel(MemberInfoDTO memberInfo, GatewayChannelDTO gatewayChannel);
+    MatchChannelDTO matchChannel(MemberInfoDTO memberInfo, GatewayChannelDTO gatewayChannel, BigDecimal amount);
 
     /**
      * 执行脚本

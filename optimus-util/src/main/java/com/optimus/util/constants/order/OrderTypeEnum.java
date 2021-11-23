@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 订单类型枚举
+ * 订单类型Enum
  * 
  * @author sunxp
  */

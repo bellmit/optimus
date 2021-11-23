@@ -35,7 +35,7 @@ import com.optimus.web.collect.resp.PlaceOrderResp;
 import com.optimus.web.collect.resp.RechargeResp;
 import com.optimus.web.collect.resp.TransferResp;
 import com.optimus.web.collect.resp.WithdrawResp;
-import com.optimus.web.collect.validate.CollectValidate;
+import com.optimus.web.collect.validate.CollectControllerValidate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -83,7 +83,7 @@ public class CollectController {
 
         OrderInfoDTO orderInfo = orderService.createOrder(createOrder);
 
-        // 返回信息
+        // 响应信息
         ApplyForRechargeResp resp = new ApplyForRechargeResp();
         resp.setOrderId(orderInfo.getOrderId());
 
@@ -185,7 +185,7 @@ public class CollectController {
 
         orderService.createOrder(createOrder);
 
-        // 返回信息
+        // 响应信息
         ApplyForWithdrawResp resp = new ApplyForWithdrawResp();
         resp.setOrderId(createOrder.getOrderId());
 
@@ -302,7 +302,7 @@ public class CollectController {
     public PlaceOrderResp placeOrder(@RequestBody PlaceOrderReq req) {
 
         // 参数验证
-        CollectValidate.validatePlaceOrder(req);
+        CollectControllerValidate.validatePlaceOrder(req);
 
         // 获取会员信息
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
@@ -317,9 +317,7 @@ public class CollectController {
         AssertUtil.notEquals(GatewayChannelStatusEnum.GATEWAY_CHANNEL_STATUS_Y.getCode(), gatewayChannel.getChannelStatus(), RespCodeEnum.GATEWAY_CHANNEL_ERROR, "渠道未启用");
 
         // 匹配子渠道
-        MatchChannelDTO matchChannel = gatewayService.matchChannel(memberInfo, gatewayChannel);
-
-        // 验证码商余额是否充足
+        MatchChannelDTO matchChannel = gatewayService.matchChannel(memberInfo, gatewayChannel, req.getAmount());
 
         // 下单
         CreateOrderDTO createOrder = CollectControllerConvert.getCreateOrderDTO(req);

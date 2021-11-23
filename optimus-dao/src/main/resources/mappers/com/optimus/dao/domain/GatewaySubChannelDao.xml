@@ -4,6 +4,7 @@
 
   <resultMap id="BaseResultMap" type="com.optimus.dao.domain.GatewaySubChannelDO">
     <id column="ID" jdbcType="NUMERIC" property="id" />
+    <result column="AGENT_MEMBER_ID" jdbcType="VARCHAR" property="agentMemberId" />
     <result column="PARENT_CHANNEL_CODE" jdbcType="VARCHAR" property="parentChannelCode" />
     <result column="CHANNEL_CODE" jdbcType="VARCHAR" property="channelCode" />
     <result column="CHANNEL_NAME" jdbcType="VARCHAR" property="channelName" />
@@ -24,8 +25,8 @@
   </resultMap>
 
   <sql id="Base_Column_List">
-    ID, PARENT_CHANNEL_CODE, CHANNEL_CODE, CHANNEL_NAME, CHANNEL_STATUS, CLASSIFY, 
-    FACE_VALUE_TYPE, FACE_VALUE, WEIGHT, FATIGUE, IMPL_TYPE, IMPL_PATH, CALLBACK_IP, 
+    ID, AGENT_MEMBER_ID, PARENT_CHANNEL_CODE, CHANNEL_CODE, CHANNEL_NAME, CHANNEL_STATUS, 
+    CLASSIFY, FACE_VALUE_TYPE, FACE_VALUE, WEIGHT, FATIGUE, IMPL_TYPE, IMPL_PATH, CALLBACK_IP, 
     BIZ_CONTENT, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME
   </sql>
 
@@ -43,22 +44,13 @@
     where CHANNEL_CODE = #{channelCode,jdbcType=VARCHAR}
   </select>
 
-  <select id="listGatewaySubChannelByParentChannelCodeAndChannelStatuss" resultMap="BaseResultMap">
+  <select id="listGatewaySubChannelByGatewaySubChannelQuerys" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from T_GATEWAY_SUB_CHANNEL
-    where PARENT_CHANNEL_CODE = #{parentChannelCode,jdbcType=VARCHAR}
-    and CHANNEL_STATUS = #{channelStatus,jdbcType=VARCHAR}
-  </select>
-
-  <select id="listGatewaySubChannelBySubChannelCodeListAndChannelStatuss" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from T_GATEWAY_SUB_CHANNEL
-    where CHANNEL_CODE in 
-    <foreach collection="channelCodeList" item="item" open="(" close=")" separator=","> #{item,jdbcType=VARCHAR}
-    </foreach>
-    and CHANNEL_STATUS = #{channelStatus,jdbcType=VARCHAR}
+    where AGENT_MEMBER_ID = #{gatewaySubChannelQuery.agentMemberId,jdbcType=VARCHAR}
+    and PARENT_CHANNEL_CODE = #{gatewaySubChannelQuery.parentChannelCode,jdbcType=VARCHAR}
+    and CHANNEL_STATUS = #{gatewaySubChannelQuery.channelStatus,jdbcType=VARCHAR}
   </select>
 
   <insert id="addGatewaySubChannel" parameterType="com.optimus.dao.domain.GatewaySubChannelDO">
@@ -66,6 +58,9 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         ID,
+      </if>
+      <if test="agentMemberId != null">
+        AGENT_MEMBER_ID,
       </if>
       <if test="parentChannelCode != null">
         PARENT_CHANNEL_CODE,
@@ -122,6 +117,8 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null"> #{id,jdbcType=NUMERIC},
       </if>
+      <if test="agentMemberId != null"> #{agentMemberId,jdbcType=VARCHAR},
+      </if>
       <if test="parentChannelCode != null"> #{parentChannelCode,jdbcType=VARCHAR},
       </if>
       <if test="channelCode != null"> #{channelCode,jdbcType=VARCHAR},
@@ -162,6 +159,9 @@
   <update id="updateGatewaySubChannel" parameterType="com.optimus.dao.domain.GatewaySubChannelDO">
     update T_GATEWAY_SUB_CHANNEL
     <set>
+      <if test="agentMemberId != null">
+        AGENT_MEMBER_ID = #{agentMemberId,jdbcType=VARCHAR},
+      </if>
       <if test="parentChannelCode != null">
         PARENT_CHANNEL_CODE = #{parentChannelCode,jdbcType=VARCHAR},
       </if>

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 会员冻结余额开关枚举
+ * 会员冻结余额开关Enum
  * 
  * @author sunxp
  */

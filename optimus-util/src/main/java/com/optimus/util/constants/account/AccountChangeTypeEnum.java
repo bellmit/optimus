@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 账户变更类型枚举
+ * 账户变更类型Enum
  * 
  * @author sunxp
  */
