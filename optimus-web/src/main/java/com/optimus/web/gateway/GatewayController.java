@@ -59,7 +59,7 @@ public class GatewayController {
         // 验证IP
         String[] ips = gatewaySubChannel.getCallbackIp().split(",");
         if (!Arrays.asList(ips).contains(ip)) {
-            throw new OptimusException(RespCodeEnum.INVALID_IP, "调用方IP异常");
+            throw new OptimusException(RespCodeEnum.INVALID_IP, "客户端IP异常");
         }
 
         // 执行脚本
