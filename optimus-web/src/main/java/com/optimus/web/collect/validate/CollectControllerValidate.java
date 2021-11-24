@@ -1,13 +1,21 @@
 package com.optimus.web.collect.validate;
 
+import java.math.BigDecimal;
+import java.util.Objects;
+
 import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.BaseEnum;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.exception.OptimusException;
-import com.optimus.web.collect.req.*;
-
-import java.math.BigDecimal;
-import java.util.Objects;
+import com.optimus.web.collect.req.ApplyForRechargeReq;
+import com.optimus.web.collect.req.ApplyForWithdrawReq;
+import com.optimus.web.collect.req.BaseCollectReq;
+import com.optimus.web.collect.req.ConfirmForRechargeReq;
+import com.optimus.web.collect.req.ConfirmForWithdrawReq;
+import com.optimus.web.collect.req.PlaceOrderReq;
+import com.optimus.web.collect.req.RechargeReq;
+import com.optimus.web.collect.req.TransferReq;
+import com.optimus.web.collect.req.WithdrawReq;
 
 /**
  * 收单ControllerValidate
@@ -46,7 +54,7 @@ public class CollectControllerValidate {
      * @param req
      */
     public static void validatePlaceOrder(PlaceOrderReq req) {
-        // 基础校验
+        // 基础验证
         validateBaseCollect(req);
         // 自身业务
         AssertUtil.notEmpty(req.getAmount(), RespCodeEnum.INVALID_PARAM, "订单金额不能为空");
@@ -60,7 +68,7 @@ public class CollectControllerValidate {
      * @param req
      */
     public static void validateApplyForRecharge(ApplyForRechargeReq req) {
-        // 基础校验
+        // 基础验证
         validateBaseCollect(req);
         // 自身业务
         AssertUtil.notEmpty(req.getAmount(), RespCodeEnum.INVALID_PARAM, "订单金额不能为空");
@@ -72,7 +80,7 @@ public class CollectControllerValidate {
      * @param req
      */
     public static void validateConfirmForRecharge(ConfirmForRechargeReq req) {
-        // 基础校验
+        // 基础验证
         validateBaseCollect(req);
         // 自身业务
         AssertUtil.notEmpty(req.getOrderId(), RespCodeEnum.INVALID_PARAM, "订单ID不能为空");
@@ -86,7 +94,7 @@ public class CollectControllerValidate {
      * @param req
      */
     public static void validateRecharge(RechargeReq req) {
-        // 基础校验
+        // 基础验证
         validateBaseCollect(req);
         // 自身业务
         AssertUtil.notEmpty(req.getAmount(), RespCodeEnum.INVALID_PARAM, "订单金额不能为空");
@@ -99,7 +107,7 @@ public class CollectControllerValidate {
      * @param req
      */
     public static void validateApplyForWithdraw(ApplyForWithdrawReq req) {
-        // 基础校验
+        // 基础验证
         validateBaseCollect(req);
         // 自身业务
         AssertUtil.notEmpty(req.getAmount(), RespCodeEnum.INVALID_PARAM, "订单金额不能为空");
@@ -111,7 +119,7 @@ public class CollectControllerValidate {
      * @param req
      */
     public static void validateConfirmForWithdraw(ConfirmForWithdrawReq req) {
-        // 基础校验
+        // 基础验证
         validateBaseCollect(req);
         // 自身业务
         AssertUtil.notEmpty(req.getOrderId(), RespCodeEnum.INVALID_PARAM, "订单ID不能为空");
@@ -125,7 +133,7 @@ public class CollectControllerValidate {
      * @param req
      */
     public static void validateWithdraw(WithdrawReq req) {
-        // 基础校验
+        // 基础验证
         validateBaseCollect(req);
         // 自身业务
         AssertUtil.notEmpty(req.getAmount(), RespCodeEnum.INVALID_PARAM, "订单金额不能为空");
@@ -138,7 +146,7 @@ public class CollectControllerValidate {
      * @param req
      */
     public static void validateTransfer(TransferReq req) {
-        // 基础校验
+        // 基础验证
         validateBaseCollect(req);
         // 自身业务
         AssertUtil.notEmpty(req.getAmount(), RespCodeEnum.INVALID_PARAM, "订单金额不能为空");
