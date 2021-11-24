@@ -127,9 +127,14 @@ public class PlaceOrder extends BaseOrder {
 
         // 构建记账信息
         List<DoTransDTO> doTransList = buildDoTransList(memberInfoList, payOrder, originOrderStatus);
-        AssertUtil.notEmpty(doTransList, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "购建记账信息异常");
+        AssertUtil.notEmpty(doTransList, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "构建记账信息异常");
 
-        // 异步分润
+        // 记账
+        boolean doTrans = accountManager.doTrans(doTransList);
+        if (!doTrans) {
+            orderInfoDao.updateOrderStatusByOrderIdAndOrderStatus(payOrder.getOrderId(), originOrderStatus, orderStatus, DateUtil.currentDate());
+            return;
+        }
 
         // 异步通知商户
         OrderNoticeInputDTO input = OrderManagerConvert.getOrderNoticeInputDTO(payOrder);

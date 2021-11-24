@@ -2,6 +2,8 @@ package com.optimus.manager.order;
 
 import com.optimus.manager.order.dto.OrderNoticeInputDTO;
 
+import org.springframework.scheduling.annotation.Async;
+
 /**
  * 订单manager
  *
@@ -25,6 +27,7 @@ public interface OrderManager {
      * @param noticeUrl
      * @return
      */
+    @Async
     String orderNotice(OrderNoticeInputDTO input, String key, String noticeUrl);
 
 }
