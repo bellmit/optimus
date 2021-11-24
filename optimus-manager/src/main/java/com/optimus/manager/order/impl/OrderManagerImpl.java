@@ -59,6 +59,7 @@ public class OrderManagerImpl implements OrderManager {
             Map<String, Object> map = JacksonUtil.toBean(inputString, new TypeReference<Map<String, Object>>() {
             });
 
+            // 设置签名
             input.setSign(SignUtil.sign(map, key));
 
             // Post

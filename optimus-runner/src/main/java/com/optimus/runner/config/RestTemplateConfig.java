@@ -18,8 +18,10 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class RestTemplateConfig {
 
+    /** 连接超时时间 */
     private static final int CONNECT_TIMEOUT = 10000;
 
+    /** 读超时时间 */
     private static final int READ_TIMEOUT = 5000;
 
     @Bean

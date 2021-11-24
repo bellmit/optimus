@@ -36,8 +36,10 @@ public class OrderController {
     @GetMapping("/queryOrderInfo")
     public QueryOrderInfoResp queryOrderInfo(@RequestBody QueryOrderInfoReq req) {
 
+        // 验证订单信息
         OrderControllerValidate.validateQueryOrderInfo(req);
 
+        // 获取订单信息DTO
         OrderInfoDTO orderInfo = OrderControllerConvert.getOrderInfoDTO(req);
 
         // 查询订单信息

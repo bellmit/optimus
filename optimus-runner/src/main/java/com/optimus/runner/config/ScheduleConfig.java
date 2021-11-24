@@ -15,8 +15,10 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 @EnableScheduling
 public class ScheduleConfig implements SchedulingConfigurer {
 
+    /** 线程名称前缀 */
     private static final String THREAD_NAME_PREFIX = "optimus-job-";
 
+    /** 线程数 */
     private static final int POOL_SIZE = 10;
 
     @Override

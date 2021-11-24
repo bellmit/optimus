@@ -45,12 +45,13 @@ public class AccountManagerImpl implements AccountManager {
     @Override
     public AccountInfoDTO getAccountInfoByMemberIdAndAccountType(String memberId, String accountType) {
 
+        // 根据会员编号和账户类型查询账户信息
         AccountInfoDO accountInfoDO = accountInfoDao.getAccountInfoByMemberIdAndAccountType(memberId, accountType);
-
         if (Objects.isNull(accountInfoDO)) {
             return null;
         }
 
+        // 获取账户信息DTO
         AccountInfoDTO accountInfo = new AccountInfoDTO();
         BeanUtils.copyProperties(accountInfoDO, accountInfo);
 
@@ -101,14 +102,14 @@ public class AccountManagerImpl implements AccountManager {
         // 查询会员所对应的所有账户信息
         List<AccountInfoDO> accountInfoList = accountInfoDao.listAccountInfoByMemberIdLists(memberIdList);
 
-        // 断言:账户信息不为空
+        // 断言:账户信息
         AssertUtil.notEmpty(accountInfoList, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易查询账户信息为空");
 
         // 获得所涉及的账户信息
         accountInfoList = AccountManagerConvert.getAccountInfoDOList(accountInfoList, doTransList);
         log.info("buildAccountInfoList accountInfoList is {}", accountInfoList);
 
-        // 断言:涉及账户信息不为空
+        // 断言:涉及账户信息
         AssertUtil.notEmpty(accountInfoList, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易构造账户信息异常");
 
         return accountInfoList;

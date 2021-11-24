@@ -46,6 +46,7 @@ public class GatewayManagerConvert {
      */
     public static MemberInfoQuery getMemberInfoQuery(List<MemberChannelDO> memberChannelList) {
 
+        // 获取会员信息Query
         MemberInfoQuery query = new MemberInfoQuery();
         query.setMemberIdList(memberChannelList.stream().map(MemberChannelDO::getMemberId).collect(Collectors.toList()));
         query.setMemberStatus(MemberStatusEnum.MEMBER_STATUS_Y.getCode());
@@ -64,6 +65,7 @@ public class GatewayManagerConvert {
      */
     public static MemberChannelQuery getMemberChannelQuery(MemberInfoDTO memberInfo, List<GatewaySubChannelDO> gatewaySubChannelList) {
 
+        // 获取会员渠道Query
         MemberChannelQuery query = new MemberChannelQuery();
 
         query.setAgentMemberId(memberInfo.getSupDirectMemberId());
@@ -82,6 +84,7 @@ public class GatewayManagerConvert {
      */
     public static GatewaySubChannelQuery getGatewaySubChannelQuery(MemberInfoDTO memberInfo, GatewayChannelDTO gatewayChannel) {
 
+        // 获取网关子渠道Query
         GatewaySubChannelQuery query = new GatewaySubChannelQuery();
 
         query.setAgentMemberId(memberInfo.getSupDirectMemberId());
@@ -108,25 +111,30 @@ public class GatewayManagerConvert {
 
             boolean flag = false;
 
+            // 面额
             String[] faceValues = item.getFaceValue().split(",");
 
+            // 固定面额
             if (StringUtils.pathEquals(GatewayFaceValueTypeEnum.GATEWAY_FACE_VALUE_TYPE_F.getCode(), item.getFaceValueType())) {
                 long count = Arrays.asList(faceValues).stream().filter(e -> new BigDecimal(e).compareTo(amount) == 0).count();
                 flag = (count > 0) ? true : false;
             }
 
+            // 范围面额
             if (StringUtils.pathEquals(GatewayFaceValueTypeEnum.GATEWAY_FACE_VALUE_TYPE_S.getCode(), item.getFaceValueType())) {
                 BigDecimal l = new BigDecimal(faceValues[0]);
                 BigDecimal r = new BigDecimal(faceValues[1]);
                 flag = (l.compareTo(amount) <= 0 && amount.compareTo(r) <= 0) ? true : false;
             }
 
+            // 命中面额加入网关子渠道
             if (flag) {
                 gatewaySubChannelList.add(item);
             }
 
         }
 
+        // 网关子渠道为空
         if (CollectionUtils.isEmpty(gatewaySubChannelList)) {
             return gatewaySubChannelList;
         }
@@ -156,13 +164,22 @@ public class GatewayManagerConvert {
 
     }
 
+    /**
+     * 获取匹配渠道DTO
+     * 
+     * @param gatewaySubChannelList
+     * @return
+     */
     public static MatchChannelDTO getMatchChannelDTO(List<GatewaySubChannelDO> gatewaySubChannelList) {
 
+        // 洗牌
         Collections.shuffle(gatewaySubChannelList);
 
+        // 获取网关子渠道DTO
         GatewaySubChannelDTO gatewaySubChannel = new GatewaySubChannelDTO();
         BeanUtils.copyProperties(gatewaySubChannelList.get(0), gatewaySubChannel);
 
+        // 获取匹配渠道DTO
         MatchChannelDTO matchChannel = new MatchChannelDTO();
         matchChannel.setGatewaySubChannel(gatewaySubChannel);
 
@@ -180,16 +197,24 @@ public class GatewayManagerConvert {
      */
     public static MatchChannelDTO getMatchChannelDTO(List<MemberInfoDO> memberInfoList, List<MemberChannelDO> memberChannelList, List<GatewaySubChannelDO> gatewaySubChannelList) {
 
+        // 洗牌
         Collections.shuffle(memberInfoList);
         Collections.shuffle(memberChannelList);
 
+        // 取第一个码商
         String codeMemberId = memberInfoList.get(0).getMemberId();
+
+        // 取相匹配的会员渠道
         MemberChannelDO memberChannel = memberChannelList.stream().filter(e -> StringUtils.pathEquals(e.getMemberId(), codeMemberId)).findFirst().get();
+
+        // 取相匹配的子渠道下
         GatewaySubChannelDO gatewaySubChannelDO = gatewaySubChannelList.stream().filter(e -> StringUtils.pathEquals(e.getChannelCode(), memberChannel.getSubChannelCode())).findFirst().get();
 
+        // 获取网关子渠道DTO
         GatewaySubChannelDTO gatewaySubChannel = new GatewaySubChannelDTO();
         BeanUtils.copyProperties(gatewaySubChannelDO, gatewaySubChannel);
 
+        // 获取匹配渠道DTO
         MatchChannelDTO matchChannel = new MatchChannelDTO();
         matchChannel.setCodeMemberId(codeMemberId);
         matchChannel.setGatewaySubChannel(gatewaySubChannel);

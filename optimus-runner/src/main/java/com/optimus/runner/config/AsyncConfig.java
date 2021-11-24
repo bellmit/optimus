@@ -17,14 +17,19 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @EnableAsync
 public class AsyncConfig {
 
+    /** 线程名称前缀 */
     private static final String THREAD_NAME_PREFIX = "optimus-async-";
 
+    /** 最大线程数 */
     private static final int MAX_POOL_SIZE = 20;
 
+    /** 核心线程数 */
     private static final int CORE_POOL_SIZE = 5;
 
-    private static final int QUEUE_CAPACITY = 10;
+    /** 任务队列 */
+    private static final int QUEUE_CAPACITY = 1000;
 
+    /** 缓冲队列中线程的空闲时间 */
     private static final int KEEP_ALIVE_SECONDS = 100;
 
     @Bean("asyncTaskExecutor")

@@ -47,6 +47,7 @@ public class TransferOrder extends BaseOrder {
     @Override
     public OrderInfoDTO createOrder(CreateOrderDTO createOrder) {
 
+        // 获取订单信息DTO
         OrderInfoDTO orderInfo = OrderManagerConvert.getOrderInfoDTO(createOrder);
         orderInfo.setActualAmount(createOrder.getOrderAmount());
 

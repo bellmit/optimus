@@ -47,12 +47,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderInfoDTO getOrderInfoByOrderId(String orderId) {
-        OrderInfoDO orderInfoDO = orderInfoDao.getOrderInfoByOrderId(orderId);
 
+        // 根据订单编号查询订单信息DO
+        OrderInfoDO orderInfoDO = orderInfoDao.getOrderInfoByOrderId(orderId);
         if (Objects.isNull(orderInfoDO)) {
             return null;
         }
 
+        // 获取订单信息DTO
         OrderInfoDTO orderInfoDTO = new OrderInfoDTO();
         BeanUtils.copyProperties(orderInfoDO, orderInfoDTO);
 
@@ -62,15 +64,19 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderInfoDTO> listOrderInfoByOrderInfoQuerys(OrderInfoDTO orderInfo, Page page) {
 
+        // 处理分页对象
         if (Objects.isNull(page)) {
             page = new Page();
         }
 
+        // 获取订单信息Query
         OrderInfoQuery query = OrderManagerConvert.getOrderInfoQuery(orderInfo, page);
 
+        // 根据订单信息Query查询订单信息
         List<OrderInfoDO> orderInfoDOList = orderInfoDao.listOrderInfoByOrderInfoQuerys(query);
         AssertUtil.notEmpty(orderInfoDOList, RespCodeEnum.ORDER_NO, null);
 
+        // 获取订单信息DTO
         List<OrderInfoDTO> orderInfoList = new ArrayList<>();
         BeanUtil.copyProperties(orderInfoDOList, orderInfoList, OrderInfoDTO.class);
 
@@ -88,7 +94,7 @@ public class OrderServiceImpl implements OrderService {
         BaseOrder baseOrder = orderFactory.getOrderInstance(createOrder.getOrderType());
         AssertUtil.notEmpty(baseOrder, RespCodeEnum.ORDER_ERROR, "订单类型异常");
 
-        // 生成订单号
+        // 生成订单编号
         createOrder.setOrderId(GenerateUtil.generate(createOrder.getOrderType()));
 
         // 工厂处理订单信息

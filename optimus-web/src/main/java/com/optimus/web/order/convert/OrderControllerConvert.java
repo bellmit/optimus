@@ -19,6 +19,7 @@ public class OrderControllerConvert {
      */
     public static OrderInfoDTO getOrderInfoDTO(QueryOrderInfoReq req) {
 
+        // 获取订单信息DTO
         OrderInfoDTO orderInfo = new OrderInfoDTO();
 
         orderInfo.setMemberId(req.getMemberId());
@@ -37,6 +38,7 @@ public class OrderControllerConvert {
      */
     public static QueryOrderInfoResp getQueryOrderInfoResp(OrderInfoDTO orderInfo) {
 
+        // 获取查询订单Resp
         QueryOrderInfoResp resp = new QueryOrderInfoResp();
 
         resp.setMemberId(orderInfo.getMemberId());

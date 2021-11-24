@@ -101,6 +101,7 @@ public class GatewayControllerConvert {
             ip = req.getHeader("HTTP_CLIENT_IP");
         }
 
+        // 匹配ip
         if (StringUtils.hasLength(ip)) {
 
             String[] ips = ip.split(",");
@@ -118,6 +119,7 @@ public class GatewayControllerConvert {
 
         }
 
+        // 兜底
         if (!StringUtils.hasLength(ip) || BaseEnum.UNKNOWN.getCode().equalsIgnoreCase(ip)) {
             ip = req.getRemoteAddr();
         }
@@ -134,6 +136,7 @@ public class GatewayControllerConvert {
      */
     public static ExecuteScriptInputDTO getExecuteScriptInputDTO(GatewaySubChannelDTO gatewaySubChannel) {
 
+        // 获取执行脚本输入DTO
         ExecuteScriptInputDTO input = new ExecuteScriptInputDTO();
 
         input.setScriptMethod(ScriptEnum.PARSE.getCode());
@@ -153,6 +156,7 @@ public class GatewayControllerConvert {
      */
     public static PayOrderDTO getPayOrderDTO(ExecuteScriptOutputDTO output) {
 
+        // 获取支付订单DTO
         PayOrderDTO payOrder = new PayOrderDTO();
 
         payOrder.setOrderId(output.getOrderId());

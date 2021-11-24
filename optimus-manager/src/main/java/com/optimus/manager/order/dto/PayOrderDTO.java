@@ -29,7 +29,7 @@ public class PayOrderDTO implements Serializable {
     private String memberId;
 
     /**
-     * 上级会员号
+     * 上级会员编号
      */
     private String supMemberId;
 

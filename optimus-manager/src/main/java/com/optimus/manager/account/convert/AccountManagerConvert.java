@@ -21,7 +21,7 @@ import org.springframework.util.StringUtils;
 public class AccountManagerConvert {
 
     /**
-     * 获取账户信息集合
+     * 获取账户信息
      * 
      * @param accountInfoDOList
      * @param doTransList
@@ -70,7 +70,7 @@ public class AccountManagerConvert {
     }
 
     /**
-     * 获取账户日志集合
+     * 获取账户日志
      * 
      * @param accountInfoList
      * @param doTransList
@@ -128,7 +128,7 @@ public class AccountManagerConvert {
     }
 
     /**
-     * 构建账户信息Map
+     * 构建账户信息
      * 
      * @param accountInfoList
      * @return

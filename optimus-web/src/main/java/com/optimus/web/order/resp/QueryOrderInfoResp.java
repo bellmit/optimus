@@ -22,7 +22,7 @@ public class QueryOrderInfoResp implements Serializable {
     private String memberId;
 
     /**
-     * 订单号
+     * 订单编号
      */
     private String orderId;
 

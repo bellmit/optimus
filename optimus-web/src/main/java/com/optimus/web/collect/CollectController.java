@@ -171,6 +171,7 @@ public class CollectController {
      */
     @PostMapping("/applyForWithdraw")
     public ApplyForWithdrawResp applyForWithdraw(@RequestBody ApplyForWithdrawReq req) {
+
         // 获取会员信息
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
 
@@ -223,7 +224,6 @@ public class CollectController {
         orderService.payOrder(payOrder);
 
         return new ConfirmForWithdrawResp();
-
     }
 
     /**
@@ -258,7 +258,6 @@ public class CollectController {
         orderService.payOrder(payOrder);
 
         return new WithdrawResp();
-
     }
 
     /**
@@ -330,7 +329,6 @@ public class CollectController {
         OrderInfoDTO orderInfo = orderService.createOrder(createOrder);
 
         return CollectControllerConvert.getPlaceOrderResp(orderInfo);
-
     }
 
 }

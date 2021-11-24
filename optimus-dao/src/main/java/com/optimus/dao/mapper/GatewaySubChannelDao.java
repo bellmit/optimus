@@ -23,7 +23,7 @@ public interface GatewaySubChannelDao {
     GatewaySubChannelDO getGatewaySubChannelById(Long id);
 
     /**
-     * 根据网关子渠道编号查询子渠道信息
+     * 根据网关子渠道编号查询网关子渠道
      * 
      * @param channelCode
      * @return
@@ -31,7 +31,7 @@ public interface GatewaySubChannelDao {
     GatewaySubChannelDO getGatewaySubChannelBySubChannelCode(String channelCode);
 
     /**
-     * 根据网关子渠道Query查询子渠道信息
+     * 根据网关子渠道Query查询网关子渠道
      * 
      * @param query
      * @return

@@ -40,7 +40,7 @@ public interface OrderInfoDao {
     OrderInfoDO getOrderInfoByCallerOrderId(String callerOrderId);
 
     /**
-     * 根据OrderInfoQuery查询订单信息
+     * 根据订单信息Query查询订单信息
      *
      * @param query
      * @return
@@ -64,7 +64,7 @@ public interface OrderInfoDao {
     int updateOrderInfo(OrderInfoDO orderInfoDO);
 
     /**
-     * 根据订单号和订单状态更新订单状态
+     * 根据订单编号和订单状态更新订单状态
      *
      * @param orderId
      * @param orderStatus

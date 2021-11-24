@@ -15,7 +15,7 @@ public class ApplyForWithdrawResp implements Serializable {
     private static final long serialVersionUID = 6186819433796680807L;
 
     /**
-     * 订单号
+     * 订单编号
      */
     private String orderId;
 

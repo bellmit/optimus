@@ -26,6 +26,7 @@ public class AccountManagerValidate {
      */
     public static void validateDoTrans(List<DoTransDTO> doTransList) {
 
+        // 断言:账户交易入参
         AssertUtil.notEmpty(doTransList, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易入参不能为空");
 
         // 账户交易重复性
@@ -42,7 +43,7 @@ public class AccountManagerValidate {
             BigDecimal amount = item.getAmount();
             String remark = item.getRemark();
 
-            // 非空验证
+            // 断言:为空
             AssertUtil.empty(memberId, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易会员编号不能为空");
             AssertUtil.empty(orderId, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易订单编号不能为空");
             AssertUtil.empty(orderType, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易订单类型不能为空");
@@ -50,7 +51,7 @@ public class AccountManagerValidate {
             AssertUtil.empty(amount, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易金额不能为空");
             AssertUtil.empty(remark, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易备注不能为空");
 
-            // 合法性验证
+            // 验证合法性
             AssertUtil.empty(OrderTypeEnum.instanceOf(orderType), RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易非法的订单类型");
             AssertUtil.empty(AccountChangeTypeEnum.instanceOf(changeType), RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易非法的变更类型");
 
@@ -61,7 +62,7 @@ public class AccountManagerValidate {
                 throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易金额精度为4");
             }
 
-            // 重复性验证
+            // 验证重复性
             String ma = memberId + changeType.substring(0, changeType.length() - 1);
             if (!maSet.add(ma)) {
                 throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易同一账户不允许在同一事务中");
@@ -72,8 +73,9 @@ public class AccountManagerValidate {
 
         }
 
+        // 验证重复性
         if (orderIdSet.size() != 1 || orderTypeSet.size() != 1) {
-            throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易订单号或订单类型不合法");
+            throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易订单编号或订单类型不合法");
         }
 
     }

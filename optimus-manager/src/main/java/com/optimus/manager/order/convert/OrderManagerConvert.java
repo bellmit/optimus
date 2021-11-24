@@ -35,6 +35,7 @@ public class OrderManagerConvert {
      */
     public static OrderInfoQuery getOrderInfoQuery(OrderInfoDTO orderInfo, Page page) {
 
+        // 获取订单Query
         OrderInfoQuery query = new OrderInfoQuery();
 
         query.setPage(page);
@@ -54,9 +55,10 @@ public class OrderManagerConvert {
      */
     public static OrderInfoDO getOrderInfoDO(OrderInfoDTO orderInfo) {
 
+        // 获取订单信息DTO
         OrderInfoDO orderInfoDO = new OrderInfoDO();
-
         BeanUtils.copyProperties(orderInfo, orderInfoDO);
+
         orderInfoDO.setCreateTime(DateUtil.currentDate());
         orderInfoDO.setUpdateTime(DateUtil.currentDate());
         orderInfoDO.setOrderTime(DateUtil.currentDate());
@@ -71,9 +73,13 @@ public class OrderManagerConvert {
      * @return
      */
     public static OrderInfoDTO getOrderInfoDTO(CreateOrderDTO createOrder) {
+
+        // 获取订单信息DTO
         OrderInfoDTO orderInfo = new OrderInfoDTO();
         BeanUtils.copyProperties(createOrder, orderInfo);
+
         return orderInfo;
+
     }
 
     /**
@@ -85,6 +91,7 @@ public class OrderManagerConvert {
      */
     public static OrderInfoDTO getOrderInfoDTO(CreateOrderDTO createOrder, ExecuteScriptOutputDTO output) {
 
+        // 获取订单信息DTO
         OrderInfoDTO orderInfo = new OrderInfoDTO();
         BeanUtils.copyProperties(createOrder, orderInfo);
 
@@ -93,15 +100,18 @@ public class OrderManagerConvert {
         orderInfo.setActualAmount(output.getActualAmount());
         orderInfo.setChannelReturnMessage(output.getChannelReturnMessage());
 
+        // 下单成功必须为等待支付
         if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_NP.getCode(), orderInfo.getOrderStatus())) {
             orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_AF.getCode());
             return orderInfo;
         }
 
+        // 自研渠道设置码商会员编号
         if (StringUtils.pathEquals(GatewayChannelGroupEnum.GATEWAY_CHANNEL_GROUP_I.getCode(), createOrder.getGatewayChannel().getChannelGroup())) {
             orderInfo.setCodeMemberId(output.getCodeMemberId());
         }
 
+        // 验证码商会员编号
         if (!StringUtils.hasLength(orderInfo.getCodeMemberId())) {
             orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_AF.getCode());
             return orderInfo;
@@ -121,6 +131,7 @@ public class OrderManagerConvert {
      */
     public static DoTransDTO getDoTransDTO(AccountChangeTypeEnum accountChangeTypeEnum, CreateOrderDTO createOrder, String remark) {
 
+        // 获取账户交易DTO
         DoTransDTO doTrans = new DoTransDTO();
 
         doTrans.setChangeType(accountChangeTypeEnum.getCode());
@@ -143,6 +154,7 @@ public class OrderManagerConvert {
      */
     public static DoTransDTO getDoTransDTO(AccountChangeTypeEnum accountChangeTypeEnum, PayOrderDTO payOrder, String remark) {
 
+        // 获取账户交易DTO
         DoTransDTO doTrans = new DoTransDTO();
 
         doTrans.setChangeType(accountChangeTypeEnum.getCode());
@@ -165,6 +177,7 @@ public class OrderManagerConvert {
      */
     public static DoTransDTO getDoTransDTO(AccountChangeTypeEnum accountChangeTypeEnum, OrderInfoDTO orderInfo, String remark) {
 
+        // 获取账户交易DTO
         DoTransDTO doTrans = new DoTransDTO();
 
         doTrans.setChangeType(accountChangeTypeEnum.getCode());
@@ -187,6 +200,7 @@ public class OrderManagerConvert {
      */
     public static ExecuteScriptInputDTO getExecuteScriptInputDTO(CreateOrderDTO createOrder) {
 
+        // 获取执行脚本输入DTO
         ExecuteScriptInputDTO input = new ExecuteScriptInputDTO();
         input.setScriptMethod(ScriptEnum.CREATE.getCode());
         input.setMemberId(createOrder.getMemberId());
@@ -194,6 +208,7 @@ public class OrderManagerConvert {
         input.setAmount(createOrder.getOrderAmount());
         input.setOrderTime(createOrder.getOrderTime());
 
+        // 下单必要参数
         if (StringUtils.pathEquals(OrderTypeEnum.ORDER_TYPE_C.getCode(), createOrder.getOrderType())) {
             input.setClientIp(createOrder.getClientIp());
             input.setRedirectUrl(createOrder.getRedirectUrl());

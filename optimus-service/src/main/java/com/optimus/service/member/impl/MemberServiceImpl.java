@@ -33,11 +33,14 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberInfoDTO getMemberInfoByMemberId(String memberId) {
 
+        // 根据会员编号查询会员信息
         MemberInfoDO memberInfoDO = memberInfoDao.getMemberInfoByMemberId(memberId);
 
+        // 断言:不为空,未删除
         AssertUtil.notEmpty(memberInfoDO, RespCodeEnum.MEMBER_NO, null);
         AssertUtil.notEquals(MemberDeleteFlagEnum.DELETE_FLAG_ND.getCode(), memberInfoDO.getDeleteFlag(), RespCodeEnum.MEMBER_NO, null);
 
+        // 获取会员信息DTO
         MemberInfoDTO memberInfo = new MemberInfoDTO();
         BeanUtils.copyProperties(memberInfoDO, memberInfo);
 
@@ -53,6 +56,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void checkMemberLevel(MemberInfoDTO memberInfo, String subDirectMemberId) {
 
+        // 根据直接上级会员编号查询会员信息
         MemberInfoDO subMemberInfo = memberInfoDao.getMemberInfoByMemberId(subDirectMemberId);
         AssertUtil.notEmpty(subMemberInfo, RespCodeEnum.MEMBER_NO, "下级会员不存在");
 

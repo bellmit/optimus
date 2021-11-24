@@ -27,6 +27,7 @@ public class CollectControllerConvert {
      */
     public static CreateOrderDTO getCreateOrderDTO(PlaceOrderReq req) {
 
+        // 获取网关渠道DTO
         CreateOrderDTO createOrder = new CreateOrderDTO();
         createOrder.setMemberId(req.getMemberId());
         createOrder.setCallerOrderId(req.getCallerOrderId());
@@ -48,6 +49,7 @@ public class CollectControllerConvert {
      */
     public static CreateOrderDTO getCreateOrderDTO(ApplyForRechargeReq req) {
 
+        // 获取创建订单DTO
         CreateOrderDTO createOrder = new CreateOrderDTO();
 
         createOrder.setMemberId(req.getMemberId());
@@ -67,6 +69,7 @@ public class CollectControllerConvert {
      */
     public static CreateOrderDTO getCreateOrderDTO(ApplyForWithdrawReq req) {
 
+        // 获取创建订单DTO
         CreateOrderDTO createOrder = new CreateOrderDTO();
 
         createOrder.setMemberId(req.getMemberId());
@@ -85,6 +88,7 @@ public class CollectControllerConvert {
      */
     public static CreateOrderDTO getCreateOrderDTO(WithdrawReq req) {
 
+        // 获取创建订单DTO
         CreateOrderDTO createOrder = new CreateOrderDTO();
 
         createOrder.setMemberId(req.getSubDirectMemberId());

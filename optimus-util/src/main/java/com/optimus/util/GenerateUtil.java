@@ -12,12 +12,16 @@ public class GenerateUtil {
 
     private static final AtomicInteger POINT = new AtomicInteger(0);
 
+    /** 最小值 */
     private static final Integer MIN = 1;
 
+    /** 最大值 */
     private static final Integer MAX = 999999;
 
+    /** 中缀 */
     private static final String INFIX_COVER = "%015d";
 
+    /** 后缀 */
     private static final String SUFFIX_COVER = "%06d";
 
     /**

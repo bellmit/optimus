@@ -23,7 +23,7 @@ public interface MemberInfoDao {
     MemberInfoDO getMemberInfoById(Long id);
 
     /**
-     * 根据memberId查询会员信息
+     * 根据会员编号查询会员信息
      * 
      * @param memberId
      * @return

@@ -37,20 +37,25 @@ public class MemberManagerImpl implements MemberManager {
             return BigDecimal.ZERO;
         }
 
+        // 断言:收取手续费类型
         AssertUtil.notEmpty(memberTransConfine.getCollectFeeType(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "手续费类型未配置");
 
+        // 单笔
         if (StringUtils.pathEquals(MemberCollectFeeTypeEnum.COLLECT_FEE_TYPE_R.getCode(), memberTransConfine.getCollectFeeType())) {
             return orderAmount.multiply(memberTransConfine.getRatioCollectFee());
         }
 
+        // 比例
         if (StringUtils.pathEquals(MemberCollectFeeTypeEnum.COLLECT_FEE_TYPE_S.getCode(), memberTransConfine.getCollectFeeType())) {
             return memberTransConfine.getSingleCollectFee();
         }
 
+        // 单笔+比例
         if (StringUtils.pathEquals(MemberCollectFeeTypeEnum.COLLECT_FEE_TYPE_SR.getCode(), memberTransConfine.getCollectFeeType())) {
             return orderAmount.multiply(memberTransConfine.getRatioCollectFee()).add(memberTransConfine.getSingleCollectFee());
         }
 
+        // 手续费类型不匹配
         throw new OptimusException(RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "手续费类型不匹配");
 
     }
@@ -58,10 +63,13 @@ public class MemberManagerImpl implements MemberManager {
     @Override
     public MemberTransConfineDTO getMemberTransConfineByMemberId(String memberId) {
 
+        // 查询会员交易限制
         MemberTransConfineDO memberTransConfineDO = memberTransConfineDao.getMemberTransConfineByMemberId(memberId);
 
+        // 断言:会员交易限制
         AssertUtil.notEmpty(memberTransConfineDO, RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "会员交易限制为空");
 
+        // 获取会员交易限制DTO
         MemberTransConfineDTO memberTransConfine = new MemberTransConfineDTO();
         BeanUtils.copyProperties(memberTransConfineDO, memberTransConfine);
 
