@@ -21,6 +21,12 @@
     <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
 
+  <resultMap id="MemberInfoForRecursionResultMap" type="com.optimus.dao.result.MemberInfoForRecursionResult">
+    <result column="MEMBER_ID" jdbcType="VARCHAR" property="memberId" />
+    <result column="MEMBER_TYPE" jdbcType="VARCHAR" property="memberType" />
+    <result column="LEVEL" jdbcType="NUMERIC" property="level" />
+  </resultMap>
+
   <sql id="Base_Column_List">
     ID, MEMBER_ID, LOGIN_NAME, LOGIN_PASSWORD, MEMBER_KEY, MOBILE, EMAIL, SHOW_NAME, 
     MEMBER_TYPE, MEMBER_STATUS, SUP_DIRECT_MEMBER_ID, DELETE_FLAG, CREATE_BY, 
@@ -50,6 +56,21 @@
     </foreach>
     and MEMBER_STATUS = #{memberInfoQuery.memberStatus,jdbcType=VARCHAR}
     and DELETE_FLAG = #{memberInfoQuery.deleteFlag,jdbcType=VARCHAR}
+  </select>
+
+  <select id="listMemberInfoForRecursions" parameterType="java.lang.String" resultMap="MemberInfoForRecursionResultMap">
+    with CTE_PARENT(MEMBER_ID, SUP_DIRECT_MEMBER_ID, MEMBER_TYPE, LEVEL)
+    as (
+      select MEMBER_ID, SUP_DIRECT_MEMBER_ID, MEMBER_TYPE, 0 as LEVEL
+      from T_MEMBER_INFO
+      where MEMBER_ID = #{memberId,jdbcType=VARCHAR}
+      union all
+      select l.MEMBER_ID, l.SUP_DIRECT_MEMBER_ID, l.MEMBER_TYPE, LEVEL + 1
+      from T_MEMBER_INFO l
+      inner join CTE_PARENT r
+      on l.MEMBER_ID = r.SUP_DIRECT_MEMBER_ID
+    )
+    select MEMBER_ID, MEMBER_TYPE, LEVEL from CTE_PARENT
   </select>
 
   <insert id="addMemberInfo" parameterType="com.optimus.dao.domain.MemberInfoDO">

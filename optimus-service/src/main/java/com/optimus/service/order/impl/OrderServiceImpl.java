@@ -54,7 +54,7 @@ public class OrderServiceImpl implements OrderService {
             return null;
         }
 
-        // 获取订单信息DTO
+        // 订单信息DTO
         OrderInfoDTO orderInfoDTO = new OrderInfoDTO();
         BeanUtils.copyProperties(orderInfoDO, orderInfoDTO);
 
@@ -69,14 +69,14 @@ public class OrderServiceImpl implements OrderService {
             page = new Page();
         }
 
-        // 获取订单信息Query
+        // 订单信息Query
         OrderInfoQuery query = OrderManagerConvert.getOrderInfoQuery(orderInfo, page);
 
         // 根据订单信息Query查询订单信息
         List<OrderInfoDO> orderInfoDOList = orderInfoDao.listOrderInfoByOrderInfoQuerys(query);
         AssertUtil.notEmpty(orderInfoDOList, RespCodeEnum.ORDER_NO, null);
 
-        // 获取订单信息DTO
+        // 订单信息DTO
         List<OrderInfoDTO> orderInfoList = new ArrayList<>();
         BeanUtil.copyProperties(orderInfoDOList, orderInfoList, OrderInfoDTO.class);
 
@@ -90,7 +90,7 @@ public class OrderServiceImpl implements OrderService {
         // 验证上游订单是否重复
         orderManager.checkCallerOrderId(createOrder.getCallerOrderId());
 
-        // 根据订单类型获取处理工厂类
+        // 订单工厂实例
         BaseOrder baseOrder = orderFactory.getOrderInstance(createOrder.getOrderType());
         AssertUtil.notEmpty(baseOrder, RespCodeEnum.ORDER_ERROR, "订单类型异常");
 
@@ -111,7 +111,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void payOrder(PayOrderDTO payOrder) {
 
-        // 根据订单类型获取处理工厂类
+        // 订单工厂实例
         BaseOrder baseOrder = orderFactory.getOrderInstance(payOrder.getOrderType());
         AssertUtil.notEmpty(baseOrder, RespCodeEnum.ORDER_ERROR, "订单类型异常");
 

@@ -47,7 +47,7 @@ public class TransferOrder extends BaseOrder {
     @Override
     public OrderInfoDTO createOrder(CreateOrderDTO createOrder) {
 
-        // 获取订单信息DTO
+        // 订单信息DTO
         OrderInfoDTO orderInfo = OrderManagerConvert.getOrderInfoDTO(createOrder);
         orderInfo.setActualAmount(createOrder.getOrderAmount());
 
@@ -64,7 +64,7 @@ public class TransferOrder extends BaseOrder {
     public void payOrder(PayOrderDTO payOrder) {
 
         // 更新订单状态
-        int update = orderInfoDao.updateStatusByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_AP.getCode(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());
+        int update = orderInfoDao.updateOrderStatusByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_AP.getCode(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());
         if (update != 1) {
             throw new OptimusException(RespCodeEnum.ORDER_ERROR, "订单状态异常");
         }
@@ -97,7 +97,7 @@ public class TransferOrder extends BaseOrder {
 
         // 账户交易失败,回滚订单状态
         if (!doTrans) {
-            orderInfoDao.updateStatusByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), OrderStatusEnum.ORDER_STATUS_AP.getCode(), DateUtil.currentDate());
+            orderInfoDao.updateOrderStatusByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), OrderStatusEnum.ORDER_STATUS_AP.getCode(), DateUtil.currentDate());
         }
 
     }

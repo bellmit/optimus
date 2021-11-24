@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.optimus.dao.domain.MemberInfoDO;
 import com.optimus.dao.query.MemberInfoQuery;
+import com.optimus.dao.result.MemberInfoForRecursionResult;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -37,6 +38,14 @@ public interface MemberInfoDao {
      * @return
      */
     List<MemberInfoDO> listMemberInfoByMemberInfoQuerys(@Param("memberInfoQuery") MemberInfoQuery query);
+
+    /**
+     * 递归查询会员编号的父节点
+     * 
+     * @param memberId
+     * @return
+     */
+    List<MemberInfoForRecursionResult> listMemberInfoForRecursions(String memberId);
 
     /**
      * 新增一条会员信息

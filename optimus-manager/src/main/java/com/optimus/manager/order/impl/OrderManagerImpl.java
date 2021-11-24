@@ -50,7 +50,7 @@ public class OrderManagerImpl implements OrderManager {
     @Override
     public String orderNotice(OrderNoticeInputDTO input, String key, String noticeUrl) {
 
-        log.info("orderNotice input is {}, key is {}, noticeUrl is {}", input, key, noticeUrl);
+        log.info("orderNotice orderNoticeInput is {}, key is {}, noticeUrl is {}", input, key, noticeUrl);
 
         try {
 

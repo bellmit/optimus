@@ -68,7 +68,7 @@ public class WithdrawOrder extends BaseOrder {
             throw new OptimusException(RespCodeEnum.ACCOUNT_AMOUNT_ERROR);
         }
 
-        // 获取订单信息DTO
+        // 订单信息DTO
         OrderInfoDTO orderInfo = OrderManagerConvert.getOrderInfoDTO(createOrder);
 
         // 计算手续费
@@ -157,7 +157,7 @@ public class WithdrawOrder extends BaseOrder {
 
         // 账户交易失败,回滚订单状态
         if (!doTrans) {
-            orderInfoDao.updateStatusByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), OrderStatusEnum.ORDER_STATUS_AP.getCode(), DateUtil.currentDate());
+            orderInfoDao.updateOrderStatusByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), OrderStatusEnum.ORDER_STATUS_AP.getCode(), DateUtil.currentDate());
         }
 
     }

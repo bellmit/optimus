@@ -7,6 +7,7 @@ import com.optimus.manager.gateway.dto.ExecuteScriptInputDTO;
 import com.optimus.manager.gateway.dto.ExecuteScriptOutputDTO;
 import com.optimus.manager.order.dto.CreateOrderDTO;
 import com.optimus.manager.order.dto.OrderInfoDTO;
+import com.optimus.manager.order.dto.OrderNoticeInputDTO;
 import com.optimus.manager.order.dto.PayOrderDTO;
 import com.optimus.util.DateUtil;
 import com.optimus.util.constants.account.AccountChangeTypeEnum;
@@ -35,7 +36,7 @@ public class OrderManagerConvert {
      */
     public static OrderInfoQuery getOrderInfoQuery(OrderInfoDTO orderInfo, Page page) {
 
-        // 获取订单Query
+        // 订单Query
         OrderInfoQuery query = new OrderInfoQuery();
 
         query.setPage(page);
@@ -55,7 +56,7 @@ public class OrderManagerConvert {
      */
     public static OrderInfoDO getOrderInfoDO(OrderInfoDTO orderInfo) {
 
-        // 获取订单信息DTO
+        // 订单信息DTO
         OrderInfoDO orderInfoDO = new OrderInfoDO();
         BeanUtils.copyProperties(orderInfo, orderInfoDO);
 
@@ -74,7 +75,7 @@ public class OrderManagerConvert {
      */
     public static OrderInfoDTO getOrderInfoDTO(CreateOrderDTO createOrder) {
 
-        // 获取订单信息DTO
+        // 订单信息DTO
         OrderInfoDTO orderInfo = new OrderInfoDTO();
         BeanUtils.copyProperties(createOrder, orderInfo);
 
@@ -91,7 +92,7 @@ public class OrderManagerConvert {
      */
     public static OrderInfoDTO getOrderInfoDTO(CreateOrderDTO createOrder, ExecuteScriptOutputDTO output) {
 
-        // 获取订单信息DTO
+        // 订单信息DTO
         OrderInfoDTO orderInfo = new OrderInfoDTO();
         BeanUtils.copyProperties(createOrder, orderInfo);
 
@@ -131,7 +132,7 @@ public class OrderManagerConvert {
      */
     public static DoTransDTO getDoTransDTO(AccountChangeTypeEnum accountChangeTypeEnum, CreateOrderDTO createOrder, String remark) {
 
-        // 获取账户交易DTO
+        // 账户交易DTO
         DoTransDTO doTrans = new DoTransDTO();
 
         doTrans.setChangeType(accountChangeTypeEnum.getCode());
@@ -154,7 +155,7 @@ public class OrderManagerConvert {
      */
     public static DoTransDTO getDoTransDTO(AccountChangeTypeEnum accountChangeTypeEnum, PayOrderDTO payOrder, String remark) {
 
-        // 获取账户交易DTO
+        // 账户交易DTO
         DoTransDTO doTrans = new DoTransDTO();
 
         doTrans.setChangeType(accountChangeTypeEnum.getCode());
@@ -177,7 +178,7 @@ public class OrderManagerConvert {
      */
     public static DoTransDTO getDoTransDTO(AccountChangeTypeEnum accountChangeTypeEnum, OrderInfoDTO orderInfo, String remark) {
 
-        // 获取账户交易DTO
+        // 账户交易DTO
         DoTransDTO doTrans = new DoTransDTO();
 
         doTrans.setChangeType(accountChangeTypeEnum.getCode());
@@ -200,7 +201,7 @@ public class OrderManagerConvert {
      */
     public static ExecuteScriptInputDTO getExecuteScriptInputDTO(CreateOrderDTO createOrder) {
 
-        // 获取执行脚本输入DTO
+        // 执行脚本输入DTO
         ExecuteScriptInputDTO input = new ExecuteScriptInputDTO();
         input.setScriptMethod(ScriptEnum.CREATE.getCode());
         input.setMemberId(createOrder.getMemberId());
@@ -216,6 +217,28 @@ public class OrderManagerConvert {
             input.setImplPath(createOrder.getGatewaySubChannel().getImplPath());
             input.setBizContent(createOrder.getGatewaySubChannel().getBizContent());
         }
+
+        return input;
+
+    }
+
+    /**
+     * 获取订单通知输入DTO
+     * 
+     * @param payOrder
+     * @return
+     */
+    public static OrderNoticeInputDTO getOrderNoticeInputDTO(PayOrderDTO payOrder) {
+
+        // 订单通知输入DTO
+        OrderNoticeInputDTO input = new OrderNoticeInputDTO();
+
+        input.setMemberId(payOrder.getMemberId());
+        input.setOrderId(payOrder.getOrderId());
+        input.setCallerOrderId(payOrder.getCallerOrderId());
+        input.setOrderStatus(payOrder.getOrderStatus());
+        input.setOrderAmount(payOrder.getOrderAmount());
+        input.setActualAmount(payOrder.getActualAmount());
 
         return input;
 

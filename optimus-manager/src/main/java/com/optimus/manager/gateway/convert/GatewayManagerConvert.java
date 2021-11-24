@@ -46,7 +46,7 @@ public class GatewayManagerConvert {
      */
     public static MemberInfoQuery getMemberInfoQuery(List<MemberChannelDO> memberChannelList) {
 
-        // 获取会员信息Query
+        // 会员信息Query
         MemberInfoQuery query = new MemberInfoQuery();
         query.setMemberIdList(memberChannelList.stream().map(MemberChannelDO::getMemberId).collect(Collectors.toList()));
         query.setMemberStatus(MemberStatusEnum.MEMBER_STATUS_Y.getCode());
@@ -65,7 +65,7 @@ public class GatewayManagerConvert {
      */
     public static MemberChannelQuery getMemberChannelQuery(MemberInfoDTO memberInfo, List<GatewaySubChannelDO> gatewaySubChannelList) {
 
-        // 获取会员渠道Query
+        // 会员渠道Query
         MemberChannelQuery query = new MemberChannelQuery();
 
         query.setAgentMemberId(memberInfo.getSupDirectMemberId());
@@ -84,7 +84,7 @@ public class GatewayManagerConvert {
      */
     public static GatewaySubChannelQuery getGatewaySubChannelQuery(MemberInfoDTO memberInfo, GatewayChannelDTO gatewayChannel) {
 
-        // 获取网关子渠道Query
+        // 网关子渠道Query
         GatewaySubChannelQuery query = new GatewaySubChannelQuery();
 
         query.setAgentMemberId(memberInfo.getSupDirectMemberId());
@@ -175,11 +175,11 @@ public class GatewayManagerConvert {
         // 洗牌
         Collections.shuffle(gatewaySubChannelList);
 
-        // 获取网关子渠道DTO
+        // 网关子渠道DTO
         GatewaySubChannelDTO gatewaySubChannel = new GatewaySubChannelDTO();
         BeanUtils.copyProperties(gatewaySubChannelList.get(0), gatewaySubChannel);
 
-        // 获取匹配渠道DTO
+        // 匹配渠道DTO
         MatchChannelDTO matchChannel = new MatchChannelDTO();
         matchChannel.setGatewaySubChannel(gatewaySubChannel);
 
@@ -201,20 +201,20 @@ public class GatewayManagerConvert {
         Collections.shuffle(memberInfoList);
         Collections.shuffle(memberChannelList);
 
-        // 取第一个码商
+        // 第一个码商
         String codeMemberId = memberInfoList.get(0).getMemberId();
 
-        // 取相匹配的会员渠道
+        // 相匹配的会员渠道
         MemberChannelDO memberChannel = memberChannelList.stream().filter(e -> StringUtils.pathEquals(e.getMemberId(), codeMemberId)).findFirst().get();
 
-        // 取相匹配的子渠道下
+        // 相匹配的子渠道
         GatewaySubChannelDO gatewaySubChannelDO = gatewaySubChannelList.stream().filter(e -> StringUtils.pathEquals(e.getChannelCode(), memberChannel.getSubChannelCode())).findFirst().get();
 
-        // 获取网关子渠道DTO
+        // 网关子渠道DTO
         GatewaySubChannelDTO gatewaySubChannel = new GatewaySubChannelDTO();
         BeanUtils.copyProperties(gatewaySubChannelDO, gatewaySubChannel);
 
-        // 获取匹配渠道DTO
+        // 匹配渠道DTO
         MatchChannelDTO matchChannel = new MatchChannelDTO();
         matchChannel.setCodeMemberId(codeMemberId);
         matchChannel.setGatewaySubChannel(gatewaySubChannel);

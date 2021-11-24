@@ -48,7 +48,7 @@ public class RechargeOrder extends BaseOrder {
     @Override
     public OrderInfoDTO createOrder(CreateOrderDTO createOrder) {
 
-        // 获取订单信息DTO
+        // 订单信息DTO
         OrderInfoDTO orderInfo = OrderManagerConvert.getOrderInfoDTO(createOrder);
         orderInfo.setActualAmount(createOrder.getOrderAmount());
 
@@ -66,12 +66,12 @@ public class RechargeOrder extends BaseOrder {
         // 驳回
         if (StringUtils.pathEquals(OrderConfirmTypeEnum.ORDER_CONFIRM_TYPE_R.getCode(), payOrder.getConfirmType())) {
             // 更新订单状态
-            orderInfoDao.updateStatusByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_AC.getCode(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());
+            orderInfoDao.updateOrderStatusByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_AC.getCode(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());
             return;
         }
 
         // 更新订单状态
-        int update = orderInfoDao.updateStatusByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_AP.getCode(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());
+        int update = orderInfoDao.updateOrderStatusByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_AP.getCode(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());
         if (update != 1) {
             throw new OptimusException(RespCodeEnum.ORDER_ERROR, "订单状态异常");
         }
@@ -85,8 +85,8 @@ public class RechargeOrder extends BaseOrder {
         doTransList.add(bPlus);
 
         // 如果是码商给下级充值,则码商自己需要减一笔余额
-        // 若superMemberInfo为空,则作为异常处理
-        if (StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_C.getCode(), payOrder.getSuperMemberInfo().getMemberType())) {
+        // 若supMemberInfo为空,则作为异常处理
+        if (StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_C.getCode(), payOrder.getSupMemberInfo().getMemberType())) {
             // 减一笔余额
             DoTransDTO bMinus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_MINUS, payOrder, "充值扣减");
             doTransList.add(bMinus);
@@ -96,7 +96,7 @@ public class RechargeOrder extends BaseOrder {
 
         // 账户交易失败,回滚订单状态
         if (!doTrans) {
-            orderInfoDao.updateStatusByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), OrderStatusEnum.ORDER_STATUS_AP.getCode(), DateUtil.currentDate());
+            orderInfoDao.updateOrderStatusByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), OrderStatusEnum.ORDER_STATUS_AP.getCode(), DateUtil.currentDate());
         }
 
     }

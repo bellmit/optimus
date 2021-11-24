@@ -50,7 +50,7 @@ public class GatewayServiceImpl implements GatewayService {
         GatewayChannelDO gatewayChannelDO = gatewayChannelDao.getGatewayChannelByChannelCode(channelCode);
         AssertUtil.notEmpty(gatewayChannelDO, RespCodeEnum.GATEWAY_CHANNEL_NO, null);
 
-        // 获取网关渠道DTO
+        // 网关渠道DTO
         GatewayChannelDTO gatewayChannel = new GatewayChannelDTO();
         BeanUtils.copyProperties(gatewayChannelDO, gatewayChannel);
 
@@ -65,7 +65,7 @@ public class GatewayServiceImpl implements GatewayService {
         GatewaySubChannelDO gatewaySubChannelDO = gatewaySubChannelDao.getGatewaySubChannelBySubChannelCode(channelCode);
         AssertUtil.notEmpty(gatewaySubChannelDO, RespCodeEnum.GATEWAY_CHANNEL_NO, null);
 
-        // 获取网关子渠道DTO
+        // 网关子渠道DTO
         GatewaySubChannelDTO gatewaySubChannel = new GatewaySubChannelDTO();
         BeanUtils.copyProperties(gatewaySubChannelDO, gatewaySubChannel);
 

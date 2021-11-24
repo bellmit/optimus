@@ -29,11 +29,14 @@ public class AccountManagerConvert {
      */
     public static List<AccountInfoDO> getAccountInfoDOList(List<AccountInfoDO> accountInfoDOList, List<DoTransDTO> doTransList) {
 
+        // 账户信息Map
         Map<String, AccountInfoDO> accountInfoMap = buildAccountInfoMap(accountInfoDOList);
 
+        // 账户信息List
         List<AccountInfoDO> accountInfoList = new ArrayList<>();
         AccountInfoDO accountInfo = null;
 
+        // 遍历账户交易
         for (DoTransDTO item : doTransList) {
 
             String memberId = item.getMemberId();
@@ -61,6 +64,7 @@ public class AccountManagerConvert {
 
         }
 
+        // 验证账户信息和账户交易必须一致
         if (accountInfoList.size() != doTransList.size()) {
             return null;
         }
@@ -78,11 +82,14 @@ public class AccountManagerConvert {
      */
     public static List<AccountLogDO> getAccountLogDOList(List<AccountInfoDO> accountInfoList, List<DoTransDTO> doTransList) {
 
+        // 账户日志Map
         Map<String, AccountInfoDO> accountInfoMap = buildAccountInfoMap(accountInfoList);
 
+        // 账户日志List
         List<AccountLogDO> accountLogList = new ArrayList<>();
         AccountLogDO accountLog = null;
 
+        // 遍历账户交易List
         for (DoTransDTO item : doTransList) {
 
             String memberId = item.getMemberId();
@@ -119,6 +126,7 @@ public class AccountManagerConvert {
 
         }
 
+        // 验证账户日志和账户交易必须一致
         if (accountLogList.size() != doTransList.size()) {
             return null;
         }
@@ -135,8 +143,10 @@ public class AccountManagerConvert {
      */
     private static Map<String, AccountInfoDO> buildAccountInfoMap(List<AccountInfoDO> accountInfoList) {
 
+        // 账户信息Map
         Map<String, AccountInfoDO> accountInfoMap = new HashMap<>(128);
 
+        // 遍历账户信息List
         for (AccountInfoDO item : accountInfoList) {
 
             String memberId = item.getMemberId();

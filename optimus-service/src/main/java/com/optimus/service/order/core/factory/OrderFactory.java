@@ -32,13 +32,13 @@ public class OrderFactory {
      */
     public BaseOrder getOrderInstance(String orderType) {
 
-        // 获取订单类型Enum
+        // 订单类型Enum
         OrderTypeEnum instance = OrderTypeEnum.instanceOf(orderType);
         if (Objects.isNull(instance)) {
             return null;
         }
 
-        // 获取工厂实例
+        // 工厂实例
         BaseOrder baseOrder = baseOrderMap.get(instance.getInstance());
         if (Objects.isNull(baseOrder)) {
             return null;

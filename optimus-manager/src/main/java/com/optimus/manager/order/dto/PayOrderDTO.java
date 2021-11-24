@@ -44,6 +44,11 @@ public class PayOrderDTO implements Serializable {
     private String orderId;
 
     /**
+     * 调用方订单编号
+     */
+    private String callerOrderId;
+
+    /**
      * 被调用方订单编号
      */
     private String calleeOrderId;
@@ -90,6 +95,11 @@ public class PayOrderDTO implements Serializable {
     private String behavior;
 
     /**
+     * 商户回调地址[商户下单时传入]
+     */
+    private String merchantCallbackUrl;
+
+    /**
      * 划账类型
      *
      * @see OrderTransferTypeEnum
@@ -106,7 +116,7 @@ public class PayOrderDTO implements Serializable {
     /**
      * 上级会员信息
      */
-    private MemberInfoDTO superMemberInfo;
+    private MemberInfoDTO supMemberInfo;
 
     /**
      * 会员信息

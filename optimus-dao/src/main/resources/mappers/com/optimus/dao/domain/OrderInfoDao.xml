@@ -308,7 +308,7 @@
     where ID = #{id,jdbcType=NUMERIC}
   </update>
 
-  <update id="updateStatusByOrderIdAndOrderStatus">
+  <update id="updateOrderStatusByOrderIdAndOrderStatus">
     update T_ORDER_INFO
     set ORDER_STATUS = #{orderStatus,jdbcType=VARCHAR},
         UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}

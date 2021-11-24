@@ -7,9 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 import com.optimus.manager.gateway.dto.ExecuteScriptInputDTO;
 import com.optimus.manager.gateway.dto.ExecuteScriptOutputDTO;
 import com.optimus.manager.gateway.dto.GatewaySubChannelDTO;
+import com.optimus.manager.member.dto.MemberInfoDTO;
 import com.optimus.manager.order.dto.OrderInfoDTO;
 import com.optimus.manager.order.dto.PayOrderDTO;
 import com.optimus.service.gateway.GatewayService;
+import com.optimus.service.member.MemberService;
 import com.optimus.service.order.OrderService;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
@@ -36,6 +38,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class GatewayController {
 
     @Autowired
+    public MemberService memberService;
+
+    @Autowired
     public GatewayService gatewayService;
 
     @Autowired
@@ -49,12 +54,13 @@ public class GatewayController {
     @RequestMapping(value = "/channelCallback", method = { RequestMethod.GET, RequestMethod.POST })
     public String channelCallback(HttpServletRequest req, @RequestParam("subChannelCode") String subChannelCode) {
 
-        // 获取商户客户端IP
+        // 商户客户端IP
         String ip = GatewayControllerConvert.getRemoteIp(req);
         AssertUtil.notEmpty(ip, RespCodeEnum.INVALID_IP, "客户端IP不能为空");
 
         // 查询子渠道
         GatewaySubChannelDTO gatewaySubChannel = gatewayService.getGatewaySubChannelBySubChannelCode(subChannelCode);
+        AssertUtil.notEmpty(gatewaySubChannel, RespCodeEnum.GATEWAY_CHANNEL_NO, "网关子渠道为空");
 
         // 验证IP
         String[] ips = gatewaySubChannel.getCallbackIp().split(",");
@@ -77,13 +83,13 @@ public class GatewayController {
             throw new OptimusException(RespCodeEnum.ORDER_ERROR, "原订单状态不合法");
         }
 
+        // 查询会员信息
+        MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(orderInfo.getMemberId());
+
         // 支付
-        PayOrderDTO payOrder = GatewayControllerConvert.getPayOrderDTO(output);
+        PayOrderDTO payOrder = GatewayControllerConvert.getPayOrderDTO(output, memberInfo, orderInfo);
         payOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_C.getCode());
         payOrder.setBehavior(OrderBehaviorEnum.ORDER_BEHAVIOR_S.getCode());
-        payOrder.setMemberId(orderInfo.getMemberId());
-        payOrder.setSupMemberId(orderInfo.getSupMemberId());
-        payOrder.setCodeMemberId(orderInfo.getCodeMemberId());
 
         orderService.payOrder(payOrder);
 

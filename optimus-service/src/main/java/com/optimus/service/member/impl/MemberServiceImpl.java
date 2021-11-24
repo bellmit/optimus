@@ -40,7 +40,7 @@ public class MemberServiceImpl implements MemberService {
         AssertUtil.notEmpty(memberInfoDO, RespCodeEnum.MEMBER_NO, null);
         AssertUtil.notEquals(MemberDeleteFlagEnum.DELETE_FLAG_ND.getCode(), memberInfoDO.getDeleteFlag(), RespCodeEnum.MEMBER_NO, null);
 
-        // 获取会员信息DTO
+        // 会员信息DTO
         MemberInfoDTO memberInfo = new MemberInfoDTO();
         BeanUtils.copyProperties(memberInfoDO, memberInfo);
 
@@ -58,7 +58,7 @@ public class MemberServiceImpl implements MemberService {
 
         // 根据直接上级会员编号查询会员信息
         MemberInfoDO subMemberInfo = memberInfoDao.getMemberInfoByMemberId(subDirectMemberId);
-        AssertUtil.notEmpty(subMemberInfo, RespCodeEnum.MEMBER_NO, "下级会员不存在");
+        AssertUtil.notEmpty(subMemberInfo, RespCodeEnum.MEMBER_NO, "下级会员为空");
 
         // 验证上下级关系
         AssertUtil.notEquals(memberInfo.getMemberId(), subMemberInfo.getSupDirectMemberId(), RespCodeEnum.MEMBER_ERROR, "上下级关系异常");

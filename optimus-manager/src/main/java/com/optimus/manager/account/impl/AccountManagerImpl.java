@@ -51,7 +51,7 @@ public class AccountManagerImpl implements AccountManager {
             return null;
         }
 
-        // 获取账户信息DTO
+        // 账户信息DTO
         AccountInfoDTO accountInfo = new AccountInfoDTO();
         BeanUtils.copyProperties(accountInfoDO, accountInfo);
 

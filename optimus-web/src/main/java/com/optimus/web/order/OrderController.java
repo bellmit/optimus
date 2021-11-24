@@ -39,7 +39,7 @@ public class OrderController {
         // 验证订单信息
         OrderControllerValidate.validateQueryOrderInfo(req);
 
-        // 获取订单信息DTO
+        // 订单信息DTO
         OrderInfoDTO orderInfo = OrderControllerConvert.getOrderInfoDTO(req);
 
         // 查询订单信息

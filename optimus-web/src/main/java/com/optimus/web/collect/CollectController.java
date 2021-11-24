@@ -71,7 +71,7 @@ public class CollectController {
     @PostMapping("/applyForRecharge")
     public ApplyForRechargeResp applyForRecharge(@RequestBody ApplyForRechargeReq req) {
 
-        // 获取会员信息
+        // 会员信息DTO
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
 
         // 验证会员类型
@@ -100,10 +100,10 @@ public class CollectController {
     @PostMapping("/confirmForRecharge")
     public ConfirmForRechargeResp confirmForRecharge(@RequestBody ConfirmForRechargeReq req) {
 
-        // 获取会员信息
+        // 会员信息DTO
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
 
-        // 获取订单信息
+        // 订单信息
         OrderInfoDTO orderInfo = orderService.getOrderInfoByOrderId(req.getOrderId());
         AssertUtil.notEmpty(orderInfo, RespCodeEnum.ORDER_NO, null);
 
@@ -132,7 +132,7 @@ public class CollectController {
     @PostMapping("/recharge")
     public RechargeResp recharge(@RequestBody RechargeReq req) {
 
-        // 获取会员信息
+        // 会员信息DTO
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
 
         // 验证上下级关系
@@ -157,7 +157,7 @@ public class CollectController {
         // 支付订单
         PayOrderDTO payOrder = CollectControllerConvert.getPayOrderDTO(orderInfo);
         // 注意:由于后面的订单信息的会员ID是下级的,所以这里会员信息看作是上级会员
-        payOrder.setSuperMemberInfo(memberInfo);
+        payOrder.setSupMemberInfo(memberInfo);
         orderService.payOrder(payOrder);
 
         return new RechargeResp();
@@ -172,7 +172,7 @@ public class CollectController {
     @PostMapping("/applyForWithdraw")
     public ApplyForWithdrawResp applyForWithdraw(@RequestBody ApplyForWithdrawReq req) {
 
-        // 获取会员信息
+        // 会员信息
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
 
         // 验证会员类型
@@ -202,13 +202,13 @@ public class CollectController {
     @PostMapping("/confirmForWithdraw")
     public ConfirmForWithdrawResp confirmForWithdraw(@RequestBody ConfirmForWithdrawReq req) {
 
-        // 获取会员信息
+        // 会员信息
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
 
         // 验证会员类型
         AssertUtil.notEquals(MemberTypeEnum.MEMBER_TYPE_S.getCode(), memberInfo.getMemberType(), RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为平台");
 
-        // 获取订单信息
+        // 订单信息
         OrderInfoDTO orderInfo = orderService.getOrderInfoByOrderId(req.getOrderId());
         AssertUtil.notEmpty(orderInfo, RespCodeEnum.ORDER_NO, null);
 
@@ -220,7 +220,7 @@ public class CollectController {
 
         // 支付订单
         PayOrderDTO payOrder = CollectControllerConvert.getPayOrderDTO(orderInfo);
-        payOrder.setSuperMemberInfo(memberInfo);
+        payOrder.setSupMemberInfo(memberInfo);
         orderService.payOrder(payOrder);
 
         return new ConfirmForWithdrawResp();
@@ -235,7 +235,7 @@ public class CollectController {
     @PostMapping("/withdraw")
     public WithdrawResp withdraw(@RequestBody WithdrawReq req) {
 
-        // 获取会员信息
+        // 会员信息
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
 
         // 验证会员类型
@@ -254,7 +254,7 @@ public class CollectController {
 
         // 支付订单
         PayOrderDTO payOrder = CollectControllerConvert.getPayOrderDTO(orderInfo);
-        payOrder.setSuperMemberInfo(memberInfo);
+        payOrder.setSupMemberInfo(memberInfo);
         orderService.payOrder(payOrder);
 
         return new WithdrawResp();
@@ -269,7 +269,7 @@ public class CollectController {
     @PostMapping("/transfer")
     public TransferResp transfer(@RequestBody TransferReq req) {
 
-        // 获取会员信息
+        // 会员信息
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
 
         // 验证会员类型
@@ -303,7 +303,7 @@ public class CollectController {
         // 参数验证
         CollectControllerValidate.validatePlaceOrder(req);
 
-        // 获取会员信息
+        // 会员信息
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
         AssertUtil.notEquals(MemberTypeEnum.MEMBER_TYPE_B.getCode(), memberInfo.getMemberType(), RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为商户");
 

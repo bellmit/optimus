@@ -1,11 +1,14 @@
 package com.optimus.manager.member.impl;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.annotation.Resource;
 
 import com.optimus.dao.domain.MemberTransConfineDO;
+import com.optimus.dao.mapper.MemberInfoDao;
 import com.optimus.dao.mapper.MemberTransConfineDao;
+import com.optimus.dao.result.MemberInfoForRecursionResult;
 import com.optimus.manager.member.MemberManager;
 import com.optimus.manager.member.dto.MemberTransConfineDTO;
 import com.optimus.util.AssertUtil;
@@ -15,8 +18,12 @@ import com.optimus.util.constants.member.MemberWithdrawFeeSwitchEnum;
 import com.optimus.util.exception.OptimusException;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 用户managerImpl
@@ -24,7 +31,11 @@ import org.springframework.util.StringUtils;
  * @author hongp
  */
 @Component
+@Slf4j
 public class MemberManagerImpl implements MemberManager {
+
+    @Resource
+    private MemberInfoDao memberInfoDao;
 
     @Resource
     private MemberTransConfineDao memberTransConfineDao;
@@ -69,11 +80,27 @@ public class MemberManagerImpl implements MemberManager {
         // 断言:会员交易限制
         AssertUtil.notEmpty(memberTransConfineDO, RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "会员交易限制为空");
 
-        // 获取会员交易限制DTO
+        // 会员交易限制DTO
         MemberTransConfineDTO memberTransConfine = new MemberTransConfineDTO();
         BeanUtils.copyProperties(memberTransConfineDO, memberTransConfine);
 
         return memberTransConfine;
 
     }
+
+    @Override
+    @Cacheable(value = "memberChainConfig", key = "#memberId", unless = "#result == null")
+    public List<MemberInfoForRecursionResult> listMemberInfoForRecursions(String memberId) {
+
+        // 递归查询会员信息
+        List<MemberInfoForRecursionResult> memberInfoList = memberInfoDao.listMemberInfoForRecursions(memberId);
+        log.info("memberInfo chain is {}", memberInfoList);
+
+        if (CollectionUtils.isEmpty(memberInfoList)) {
+            return null;
+        }
+
+        return memberInfoList;
+    }
+
 }

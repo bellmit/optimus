@@ -62,7 +62,7 @@ public class GatewayManagerImpl implements GatewayManager {
         gatewaySubChannelList = GatewayManagerConvert.getGatewaySubChannelList(gatewaySubChannelList, amount);
         AssertUtil.notEmpty(gatewaySubChannelList, RespCodeEnum.GATEWAY_CHANNEL_NO, "没有符合条件的子渠道");
 
-        // 选取子渠道
+        // 选择子渠道
         MatchChannelDTO matchChannel = GatewayManagerConvert.getMatchChannelDTO(gatewaySubChannelList);
         AssertUtil.notEmpty(matchChannel, RespCodeEnum.GATEWAY_CHANNEL_NO, "未匹配到子渠道");
 
@@ -92,7 +92,7 @@ public class GatewayManagerImpl implements GatewayManager {
         List<MemberInfoDO> memberInfoList = memberInfoDao.listMemberInfoByMemberInfoQuerys(memberInfoQuery);
         AssertUtil.notEmpty(memberInfoList, RespCodeEnum.MEMBER_ERROR, "会员信息状态已删除或无效");
 
-        // 选取码商和子渠道
+        // 选择码商和子渠道
         MatchChannelDTO matchChannel = GatewayManagerConvert.getMatchChannelDTO(memberInfoList, memberChannelList, gatewaySubChannelList);
         AssertUtil.notEmpty(matchChannel, RespCodeEnum.GATEWAY_CHANNEL_NO, "未匹配到子渠道");
         return matchChannel;

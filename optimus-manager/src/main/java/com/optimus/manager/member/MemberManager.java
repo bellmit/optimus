@@ -1,8 +1,10 @@
 package com.optimus.manager.member;
 
-import com.optimus.manager.member.dto.MemberTransConfineDTO;
-
 import java.math.BigDecimal;
+import java.util.List;
+
+import com.optimus.dao.result.MemberInfoForRecursionResult;
+import com.optimus.manager.member.dto.MemberTransConfineDTO;
 
 /**
  * 用户manager
@@ -29,5 +31,13 @@ public interface MemberManager {
      * @return
      */
     MemberTransConfineDTO getMemberTransConfineByMemberId(String memberId);
+
+    /**
+     * 递归查询会员信息
+     * 
+     * @param memberId
+     * @return
+     */
+    List<MemberInfoForRecursionResult> listMemberInfoForRecursions(String memberId);
 
 }

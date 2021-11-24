@@ -72,6 +72,6 @@ public interface OrderInfoDao {
      * @param updateTime
      * @return
      */
-    int updateStatusByOrderIdAndOrderStatus(@Param("orderId") String orderId, @Param("orderStatus") String orderStatus, @Param("originOrderStatus") String originOrderStatus, @Param("updateTime") Date updateTime);
+    int updateOrderStatusByOrderIdAndOrderStatus(@Param("orderId") String orderId, @Param("orderStatus") String orderStatus, @Param("originOrderStatus") String originOrderStatus, @Param("updateTime") Date updateTime);
 
 }
