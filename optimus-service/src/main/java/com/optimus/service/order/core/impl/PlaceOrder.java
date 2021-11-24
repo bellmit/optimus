@@ -12,6 +12,7 @@ import com.optimus.manager.account.AccountManager;
 import com.optimus.manager.account.dto.AccountInfoDTO;
 import com.optimus.manager.account.dto.DoTransDTO;
 import com.optimus.manager.gateway.GatewayManager;
+import com.optimus.manager.gateway.dto.ExecuteScriptInputDTO;
 import com.optimus.manager.gateway.dto.ExecuteScriptOutputDTO;
 import com.optimus.manager.member.MemberManager;
 import com.optimus.manager.member.dto.MemberTransConfineDTO;
@@ -73,7 +74,8 @@ public class PlaceOrder extends BaseOrder {
         MemberTransConfineDTO memberTransConfine = checkCodeBalance(createOrder);
 
         // 执行脚本
-        ExecuteScriptOutputDTO output = gatewayManager.executeScript(OrderManagerConvert.getExecuteScriptInputDTO(createOrder));
+        ExecuteScriptInputDTO executeScriptInput = OrderManagerConvert.getExecuteScriptInputDTO(createOrder);
+        ExecuteScriptOutputDTO output = gatewayManager.executeScript(executeScriptInput);
 
         // 订单信息DTO
         OrderInfoDTO orderInfo = OrderManagerConvert.getOrderInfoDTO(createOrder, output);
