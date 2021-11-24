@@ -203,6 +203,7 @@ public class OrderManagerConvert {
 
         // 执行脚本输入DTO
         ExecuteScriptInputDTO input = new ExecuteScriptInputDTO();
+
         input.setScriptMethod(ScriptEnum.CREATE.getCode());
         input.setMemberId(createOrder.getMemberId());
         input.setOrderId(createOrder.getOrderId());
