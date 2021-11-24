@@ -71,6 +71,9 @@ public class CollectController {
     @PostMapping("/applyForRecharge")
     public ApplyForRechargeResp applyForRecharge(@RequestBody ApplyForRechargeReq req) {
 
+        // 参数验证
+        CollectControllerValidate.validateApplyForRecharge(req);
+
         // 会员信息DTO
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
 
@@ -99,6 +102,9 @@ public class CollectController {
      */
     @PostMapping("/confirmForRecharge")
     public ConfirmForRechargeResp confirmForRecharge(@RequestBody ConfirmForRechargeReq req) {
+
+        // 参数验证
+        CollectControllerValidate.validateConfirmForRecharge(req);
 
         // 会员信息DTO
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
@@ -131,6 +137,9 @@ public class CollectController {
      */
     @PostMapping("/recharge")
     public RechargeResp recharge(@RequestBody RechargeReq req) {
+
+        // 参数验证
+        CollectControllerValidate.validateRecharge(req);
 
         // 会员信息DTO
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
@@ -172,6 +181,9 @@ public class CollectController {
     @PostMapping("/applyForWithdraw")
     public ApplyForWithdrawResp applyForWithdraw(@RequestBody ApplyForWithdrawReq req) {
 
+        // 参数验证
+        CollectControllerValidate.validateApplyForWithdraw(req);
+
         // 会员信息
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
 
@@ -201,6 +213,9 @@ public class CollectController {
      */
     @PostMapping("/confirmForWithdraw")
     public ConfirmForWithdrawResp confirmForWithdraw(@RequestBody ConfirmForWithdrawReq req) {
+
+        // 参数验证
+        CollectControllerValidate.validateConfirmForWithdraw(req);
 
         // 会员信息
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
@@ -235,6 +250,9 @@ public class CollectController {
     @PostMapping("/withdraw")
     public WithdrawResp withdraw(@RequestBody WithdrawReq req) {
 
+        // 参数验证
+        CollectControllerValidate.validateWithdraw(req);
+
         // 会员信息
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
 
@@ -268,6 +286,9 @@ public class CollectController {
      */
     @PostMapping("/transfer")
     public TransferResp transfer(@RequestBody TransferReq req) {
+
+        // 参数验证
+        CollectControllerValidate.validateTransfer(req);
 
         // 会员信息
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());

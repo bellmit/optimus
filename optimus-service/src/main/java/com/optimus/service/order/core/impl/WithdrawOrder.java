@@ -68,6 +68,11 @@ public class WithdrawOrder extends BaseOrder {
             throw new OptimusException(RespCodeEnum.ACCOUNT_AMOUNT_ERROR);
         }
 
+        // 验证提现金额，必须 最大金额>= 提现金额 >= 最小金额
+        if (createOrder.getOrderAmount().compareTo(memberTransConfine.getSingleMaxAmount()) > 0 || createOrder.getOrderAmount().compareTo(memberTransConfine.getSingleMinAmount()) < 0) {
+            throw new OptimusException(RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "提现金额不在交易限制范围内");
+        }
+
         // 订单信息DTO
         OrderInfoDTO orderInfo = OrderManagerConvert.getOrderInfoDTO(createOrder);
 
