@@ -3,9 +3,12 @@ package com.optimus.service.order.core.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import com.optimus.dao.domain.MemberChannelDO;
+import com.optimus.dao.mapper.MemberChannelDao;
 import com.optimus.dao.mapper.OrderInfoDao;
 import com.optimus.dao.result.MemberInfoForRecursionResult;
 import com.optimus.manager.account.AccountManager;
@@ -22,6 +25,7 @@ import com.optimus.manager.order.dto.CreateOrderDTO;
 import com.optimus.manager.order.dto.OrderInfoDTO;
 import com.optimus.manager.order.dto.OrderNoticeInputDTO;
 import com.optimus.manager.order.dto.PayOrderDTO;
+import com.optimus.manager.order.validate.OrderManagerValidate;
 import com.optimus.service.order.core.BaseOrder;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.DateUtil;
@@ -57,6 +61,9 @@ public class PlaceOrder extends BaseOrder {
 
     @Autowired
     private OrderManager orderManager;
+
+    @Resource
+    private MemberChannelDao memberChannelDao;
 
     @Resource
     private OrderInfoDao orderInfoDao;
@@ -119,9 +126,17 @@ public class PlaceOrder extends BaseOrder {
         String orderStatus = payOrder.getOrderStatus();
         AssertUtil.notEquals(OrderStatusEnum.ORDER_STATUS_AP.getCode(), orderStatus, RespCodeEnum.ORDER_ERROR, "订单状态只能为成功");
 
-        // 查询关系链
+        // 查询会员关系链
         List<MemberInfoForRecursionResult> memberInfoList = memberManager.listMemberInfoForRecursions(payOrder.getCodeMemberId());
         AssertUtil.notEmpty(memberInfoList, RespCodeEnum.MEMBER_ERROR, "会员关系链为空");
+
+        // 查询会员关系链的会员渠道费率
+        List<String> memberIdList = memberInfoList.stream().map(MemberInfoForRecursionResult::getMemberId).collect(Collectors.toList());
+        memberIdList.add(payOrder.getMemberId());
+        List<MemberChannelDO> memberChannelList = memberChannelDao.listMemberChannelByMemberIdLists(memberIdList);
+
+        // 验证会员关系链渠道费率
+        OrderManagerValidate.validateMemberChain(memberInfoList, memberChannelList);
 
         // 更新订单状态
         String originOrderStatus = updateOrderStatus(payOrder.getOrderId(), orderStatus);

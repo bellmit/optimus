@@ -69,7 +69,7 @@ public class AccountManagerImpl implements AccountManager {
             // 验证账户交易参数
             AccountManagerValidate.validateDoTrans(doTransList);
 
-            // 构造账户信息
+            // 构建账户信息
             List<AccountInfoDO> accountInfoList = buildAccountInfoList(doTransList);
 
             // 更新账户
@@ -89,14 +89,14 @@ public class AccountManagerImpl implements AccountManager {
     }
 
     /**
-     * 构造账户信息
+     * 构建账户信息
      * 
      * @param doTransList
      * @return
      */
     private List<AccountInfoDO> buildAccountInfoList(List<DoTransDTO> doTransList) {
 
-        // 获得会员编号集合
+        // 获取会员编号集合
         List<String> memberIdList = doTransList.stream().map(DoTransDTO::getMemberId).distinct().collect(Collectors.toList());
 
         // 查询会员所对应的所有账户信息
@@ -105,12 +105,12 @@ public class AccountManagerImpl implements AccountManager {
         // 断言:账户信息
         AssertUtil.notEmpty(accountInfoList, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易查询账户信息为空");
 
-        // 获得所涉及的账户信息
+        // 获取所涉及的账户信息
         accountInfoList = AccountManagerConvert.getAccountInfoDOList(accountInfoList, doTransList);
         log.info("buildAccountInfoList accountInfoList is {}", accountInfoList);
 
         // 断言:涉及账户信息
-        AssertUtil.notEmpty(accountInfoList, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易构造账户信息异常");
+        AssertUtil.notEmpty(accountInfoList, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易构建账户信息异常");
 
         return accountInfoList;
 
@@ -142,19 +142,19 @@ public class AccountManagerImpl implements AccountManager {
      */
     private void addBatchAccountLog(List<AccountInfoDO> accountInfoDOList, List<DoTransDTO> doTransList) {
 
-        // 获得账户主键集合
+        // 获取账户主键集合
         List<Long> idList = accountInfoDOList.stream().map(AccountInfoDO::getId).distinct().collect(Collectors.toList());
 
         // 查询账户交易后的数据
         List<AccountInfoDO> accountInfoList = accountInfoDao.listAccountInfoByIdLists(idList);
         log.info("addBatchAccountLog accountInfoList is {}", accountInfoList);
 
-        // 获得账户日志
+        // 获取账户日志
         List<AccountLogDO> accountLogList = AccountManagerConvert.getAccountLogDOList(accountInfoList, doTransList);
         log.info("addBatchAccountLog accountLogList is {}", accountLogList);
 
-        // 验证获得的账户日志
-        AssertUtil.empty(accountLogList, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易构造账户日志异常");
+        // 验证获取的账户日志
+        AssertUtil.empty(accountLogList, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易构建账户日志异常");
 
         // 记录账户日志
         accountLogDao.addBatchAccountLog(accountLogList);

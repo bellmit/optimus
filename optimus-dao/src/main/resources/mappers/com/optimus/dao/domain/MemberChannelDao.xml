@@ -28,6 +28,15 @@
     where ID = #{id,jdbcType=NUMERIC}
   </select>
 
+  <select id="listMemberChannelByMemberIdLists" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_MEMBER_CHANNEL
+    where MEMBER_ID in
+    <foreach collection="memberIdList" item="item" open="(" close=")" separator=","> #{item,jdbcType=VARCHAR}
+    </foreach>
+  </select>
+
   <select id="listMemberChannelTopByMemberChannelQuerys" resultMap="BaseResultMap">
     select top 100
     <include refid="Base_Column_List" />
