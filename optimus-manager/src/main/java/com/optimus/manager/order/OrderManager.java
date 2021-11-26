@@ -1,8 +1,11 @@
 package com.optimus.manager.order;
 
-import com.optimus.manager.order.dto.OrderNoticeInputDTO;
+import java.util.List;
 
-import org.springframework.scheduling.annotation.Async;
+import com.optimus.dao.domain.MemberChannelDO;
+import com.optimus.dao.result.MemberInfoChainResult;
+import com.optimus.manager.order.dto.OrderInfoDTO;
+import com.optimus.manager.order.dto.OrderNoticeInputDTO;
 
 /**
  * 订单manager
@@ -20,13 +23,27 @@ public interface OrderManager {
     void checkCallerOrderId(String callerOrderId);
 
     /**
-     * 订单通知
+     * 异步释放订单
+     * 
+     * @param orderInfo
+     */
+    void asyncRelease(OrderInfoDTO orderInfo);
+
+    /**
+     * 异步分润
+     * 
+     * @param orderId
+     * @param chainList
+     * @param memberChannelList
+     */
+    void asyncSplitProfit(String orderId, List<MemberInfoChainResult> chainList, List<MemberChannelDO> memberChannelList);
+
+    /**
+     * 异步订单通知
      * 
      * @param input
      * @param noticeUrl
-     * @return
      */
-    @Async
-    String orderNotice(OrderNoticeInputDTO input, String noticeUrl);
+    void asyncOrderNotice(OrderNoticeInputDTO input, String noticeUrl);
 
 }

@@ -16,8 +16,6 @@ public enum OrderSplitProfitStatusEnum {
 
     ORDER_SPLIT_PROFIT_STATUS_N("N", "待分润"),
 
-    ORDER_SPLIT_PROFIT_STATUS_P("P", "分润中"),
-
     ORDER_SPLIT_PROFIT_STATUS_Y("Y", "已分润"),
 
     ;

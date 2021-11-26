@@ -81,8 +81,8 @@ public class GatewayController {
         AssertUtil.notEquals(OrderTypeEnum.ORDER_TYPE_C.getCode(), orderInfo.getOrderType(), RespCodeEnum.ORDER_ERROR, "订单类型异常");
         AssertUtil.notEquals(orderInfo.getSubChannelCode(), subChannelCode, RespCodeEnum.ORDER_ERROR, "订单子渠道信息异常");
 
-        // 原订单状态只能为等待支付或订单挂起
-        if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_NP.getCode(), orderInfo.getOrderStatus()) && !StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_HU.getCode(), orderInfo.getOrderStatus())) {
+        // 原订单状态:等待支付
+        if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_NP.getCode(), orderInfo.getOrderStatus())) {
             throw new OptimusException(RespCodeEnum.ORDER_ERROR, "原订单状态不合法");
         }
 

@@ -12,12 +12,13 @@
     <result column="CALLEE_ORDER_ID" jdbcType="VARCHAR" property="calleeOrderId" />
     <result column="ORDER_TYPE" jdbcType="VARCHAR" property="orderType" />
     <result column="ORDER_STATUS" jdbcType="VARCHAR" property="orderStatus" />
+    <result column="RELEASE_STATUS" jdbcType="VARCHAR" property="releaseStatus" />
+    <result column="SPLIT_PROFIT_STATUS" jdbcType="VARCHAR" property="splitProfitStatus" />
     <result column="ORDER_AMOUNT" jdbcType="NUMERIC" property="orderAmount" />
     <result column="ACTUAL_AMOUNT" jdbcType="NUMERIC" property="actualAmount" />
     <result column="FEE" jdbcType="NUMERIC" property="fee" />
     <result column="ORDER_TIME" jdbcType="TIMESTAMP" property="orderTime" />
     <result column="PAY_TIME" jdbcType="TIMESTAMP" property="payTime" />
-    <result column="SPLIT_PROFIT_STATUS" jdbcType="VARCHAR" property="splitProfitStatus" />
     <result column="BEHAVIOR" jdbcType="VARCHAR" property="behavior" />
     <result column="MERCHANT_CALLBACK_URL" jdbcType="VARCHAR" property="merchantCallbackUrl" />
     <result column="MERCHANT_CALLBACK_COUNT" jdbcType="NUMERIC" property="merchantCallbackCount" />
@@ -34,8 +35,8 @@
 
   <sql id="Base_Column_List">
     ID, MEMBER_ID, SUP_MEMBER_ID, CODE_MEMBER_ID, ORDER_ID, CALLER_ORDER_ID, CALLEE_ORDER_ID, 
-    ORDER_TYPE, ORDER_STATUS, ORDER_AMOUNT, ACTUAL_AMOUNT, FEE, ORDER_TIME, PAY_TIME, 
-    SPLIT_PROFIT_STATUS, BEHAVIOR, MERCHANT_CALLBACK_URL, MERCHANT_CALLBACK_COUNT, 
+    ORDER_TYPE, ORDER_STATUS, RELEASE_STATUS, SPLIT_PROFIT_STATUS, ORDER_AMOUNT, ACTUAL_AMOUNT, 
+    FEE, ORDER_TIME, PAY_TIME, BEHAVIOR, MERCHANT_CALLBACK_URL, MERCHANT_CALLBACK_COUNT, 
     MERCHANT_NOTIFY_STATUS, CHANNEL_CODE, SUB_CHANNEL_CODE, CHANNEL_RETURN_MESSAGE, 
     CHANNEL_ORDER_QUERY_COUNT, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME
   </sql>
@@ -110,6 +111,12 @@
       <if test="orderStatus != null">
         ORDER_STATUS,
       </if>
+      <if test="releaseStatus != null">
+        RELEASE_STATUS,
+      </if>
+      <if test="splitProfitStatus != null">
+        SPLIT_PROFIT_STATUS,
+      </if>
       <if test="orderAmount != null">
         ORDER_AMOUNT,
       </if>
@@ -124,9 +131,6 @@
       </if>
       <if test="payTime != null">
         PAY_TIME,
-      </if>
-      <if test="splitProfitStatus != null">
-        SPLIT_PROFIT_STATUS,
       </if>
       <if test="behavior != null">
         BEHAVIOR,
@@ -184,6 +188,10 @@
       </if>
       <if test="orderStatus != null"> #{orderStatus,jdbcType=VARCHAR},
       </if>
+      <if test="releaseStatus != null"> #{releaseStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="splitProfitStatus != null"> #{splitProfitStatus,jdbcType=VARCHAR},
+      </if>
       <if test="orderAmount != null"> #{orderAmount,jdbcType=NUMERIC},
       </if>
       <if test="actualAmount != null"> #{actualAmount,jdbcType=NUMERIC},
@@ -193,8 +201,6 @@
       <if test="orderTime != null"> #{orderTime,jdbcType=TIMESTAMP},
       </if>
       <if test="payTime != null"> #{payTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="splitProfitStatus != null"> #{splitProfitStatus,jdbcType=VARCHAR},
       </if>
       <if test="behavior != null"> #{behavior,jdbcType=VARCHAR},
       </if>
@@ -250,6 +256,12 @@
       <if test="orderStatus != null">
         ORDER_STATUS = #{orderStatus,jdbcType=VARCHAR},
       </if>
+      <if test="releaseStatus != null">
+        RELEASE_STATUS = #{releaseStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="splitProfitStatus != null">
+        SPLIT_PROFIT_STATUS = #{splitProfitStatus,jdbcType=VARCHAR},
+      </if>
       <if test="orderAmount != null">
         ORDER_AMOUNT = #{orderAmount,jdbcType=NUMERIC},
       </if>
@@ -264,9 +276,6 @@
       </if>
       <if test="payTime != null">
         PAY_TIME = #{payTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="splitProfitStatus != null">
-        SPLIT_PROFIT_STATUS = #{splitProfitStatus,jdbcType=VARCHAR},
       </if>
       <if test="behavior != null">
         BEHAVIOR = #{behavior,jdbcType=VARCHAR},
@@ -314,6 +323,22 @@
         UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
     where ORDER_ID = #{orderId,jdbcType=VARCHAR}
     and ORDER_STATUS = #{originOrderStatus,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateOrderInfoByOrderIdAndReleaseStatus">
+    update T_ORDER_INFO
+    set RELEASE_STATUS = #{releaseStatus,jdbcType=VARCHAR},
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+    where ORDER_ID = #{orderId,jdbcType=VARCHAR}
+    and RELEASE_STATUS = #{originReleaseStatus,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateOrderInfoByOrderIdAndSplitProfitStatus">
+    update T_ORDER_INFO
+    set SPLIT_PROFIT_STATUS = #{splitProfitStatus,jdbcType=VARCHAR},
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+    where ORDER_ID = #{orderId,jdbcType=VARCHAR}
+    and SPLIT_PROFIT_STATUS = #{originSplitProfitStatus,jdbcType=VARCHAR}
   </update>
 
 </mapper>

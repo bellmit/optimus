@@ -7,6 +7,7 @@ import java.util.Date;
 import com.optimus.manager.member.dto.MemberInfoDTO;
 import com.optimus.util.constants.order.OrderBehaviorEnum;
 import com.optimus.util.constants.order.OrderConfirmTypeEnum;
+import com.optimus.util.constants.order.OrderReleaseStatusEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.constants.order.OrderTransferTypeEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
@@ -59,6 +60,13 @@ public class PayOrderDTO implements Serializable {
      * @see OrderStatusEnum
      */
     private String orderStatus;
+
+    /**
+     * 释放状态
+     * 
+     * @see OrderReleaseStatusEnum
+     */
+    private String releaseStatus;
 
     /**
      * 订单类型

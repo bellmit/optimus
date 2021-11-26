@@ -29,9 +29,9 @@ public class OrderJob {
     }
 
     @Scheduled(initialDelay = 60000, fixedDelay = 60000)
-    public void pendingOrder() {
+    public void releaseOrder() {
 
-        log.info("pendingOrder start...");
+        log.info("releaseOrder start...");
 
     }
 

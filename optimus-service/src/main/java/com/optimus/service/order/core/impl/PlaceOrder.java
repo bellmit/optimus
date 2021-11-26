@@ -22,7 +22,6 @@ import com.optimus.manager.order.OrderManager;
 import com.optimus.manager.order.convert.OrderManagerConvert;
 import com.optimus.manager.order.dto.CreateOrderDTO;
 import com.optimus.manager.order.dto.OrderInfoDTO;
-import com.optimus.manager.order.dto.OrderNoticeInputDTO;
 import com.optimus.manager.order.dto.PayOrderDTO;
 import com.optimus.manager.order.validate.OrderManagerValidate;
 import com.optimus.service.order.core.BaseOrder;
@@ -34,6 +33,7 @@ import com.optimus.util.constants.account.AccountTypeEnum;
 import com.optimus.util.constants.gateway.GatewayChannelGroupEnum;
 import com.optimus.util.constants.member.MemberCodeBalanceSwitchEnum;
 import com.optimus.util.constants.member.MemberFreezeBalanceSwitchEnum;
+import com.optimus.util.constants.order.OrderReleaseStatusEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.exception.OptimusException;
 
@@ -104,23 +104,21 @@ public class PlaceOrder extends BaseOrder {
 
         // 不冻结码商余额
         if (StringUtils.pathEquals(MemberFreezeBalanceSwitchEnum.FREEZE_BALANCE_SWITCH_N.getCode(), memberTransConfine.getFreezeBalanceSwitch())) {
+            orderInfo.setReleaseStatus(OrderReleaseStatusEnum.RELEASE_STATUS_D.getCode());
             return orderInfo;
         }
 
-        // 赋值:码商会员编号和实际金额
-        createOrder.setMemberId(orderInfo.getCodeMemberId());
-        createOrder.setActualAmount(orderInfo.getActualAmount());
-
         // 记账
         List<DoTransDTO> doTransList = new ArrayList<>();
-        doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_MINUS, createOrder, "下单减余额户"));
-        doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_PLUS, createOrder, "下单加冻结户"));
+        doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_MINUS, orderInfo, "下单减余额户"));
+        doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_PLUS, orderInfo, "下单加冻结户"));
 
         boolean doTrans = accountManager.doTrans(doTransList);
         if (!doTrans) {
             orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_AF.getCode());
         }
 
+        orderInfo.setReleaseStatus(OrderReleaseStatusEnum.RELEASE_STATUS_N.getCode());
         return orderInfo;
     }
 
@@ -141,34 +139,23 @@ public class PlaceOrder extends BaseOrder {
         memberIdList.add(payOrder.getMemberId());
         List<MemberChannelDO> memberChannelList = memberChannelDao.listMemberChannelByMemberIdLists(memberIdList);
 
-        // 验证会员信息链渠道费率
-        OrderManagerValidate.validateMemberChain(chainList, memberChannelList);
+        // 验证链及渠道
+        OrderManagerValidate.validateChainAndChannel(chainList, memberChannelList);
 
-        // 更新订单状态:原状态可能为等待支付或订单挂起
-        String originOrderStatus = OrderStatusEnum.ORDER_STATUS_NP.getCode();
-        int update = orderInfoDao.updateOrderStatusByOrderIdAndOrderStatus(payOrder.getOrderId(), payOrder.getOrderStatus(), originOrderStatus, DateUtil.currentDate());
-        if (update != 1) {
-            originOrderStatus = OrderStatusEnum.ORDER_STATUS_HU.getCode();
-            update = orderInfoDao.updateOrderStatusByOrderIdAndOrderStatus(payOrder.getOrderId(), payOrder.getOrderStatus(), originOrderStatus, DateUtil.currentDate());
-        }
+        // 更新订单状态
+        int update = orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(payOrder.getOrderId(), payOrder.getOrderStatus(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());
         if (update != 1) {
             throw new OptimusException(RespCodeEnum.ORDER_ERROR, "更新订单状态异常");
         }
 
-        // 构建记账信息
-        List<DoTransDTO> doTransList = OrderManagerConvert.getDoTransDTOList(chainList, memberChannelList, payOrder, originOrderStatus);
-        AssertUtil.notEmpty(doTransList, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "构建记账信息异常");
+        // 异步释放订单
+        orderManager.asyncRelease(OrderManagerConvert.getOrderInfoDTO(payOrder));
 
-        // 记账
-        boolean doTrans = accountManager.doTrans(doTransList);
-        if (!doTrans) {
-            orderInfoDao.updateOrderStatusByOrderIdAndOrderStatus(payOrder.getOrderId(), originOrderStatus, payOrder.getOrderStatus(), DateUtil.currentDate());
-            return;
-        }
+        // 异步分润
+        orderManager.asyncSplitProfit(payOrder.getOrderId(), chainList, memberChannelList);
 
         // 异步通知商户
-        OrderNoticeInputDTO input = OrderManagerConvert.getOrderNoticeInputDTO(payOrder);
-        orderManager.orderNotice(input, payOrder.getMerchantCallbackUrl());
+        orderManager.asyncOrderNotice(OrderManagerConvert.getOrderNoticeInputDTO(payOrder), payOrder.getMerchantCallbackUrl());
 
     }
 

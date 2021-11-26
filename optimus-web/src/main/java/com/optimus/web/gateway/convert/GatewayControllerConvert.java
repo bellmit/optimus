@@ -28,6 +28,53 @@ import org.springframework.util.StringUtils;
 public class GatewayControllerConvert {
 
     /**
+     * 获取支付订单DTO
+     * 
+     * @param output
+     * @param orderInfo
+     * @return
+     */
+    public static PayOrderDTO getPayOrderDTO(ExecuteScriptOutputDTO output, OrderInfoDTO orderInfo) {
+
+        // 支付订单DTO
+        PayOrderDTO payOrder = new PayOrderDTO();
+
+        payOrder.setOrderId(output.getOrderId());
+        payOrder.setCalleeOrderId(output.getCalleeOrderId());
+        payOrder.setOrderAmount(output.getAmount());
+        payOrder.setActualAmount(output.getActualAmount());
+        payOrder.setOrderStatus(output.getOrderStatus());
+        payOrder.setReleaseStatus(orderInfo.getReleaseStatus());
+        payOrder.setMerchantCallbackUrl(orderInfo.getMerchantCallbackUrl());
+        payOrder.setMemberId(orderInfo.getMemberId());
+        payOrder.setSupMemberId(orderInfo.getSupMemberId());
+        payOrder.setCodeMemberId(orderInfo.getCodeMemberId());
+
+        return payOrder;
+
+    }
+
+    /**
+     * 获取执行脚本输入DTO
+     * 
+     * @param gatewaySubChannel
+     * @return
+     */
+    public static ExecuteScriptInputDTO getExecuteScriptInputDTO(GatewaySubChannelDTO gatewaySubChannel) {
+
+        // 执行脚本输入DTO
+        ExecuteScriptInputDTO input = new ExecuteScriptInputDTO();
+
+        input.setScriptMethod(ScriptEnum.PARSE.getCode());
+        input.setBizContent(gatewaySubChannel.getBizContent());
+        input.setImplPath(gatewaySubChannel.getImplPath());
+        input.setImplType(gatewaySubChannel.getImplType());
+
+        return input;
+
+    }
+
+    /**
      * 获取网关渠道全部参数
      * 
      * @param req
@@ -104,20 +151,16 @@ public class GatewayControllerConvert {
 
         // 匹配ip
         if (StringUtils.hasLength(ip)) {
-
             String[] ips = ip.split(",");
 
             for (String item : ips) {
-
                 if (BaseEnum.UNKNOWN.getCode().equalsIgnoreCase(item)) {
                     continue;
                 }
 
                 ip = item;
                 break;
-
             }
-
         }
 
         // 兜底
@@ -126,52 +169,6 @@ public class GatewayControllerConvert {
         }
 
         return ip;
-
-    }
-
-    /**
-     * 获取执行脚本输入DTO
-     * 
-     * @param gatewaySubChannel
-     * @return
-     */
-    public static ExecuteScriptInputDTO getExecuteScriptInputDTO(GatewaySubChannelDTO gatewaySubChannel) {
-
-        // 执行脚本输入DTO
-        ExecuteScriptInputDTO input = new ExecuteScriptInputDTO();
-
-        input.setScriptMethod(ScriptEnum.PARSE.getCode());
-        input.setBizContent(gatewaySubChannel.getBizContent());
-        input.setImplPath(gatewaySubChannel.getImplPath());
-        input.setImplType(gatewaySubChannel.getImplType());
-
-        return input;
-
-    }
-
-    /**
-     * 获取支付订单DTO
-     * 
-     * @param output
-     * @param orderInfo
-     * @return
-     */
-    public static PayOrderDTO getPayOrderDTO(ExecuteScriptOutputDTO output, OrderInfoDTO orderInfo) {
-
-        // 支付订单DTO
-        PayOrderDTO payOrder = new PayOrderDTO();
-
-        payOrder.setOrderId(output.getOrderId());
-        payOrder.setCalleeOrderId(output.getCalleeOrderId());
-        payOrder.setOrderStatus(output.getOrderStatus());
-        payOrder.setOrderAmount(output.getAmount());
-        payOrder.setActualAmount(output.getActualAmount());
-        payOrder.setMerchantCallbackUrl(orderInfo.getMerchantCallbackUrl());
-        payOrder.setMemberId(orderInfo.getMemberId());
-        payOrder.setSupMemberId(orderInfo.getSupMemberId());
-        payOrder.setCodeMemberId(orderInfo.getCodeMemberId());
-
-        return payOrder;
 
     }
 

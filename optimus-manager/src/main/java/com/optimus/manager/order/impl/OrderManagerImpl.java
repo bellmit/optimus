@@ -1,24 +1,36 @@
 package com.optimus.manager.order.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.optimus.dao.domain.MemberChannelDO;
 import com.optimus.dao.domain.MemberInfoDO;
 import com.optimus.dao.domain.OrderInfoDO;
 import com.optimus.dao.mapper.MemberInfoDao;
 import com.optimus.dao.mapper.OrderInfoDao;
+import com.optimus.dao.result.MemberInfoChainResult;
+import com.optimus.manager.account.AccountManager;
+import com.optimus.manager.account.dto.DoTransDTO;
 import com.optimus.manager.order.OrderManager;
+import com.optimus.manager.order.convert.OrderManagerConvert;
+import com.optimus.manager.order.dto.OrderInfoDTO;
 import com.optimus.manager.order.dto.OrderNoticeInputDTO;
 import com.optimus.util.AssertUtil;
+import com.optimus.util.DateUtil;
 import com.optimus.util.JacksonUtil;
 import com.optimus.util.SignUtil;
 import com.optimus.util.constants.RespCodeEnum;
+import com.optimus.util.constants.account.AccountChangeTypeEnum;
+import com.optimus.util.constants.order.OrderReleaseStatusEnum;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +46,9 @@ public class OrderManagerImpl implements OrderManager {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private AccountManager accountManager;
 
     @Resource
     private MemberInfoDao memberInfoDao;
@@ -52,10 +67,48 @@ public class OrderManagerImpl implements OrderManager {
 
     }
 
+    @Async
     @Override
-    public String orderNotice(OrderNoticeInputDTO input, String noticeUrl) {
+    public void asyncRelease(OrderInfoDTO orderInfo) {
 
-        log.info("orderNotice orderNoticeInput is {}, noticeUrl is {}", input, noticeUrl);
+        // 无需释放的订单
+        if (StringUtils.pathEquals(OrderReleaseStatusEnum.RELEASE_STATUS_D.getCode(), orderInfo.getReleaseStatus())) {
+            return;
+        }
+
+        // 更新释放状态
+        int update = orderInfoDao.updateOrderInfoByOrderIdAndReleaseStatus(orderInfo.getOrderId(), OrderReleaseStatusEnum.RELEASE_STATUS_Y.getCode(), OrderReleaseStatusEnum.RELEASE_STATUS_N.getCode(), DateUtil.currentDate());
+        if (update != 1) {
+            return;
+        }
+
+        // 记账
+        List<DoTransDTO> doTransList = new ArrayList<>();
+        doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_PLUS, orderInfo, "渠道回调加余额户"));
+        doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_MINUS, orderInfo, "渠道回调减冻结户"));
+
+        boolean doTrans = accountManager.doTrans(doTransList);
+        if (doTrans) {
+            return;
+        }
+
+        // 记账失败,回滚释放状态
+        orderInfoDao.updateOrderInfoByOrderIdAndReleaseStatus(orderInfo.getOrderId(), OrderReleaseStatusEnum.RELEASE_STATUS_N.getCode(), OrderReleaseStatusEnum.RELEASE_STATUS_Y.getCode(), DateUtil.currentDate());
+
+    }
+
+    @Async
+    @Override
+    public void asyncSplitProfit(String orderId, List<MemberInfoChainResult> chainList, List<MemberChannelDO> memberChannelList) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Async
+    @Override
+    public void asyncOrderNotice(OrderNoticeInputDTO input, String noticeUrl) {
+
+        log.info("asyncOrderNotice orderNoticeInput is {}, noticeUrl is {}", input, noticeUrl);
 
         try {
 
@@ -71,15 +124,11 @@ public class OrderManagerImpl implements OrderManager {
             input.setSign(SignUtil.sign(map, memberInfo.getMemberKey()));
 
             // Post
-            ResponseEntity<String> resp = restTemplate.postForEntity(noticeUrl, input, String.class);
-
-            return resp.getBody();
+            restTemplate.postForEntity(noticeUrl, input, String.class);
 
         } catch (Exception e) {
-            log.error("orderNotice is error", e);
+            log.error("asyncOrderNotice is error", e);
         }
-
-        return null;
 
     }
 

@@ -31,12 +31,12 @@ public class OrderManagerValidate {
     private static final String MEMBER_TYPE_C = MemberTypeEnum.MEMBER_TYPE_C.getCode();
 
     /**
-     * 验证会员信息链
+     * 验证链及渠道
      * 
      * @param chainList
      * @param memberChannelList
      */
-    public static void validateMemberChain(List<MemberInfoChainResult> chainList, List<MemberChannelDO> memberChannelList) {
+    public static void validateChainAndChannel(List<MemberInfoChainResult> chainList, List<MemberChannelDO> memberChannelList) {
 
         // 断言:非空
         AssertUtil.notEmpty(chainList, RespCodeEnum.MEMBER_ERROR, "会员信息链为空");

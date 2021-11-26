@@ -6,6 +6,7 @@ import java.util.Date;
 
 import com.optimus.util.constants.order.OrderBehaviorEnum;
 import com.optimus.util.constants.order.OrderMerchantNotifyStatusEnum;
+import com.optimus.util.constants.order.OrderReleaseStatusEnum;
 import com.optimus.util.constants.order.OrderSplitProfitStatusEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
@@ -67,6 +68,20 @@ public class OrderInfoDTO implements Serializable {
     private String orderStatus;
 
     /**
+     * 释放状态
+     * 
+     * @see OrderReleaseStatusEnum
+     */
+    private String releaseStatus;
+
+    /**
+     * 分润状态
+     * 
+     * @see OrderSplitProfitStatusEnum
+     */
+    private String splitProfitStatus;
+
+    /**
      * 订单金额
      */
     private BigDecimal orderAmount;
@@ -90,13 +105,6 @@ public class OrderInfoDTO implements Serializable {
      * 支付时间
      */
     private Date payTime;
-
-    /**
-     * 分润状态
-     * 
-     * @see OrderSplitProfitStatusEnum
-     */
-    private String splitProfitStatus;
 
     /**
      * 行为

@@ -22,7 +22,7 @@ public interface AccountManager {
     AccountInfoDTO getAccountInfoByMemberIdAndAccountType(String memberId, String accountType);
 
     /**
-     * 账户交易
+     * 账户交易[事务]
      * 
      * @param doTransList
      * @return

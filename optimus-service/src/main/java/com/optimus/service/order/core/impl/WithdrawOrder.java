@@ -162,7 +162,7 @@ public class WithdrawOrder extends BaseOrder {
 
         // 账户交易失败,回滚订单状态
         if (!doTrans) {
-            orderInfoDao.updateOrderStatusByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), OrderStatusEnum.ORDER_STATUS_AP.getCode(), DateUtil.currentDate());
+            orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), OrderStatusEnum.ORDER_STATUS_AP.getCode(), DateUtil.currentDate());
         }
 
     }
