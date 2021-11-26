@@ -1,6 +1,5 @@
 package com.optimus.service.order.core.impl;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,7 +9,7 @@ import javax.annotation.Resource;
 import com.optimus.dao.domain.MemberChannelDO;
 import com.optimus.dao.mapper.MemberChannelDao;
 import com.optimus.dao.mapper.OrderInfoDao;
-import com.optimus.dao.result.MemberInfoForRecursionResult;
+import com.optimus.dao.result.MemberInfoChainResult;
 import com.optimus.manager.account.AccountManager;
 import com.optimus.manager.account.dto.AccountInfoDTO;
 import com.optimus.manager.account.dto.DoTransDTO;
@@ -77,8 +76,19 @@ public class PlaceOrder extends BaseOrder {
     @Override
     public OrderInfoDTO createOrder(CreateOrderDTO createOrder) {
 
-        // 验证码商余额是否充足
-        MemberTransConfineDTO memberTransConfine = checkCodeBalance(createOrder);
+        // 查询码商会员交易限制
+        MemberTransConfineDTO memberTransConfine = memberManager.getMemberTransConfineByMemberId(createOrder.getCodeMemberId());
+        AssertUtil.notEmpty(memberTransConfine.getCodeBalanceSwitch(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "码商余额限制开关未配置");
+
+        // 验证码商余额:非自研渠道且非关闭
+        if (!StringUtils.pathEquals(GatewayChannelGroupEnum.GATEWAY_CHANNEL_GROUP_I.getCode(), createOrder.getGatewayChannel().getChannelGroup())
+                && !StringUtils.pathEquals(MemberCodeBalanceSwitchEnum.CODE_BALANCE_SWITCH_N.getCode(), memberTransConfine.getCodeBalanceSwitch())) {
+            // 查询账户信息
+            AccountInfoDTO accountInfo = accountManager.getAccountInfoByMemberIdAndAccountType(createOrder.getCodeMemberId(), AccountTypeEnum.ACCOUNT_TYPE_B.getCode());
+            if (accountInfo.getAmount().compareTo(createOrder.getOrderAmount()) < 0) {
+                throw new OptimusException(RespCodeEnum.ACCOUNT_AMOUNT_ERROR);
+            }
+        }
 
         // 执行脚本
         ExecuteScriptInputDTO executeScriptInput = OrderManagerConvert.getExecuteScriptInputDTO(createOrder);
@@ -103,8 +113,8 @@ public class PlaceOrder extends BaseOrder {
 
         // 记账
         List<DoTransDTO> doTransList = new ArrayList<>();
-        doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_MINUS, createOrder, "下单扣减余额户"));
-        doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_PLUS, createOrder, "下单增加冻结户"));
+        doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_MINUS, createOrder, "下单减余额户"));
+        doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_PLUS, createOrder, "下单加冻结户"));
 
         boolean doTrans = accountManager.doTrans(doTransList);
         if (!doTrans) {
@@ -122,126 +132,43 @@ public class PlaceOrder extends BaseOrder {
     @Override
     public void payOrder(PayOrderDTO payOrder) {
 
-        // 验证订单状态[只能为成功]
-        String orderStatus = payOrder.getOrderStatus();
-        AssertUtil.notEquals(OrderStatusEnum.ORDER_STATUS_AP.getCode(), orderStatus, RespCodeEnum.ORDER_ERROR, "订单状态只能为成功");
-
-        // 查询会员关系链
-        List<MemberInfoForRecursionResult> memberInfoList = memberManager.listMemberInfoForRecursions(payOrder.getCodeMemberId());
-        AssertUtil.notEmpty(memberInfoList, RespCodeEnum.MEMBER_ERROR, "会员关系链为空");
+        // 查询会员信息链
+        List<MemberInfoChainResult> chainList = memberManager.listMemberInfoChains(payOrder.getCodeMemberId());
+        AssertUtil.notEmpty(chainList, RespCodeEnum.MEMBER_ERROR, "会员信息链为空");
 
         // 查询会员关系链的会员渠道费率
-        List<String> memberIdList = memberInfoList.stream().map(MemberInfoForRecursionResult::getMemberId).collect(Collectors.toList());
+        List<String> memberIdList = chainList.stream().map(MemberInfoChainResult::getMemberId).collect(Collectors.toList());
         memberIdList.add(payOrder.getMemberId());
         List<MemberChannelDO> memberChannelList = memberChannelDao.listMemberChannelByMemberIdLists(memberIdList);
 
-        // 验证会员关系链渠道费率
-        OrderManagerValidate.validateMemberChain(memberInfoList, memberChannelList);
+        // 验证会员信息链渠道费率
+        OrderManagerValidate.validateMemberChain(chainList, memberChannelList);
 
-        // 更新订单状态
-        String originOrderStatus = updateOrderStatus(payOrder.getOrderId(), orderStatus);
-        AssertUtil.notEmpty(originOrderStatus, RespCodeEnum.ORDER_ERROR, "更新订单状态异常");
+        // 更新订单状态:原状态可能为等待支付或订单挂起
+        String originOrderStatus = OrderStatusEnum.ORDER_STATUS_NP.getCode();
+        int update = orderInfoDao.updateOrderStatusByOrderIdAndOrderStatus(payOrder.getOrderId(), payOrder.getOrderStatus(), originOrderStatus, DateUtil.currentDate());
+        if (update != 1) {
+            originOrderStatus = OrderStatusEnum.ORDER_STATUS_HU.getCode();
+            update = orderInfoDao.updateOrderStatusByOrderIdAndOrderStatus(payOrder.getOrderId(), payOrder.getOrderStatus(), originOrderStatus, DateUtil.currentDate());
+        }
+        if (update != 1) {
+            throw new OptimusException(RespCodeEnum.ORDER_ERROR, "更新订单状态异常");
+        }
 
         // 构建记账信息
-        List<DoTransDTO> doTransList = buildDoTransList(memberInfoList, payOrder, originOrderStatus);
+        List<DoTransDTO> doTransList = OrderManagerConvert.getDoTransDTOList(chainList, memberChannelList, payOrder, originOrderStatus);
         AssertUtil.notEmpty(doTransList, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "构建记账信息异常");
 
         // 记账
         boolean doTrans = accountManager.doTrans(doTransList);
         if (!doTrans) {
-            orderInfoDao.updateOrderStatusByOrderIdAndOrderStatus(payOrder.getOrderId(), originOrderStatus, orderStatus, DateUtil.currentDate());
+            orderInfoDao.updateOrderStatusByOrderIdAndOrderStatus(payOrder.getOrderId(), originOrderStatus, payOrder.getOrderStatus(), DateUtil.currentDate());
             return;
         }
 
         // 异步通知商户
         OrderNoticeInputDTO input = OrderManagerConvert.getOrderNoticeInputDTO(payOrder);
-        orderManager.orderNotice(input, payOrder.getMemberInfo().getMemberKey(), payOrder.getMerchantCallbackUrl());
-
-    }
-
-    /**
-     * 验证码商余额是否充足
-     * 
-     * @param createOrder
-     * @return
-     */
-    private MemberTransConfineDTO checkCodeBalance(CreateOrderDTO createOrder) {
-
-        String codeMemberId = createOrder.getCodeMemberId();
-        String channelGroup = createOrder.getGatewayChannel().getChannelGroup();
-        BigDecimal orderAmount = createOrder.getOrderAmount();
-
-        // 查询码商会员交易限制
-        MemberTransConfineDTO memberTransConfine = memberManager.getMemberTransConfineByMemberId(codeMemberId);
-        AssertUtil.notEmpty(memberTransConfine.getCodeBalanceSwitch(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "码商余额限制开关未配置");
-
-        // 自研渠道不验证码商余额
-        if (StringUtils.pathEquals(GatewayChannelGroupEnum.GATEWAY_CHANNEL_GROUP_I.getCode(), channelGroup)) {
-            return memberTransConfine;
-        }
-
-        // 不限制码商余额
-        if (StringUtils.pathEquals(MemberCodeBalanceSwitchEnum.CODE_BALANCE_SWITCH_N.getCode(), memberTransConfine.getCodeBalanceSwitch())) {
-            return memberTransConfine;
-        }
-
-        // 查询码商余额
-        AccountInfoDTO accountInfo = accountManager.getAccountInfoByMemberIdAndAccountType(codeMemberId, AccountTypeEnum.ACCOUNT_TYPE_B.getCode());
-        if (accountInfo.getAmount().compareTo(orderAmount) < 0) {
-            throw new OptimusException(RespCodeEnum.ACCOUNT_AMOUNT_ERROR);
-        }
-
-        return memberTransConfine;
-
-    }
-
-    /**
-     * 更新订单状态
-     * 
-     * @param orderId
-     * @param orderStatus
-     * @return
-     */
-    private String updateOrderStatus(String orderId, String orderStatus) {
-
-        // 更新结果
-        int update = 0;
-
-        // 默认原状态等待支付
-        String originOrderStatus = OrderStatusEnum.ORDER_STATUS_NP.getCode();
-
-        // 由等待支付更新订单状态
-        update = orderInfoDao.updateOrderStatusByOrderIdAndOrderStatus(orderId, orderStatus, originOrderStatus, DateUtil.currentDate());
-        if (update == 1) {
-            return originOrderStatus;
-        }
-
-        // 更新原状态为订单挂起
-        originOrderStatus = OrderStatusEnum.ORDER_STATUS_NP.getCode();
-
-        // 由订单挂起状态更新订单状态
-        update = orderInfoDao.updateOrderStatusByOrderIdAndOrderStatus(orderId, orderStatus, originOrderStatus, DateUtil.currentDate());
-        if (update == 1) {
-            return originOrderStatus;
-        }
-
-        return null;
-
-    }
-
-    /**
-     * 构建记账信息
-     * 
-     * @param memberInfoList
-     * @param payOrder
-     * @param originOrderStatus
-     * @return
-     */
-    private List<DoTransDTO> buildDoTransList(List<MemberInfoForRecursionResult> memberInfoList, PayOrderDTO payOrder, String originOrderStatus) {
-
-        List<DoTransDTO> doTransList = new ArrayList<>();
-
-        return doTransList;
+        orderManager.orderNotice(input, payOrder.getMerchantCallbackUrl());
 
     }
 

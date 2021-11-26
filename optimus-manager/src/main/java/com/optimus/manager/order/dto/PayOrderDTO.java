@@ -118,9 +118,4 @@ public class PayOrderDTO implements Serializable {
      */
     private MemberInfoDTO supMemberInfo;
 
-    /**
-     * 会员信息
-     */
-    private MemberInfoDTO memberInfo;
-
 }

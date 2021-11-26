@@ -5,7 +5,9 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.optimus.dao.domain.MemberInfoDO;
 import com.optimus.dao.domain.OrderInfoDO;
+import com.optimus.dao.mapper.MemberInfoDao;
 import com.optimus.dao.mapper.OrderInfoDao;
 import com.optimus.manager.order.OrderManager;
 import com.optimus.manager.order.dto.OrderNoticeInputDTO;
@@ -34,6 +36,9 @@ public class OrderManagerImpl implements OrderManager {
     private RestTemplate restTemplate;
 
     @Resource
+    private MemberInfoDao memberInfoDao;
+
+    @Resource
     private OrderInfoDao orderInfoDao;
 
     @Override
@@ -48,11 +53,14 @@ public class OrderManagerImpl implements OrderManager {
     }
 
     @Override
-    public String orderNotice(OrderNoticeInputDTO input, String key, String noticeUrl) {
+    public String orderNotice(OrderNoticeInputDTO input, String noticeUrl) {
 
-        log.info("orderNotice orderNoticeInput is {}, key is {}, noticeUrl is {}", input, key, noticeUrl);
+        log.info("orderNotice orderNoticeInput is {}, noticeUrl is {}", input, noticeUrl);
 
         try {
+
+            // 查询会员信息
+            MemberInfoDO memberInfo = memberInfoDao.getMemberInfoByMemberId(input.getMemberId());
 
             // 加签
             String inputString = JacksonUtil.toString(input);
@@ -60,7 +68,7 @@ public class OrderManagerImpl implements OrderManager {
             });
 
             // 设置签名
-            input.setSign(SignUtil.sign(map, key));
+            input.setSign(SignUtil.sign(map, memberInfo.getMemberKey()));
 
             // Post
             ResponseEntity<String> resp = restTemplate.postForEntity(noticeUrl, input, String.class);

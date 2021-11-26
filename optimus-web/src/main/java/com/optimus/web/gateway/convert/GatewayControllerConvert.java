@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.optimus.manager.gateway.dto.ExecuteScriptInputDTO;
 import com.optimus.manager.gateway.dto.ExecuteScriptOutputDTO;
 import com.optimus.manager.gateway.dto.GatewaySubChannelDTO;
-import com.optimus.manager.member.dto.MemberInfoDTO;
 import com.optimus.manager.order.dto.OrderInfoDTO;
 import com.optimus.manager.order.dto.PayOrderDTO;
 import com.optimus.util.JacksonUtil;
@@ -154,11 +153,10 @@ public class GatewayControllerConvert {
      * 获取支付订单DTO
      * 
      * @param output
-     * @param memberInfo
      * @param orderInfo
      * @return
      */
-    public static PayOrderDTO getPayOrderDTO(ExecuteScriptOutputDTO output, MemberInfoDTO memberInfo, OrderInfoDTO orderInfo) {
+    public static PayOrderDTO getPayOrderDTO(ExecuteScriptOutputDTO output, OrderInfoDTO orderInfo) {
 
         // 支付订单DTO
         PayOrderDTO payOrder = new PayOrderDTO();
@@ -168,7 +166,6 @@ public class GatewayControllerConvert {
         payOrder.setOrderStatus(output.getOrderStatus());
         payOrder.setOrderAmount(output.getAmount());
         payOrder.setActualAmount(output.getActualAmount());
-        payOrder.setMemberInfo(memberInfo);
         payOrder.setMerchantCallbackUrl(orderInfo.getMerchantCallbackUrl());
         payOrder.setMemberId(orderInfo.getMemberId());
         payOrder.setSupMemberId(orderInfo.getSupMemberId());

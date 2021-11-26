@@ -106,20 +106,17 @@ public class CollectController {
         // 参数验证
         CollectControllerValidate.validateConfirmForRecharge(req);
 
-        // 会员信息DTO
+        // 会员信息:平台
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
+        AssertUtil.notEquals(MemberTypeEnum.MEMBER_TYPE_S.getCode(), memberInfo.getMemberType(), RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为平台");
 
         // 订单信息
         OrderInfoDTO orderInfo = orderService.getOrderInfoByOrderId(req.getOrderId());
+
+        // 验证:订单/会员编号合法性/订单类型/订单状态
         AssertUtil.notEmpty(orderInfo, RespCodeEnum.ORDER_NO, null);
-
-        // 验证会员类型
-        AssertUtil.notEquals(MemberTypeEnum.MEMBER_TYPE_S.getCode(), memberInfo.getMemberType(), RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为平台");
-
-        // 验证订单里面的会员编号
         AssertUtil.notEquals(orderInfo.getMemberId(), req.getSubMemberId(), RespCodeEnum.ORDER_ERROR, null);
-
-        // 验证订单状态
+        AssertUtil.notEquals(OrderTypeEnum.ORDER_TYPE_R.getCode(), orderInfo.getOrderType(), RespCodeEnum.ORDER_ERROR, "订单类型异常");
         AssertUtil.notEquals(OrderStatusEnum.ORDER_STATUS_NP.getCode(), orderInfo.getOrderStatus(), RespCodeEnum.ORDER_ERROR, "订单状态异常");
 
         // 支付订单
@@ -165,6 +162,7 @@ public class CollectController {
 
         // 支付订单
         PayOrderDTO payOrder = CollectControllerConvert.getPayOrderDTO(orderInfo);
+
         // 注意:由于后面的订单信息的会员ID是下级的,所以这里会员信息看作是上级会员
         payOrder.setSupMemberInfo(memberInfo);
         orderService.payOrder(payOrder);
@@ -217,20 +215,17 @@ public class CollectController {
         // 参数验证
         CollectControllerValidate.validateConfirmForWithdraw(req);
 
-        // 会员信息
+        // 会员信息:平台
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
-
-        // 验证会员类型
         AssertUtil.notEquals(MemberTypeEnum.MEMBER_TYPE_S.getCode(), memberInfo.getMemberType(), RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为平台");
 
         // 订单信息
         OrderInfoDTO orderInfo = orderService.getOrderInfoByOrderId(req.getOrderId());
+
+        // 验证:订单/会员编号合法性/订单类型/订单状态
         AssertUtil.notEmpty(orderInfo, RespCodeEnum.ORDER_NO, null);
-
-        // 验证订单里面的会员编号
         AssertUtil.notEquals(orderInfo.getMemberId(), req.getSubMemberId(), RespCodeEnum.ORDER_ERROR, null);
-
-        // 验证订单状态
+        AssertUtil.notEquals(OrderTypeEnum.ORDER_TYPE_W.getCode(), orderInfo.getOrderType(), RespCodeEnum.ORDER_ERROR, "订单类型异常");
         AssertUtil.notEquals(OrderStatusEnum.ORDER_STATUS_NP.getCode(), orderInfo.getOrderStatus(), RespCodeEnum.ORDER_ERROR, "订单状态异常");
 
         // 支付订单

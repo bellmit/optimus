@@ -7,12 +7,12 @@ import com.optimus.util.constants.member.MemberTypeEnum;
 import lombok.Data;
 
 /**
- * 递归查询会员信息Result
+ * 会员信息链Result
  * 
  * @author sunxp
  */
 @Data
-public class MemberInfoForRecursionResult implements Serializable {
+public class MemberInfoChainResult implements Serializable {
 
     private static final long serialVersionUID = -8753332987533130915L;
 

@@ -8,7 +8,7 @@ import javax.annotation.Resource;
 import com.optimus.dao.domain.MemberTransConfineDO;
 import com.optimus.dao.mapper.MemberInfoDao;
 import com.optimus.dao.mapper.MemberTransConfineDao;
-import com.optimus.dao.result.MemberInfoForRecursionResult;
+import com.optimus.dao.result.MemberInfoChainResult;
 import com.optimus.manager.member.MemberManager;
 import com.optimus.manager.member.dto.MemberTransConfineDTO;
 import com.optimus.util.AssertUtil;
@@ -52,13 +52,13 @@ public class MemberManagerImpl implements MemberManager {
         AssertUtil.notEmpty(memberTransConfine.getCollectFeeType(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "手续费类型未配置");
 
         // 单笔
-        if (StringUtils.pathEquals(MemberCollectFeeTypeEnum.COLLECT_FEE_TYPE_R.getCode(), memberTransConfine.getCollectFeeType())) {
-            return orderAmount.multiply(memberTransConfine.getRatioCollectFee());
+        if (StringUtils.pathEquals(MemberCollectFeeTypeEnum.COLLECT_FEE_TYPE_S.getCode(), memberTransConfine.getCollectFeeType())) {
+            return memberTransConfine.getSingleCollectFee();
         }
 
         // 比例
-        if (StringUtils.pathEquals(MemberCollectFeeTypeEnum.COLLECT_FEE_TYPE_S.getCode(), memberTransConfine.getCollectFeeType())) {
-            return memberTransConfine.getSingleCollectFee();
+        if (StringUtils.pathEquals(MemberCollectFeeTypeEnum.COLLECT_FEE_TYPE_R.getCode(), memberTransConfine.getCollectFeeType())) {
+            return orderAmount.multiply(memberTransConfine.getRatioCollectFee());
         }
 
         // 单笔+比例
@@ -90,17 +90,17 @@ public class MemberManagerImpl implements MemberManager {
 
     @Override
     @Cacheable(value = "memberChainConfig", key = "#memberId", unless = "#result == null")
-    public List<MemberInfoForRecursionResult> listMemberInfoForRecursions(String memberId) {
+    public List<MemberInfoChainResult> listMemberInfoChains(String memberId) {
 
-        // 递归查询会员信息
-        List<MemberInfoForRecursionResult> memberInfoList = memberInfoDao.listMemberInfoForRecursions(memberId);
-        log.info("memberInfo chain is {}", memberInfoList);
+        // 递归查询会员信息链
+        List<MemberInfoChainResult> chainList = memberInfoDao.listMemberInfoChains(memberId);
+        log.info("memberInfo chain is {}", chainList);
 
-        if (CollectionUtils.isEmpty(memberInfoList)) {
+        if (CollectionUtils.isEmpty(chainList)) {
             return null;
         }
 
-        return memberInfoList;
+        return chainList;
     }
 
 }

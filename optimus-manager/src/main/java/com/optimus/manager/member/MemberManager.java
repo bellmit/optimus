@@ -3,7 +3,7 @@ package com.optimus.manager.member;
 import java.math.BigDecimal;
 import java.util.List;
 
-import com.optimus.dao.result.MemberInfoForRecursionResult;
+import com.optimus.dao.result.MemberInfoChainResult;
 import com.optimus.manager.member.dto.MemberTransConfineDTO;
 
 /**
@@ -33,11 +33,11 @@ public interface MemberManager {
     MemberTransConfineDTO getMemberTransConfineByMemberId(String memberId);
 
     /**
-     * 递归查询会员信息
+     * 递归查询会员信息链
      * 
      * @param memberId
      * @return
      */
-    List<MemberInfoForRecursionResult> listMemberInfoForRecursions(String memberId);
+    List<MemberInfoChainResult> listMemberInfoChains(String memberId);
 
 }

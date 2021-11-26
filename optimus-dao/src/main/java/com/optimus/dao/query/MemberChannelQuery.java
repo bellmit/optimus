@@ -30,7 +30,7 @@ public class MemberChannelQuery implements Serializable {
     private String memberType;
 
     /**
-     * 网关子渠道编号集合
+     * 网关子渠道编号List
      */
     private List<String> subChannelCodeList;
 

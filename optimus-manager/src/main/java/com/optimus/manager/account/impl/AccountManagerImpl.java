@@ -96,7 +96,7 @@ public class AccountManagerImpl implements AccountManager {
      */
     private List<AccountInfoDO> buildAccountInfoList(List<DoTransDTO> doTransList) {
 
-        // 获取会员编号集合
+        // 获取会员编号List
         List<String> memberIdList = doTransList.stream().map(DoTransDTO::getMemberId).distinct().collect(Collectors.toList());
 
         // 查询会员所对应的所有账户信息
@@ -142,7 +142,7 @@ public class AccountManagerImpl implements AccountManager {
      */
     private void addBatchAccountLog(List<AccountInfoDO> accountInfoDOList, List<DoTransDTO> doTransList) {
 
-        // 获取账户主键集合
+        // 获取账户主键List
         List<Long> idList = accountInfoDOList.stream().map(AccountInfoDO::getId).distinct().collect(Collectors.toList());
 
         // 查询账户交易后的数据

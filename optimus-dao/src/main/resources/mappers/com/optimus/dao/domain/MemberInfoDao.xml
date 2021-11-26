@@ -21,7 +21,7 @@
     <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
 
-  <resultMap id="MemberInfoForRecursionResultMap" type="com.optimus.dao.result.MemberInfoForRecursionResult">
+  <resultMap id="MemberInfoChainResultMap" type="com.optimus.dao.result.MemberInfoChainResult">
     <result column="MEMBER_ID" jdbcType="VARCHAR" property="memberId" />
     <result column="MEMBER_TYPE" jdbcType="VARCHAR" property="memberType" />
     <result column="LEVEL" jdbcType="NUMERIC" property="level" />
@@ -58,7 +58,7 @@
     and DELETE_FLAG = #{memberInfoQuery.deleteFlag,jdbcType=VARCHAR}
   </select>
 
-  <select id="listMemberInfoForRecursions" parameterType="java.lang.String" resultMap="MemberInfoForRecursionResultMap">
+  <select id="listMemberInfoChains" parameterType="java.lang.String" resultMap="MemberInfoChainResultMap">
     with CTE_PARENT(MEMBER_ID, SUP_DIRECT_MEMBER_ID, MEMBER_TYPE, LEVEL)
     as (
       select MEMBER_ID, SUP_DIRECT_MEMBER_ID, MEMBER_TYPE, 0 as LEVEL

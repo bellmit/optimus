@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import com.optimus.manager.gateway.dto.ExecuteScriptInputDTO;
 import com.optimus.manager.gateway.dto.ExecuteScriptOutputDTO;
 import com.optimus.manager.gateway.dto.GatewaySubChannelDTO;
-import com.optimus.manager.member.dto.MemberInfoDTO;
 import com.optimus.manager.order.dto.OrderInfoDTO;
 import com.optimus.manager.order.dto.PayOrderDTO;
 import com.optimus.service.gateway.GatewayService;
@@ -20,6 +19,7 @@ import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
 import com.optimus.util.exception.OptimusException;
 import com.optimus.web.gateway.convert.GatewayControllerConvert;
+import com.optimus.web.gateway.validate.GatewayControllerValidate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -68,14 +68,17 @@ public class GatewayController {
             throw new OptimusException(RespCodeEnum.INVALID_IP, "客户端IP异常");
         }
 
-        // 执行脚本
+        // 执行脚本输入DTO
         ExecuteScriptInputDTO input = GatewayControllerConvert.getExecuteScriptInputDTO(gatewaySubChannel);
         input.setArgs(GatewayControllerConvert.getAllArgs(req));
 
+        // 执行脚本
         ExecuteScriptOutputDTO output = gatewayService.executeScript(input);
+        GatewayControllerValidate.validateChannelCallback(output);
 
-        // 验证子渠道合法性
+        // 查询订单信息:订单类型/子渠道合法性
         OrderInfoDTO orderInfo = orderService.getOrderInfoByOrderId(output.getOrderId());
+        AssertUtil.notEquals(OrderTypeEnum.ORDER_TYPE_C.getCode(), orderInfo.getOrderType(), RespCodeEnum.ORDER_ERROR, "订单类型异常");
         AssertUtil.notEquals(orderInfo.getSubChannelCode(), subChannelCode, RespCodeEnum.ORDER_ERROR, "订单子渠道信息异常");
 
         // 原订单状态只能为等待支付或订单挂起
@@ -83,11 +86,8 @@ public class GatewayController {
             throw new OptimusException(RespCodeEnum.ORDER_ERROR, "原订单状态不合法");
         }
 
-        // 查询会员信息
-        MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(orderInfo.getMemberId());
-
         // 支付
-        PayOrderDTO payOrder = GatewayControllerConvert.getPayOrderDTO(output, memberInfo, orderInfo);
+        PayOrderDTO payOrder = GatewayControllerConvert.getPayOrderDTO(output, orderInfo);
         payOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_C.getCode());
         payOrder.setBehavior(OrderBehaviorEnum.ORDER_BEHAVIOR_S.getCode());
 

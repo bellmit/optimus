@@ -96,7 +96,7 @@ public class GatewayManagerConvert {
     }
 
     /**
-     * 获取可用的网关子渠道集合
+     * 获取可用的网关子渠道List
      * 
      * @param list
      * @param amount

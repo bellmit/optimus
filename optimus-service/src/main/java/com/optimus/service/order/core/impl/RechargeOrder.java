@@ -88,7 +88,7 @@ public class RechargeOrder extends BaseOrder {
         // 若supMemberInfo为空,则作为异常处理
         if (StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_C.getCode(), payOrder.getSupMemberInfo().getMemberType())) {
             // 减一笔余额
-            DoTransDTO bMinus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_MINUS, payOrder, "充值扣减");
+            DoTransDTO bMinus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_MINUS, payOrder, "充值减余额");
             doTransList.add(bMinus);
         }
 

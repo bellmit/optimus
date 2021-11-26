@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.Async;
 public interface OrderManager {
 
     /**
-     * 验证上游单号重复
+     * 检查上游单号重复
      *
      * @param callerOrderId
      * @return
@@ -23,11 +23,10 @@ public interface OrderManager {
      * 订单通知
      * 
      * @param input
-     * @param key
      * @param noticeUrl
      * @return
      */
     @Async
-    String orderNotice(OrderNoticeInputDTO input, String key, String noticeUrl);
+    String orderNotice(OrderNoticeInputDTO input, String noticeUrl);
 
 }

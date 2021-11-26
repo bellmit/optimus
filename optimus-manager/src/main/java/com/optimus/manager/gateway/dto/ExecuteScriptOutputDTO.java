@@ -50,7 +50,7 @@ public class ExecuteScriptOutputDTO implements Serializable {
     private BigDecimal actualAmount;
 
     /**
-     * 描述[渠道回调时返回渠道描述]
+     * 描述[渠道回调时返回渠道]
      */
     private String memo;
 

@@ -32,7 +32,7 @@ public interface AccountInfoDao {
     AccountInfoDO getAccountInfoByMemberIdAndAccountType(@Param("memberId") String memberId, @Param("accountType") String accountType);
 
     /**
-     * 根据主键集合查询账户信息
+     * 根据主键List查询账户信息
      * 
      * @param idList
      * @return
@@ -40,7 +40,7 @@ public interface AccountInfoDao {
     List<AccountInfoDO> listAccountInfoByIdLists(@Param("idList") List<Long> idList);
 
     /**
-     * 根据会员编号集合查询账户信息
+     * 根据会员编号List查询账户信息
      * 
      * @param memberIdList
      * @return

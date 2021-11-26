@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.optimus.manager.account.dto.DoTransDTO;
 import com.optimus.util.AssertUtil;
+import com.optimus.util.constants.BaseEnum;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.account.AccountChangeTypeEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
@@ -58,7 +59,7 @@ public class AccountManagerValidate {
             if (amount.compareTo(BigDecimal.ZERO) < 0) {
                 throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易金额不能小于0");
             }
-            if (amount.scale() > 4) {
+            if (amount.scale() > Integer.parseInt(BaseEnum.SCALE_FOUR.getCode())) {
                 throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易金额精度为4");
             }
 

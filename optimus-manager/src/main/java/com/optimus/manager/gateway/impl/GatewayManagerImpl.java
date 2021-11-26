@@ -53,7 +53,7 @@ public class GatewayManagerImpl implements GatewayManager {
     @Override
     public MatchChannelDTO insideMatch(MemberInfoDTO memberInfo, GatewayChannelDTO gatewayChannel, BigDecimal amount) {
 
-        // 查询代理当前渠道下启用的子渠道集合
+        // 查询代理当前渠道下启用的子渠道List
         GatewaySubChannelQuery gatewaySubChannelQuery = GatewayManagerConvert.getGatewaySubChannelQuery(memberInfo, gatewayChannel);
         List<GatewaySubChannelDO> gatewaySubChannelList = gatewaySubChannelDao.listGatewaySubChannelByGatewaySubChannelQuerys(gatewaySubChannelQuery);
         AssertUtil.notEmpty(gatewaySubChannelList, RespCodeEnum.GATEWAY_CHANNEL_NO, "当前渠道下代理没有启用的子渠道");
@@ -73,7 +73,7 @@ public class GatewayManagerImpl implements GatewayManager {
     @Override
     public MatchChannelDTO outsideMatch(MemberInfoDTO memberInfo, GatewayChannelDTO gatewayChannel, BigDecimal amount) {
 
-        // 查询代理当前渠道下启用的子渠道集合
+        // 查询代理当前渠道下启用的子渠道List
         GatewaySubChannelQuery gatewaySubChannelQuery = GatewayManagerConvert.getGatewaySubChannelQuery(memberInfo, gatewayChannel);
         List<GatewaySubChannelDO> gatewaySubChannelList = gatewaySubChannelDao.listGatewaySubChannelByGatewaySubChannelQuerys(gatewaySubChannelQuery);
         AssertUtil.notEmpty(gatewaySubChannelList, RespCodeEnum.GATEWAY_CHANNEL_NO, "当前渠道下代理没有启用的子渠道");
@@ -82,7 +82,7 @@ public class GatewayManagerImpl implements GatewayManager {
         gatewaySubChannelList = GatewayManagerConvert.getGatewaySubChannelList(gatewaySubChannelList, amount);
         AssertUtil.notEmpty(gatewaySubChannelList, RespCodeEnum.GATEWAY_CHANNEL_NO, "没有符合条件的子渠道");
 
-        // 查询代理在子渠道下配置的码商会员渠道集合
+        // 查询代理在子渠道下配置的码商会员渠道List
         MemberChannelQuery memberChannelQuery = GatewayManagerConvert.getMemberChannelQuery(memberInfo, gatewaySubChannelList);
         List<MemberChannelDO> memberChannelList = memberChannelDao.listMemberChannelTopByMemberChannelQuerys(memberChannelQuery);
         AssertUtil.notEmpty(memberChannelList, RespCodeEnum.MEMBER_CHANNEL_ERROR, "未查询到会员渠道");

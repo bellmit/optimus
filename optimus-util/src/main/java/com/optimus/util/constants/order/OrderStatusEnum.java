@@ -14,8 +14,11 @@ public enum OrderStatusEnum {
 
     /* ---------订单状态--------- */
 
-    // ->HU/AP/OF
+    // ->HI/AP
     ORDER_STATUS_NP("NP", "等待支付"),
+
+    // ->HU/NP
+    ORDER_STATUS_HI("HI", "正在挂起"),
 
     // ->AP
     ORDER_STATUS_HU("HU", "订单挂起"),

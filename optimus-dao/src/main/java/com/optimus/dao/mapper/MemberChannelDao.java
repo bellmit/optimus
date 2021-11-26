@@ -23,7 +23,7 @@ public interface MemberChannelDao {
     MemberChannelDO getMemberChannelById(Long id);
 
     /**
-     * 根据会员编号集合查询会员渠道
+     * 根据会员编号List查询会员渠道
      * 
      * @param memberIdList
      * @return
