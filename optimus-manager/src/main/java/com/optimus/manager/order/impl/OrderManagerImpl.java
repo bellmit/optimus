@@ -1,8 +1,10 @@
 package com.optimus.manager.order.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -26,6 +28,7 @@ import com.optimus.util.SignUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.account.AccountChangeTypeEnum;
 import com.optimus.util.constants.order.OrderReleaseStatusEnum;
+import com.optimus.util.constants.order.OrderSplitProfitStatusEnum;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -100,7 +103,30 @@ public class OrderManagerImpl implements OrderManager {
     @Async
     @Override
     public void asyncSplitProfit(OrderInfoDTO orderInfo, List<MemberInfoChainResult> chainList, List<MemberChannelDO> memberChannelList) {
-        // TODO Auto-generated method stub
+
+        // 订单编号
+        String orderId = orderInfo.getOrderId();
+
+        // 构建会员费率Map
+        Map<String, BigDecimal> map = memberChannelList.stream().collect(Collectors.toMap(MemberChannelDO::getMemberId, MemberChannelDO::getRate));
+
+        // 账户交易List
+        List<DoTransDTO> doTransList = OrderManagerConvert.getDoTransDTOList(orderInfo, chainList, map);
+
+        // 更新订单分润状态
+        int update = orderInfoDao.updateOrderInfoByOrderIdAndSplitProfitStatus(orderId, OrderSplitProfitStatusEnum.ORDER_SPLIT_PROFIT_STATUS_Y.getCode(), OrderSplitProfitStatusEnum.ORDER_SPLIT_PROFIT_STATUS_N.getCode(), DateUtil.currentDate());
+        if (update != 1) {
+            return;
+        }
+
+        // 记账
+        boolean doTrans = accountManager.doTrans(doTransList);
+        if (doTrans) {
+            return;
+        }
+
+        // 记账失败,回滚分润状态
+        orderInfoDao.updateOrderInfoByOrderIdAndSplitProfitStatus(orderId, OrderSplitProfitStatusEnum.ORDER_SPLIT_PROFIT_STATUS_N.getCode(), OrderSplitProfitStatusEnum.ORDER_SPLIT_PROFIT_STATUS_Y.getCode(), DateUtil.currentDate());
 
     }
 

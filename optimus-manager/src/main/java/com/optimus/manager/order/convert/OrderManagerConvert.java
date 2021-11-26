@@ -1,7 +1,13 @@
 package com.optimus.manager.order.convert;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import com.optimus.dao.domain.OrderInfoDO;
 import com.optimus.dao.query.OrderInfoQuery;
+import com.optimus.dao.result.MemberInfoChainResult;
 import com.optimus.manager.account.dto.DoTransDTO;
 import com.optimus.manager.gateway.dto.ExecuteScriptInputDTO;
 import com.optimus.manager.gateway.dto.ExecuteScriptOutputDTO;
@@ -10,11 +16,15 @@ import com.optimus.manager.order.dto.OrderInfoDTO;
 import com.optimus.manager.order.dto.OrderNoticeInputDTO;
 import com.optimus.manager.order.dto.PayOrderDTO;
 import com.optimus.util.DateUtil;
+import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.account.AccountChangeTypeEnum;
 import com.optimus.util.constants.gateway.GatewayChannelGroupEnum;
 import com.optimus.util.constants.gateway.ScriptEnum;
+import com.optimus.util.constants.member.MemberTypeEnum;
+import com.optimus.util.constants.order.OrderReleaseStatusEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
+import com.optimus.util.exception.OptimusException;
 import com.optimus.util.page.Page;
 
 import org.springframework.beans.BeanUtils;
@@ -44,6 +54,102 @@ public class OrderManagerConvert {
         orderInfoDO.setOrderTime(DateUtil.currentDate());
 
         return orderInfoDO;
+    }
+
+    /**
+     * 获取账户交易
+     * 
+     * @param orderInfo
+     * @param chainList
+     * @param map
+     * @return
+     */
+    public static List<DoTransDTO> getDoTransDTOList(OrderInfoDTO orderInfo, List<MemberInfoChainResult> chainList, Map<String, BigDecimal> map) {
+
+        // 账户交易List
+        List<DoTransDTO> doTransList = new ArrayList<>();
+
+        // 排序:码商[n]->代理[n]->管理[1]->平台[1]
+        chainList.sort((l, r) -> Short.compare(l.getLevel(), r.getLevel()));
+
+        chainList.stream().reduce((l, r) -> {
+
+            String changeType = null;
+            BigDecimal amount = null;
+
+            // 码商->码商:r-l
+            if (StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_C.getCode(), r.getMemberType())) {
+
+                // 第一个码商
+                if (StringUtils.pathEquals(orderInfo.getCodeMemberId(), l.getMemberId())) {
+
+                    changeType = AccountChangeTypeEnum.B_PLUS.getCode();
+                    amount = orderInfo.getActualAmount().multiply(map.get(l.getMemberId()));
+
+                    if (!StringUtils.pathEquals(OrderReleaseStatusEnum.RELEASE_STATUS_D.getCode(), orderInfo.getReleaseStatus())) {
+                        changeType = AccountChangeTypeEnum.B_MINUS.getCode();
+                        amount = orderInfo.getActualAmount().subtract(amount);
+                    }
+
+                    doTransList.add(new DoTransDTO(l.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "订单回调码商分润"));
+
+                }
+
+                // 其他码商
+                changeType = AccountChangeTypeEnum.B_PLUS.getCode();
+                amount = orderInfo.getActualAmount().multiply(map.get(r.getMemberId()).subtract(map.get(l.getMemberId())));
+                doTransList.add(new DoTransDTO(r.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "订单回调分润"));
+
+                return r;
+            }
+
+            // 代理->管理->平台:l-r
+            if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_C.getCode(), l.getMemberType())) {
+
+                // 平台
+                if (StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_S.getCode(), r.getMemberType())) {
+
+                    changeType = AccountChangeTypeEnum.P_PLUS.getCode();
+                    amount = orderInfo.getActualAmount().multiply(map.get(l.getMemberId()));
+                    doTransList.add(new DoTransDTO(r.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "订单回调分润"));
+
+                    return r;
+                }
+
+                // 管理/代理
+                changeType = AccountChangeTypeEnum.A_PLUS.getCode();
+                amount = orderInfo.getActualAmount().multiply(map.get(l.getMemberId()).subtract(map.get(r.getMemberId())));
+                doTransList.add(new DoTransDTO(r.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "订单回调分润"));
+
+                return r;
+            }
+
+            // 代理-商户-码商:商户-码商
+            if (StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_C.getCode(), l.getMemberType()) && StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_A.getCode(), r.getMemberType())) {
+
+                // 代理
+                changeType = AccountChangeTypeEnum.A_MINUS.getCode();
+                amount = orderInfo.getActualAmount().multiply(map.get(r.getMemberId()));
+                doTransList.add(new DoTransDTO(r.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "订单回调系统使用费"));
+
+                changeType = AccountChangeTypeEnum.E_PLUS.getCode();
+                amount = orderInfo.getActualAmount().multiply(map.get(orderInfo.getMemberId()).subtract(map.get(l.getMemberId())));
+                doTransList.add(new DoTransDTO(r.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "订单回调收益"));
+
+                // 商户
+                changeType = AccountChangeTypeEnum.B_PLUS.getCode();
+                amount = orderInfo.getActualAmount().subtract(orderInfo.getActualAmount().multiply(map.get(orderInfo.getMemberId())));
+                doTransList.add(new DoTransDTO(orderInfo.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "订单回调收益"));
+
+                return r;
+            }
+
+            throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "订单回调账户交易异常");
+
+        });
+
+        return doTransList;
+
     }
 
     /**
