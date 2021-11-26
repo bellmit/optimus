@@ -99,7 +99,7 @@ public class OrderManagerImpl implements OrderManager {
 
     @Async
     @Override
-    public void asyncSplitProfit(String orderId, List<MemberInfoChainResult> chainList, List<MemberChannelDO> memberChannelList) {
+    public void asyncSplitProfit(OrderInfoDTO orderInfo, List<MemberInfoChainResult> chainList, List<MemberChannelDO> memberChannelList) {
         // TODO Auto-generated method stub
 
     }

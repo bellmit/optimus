@@ -148,11 +148,14 @@ public class PlaceOrder extends BaseOrder {
             throw new OptimusException(RespCodeEnum.ORDER_ERROR, "更新订单状态异常");
         }
 
+        // 获取订单信息DTO
+        OrderInfoDTO orderInfo = OrderManagerConvert.getOrderInfoDTO(payOrder);
+
         // 异步释放订单
-        orderManager.asyncRelease(OrderManagerConvert.getOrderInfoDTO(payOrder));
+        orderManager.asyncRelease(orderInfo);
 
         // 异步分润
-        orderManager.asyncSplitProfit(payOrder.getOrderId(), chainList, memberChannelList);
+        orderManager.asyncSplitProfit(orderInfo, chainList, memberChannelList);
 
         // 异步通知商户
         orderManager.asyncOrderNotice(OrderManagerConvert.getOrderNoticeInputDTO(payOrder), payOrder.getMerchantCallbackUrl());

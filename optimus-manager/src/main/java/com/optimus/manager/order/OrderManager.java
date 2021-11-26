@@ -32,11 +32,11 @@ public interface OrderManager {
     /**
      * 异步分润
      * 
-     * @param orderId
+     * @param orderInfo
      * @param chainList
      * @param memberChannelList
      */
-    void asyncSplitProfit(String orderId, List<MemberInfoChainResult> chainList, List<MemberChannelDO> memberChannelList);
+    void asyncSplitProfit(OrderInfoDTO orderInfo, List<MemberInfoChainResult> chainList, List<MemberChannelDO> memberChannelList);
 
     /**
      * 异步订单通知
