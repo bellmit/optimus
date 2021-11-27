@@ -13,7 +13,7 @@ import com.optimus.manager.gateway.dto.ExecuteScriptInputDTO;
 import com.optimus.manager.gateway.dto.ExecuteScriptOutputDTO;
 import com.optimus.manager.order.dto.CreateOrderDTO;
 import com.optimus.manager.order.dto.OrderInfoDTO;
-import com.optimus.manager.order.dto.OrderNoticeInputDTO;
+import com.optimus.manager.order.dto.OrderNoticeDTO;
 import com.optimus.manager.order.dto.PayOrderDTO;
 import com.optimus.util.DateUtil;
 import com.optimus.util.constants.RespCodeEnum;
@@ -300,22 +300,22 @@ public class OrderManagerConvert {
     }
 
     /**
-     * 获取订单通知输入DTO
+     * 获取订单通知DTO
      * 
-     * @param payOrder
+     * @param orderInfo
      * @return
      */
-    public static OrderNoticeInputDTO getOrderNoticeInputDTO(PayOrderDTO payOrder) {
+    public static OrderNoticeDTO getOrderNoticeDTO(OrderInfoDTO orderInfo) {
 
-        // 订单通知输入DTO
-        OrderNoticeInputDTO input = new OrderNoticeInputDTO();
+        // 订单通知DTO
+        OrderNoticeDTO input = new OrderNoticeDTO();
 
-        input.setMemberId(payOrder.getMemberId());
-        input.setOrderId(payOrder.getOrderId());
-        input.setCallerOrderId(payOrder.getCallerOrderId());
-        input.setOrderStatus(payOrder.getOrderStatus());
-        input.setOrderAmount(payOrder.getOrderAmount());
-        input.setActualAmount(payOrder.getActualAmount());
+        input.setMemberId(orderInfo.getMemberId());
+        input.setOrderId(orderInfo.getOrderId());
+        input.setCallerOrderId(orderInfo.getCallerOrderId());
+        input.setOrderStatus(orderInfo.getOrderStatus());
+        input.setOrderAmount(orderInfo.getOrderAmount());
+        input.setActualAmount(orderInfo.getActualAmount());
 
         return input;
 

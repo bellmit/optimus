@@ -79,7 +79,7 @@ public class AccountManagerImpl implements AccountManager {
             addBatchAccountLog(accountInfoList, doTransList);
 
         } catch (Exception e) {
-            log.error("doTrans e is {}", e);
+            log.error("doTrans error is {}", e);
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return false;
         }
