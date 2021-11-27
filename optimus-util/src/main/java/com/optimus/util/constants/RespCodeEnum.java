@@ -18,13 +18,15 @@ public enum RespCodeEnum {
 
     FAILE("1001", "失败"),
 
-    INVALID_IP("1002", "IP异常"),
+    INVALID_PARAM("1002", "无效参数"),
 
-    INVALID_PARAM("1003", "无效参数"),
+    ERROR_CONVERT("1003", "转换异常"),
 
-    ERROR_CONVERT("1004", "转换异常"),
+    ERROR_SIGN("1004", "签名异常"),
 
-    ERROR_SIGN("1005", "签名异常"),
+    ERROR_LIMIT("1005", "限流异常"),
+
+    ERROR_IP("1006", "IP异常"),
 
     /* ---------会员类编码--------- */
 
@@ -52,9 +54,9 @@ public enum RespCodeEnum {
 
     ORDER_EXIST_ERROR("4001", "订单已存在"),
 
-    ORDER_PLACE_ERROR("4002", "下单失败"),
+    ORDER_ERROR("4002", "订单信息异常"),
 
-    ORDER_ERROR("4003", "订单信息异常"),
+    ORDER_PLACE_ERROR("4003", "下单失败"),
 
     /* ---------网关类编码--------- */
 

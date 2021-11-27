@@ -2,6 +2,7 @@ package com.optimus.manager.member.dto;
 
 import java.io.Serializable;
 
+import com.optimus.util.constants.member.MemberDeleteFlagEnum;
 import com.optimus.util.constants.member.MemberStatusEnum;
 import com.optimus.util.constants.member.MemberTypeEnum;
 
@@ -47,6 +48,13 @@ public class MemberInfoDTO implements Serializable {
      * 直接上级会员编号
      */
     private String supDirectMemberId;
+
+    /**
+     * 删除标识
+     * 
+     * @see MemberDeleteFlagEnum
+     */
+    private String deleteFlag;
 
     public MemberInfoDTO(String memberId) {
         this.memberId = memberId;

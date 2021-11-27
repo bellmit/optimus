@@ -1,6 +1,6 @@
 package com.optimus.web.order.req;
 
-import com.optimus.util.req.Req;
+import com.optimus.util.model.req.Req;
 
 import lombok.Data;
 

@@ -2,7 +2,7 @@ package com.optimus.dao.query;
 
 import java.io.Serializable;
 
-import com.optimus.util.page.Page;
+import com.optimus.util.model.page.Page;
 
 import lombok.Data;
 

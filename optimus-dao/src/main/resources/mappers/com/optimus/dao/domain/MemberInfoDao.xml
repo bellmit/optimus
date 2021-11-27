@@ -5,12 +5,7 @@
   <resultMap id="BaseResultMap" type="com.optimus.dao.domain.MemberInfoDO">
     <id column="ID" jdbcType="NUMERIC" property="id" />
     <result column="MEMBER_ID" jdbcType="VARCHAR" property="memberId" />
-    <result column="LOGIN_NAME" jdbcType="VARCHAR" property="loginName" />
-    <result column="LOGIN_PASSWORD" jdbcType="VARCHAR" property="loginPassword" />
     <result column="MEMBER_KEY" jdbcType="VARCHAR" property="memberKey" />
-    <result column="MOBILE" jdbcType="VARCHAR" property="mobile" />
-    <result column="EMAIL" jdbcType="VARCHAR" property="email" />
-    <result column="SHOW_NAME" jdbcType="VARCHAR" property="showName" />
     <result column="MEMBER_TYPE" jdbcType="VARCHAR" property="memberType" />
     <result column="MEMBER_STATUS" jdbcType="VARCHAR" property="memberStatus" />
     <result column="SUP_DIRECT_MEMBER_ID" jdbcType="VARCHAR" property="supDirectMemberId" />
@@ -28,9 +23,8 @@
   </resultMap>
 
   <sql id="Base_Column_List">
-    ID, MEMBER_ID, LOGIN_NAME, LOGIN_PASSWORD, MEMBER_KEY, MOBILE, EMAIL, SHOW_NAME, 
-    MEMBER_TYPE, MEMBER_STATUS, SUP_DIRECT_MEMBER_ID, DELETE_FLAG, CREATE_BY, 
-    CREATE_TIME, UPDATE_BY, UPDATE_TIME
+    ID, MEMBER_ID, MEMBER_KEY, MEMBER_TYPE, MEMBER_STATUS, SUP_DIRECT_MEMBER_ID, 
+    DELETE_FLAG, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME
   </sql>
 
   <select id="getMemberInfoById" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -82,23 +76,8 @@
       <if test="memberId != null">
         MEMBER_ID,
       </if>
-      <if test="loginName != null">
-        LOGIN_NAME,
-      </if>
-      <if test="loginPassword != null">
-        LOGIN_PASSWORD,
-      </if>
       <if test="memberKey != null">
         MEMBER_KEY,
-      </if>
-      <if test="mobile != null">
-        MOBILE,
-      </if>
-      <if test="email != null">
-        EMAIL,
-      </if>
-      <if test="showName != null">
-        SHOW_NAME,
       </if>
       <if test="memberType != null">
         MEMBER_TYPE,
@@ -130,17 +109,7 @@
       </if>
       <if test="memberId != null"> #{memberId,jdbcType=VARCHAR},
       </if>
-      <if test="loginName != null"> #{loginName,jdbcType=VARCHAR},
-      </if>
-      <if test="loginPassword != null"> #{loginPassword,jdbcType=VARCHAR},
-      </if>
       <if test="memberKey != null"> #{memberKey,jdbcType=VARCHAR},
-      </if>
-      <if test="mobile != null"> #{mobile,jdbcType=VARCHAR},
-      </if>
-      <if test="email != null"> #{email,jdbcType=VARCHAR},
-      </if>
-      <if test="showName != null"> #{showName,jdbcType=VARCHAR},
       </if>
       <if test="memberType != null"> #{memberType,jdbcType=VARCHAR},
       </if>
@@ -167,23 +136,8 @@
       <if test="memberId != null">
         MEMBER_ID = #{memberId,jdbcType=VARCHAR},
       </if>
-      <if test="loginName != null">
-        LOGIN_NAME = #{loginName,jdbcType=VARCHAR},
-      </if>
-      <if test="loginPassword != null">
-        LOGIN_PASSWORD = #{loginPassword,jdbcType=VARCHAR},
-      </if>
       <if test="memberKey != null">
         MEMBER_KEY = #{memberKey,jdbcType=VARCHAR},
-      </if>
-      <if test="mobile != null">
-        MOBILE = #{mobile,jdbcType=VARCHAR},
-      </if>
-      <if test="email != null">
-        EMAIL = #{email,jdbcType=VARCHAR},
-      </if>
-      <if test="showName != null">
-        SHOW_NAME = #{showName,jdbcType=VARCHAR},
       </if>
       <if test="memberType != null">
         MEMBER_TYPE = #{memberType,jdbcType=VARCHAR},

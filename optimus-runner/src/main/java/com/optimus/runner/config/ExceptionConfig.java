@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.exception.OptimusException;
-import com.optimus.util.resp.Resp;
+import com.optimus.util.model.resp.Resp;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;

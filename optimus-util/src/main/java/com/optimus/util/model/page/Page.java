@@ -1,4 +1,4 @@
-package com.optimus.util.page;
+package com.optimus.util.model.page;
 
 import java.io.Serializable;
 

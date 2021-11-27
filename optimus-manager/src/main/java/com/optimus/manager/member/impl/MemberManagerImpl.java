@@ -5,11 +5,13 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.optimus.dao.domain.MemberInfoDO;
 import com.optimus.dao.domain.MemberTransConfineDO;
 import com.optimus.dao.mapper.MemberInfoDao;
 import com.optimus.dao.mapper.MemberTransConfineDao;
 import com.optimus.dao.result.MemberInfoChainResult;
 import com.optimus.manager.member.MemberManager;
+import com.optimus.manager.member.dto.MemberInfoDTO;
 import com.optimus.manager.member.dto.MemberTransConfineDTO;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
@@ -68,6 +70,20 @@ public class MemberManagerImpl implements MemberManager {
 
         // 手续费类型不匹配
         throw new OptimusException(RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "手续费类型不匹配");
+
+    }
+
+    @Override
+    public MemberInfoDTO getMemberInfoByMemberId(String memberId) {
+
+        // 根据会员编号查询会员信息
+        MemberInfoDO memberInfoDO = memberInfoDao.getMemberInfoByMemberId(memberId);
+
+        // 会员信息DTO
+        MemberInfoDTO memberInfo = new MemberInfoDTO();
+        BeanUtils.copyProperties(memberInfoDO, memberInfo);
+
+        return memberInfo;
 
     }
 

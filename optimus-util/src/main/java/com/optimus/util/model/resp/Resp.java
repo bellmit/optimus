@@ -1,4 +1,4 @@
-package com.optimus.util.resp;
+package com.optimus.util.model.resp;
 
 import java.io.Serializable;
 

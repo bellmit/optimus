@@ -1,9 +1,10 @@
 package com.optimus.web.collect.req;
 
-import com.optimus.util.req.Req;
 import lombok.Data;
 
 import java.math.BigDecimal;
+
+import com.optimus.util.model.req.Req;
 
 /**
  * 收单基础Req

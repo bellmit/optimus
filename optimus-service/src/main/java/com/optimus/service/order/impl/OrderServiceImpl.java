@@ -22,7 +22,7 @@ import com.optimus.util.BeanUtil;
 import com.optimus.util.GenerateUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
-import com.optimus.util.page.Page;
+import com.optimus.util.model.page.Page;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

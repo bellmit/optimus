@@ -56,7 +56,7 @@ public class GatewayController {
 
         // 商户客户端IP
         String ip = GatewayControllerConvert.getRemoteIp(req);
-        AssertUtil.notEmpty(ip, RespCodeEnum.INVALID_IP, "客户端IP不能为空");
+        AssertUtil.notEmpty(ip, RespCodeEnum.ERROR_IP, "客户端IP不能为空");
 
         // 查询子渠道
         GatewaySubChannelDTO gatewaySubChannel = gatewayService.getGatewaySubChannelBySubChannelCode(subChannelCode);
@@ -65,7 +65,7 @@ public class GatewayController {
         // 验证IP
         String[] ips = gatewaySubChannel.getCallbackIp().split(",");
         if (!Arrays.asList(ips).contains(ip)) {
-            throw new OptimusException(RespCodeEnum.INVALID_IP, "客户端IP异常");
+            throw new OptimusException(RespCodeEnum.ERROR_IP, "客户端IP异常");
         }
 
         // 执行脚本输入DTO

@@ -11,6 +11,7 @@ import com.optimus.service.gateway.GatewayService;
 import com.optimus.service.member.MemberService;
 import com.optimus.service.order.OrderService;
 import com.optimus.util.AssertUtil;
+import com.optimus.util.annotation.OptimusRateLimiter;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.gateway.GatewayChannelStatusEnum;
 import com.optimus.util.constants.member.MemberMerchantOrderSwitchEnum;
@@ -68,6 +69,7 @@ public class CollectController {
      * @param req
      * @return ApplyForRechargeResp
      */
+    @OptimusRateLimiter(permits = 100D, timeout = 0)
     @PostMapping("/applyForRecharge")
     public ApplyForRechargeResp applyForRecharge(@RequestBody ApplyForRechargeReq req) {
 

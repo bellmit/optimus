@@ -25,7 +25,7 @@ import com.optimus.util.constants.order.OrderReleaseStatusEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
 import com.optimus.util.exception.OptimusException;
-import com.optimus.util.page.Page;
+import com.optimus.util.model.page.Page;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
