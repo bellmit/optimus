@@ -14,9 +14,9 @@ public enum OrderTransferTypeEnum {
 
     /* ---------订单划账类型--------- */
 
-    ORDER_TRANSFER_TYPE_B2A("BA", "余额户到预付款户"),
+    TRANSFER_TYPE_B2A("BA", "余额户到预付款户"),
 
-    ORDER_TRANSFER_TYPE_A2B("AB", "预付款户到余额户"),
+    TRANSFER_TYPE_A2B("AB", "预付款户到余额户"),
 
     ;
 

@@ -77,12 +77,12 @@ public class GatewayServiceImpl implements GatewayService {
     public MatchChannelDTO matchChannel(MemberInfoDTO memberInfo, GatewayChannelDTO gatewayChannel, BigDecimal amount) {
 
         // 自研渠道匹配
-        if (StringUtils.pathEquals(GatewayChannelGroupEnum.GATEWAY_CHANNEL_GROUP_I.getCode(), gatewayChannel.getChannelGroup())) {
+        if (StringUtils.pathEquals(GatewayChannelGroupEnum.CHANNEL_GROUP_I.getCode(), gatewayChannel.getChannelGroup())) {
             return gatewayManager.insideMatch(memberInfo, gatewayChannel, amount);
         }
 
         // 外部渠道匹配
-        if (StringUtils.pathEquals(GatewayChannelGroupEnum.GATEWAY_CHANNEL_GROUP_O.getCode(), gatewayChannel.getChannelGroup())) {
+        if (StringUtils.pathEquals(GatewayChannelGroupEnum.CHANNEL_GROUP_O.getCode(), gatewayChannel.getChannelGroup())) {
             return gatewayManager.outsideMatch(memberInfo, gatewayChannel, amount);
         }
 

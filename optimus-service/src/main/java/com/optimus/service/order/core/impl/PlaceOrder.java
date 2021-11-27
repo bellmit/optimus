@@ -81,7 +81,7 @@ public class PlaceOrder extends BaseOrder {
         AssertUtil.notEmpty(memberTransConfine.getCodeBalanceSwitch(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "码商余额限制开关未配置");
 
         // 验证码商余额:非自研渠道且非关闭
-        if (!StringUtils.pathEquals(GatewayChannelGroupEnum.GATEWAY_CHANNEL_GROUP_I.getCode(), createOrder.getGatewayChannel().getChannelGroup())
+        if (!StringUtils.pathEquals(GatewayChannelGroupEnum.CHANNEL_GROUP_I.getCode(), createOrder.getGatewayChannel().getChannelGroup())
                 && !StringUtils.pathEquals(MemberCodeBalanceSwitchEnum.CODE_BALANCE_SWITCH_N.getCode(), memberTransConfine.getCodeBalanceSwitch())) {
             // 查询账户信息
             AccountInfoDTO accountInfo = accountManager.getAccountInfoByMemberIdAndAccountType(createOrder.getCodeMemberId(), AccountTypeEnum.ACCOUNT_TYPE_B.getCode());

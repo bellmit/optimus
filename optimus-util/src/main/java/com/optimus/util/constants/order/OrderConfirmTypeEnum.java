@@ -14,9 +14,9 @@ public enum OrderConfirmTypeEnum {
 
     /* ---------订单确认类型--------- */
 
-    ORDER_CONFIRM_TYPE_P("P", "通过"),
+    CONFIRM_TYPE_P("P", "通过"),
 
-    ORDER_CONFIRM_TYPE_R("R", "驳回"),
+    CONFIRM_TYPE_R("R", "驳回"),
 
     ;
 

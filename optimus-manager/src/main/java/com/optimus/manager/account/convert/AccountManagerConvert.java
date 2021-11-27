@@ -56,7 +56,7 @@ public class AccountManagerConvert {
             accountInfo = accountInfoMap.get(key);
 
             accountInfo.setAmount(item.getAmount());
-            if (StringUtils.pathEquals(AccountFlowEnum.ACCOUNT_FLOW_S.getCode(), symbol)) {
+            if (StringUtils.pathEquals(AccountFlowEnum.FLOW_S.getCode(), symbol)) {
                 accountInfo.setAmount(item.getAmount().negate());
             }
 

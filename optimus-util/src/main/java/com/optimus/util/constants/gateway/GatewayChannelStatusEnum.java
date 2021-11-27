@@ -14,9 +14,9 @@ public enum GatewayChannelStatusEnum {
 
     /* ---------网关渠道状态--------- */
 
-    GATEWAY_CHANNEL_STATUS_Y("Y", "启用"),
+    CHANNEL_STATUS_Y("Y", "启用"),
 
-    GATEWAY_CHANNEL_STATUS_N("N", "禁用"),
+    CHANNEL_STATUS_N("N", "禁用"),
 
     ;
 

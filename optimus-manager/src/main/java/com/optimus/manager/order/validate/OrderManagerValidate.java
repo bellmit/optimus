@@ -65,9 +65,17 @@ public class OrderManagerValidate {
      */
     private static void validateMerchant(List<MemberChannelDO> memberChannelList) {
 
-        // 断言:会员渠道费率
+        // 会员渠道费率
         memberChannelList.stream().forEach(e -> {
             AssertUtil.notEmpty(e.getRate(), RespCodeEnum.MEMBER_CHANNEL_ERROR, "会员渠道费率为空");
+
+            if (e.getRate().compareTo(BigDecimal.ZERO) < 0) {
+                throw new OptimusException(RespCodeEnum.MEMBER_CHANNEL_ERROR, "会员渠道费率最小为0%");
+            }
+
+            if (e.getRate().compareTo(BigDecimal.ONE) >= 0) {
+                throw new OptimusException(RespCodeEnum.MEMBER_CHANNEL_ERROR, "会员渠道费率最大为99.99%");
+            }
         });
 
         // 获取会员类型为商户的会员

@@ -14,9 +14,9 @@ public enum GatewayChannelGroupEnum {
 
     /* ---------网关渠道分组--------- */
 
-    GATEWAY_CHANNEL_GROUP_I("I", "自研"),
+    CHANNEL_GROUP_I("I", "自研"),
 
-    GATEWAY_CHANNEL_GROUP_O("O", "外部"),
+    CHANNEL_GROUP_O("O", "外部"),
 
     ;
 

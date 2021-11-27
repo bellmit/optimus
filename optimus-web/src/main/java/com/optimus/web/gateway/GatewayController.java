@@ -89,7 +89,7 @@ public class GatewayController {
         // 支付
         PayOrderDTO payOrder = GatewayControllerConvert.getPayOrderDTO(output, orderInfo);
         payOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_C.getCode());
-        payOrder.setBehavior(OrderBehaviorEnum.ORDER_BEHAVIOR_S.getCode());
+        payOrder.setBehavior(OrderBehaviorEnum.BEHAVIOR_S.getCode());
 
         orderService.payOrder(payOrder);
 

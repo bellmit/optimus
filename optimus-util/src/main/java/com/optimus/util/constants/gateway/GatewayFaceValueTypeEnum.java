@@ -14,9 +14,9 @@ public enum GatewayFaceValueTypeEnum {
 
     /* ---------网关渠道支持的面额类型--------- */
 
-    GATEWAY_FACE_VALUE_TYPE_F("F", "固定"),
+    FACE_VALUE_TYPE_F("F", "固定"),
 
-    GATEWAY_FACE_VALUE_TYPE_S("S", "范围"),
+    FACE_VALUE_TYPE_S("S", "范围"),
 
     ;
 

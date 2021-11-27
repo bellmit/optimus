@@ -72,7 +72,7 @@ public class TransferOrder extends BaseOrder {
         List<DoTransDTO> doTransList = new ArrayList<>();
 
         // 预付款户到余额户
-        if (StringUtils.pathEquals(OrderTransferTypeEnum.ORDER_TRANSFER_TYPE_A2B.getCode(), payOrder.getTransferType())) {
+        if (StringUtils.pathEquals(OrderTransferTypeEnum.TRANSFER_TYPE_A2B.getCode(), payOrder.getTransferType())) {
             // 加一笔余额
             DoTransDTO bPlus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_PLUS, payOrder, "预付款户到余额户");
             doTransList.add(bPlus);
@@ -83,7 +83,7 @@ public class TransferOrder extends BaseOrder {
         }
 
         // 余额户到预付款户
-        if (StringUtils.pathEquals(OrderTransferTypeEnum.ORDER_TRANSFER_TYPE_B2A.getCode(), payOrder.getTransferType())) {
+        if (StringUtils.pathEquals(OrderTransferTypeEnum.TRANSFER_TYPE_B2A.getCode(), payOrder.getTransferType())) {
             // 减一笔余额
             DoTransDTO bMinus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_MINUS, payOrder, "余额户到预付款户");
             doTransList.add(bMinus);

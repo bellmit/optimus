@@ -329,7 +329,7 @@ public class CollectController {
 
         // 验证主渠道
         GatewayChannelDTO gatewayChannel = gatewayService.getGatewayChannelByChannelCode(req.getChannelCode());
-        AssertUtil.notEquals(GatewayChannelStatusEnum.GATEWAY_CHANNEL_STATUS_Y.getCode(), gatewayChannel.getChannelStatus(), RespCodeEnum.GATEWAY_CHANNEL_ERROR, "渠道未启用");
+        AssertUtil.notEquals(GatewayChannelStatusEnum.CHANNEL_STATUS_Y.getCode(), gatewayChannel.getChannelStatus(), RespCodeEnum.GATEWAY_CHANNEL_ERROR, "渠道未启用");
 
         // 匹配子渠道
         MatchChannelDTO matchChannel = gatewayService.matchChannel(memberInfo, gatewayChannel, req.getAmount());

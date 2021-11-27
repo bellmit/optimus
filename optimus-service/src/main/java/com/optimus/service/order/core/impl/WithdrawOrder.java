@@ -120,7 +120,7 @@ public class WithdrawOrder extends BaseOrder {
     public void payOrder(PayOrderDTO payOrder) {
 
         // 驳回
-        if (StringUtils.pathEquals(OrderConfirmTypeEnum.ORDER_CONFIRM_TYPE_R.getCode(), payOrder.getConfirmType())) {
+        if (StringUtils.pathEquals(OrderConfirmTypeEnum.CONFIRM_TYPE_R.getCode(), payOrder.getConfirmType())) {
             // 回账
             List<DoTransDTO> doTransList = new ArrayList<>();
             // 加一笔余额

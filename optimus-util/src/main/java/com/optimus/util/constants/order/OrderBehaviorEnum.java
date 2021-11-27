@@ -14,9 +14,9 @@ public enum OrderBehaviorEnum {
 
     /* ---------订单行为--------- */
 
-    ORDER_BEHAVIOR_S("S", "系统"),
+    BEHAVIOR_S("S", "系统"),
 
-    ORDER_BEHAVIOR_A("A", "人为"),
+    BEHAVIOR_A("A", "人为"),
 
     ;
 

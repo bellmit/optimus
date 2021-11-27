@@ -14,9 +14,9 @@ public enum OrderMerchantNotifyStatusEnum {
 
     /* ---------订单商户通知状态--------- */
 
-    ORDER_MERCHANT_NOTIFY_STATUS_NS("NS", "通知成功"),
+    MERCHANT_NOTIFY_STATUS_NS("NS", "通知成功"),
 
-    ORDER_MERCHANT_NOTIFY_STATUS_NF("NF", "通知失败"),
+    MERCHANT_NOTIFY_STATUS_NF("NF", "通知失败"),
 
     ;
 

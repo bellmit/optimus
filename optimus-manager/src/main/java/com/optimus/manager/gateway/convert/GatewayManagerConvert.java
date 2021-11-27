@@ -89,7 +89,7 @@ public class GatewayManagerConvert {
 
         query.setAgentMemberId(memberInfo.getSupDirectMemberId());
         query.setParentChannelCode(gatewayChannel.getChannelCode());
-        query.setChannelStatus(GatewayChannelStatusEnum.GATEWAY_CHANNEL_STATUS_Y.getCode());
+        query.setChannelStatus(GatewayChannelStatusEnum.CHANNEL_STATUS_Y.getCode());
 
         return query;
 
@@ -115,13 +115,13 @@ public class GatewayManagerConvert {
             String[] faceValues = item.getFaceValue().split(",");
 
             // 固定面额
-            if (StringUtils.pathEquals(GatewayFaceValueTypeEnum.GATEWAY_FACE_VALUE_TYPE_F.getCode(), item.getFaceValueType())) {
+            if (StringUtils.pathEquals(GatewayFaceValueTypeEnum.FACE_VALUE_TYPE_F.getCode(), item.getFaceValueType())) {
                 long count = Arrays.asList(faceValues).stream().filter(e -> new BigDecimal(e).compareTo(amount) == 0).count();
                 flag = (count > 0) ? true : false;
             }
 
             // 范围面额
-            if (StringUtils.pathEquals(GatewayFaceValueTypeEnum.GATEWAY_FACE_VALUE_TYPE_S.getCode(), item.getFaceValueType())) {
+            if (StringUtils.pathEquals(GatewayFaceValueTypeEnum.FACE_VALUE_TYPE_S.getCode(), item.getFaceValueType())) {
                 BigDecimal l = new BigDecimal(faceValues[0]);
                 BigDecimal r = new BigDecimal(faceValues[1]);
                 flag = (l.compareTo(amount) <= 0 && amount.compareTo(r) <= 0) ? true : false;

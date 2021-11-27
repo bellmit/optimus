@@ -104,9 +104,6 @@ public class OrderManagerImpl implements OrderManager {
     @Override
     public void asyncSplitProfit(OrderInfoDTO orderInfo, List<MemberInfoChainResult> chainList, List<MemberChannelDO> memberChannelList) {
 
-        // 订单编号
-        String orderId = orderInfo.getOrderId();
-
         // 构建会员费率Map
         Map<String, BigDecimal> map = memberChannelList.stream().collect(Collectors.toMap(MemberChannelDO::getMemberId, MemberChannelDO::getRate));
 
@@ -114,7 +111,7 @@ public class OrderManagerImpl implements OrderManager {
         List<DoTransDTO> doTransList = OrderManagerConvert.getDoTransDTOList(orderInfo, chainList, map);
 
         // 更新订单分润状态
-        int update = orderInfoDao.updateOrderInfoByOrderIdAndSplitProfitStatus(orderId, OrderSplitProfitStatusEnum.ORDER_SPLIT_PROFIT_STATUS_Y.getCode(), OrderSplitProfitStatusEnum.ORDER_SPLIT_PROFIT_STATUS_N.getCode(), DateUtil.currentDate());
+        int update = orderInfoDao.updateOrderInfoByOrderIdAndSplitProfitStatus(orderInfo.getOrderId(), OrderSplitProfitStatusEnum.SPLIT_PROFIT_STATUS_Y.getCode(), OrderSplitProfitStatusEnum.SPLIT_PROFIT_STATUS_N.getCode(), DateUtil.currentDate());
         if (update != 1) {
             return;
         }
@@ -126,7 +123,7 @@ public class OrderManagerImpl implements OrderManager {
         }
 
         // 记账失败,回滚分润状态
-        orderInfoDao.updateOrderInfoByOrderIdAndSplitProfitStatus(orderId, OrderSplitProfitStatusEnum.ORDER_SPLIT_PROFIT_STATUS_N.getCode(), OrderSplitProfitStatusEnum.ORDER_SPLIT_PROFIT_STATUS_Y.getCode(), DateUtil.currentDate());
+        orderInfoDao.updateOrderInfoByOrderIdAndSplitProfitStatus(orderInfo.getOrderId(), OrderSplitProfitStatusEnum.SPLIT_PROFIT_STATUS_N.getCode(), OrderSplitProfitStatusEnum.SPLIT_PROFIT_STATUS_Y.getCode(), DateUtil.currentDate());
 
     }
 
