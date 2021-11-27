@@ -94,18 +94,18 @@ public class WithdrawOrder extends BaseOrder {
         List<DoTransDTO> doTransList = new ArrayList<>();
 
         // 减一笔余额
-        DoTransDTO bMinus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_MINUS, orderInfo, "余额户到冻结户");
+        DoTransDTO bMinus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_MINUS, orderInfo, "提现减余额户");
         doTransList.add(bMinus);
 
         // 加一笔冻结
-        DoTransDTO fPlus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_PLUS, orderInfo, "余额户到冻结户");
+        DoTransDTO fPlus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_PLUS, orderInfo, "提现加冻结户");
         doTransList.add(fPlus);
 
         boolean doTrans = accountManager.doTrans(doTransList);
 
         // 账户交易失败,冻结余额异常
         if (!doTrans) {
-            throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "冻结余额异常");
+            throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "提现冻结余额异常");
         }
 
         return orderInfo;
@@ -124,18 +124,18 @@ public class WithdrawOrder extends BaseOrder {
             // 回账
             List<DoTransDTO> doTransList = new ArrayList<>();
             // 加一笔余额
-            DoTransDTO bPlus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_PLUS, payOrder, "冻结户到余额户");
+            DoTransDTO bPlus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_PLUS, payOrder, "提现驳回加余额户");
             doTransList.add(bPlus);
 
             // 减一笔冻结
-            DoTransDTO fMinus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_MINUS, payOrder, "冻结户到余额户");
+            DoTransDTO fMinus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_MINUS, payOrder, "提现驳回减冻结户");
             doTransList.add(fMinus);
 
             boolean doTrans = accountManager.doTrans(doTransList);
 
             // 账户交易失败
             if (!doTrans) {
-                throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "冻结余额异常");
+                throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "提现驳回冻结余额异常");
             }
             return;
         }
@@ -144,7 +144,7 @@ public class WithdrawOrder extends BaseOrder {
         List<DoTransDTO> doTransList = new ArrayList<>();
 
         // 减一笔冻结
-        DoTransDTO fMinus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_MINUS, payOrder, "冻结户到余额户");
+        DoTransDTO fMinus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_MINUS, payOrder, "提现确认减冻结户");
         doTransList.add(fMinus);
 
         // 如果有手续费,则平台加一笔手续费

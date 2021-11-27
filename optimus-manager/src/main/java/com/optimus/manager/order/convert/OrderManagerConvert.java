@@ -76,7 +76,7 @@ public class OrderManagerConvert {
             String changeType = null;
             BigDecimal amount = null;
 
-            // 码商->码商:r-l
+            // 码商->码商
             if (StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_C.getCode(), r.getMemberType())) {
                 // 第一个码商
                 if (StringUtils.pathEquals(orderInfo.getCodeMemberId(), l.getMemberId())) {
@@ -100,7 +100,7 @@ public class OrderManagerConvert {
                 return r;
             }
 
-            // 代理->管理->平台:l-r
+            // 代理->管理->平台
             if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_C.getCode(), l.getMemberType())) {
                 // 平台
                 if (StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_S.getCode(), r.getMemberType())) {
@@ -120,7 +120,7 @@ public class OrderManagerConvert {
                 return r;
             }
 
-            // 代理-商户-码商:商户-码商
+            // 代理-商户-码商
             if (StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_C.getCode(), l.getMemberType()) && StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_A.getCode(), r.getMemberType())) {
                 // 代理
                 changeType = AccountChangeTypeEnum.A_MINUS.getCode();

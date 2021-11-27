@@ -34,6 +34,7 @@ import com.optimus.util.constants.gateway.GatewayChannelGroupEnum;
 import com.optimus.util.constants.member.MemberCodeBalanceSwitchEnum;
 import com.optimus.util.constants.member.MemberFreezeBalanceSwitchEnum;
 import com.optimus.util.constants.order.OrderReleaseStatusEnum;
+import com.optimus.util.constants.order.OrderSplitProfitStatusEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.exception.OptimusException;
 
@@ -105,6 +106,7 @@ public class PlaceOrder extends BaseOrder {
         // 不冻结码商余额
         if (StringUtils.pathEquals(MemberFreezeBalanceSwitchEnum.FREEZE_BALANCE_SWITCH_N.getCode(), memberTransConfine.getFreezeBalanceSwitch())) {
             orderInfo.setReleaseStatus(OrderReleaseStatusEnum.RELEASE_STATUS_D.getCode());
+            orderInfo.setSplitProfitStatus(OrderSplitProfitStatusEnum.SPLIT_PROFIT_STATUS_N.getCode());
             return orderInfo;
         }
 
@@ -119,6 +121,7 @@ public class PlaceOrder extends BaseOrder {
         }
 
         orderInfo.setReleaseStatus(OrderReleaseStatusEnum.RELEASE_STATUS_N.getCode());
+        orderInfo.setSplitProfitStatus(OrderSplitProfitStatusEnum.SPLIT_PROFIT_STATUS_N.getCode());
         return orderInfo;
     }
 
