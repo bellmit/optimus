@@ -34,11 +34,9 @@ public enum RespCodeEnum {
 
     MEMBER_ERROR("2001", "会员信息异常"),
 
-    MEMBER_TYPE_ERROR("2002", "会员类型不匹配"),
+    MEMBER_CHANNEL_ERROR("2002", "会员渠道异常"),
 
     MEMBER_TRANS_PERMISSION_ERROR("2003", "会员交易限制异常"),
-
-    MEMBER_CHANNEL_ERROR("2004", "会员渠道异常"),
 
     /* ---------账户类编码--------- */
 
@@ -56,7 +54,7 @@ public enum RespCodeEnum {
 
     ORDER_ERROR("4002", "订单信息异常"),
 
-    ORDER_PLACE_ERROR("4003", "下单失败"),
+    ORDER_PLACE_ERROR("4003", "下单异常"),
 
     /* ---------网关类编码--------- */
 

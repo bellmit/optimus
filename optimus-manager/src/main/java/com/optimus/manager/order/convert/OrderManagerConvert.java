@@ -55,7 +55,7 @@ public class OrderManagerConvert {
     }
 
     /**
-     * 获取账户交易
+     * 获取账户交易List
      * 
      * @param orderInfo
      * @param chainList
@@ -87,13 +87,13 @@ public class OrderManagerConvert {
                         amount = orderInfo.getActualAmount().subtract(amount);
                     }
 
-                    doTransList.add(new DoTransDTO(l.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "渠道回调码商分润"));
+                    doTransList.add(new DoTransDTO(l.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "码商分润"));
                 }
 
                 // 其他码商
                 changeType = AccountChangeTypeEnum.B_PLUS.getCode();
                 amount = orderInfo.getActualAmount().multiply(map.get(r.getMemberId()).subtract(map.get(l.getMemberId())));
-                doTransList.add(new DoTransDTO(r.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "渠道回调码商分润"));
+                doTransList.add(new DoTransDTO(r.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "码商分润"));
 
                 return r;
             }
@@ -105,7 +105,7 @@ public class OrderManagerConvert {
 
                     changeType = AccountChangeTypeEnum.P_PLUS.getCode();
                     amount = orderInfo.getActualAmount().multiply(map.get(l.getMemberId()));
-                    doTransList.add(new DoTransDTO(r.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "渠道回调平台分润"));
+                    doTransList.add(new DoTransDTO(r.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "平台分润"));
 
                     return r;
                 }
@@ -113,7 +113,7 @@ public class OrderManagerConvert {
                 // 管理/代理
                 changeType = AccountChangeTypeEnum.A_PLUS.getCode();
                 amount = orderInfo.getActualAmount().multiply(map.get(l.getMemberId()).subtract(map.get(r.getMemberId())));
-                doTransList.add(new DoTransDTO(r.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "渠道回调管理或代理分润"));
+                doTransList.add(new DoTransDTO(r.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, r.getMemberType() + "分润"));
 
                 return r;
             }
@@ -123,21 +123,21 @@ public class OrderManagerConvert {
                 // 代理
                 changeType = AccountChangeTypeEnum.A_MINUS.getCode();
                 amount = orderInfo.getActualAmount().multiply(map.get(r.getMemberId()));
-                doTransList.add(new DoTransDTO(r.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "渠道回调代理系统使用费"));
+                doTransList.add(new DoTransDTO(r.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "代理系统使用费"));
 
                 changeType = AccountChangeTypeEnum.E_PLUS.getCode();
                 amount = orderInfo.getActualAmount().multiply(map.get(orderInfo.getMemberId()).subtract(map.get(l.getMemberId())));
-                doTransList.add(new DoTransDTO(r.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "渠道回调代理收益"));
+                doTransList.add(new DoTransDTO(r.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "代理收益"));
 
                 // 商户
                 changeType = AccountChangeTypeEnum.B_PLUS.getCode();
                 amount = orderInfo.getActualAmount().subtract(orderInfo.getActualAmount().multiply(map.get(orderInfo.getMemberId())));
-                doTransList.add(new DoTransDTO(orderInfo.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "渠道回调商户费用"));
+                doTransList.add(new DoTransDTO(orderInfo.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "商户费用"));
 
                 return r;
             }
 
-            throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "渠道回调账户交易构建记账异常");
+            throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "获取账户交易异常");
         });
 
         return doTransList;

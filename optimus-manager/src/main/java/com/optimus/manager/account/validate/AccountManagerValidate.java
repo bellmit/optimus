@@ -44,17 +44,17 @@ public class AccountManagerValidate {
             BigDecimal amount = item.getAmount();
             String remark = item.getRemark();
 
-            // 断言:为空
-            AssertUtil.empty(memberId, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易会员编号不能为空");
-            AssertUtil.empty(orderId, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易订单编号不能为空");
-            AssertUtil.empty(orderType, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易订单类型不能为空");
-            AssertUtil.empty(changeType, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易变更类型不能为空");
-            AssertUtil.empty(amount, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易金额不能为空");
-            AssertUtil.empty(remark, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易备注不能为空");
+            // 断言:不为空
+            AssertUtil.notEmpty(memberId, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易会员编号不能为空");
+            AssertUtil.notEmpty(orderId, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易订单编号不能为空");
+            AssertUtil.notEmpty(orderType, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易订单类型不能为空");
+            AssertUtil.notEmpty(changeType, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易变更类型不能为空");
+            AssertUtil.notEmpty(amount, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易金额不能为空");
+            AssertUtil.notEmpty(remark, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易备注不能为空");
 
             // 验证合法性
-            AssertUtil.empty(OrderTypeEnum.instanceOf(orderType), RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易非法的订单类型");
-            AssertUtil.empty(AccountChangeTypeEnum.instanceOf(changeType), RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易非法的变更类型");
+            AssertUtil.notEmpty(OrderTypeEnum.instanceOf(orderType), RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易非法的订单类型");
+            AssertUtil.notEmpty(AccountChangeTypeEnum.instanceOf(changeType), RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易非法的变更类型");
 
             if (amount.compareTo(BigDecimal.ZERO) < 0) {
                 throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易金额不能小于0");

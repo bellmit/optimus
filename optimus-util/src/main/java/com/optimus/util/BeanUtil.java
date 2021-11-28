@@ -35,7 +35,7 @@ public class BeanUtil {
                 targetList.add(t);
 
             } catch (Exception e) {
-                throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "copyProperties转换异常");
+                throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "copyProperties error");
             }
 
         });

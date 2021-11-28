@@ -84,7 +84,7 @@ public interface OrderInfoDao {
     int updateOrderInfoByOrderIdAndOrderStatus(@Param("orderId") String orderId, @Param("orderStatus") String orderStatus, @Param("originOrderStatus") String originOrderStatus, @Param("updateTime") Date updateTime);
 
     /**
-     * 根据订单ID和释放状态更新订单信息
+     * 根据订单编号和释放状态更新订单信息
      * 
      * @param orderId
      * @param releaseStatus
@@ -95,7 +95,7 @@ public interface OrderInfoDao {
     int updateOrderInfoByOrderIdAndReleaseStatus(@Param("orderId") String orderId, @Param("releaseStatus") String releaseStatus, @Param("originReleaseStatus") String originReleaseStatus, @Param("updateTime") Date updateTime);
 
     /**
-     * 根据订单ID和分润状态更新订单信息
+     * 根据订单编号和分润状态更新订单信息
      * 
      * @param orderId
      * @param splitProfitStatus

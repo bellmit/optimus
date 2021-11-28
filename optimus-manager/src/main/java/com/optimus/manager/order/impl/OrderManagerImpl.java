@@ -89,8 +89,8 @@ public class OrderManagerImpl implements OrderManager {
 
         // 记账
         List<DoTransDTO> doTransList = new ArrayList<>();
-        doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_PLUS, orderInfo, "渠道回调释放加余额户"));
-        doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_MINUS, orderInfo, "渠道回调释放减冻结户"));
+        doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_PLUS, orderInfo, "释放加余额户"));
+        doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_MINUS, orderInfo, "释放减冻结户"));
 
         boolean doTrans = accountManager.doTrans(doTransList);
         if (!doTrans) {

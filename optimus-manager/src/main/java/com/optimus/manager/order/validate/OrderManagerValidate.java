@@ -39,8 +39,8 @@ public class OrderManagerValidate {
     public static void validateChainAndChannel(List<MemberInfoChainResult> chainList, List<MemberChannelDO> memberChannelList) {
 
         // 断言:非空
-        AssertUtil.notEmpty(chainList, RespCodeEnum.MEMBER_ERROR, "会员信息链为空");
-        AssertUtil.notEmpty(memberChannelList, RespCodeEnum.MEMBER_CHANNEL_ERROR, "会员渠道为空");
+        AssertUtil.notEmpty(chainList, RespCodeEnum.MEMBER_ERROR, "会员信息链不能为空");
+        AssertUtil.notEmpty(memberChannelList, RespCodeEnum.MEMBER_CHANNEL_ERROR, "会员渠道不能为空");
 
         // 注意:会员信息链上没有商户会员编号,需加上商户会员编号作为验证依据
         if ((chainList.size() + 1) != memberChannelList.size()) {
@@ -84,7 +84,7 @@ public class OrderManagerValidate {
             return;
         }
 
-        // 商户有且只能有一个
+        // 商户有且只有一个
         throw new OptimusException(RespCodeEnum.MEMBER_ERROR, "会员信息链中有且只有一个商户");
 
     }
@@ -156,7 +156,7 @@ public class OrderManagerValidate {
                 return r;
             }
 
-            throw new OptimusException(RespCodeEnum.MEMBER_ERROR, "会员信息链费率配置错误");
+            throw new OptimusException(RespCodeEnum.MEMBER_ERROR, "会员信息链费率配置异常");
 
         });
 

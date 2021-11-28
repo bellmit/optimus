@@ -124,7 +124,7 @@ public class ReqBodyConfig implements RequestBodyAdvice {
         }
 
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberIdForLimiter(memberId);
-        AssertUtil.notEquals(MemberStatusEnum.MEMBER_STATUS_Y.getCode(), memberInfo.getMemberStatus(), RespCodeEnum.MEMBER_ERROR, "会员无效");
+        AssertUtil.notEquals(MemberStatusEnum.MEMBER_STATUS_Y.getCode(), memberInfo.getMemberStatus(), RespCodeEnum.MEMBER_ERROR, "无效的会员");
 
         Map<String, Object> map = JacksonUtil.toBean(body, new TypeReference<Map<String, Object>>() {
         });

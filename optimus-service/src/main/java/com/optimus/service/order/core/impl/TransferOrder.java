@@ -74,22 +74,22 @@ public class TransferOrder extends BaseOrder {
         // 预付款户到余额户
         if (StringUtils.pathEquals(OrderTransferTypeEnum.TRANSFER_TYPE_A2B.getCode(), payOrder.getTransferType())) {
             // 加一笔余额
-            DoTransDTO bPlus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_PLUS, payOrder, "预付款户到余额户");
+            DoTransDTO bPlus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_PLUS, payOrder, "划账加余额户");
             doTransList.add(bPlus);
 
             // 减一笔预付款
-            DoTransDTO aMinus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.A_MINUS, payOrder, "预付款户到余额户");
+            DoTransDTO aMinus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.A_MINUS, payOrder, "划账减预付款户");
             doTransList.add(aMinus);
         }
 
         // 余额户到预付款户
         if (StringUtils.pathEquals(OrderTransferTypeEnum.TRANSFER_TYPE_B2A.getCode(), payOrder.getTransferType())) {
             // 减一笔余额
-            DoTransDTO bMinus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_MINUS, payOrder, "余额户到预付款户");
+            DoTransDTO bMinus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_MINUS, payOrder, "划账减余额户");
             doTransList.add(bMinus);
 
             // 加一笔预付款
-            DoTransDTO aPlus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.A_PLUS, payOrder, "余额户到预付款户");
+            DoTransDTO aPlus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.A_PLUS, payOrder, "划账加预付款户");
             doTransList.add(aPlus);
         }
 

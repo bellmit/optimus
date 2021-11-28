@@ -72,7 +72,7 @@ public class AccountManagerImpl implements AccountManager {
             // 构建账户信息
             List<AccountInfoDO> accountInfoList = buildAccountInfoList(doTransList);
 
-            // 更新账户
+            // 更新账户信息
             updateAccountInfoForTrans(accountInfoList);
 
             // 批量新增账户日志
@@ -103,14 +103,14 @@ public class AccountManagerImpl implements AccountManager {
         List<AccountInfoDO> accountInfoList = accountInfoDao.listAccountInfoByMemberIdLists(memberIdList);
 
         // 断言:账户信息
-        AssertUtil.notEmpty(accountInfoList, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易查询账户信息为空");
+        AssertUtil.notEmpty(accountInfoList, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易账户信息不能为空");
 
-        // 获取所涉及的账户信息
+        // 获取涉及的账户信息
         accountInfoList = AccountManagerConvert.getAccountInfoDOList(accountInfoList, doTransList);
         log.info("buildAccountInfoList accountInfoList is {}", accountInfoList);
 
         // 断言:涉及账户信息
-        AssertUtil.notEmpty(accountInfoList, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易构建账户信息异常");
+        AssertUtil.notEmpty(accountInfoList, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易账户信息不能为空");
 
         return accountInfoList;
 
@@ -123,13 +123,13 @@ public class AccountManagerImpl implements AccountManager {
      */
     private void updateAccountInfoForTrans(List<AccountInfoDO> accountInfoList) {
 
-        // 更新账户
+        // 更新账户信息
         int update = accountInfoDao.updateAccountInfoForTrans(accountInfoList, DateUtil.currentDate());
         log.info("updateAccountInfoForTrans update is {}", update);
 
         // 验证更新结果
         if (update != accountInfoList.size()) {
-            throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易更新账户异常");
+            throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易更新账户信息异常");
         }
 
     }
@@ -154,7 +154,7 @@ public class AccountManagerImpl implements AccountManager {
         log.info("addBatchAccountLog accountLogList is {}", accountLogList);
 
         // 验证获取的账户日志
-        AssertUtil.empty(accountLogList, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易构建账户日志异常");
+        AssertUtil.empty(accountLogList, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易账户日志为空");
 
         // 记录账户日志
         accountLogDao.addBatchAccountLog(accountLogList);

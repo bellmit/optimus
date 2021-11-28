@@ -60,7 +60,7 @@ public class GatewayController {
 
         // 查询子渠道
         GatewaySubChannelDTO gatewaySubChannel = gatewayService.getGatewaySubChannelBySubChannelCode(subChannelCode);
-        AssertUtil.notEmpty(gatewaySubChannel, RespCodeEnum.GATEWAY_CHANNEL_NO, "网关子渠道为空");
+        AssertUtil.notEmpty(gatewaySubChannel, RespCodeEnum.GATEWAY_CHANNEL_NO, "网关子渠道不能为空");
 
         // 验证IP
         String[] ips = gatewaySubChannel.getCallbackIp().split(",");

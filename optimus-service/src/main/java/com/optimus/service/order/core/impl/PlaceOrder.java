@@ -79,7 +79,7 @@ public class PlaceOrder extends BaseOrder {
 
         // 查询码商会员交易限制
         MemberTransConfineDTO memberTransConfine = memberManager.getMemberTransConfineByMemberId(createOrder.getCodeMemberId());
-        AssertUtil.notEmpty(memberTransConfine.getCodeBalanceSwitch(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "码商余额限制开关未配置");
+        AssertUtil.notEmpty(memberTransConfine.getCodeBalanceSwitch(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置码商余额限制开关");
 
         // 验证码商余额:非自研渠道且非关闭
         if (!StringUtils.pathEquals(GatewayChannelGroupEnum.CHANNEL_GROUP_I.getCode(), createOrder.getGatewayChannel().getChannelGroup())
@@ -138,7 +138,7 @@ public class PlaceOrder extends BaseOrder {
 
         // 查询会员信息链
         List<MemberInfoChainResult> chainList = memberManager.listMemberInfoChains(orderInfo.getCodeMemberId());
-        AssertUtil.notEmpty(chainList, RespCodeEnum.MEMBER_ERROR, "会员信息链为空");
+        AssertUtil.notEmpty(chainList, RespCodeEnum.MEMBER_ERROR, "会员信息链不能为空");
 
         // 查询会员关系链的会员渠道费率
         List<String> memberIdList = chainList.stream().map(MemberInfoChainResult::getMemberId).collect(Collectors.toList());
@@ -151,7 +151,7 @@ public class PlaceOrder extends BaseOrder {
         // 更新订单状态
         int update = orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(orderInfo.getOrderId(), orderInfo.getOrderStatus(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());
         if (update != 1) {
-            throw new OptimusException(RespCodeEnum.ORDER_ERROR, "更新订单状态异常");
+            throw new OptimusException(RespCodeEnum.ORDER_ERROR, "订单状态异常");
         }
 
         // 异步释放订单

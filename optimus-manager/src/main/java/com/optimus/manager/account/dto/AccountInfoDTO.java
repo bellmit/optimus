@@ -28,7 +28,7 @@ public class AccountInfoDTO implements Serializable {
     private String memberId;
 
     /**
-     * 账户ID
+     * 账户编号
      */
     private String accountId;
 

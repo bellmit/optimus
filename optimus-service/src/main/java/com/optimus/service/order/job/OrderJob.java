@@ -15,30 +15,30 @@ import lombok.extern.slf4j.Slf4j;
 public class OrderJob {
 
     @Scheduled(initialDelay = 60000, fixedDelay = 120000)
-    public void queryOrder() {
+    public void orderQueryTask() {
 
-        log.info("queryOrder start...");
-
-    }
-
-    @Scheduled(initialDelay = 60000, fixedDelay = 60000)
-    public void noticeMerchant() {
-
-        log.info("noticeMerchant start...");
+        log.info("orderQueryTask start...");
 
     }
 
     @Scheduled(initialDelay = 60000, fixedDelay = 60000)
-    public void releaseOrder() {
+    public void orderNoticeTask() {
 
-        log.info("releaseOrder start...");
+        log.info("orderNoticeTask start...");
+
+    }
+
+    @Scheduled(initialDelay = 60000, fixedDelay = 60000)
+    public void orderReleaseTask() {
+
+        log.info("orderReleaseTask start...");
 
     }
 
     @Scheduled(initialDelay = 60000, fixedDelay = 10000)
-    public void splitProfit() {
+    public void orderSplitProfitTask() {
 
-        log.info("splitProfit start...");
+        log.info("orderSplitProfitTask start...");
 
     }
 

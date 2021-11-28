@@ -81,7 +81,7 @@ public class RechargeOrder extends BaseOrder {
         List<DoTransDTO> doTransList = new ArrayList<>();
 
         // 加一笔余额
-        DoTransDTO bPlus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_PLUS, payOrder, "充值");
+        DoTransDTO bPlus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_PLUS, payOrder, "充值加余额");
         doTransList.add(bPlus);
 
         // 如果是码商给下级充值,则码商自己需要减一笔余额

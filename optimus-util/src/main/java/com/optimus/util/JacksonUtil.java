@@ -37,7 +37,7 @@ public class JacksonUtil {
             return objectMapper.readTree(json);
 
         } catch (Exception e) {
-            throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "readTree转换异常");
+            throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "readTree error");
         }
 
     }
@@ -55,7 +55,7 @@ public class JacksonUtil {
             return objectMapper.writeValueAsString(object);
 
         } catch (Exception e) {
-            throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "ObjectToJson转换异常");
+            throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "object to json error");
         }
 
     }
@@ -75,7 +75,7 @@ public class JacksonUtil {
             return objectMapper.readValue(json, clazz);
 
         } catch (Exception e) {
-            throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "JsonToBean转换异常");
+            throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "json to bean error");
         }
 
     }
@@ -95,7 +95,7 @@ public class JacksonUtil {
             return objectMapper.readValue(json, typeReference);
 
         } catch (Exception e) {
-            throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "JsonToCollection转换异常");
+            throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "json to collection error");
         }
 
     }

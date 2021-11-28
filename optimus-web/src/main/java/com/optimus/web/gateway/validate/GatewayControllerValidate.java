@@ -15,7 +15,7 @@ import com.optimus.util.exception.OptimusException;
 public class GatewayControllerValidate {
 
     /**
-     * 验证网关渠道回调入参
+     * 验证执行脚本入参
      * 
      * @param output
      */
@@ -30,7 +30,7 @@ public class GatewayControllerValidate {
         AssertUtil.notEmpty(output.getActualAmount(), RespCodeEnum.INVALID_PARAM, "订单实际金额不能为空");
 
         // 订单状态:成功
-        AssertUtil.notEquals(OrderStatusEnum.ORDER_STATUS_AP.getCode(), output.getOrderStatus(), RespCodeEnum.INVALID_PARAM, "订单状态只能为成功");
+        AssertUtil.notEquals(OrderStatusEnum.ORDER_STATUS_AP.getCode(), output.getOrderStatus(), RespCodeEnum.INVALID_PARAM, "订单状态必须为成功");
 
         // 金额合法性
         if (output.getAmount().scale() > Integer.parseInt(BaseEnum.SCALE_TWO.getCode())) {
