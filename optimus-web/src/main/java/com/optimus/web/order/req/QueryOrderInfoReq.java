@@ -20,11 +20,6 @@ public class QueryOrderInfoReq extends Req {
     private String memberId;
 
     /**
-     * 订单编号
-     */
-    private String orderId;
-
-    /**
      * 调用方订单编号
      */
     private String callerOrderId;

@@ -40,6 +40,15 @@ public interface OrderInfoDao {
     OrderInfoDO getOrderInfoByCallerOrderId(String callerOrderId);
 
     /**
+     * 根据会员编号和上游订单编号查询订单信息
+     * 
+     * @param memberId
+     * @param callerOrderId
+     * @return
+     */
+    OrderInfoDO getOrderInfoByMemberIdAndCallerOrderId(@Param("memberId") String memberId, @Param("callerOrderId") String callerOrderId);
+
+    /**
      * 根据订单信息Query查询订单信息
      *
      * @param query

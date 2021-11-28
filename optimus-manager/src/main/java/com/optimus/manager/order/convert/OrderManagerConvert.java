@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.optimus.dao.domain.OrderInfoDO;
-import com.optimus.dao.query.OrderInfoQuery;
 import com.optimus.dao.result.MemberInfoChainResult;
 import com.optimus.manager.account.dto.DoTransDTO;
 import com.optimus.manager.gateway.dto.ExecuteScriptInputDTO;
@@ -25,7 +24,6 @@ import com.optimus.util.constants.order.OrderReleaseStatusEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
 import com.optimus.util.exception.OptimusException;
-import com.optimus.util.model.page.Page;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
@@ -318,27 +316,6 @@ public class OrderManagerConvert {
         input.setActualAmount(orderInfo.getActualAmount());
 
         return input;
-
-    }
-
-    /**
-     * 获取订单Query
-     *
-     * @param orderInfo
-     * @param page
-     * @return
-     */
-    public static OrderInfoQuery getOrderInfoQuery(OrderInfoDTO orderInfo, Page page) {
-
-        // 订单Query
-        OrderInfoQuery query = new OrderInfoQuery();
-
-        query.setPage(page);
-        query.setMemberId(orderInfo.getMemberId());
-        query.setOrderId(orderInfo.getOrderId());
-        query.setCallerOrderId(orderInfo.getCallerOrderId());
-
-        return query;
 
     }
 

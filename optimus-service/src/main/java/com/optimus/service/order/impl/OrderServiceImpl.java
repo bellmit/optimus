@@ -1,14 +1,11 @@
 package com.optimus.service.order.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import javax.annotation.Resource;
 
 import com.optimus.dao.domain.OrderInfoDO;
 import com.optimus.dao.mapper.OrderInfoDao;
-import com.optimus.dao.query.OrderInfoQuery;
 import com.optimus.manager.order.OrderManager;
 import com.optimus.manager.order.convert.OrderManagerConvert;
 import com.optimus.manager.order.dto.CreateOrderDTO;
@@ -18,11 +15,9 @@ import com.optimus.service.order.OrderService;
 import com.optimus.service.order.core.BaseOrder;
 import com.optimus.service.order.core.factory.OrderFactory;
 import com.optimus.util.AssertUtil;
-import com.optimus.util.BeanUtil;
 import com.optimus.util.GenerateUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
-import com.optimus.util.model.page.Page;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,25 +57,17 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderInfoDTO> listOrderInfoByOrderInfoQuerys(OrderInfoDTO orderInfo, Page page) {
+    public OrderInfoDTO getOrderInfoByMemberIdAndCallerOrderId(String memberId, String callerOrderId) {
 
-        // 处理分页对象
-        if (Objects.isNull(page)) {
-            page = new Page();
-        }
-
-        // 订单信息Query
-        OrderInfoQuery query = OrderManagerConvert.getOrderInfoQuery(orderInfo, page);
-
-        // 根据订单信息Query查询订单信息
-        List<OrderInfoDO> orderInfoDOList = orderInfoDao.listOrderInfoByOrderInfoQuerys(query);
-        AssertUtil.notEmpty(orderInfoDOList, RespCodeEnum.ORDER_NO, null);
+        // 查询订单信息
+        OrderInfoDO orderInfoDO = orderInfoDao.getOrderInfoByMemberIdAndCallerOrderId(memberId, callerOrderId);
+        AssertUtil.notEmpty(orderInfoDO, RespCodeEnum.ORDER_NO, null);
 
         // 订单信息DTO
-        List<OrderInfoDTO> orderInfoList = new ArrayList<>();
-        BeanUtil.copyProperties(orderInfoDOList, orderInfoList, OrderInfoDTO.class);
+        OrderInfoDTO orderInfo = new OrderInfoDTO();
+        BeanUtils.copyProperties(orderInfoDO, orderInfo);
 
-        return orderInfoList;
+        return orderInfo;
 
     }
 

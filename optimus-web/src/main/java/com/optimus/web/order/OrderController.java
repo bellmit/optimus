@@ -1,9 +1,8 @@
 package com.optimus.web.order;
 
-import java.util.List;
-
 import com.optimus.manager.order.dto.OrderInfoDTO;
 import com.optimus.service.order.OrderService;
+import com.optimus.util.annotation.OptimusRateLimiter;
 import com.optimus.web.order.convert.OrderControllerConvert;
 import com.optimus.web.order.req.QueryOrderInfoReq;
 import com.optimus.web.order.resp.QueryOrderInfoResp;
@@ -33,19 +32,17 @@ public class OrderController {
      * @param req
      * @return
      */
+    @OptimusRateLimiter(permits = 100D, timeout = 0)
     @GetMapping("/queryOrderInfo")
     public QueryOrderInfoResp queryOrderInfo(@RequestBody QueryOrderInfoReq req) {
 
         // 验证订单信息
         OrderControllerValidate.validateQueryOrderInfo(req);
 
-        // 订单信息DTO
-        OrderInfoDTO orderInfo = OrderControllerConvert.getOrderInfoDTO(req);
-
         // 查询订单信息
-        List<OrderInfoDTO> orderInfoList = orderService.listOrderInfoByOrderInfoQuerys(orderInfo, null);
+        OrderInfoDTO orderInfo = orderService.getOrderInfoByMemberIdAndCallerOrderId(req.getMemberId(), req.getCallerOrderId());
 
-        return OrderControllerConvert.getQueryOrderInfoResp(orderInfoList.get(0));
+        return OrderControllerConvert.getQueryOrderInfoResp(orderInfo);
 
     }
 

@@ -62,6 +62,14 @@
     where CALLER_ORDER_ID = #{callerOrderId,jdbcType=VARCHAR}
   </select>
 
+  <select id="getOrderInfoByMemberIdAndCallerOrderId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_ORDER_INFO
+    where MEMBER_ID = #{memberId,jdbcType=VARCHAR}
+    and CALLER_ORDER_ID = #{callerOrderId,jdbcType=VARCHAR}
+  </select>
+
   <select id="listOrderInfoByOrderInfoQuerys" parameterType="com.optimus.dao.query.OrderInfoQuery" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
