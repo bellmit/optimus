@@ -1,10 +1,12 @@
 package com.optimus.manager.gateway.impl;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.optimus.dao.domain.GatewaySubChannelDO;
 import com.optimus.dao.domain.MemberChannelDO;
 import com.optimus.dao.domain.MemberInfoDO;
@@ -24,11 +26,15 @@ import com.optimus.manager.member.dto.MemberInfoDTO;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
 
+import groovy.lang.Binding;
+import groovy.util.GroovyScriptEngine;
+import groovy.util.ResourceException;
+import groovy.util.ScriptException;
 import org.springframework.stereotype.Component;
 
 /**
  * 网关ManagerImpl
- * 
+ *
  * @author sunxp
  */
 @Component
@@ -46,7 +52,34 @@ public class GatewayManagerImpl implements GatewayManager {
     @Override
     public ExecuteScriptOutputDTO executeScript(ExecuteScriptInputDTO input) {
 
-        return new ExecuteScriptOutputDTO();
+        try {
+
+            GroovyScriptEngine engine = new GroovyScriptEngine("/Users/zhouhonglin/work/groovy/");
+
+            Binding binding = new Binding();
+            binding.setVariable("memberId", input.getMemberId());
+            binding.setVariable("orderId", input.getOrderId());
+            binding.setVariable("amount", input.getAmount());
+            binding.setVariable("clientIp", input.getClientIp());
+            binding.setVariable("redirectUrl", input.getRedirectUrl());
+
+            String scriptName = input.getScriptMethod() + ".groovy";
+            Object result1 = engine.run(scriptName, binding);
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            ExecuteScriptOutputDTO executeScriptOutput = objectMapper.readValue(objectMapper.writeValueAsString(result1), ExecuteScriptOutputDTO.class);
+
+            return executeScriptOutput;
+        } catch (ResourceException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        }
+
+
+        return null;
 
     }
 
