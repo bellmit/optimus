@@ -5,7 +5,6 @@ import java.util.List;
 import com.optimus.dao.domain.MemberChannelDO;
 import com.optimus.dao.result.MemberInfoChainResult;
 import com.optimus.manager.order.dto.OrderInfoDTO;
-import com.optimus.manager.order.dto.OrderNoticeInputDTO;
 
 /**
  * 订单manager
@@ -21,6 +20,32 @@ public interface OrderManager {
      * @return
      */
     void checkCallerOrderId(String callerOrderId);
+
+    /**
+     * 释放订单
+     * 
+     * @param orderInfo
+     * @return
+     */
+    boolean release(OrderInfoDTO orderInfo);
+
+    /**
+     * 分润
+     * 
+     * @param orderInfo
+     * @param chainList
+     * @param memberChannelList
+     * @return
+     */
+    boolean splitProfit(OrderInfoDTO orderInfo, List<MemberInfoChainResult> chainList, List<MemberChannelDO> memberChannelList);
+
+    /**
+     * 订单通知
+     * 
+     * @param orderInfo
+     * @return
+     */
+    boolean orderNotice(OrderInfoDTO orderInfo);
 
     /**
      * 异步释放订单
@@ -41,9 +66,8 @@ public interface OrderManager {
     /**
      * 异步订单通知
      * 
-     * @param input
-     * @param noticeUrl
+     * @param orderInfo
      */
-    void asyncOrderNotice(OrderNoticeInputDTO input, String noticeUrl);
+    void asyncOrderNotice(OrderInfoDTO orderInfo);
 
 }

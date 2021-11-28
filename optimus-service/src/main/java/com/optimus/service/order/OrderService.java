@@ -1,11 +1,8 @@
 package com.optimus.service.order;
 
-import java.util.List;
-
 import com.optimus.manager.order.dto.CreateOrderDTO;
 import com.optimus.manager.order.dto.OrderInfoDTO;
 import com.optimus.manager.order.dto.PayOrderDTO;
-import com.optimus.util.page.Page;
 
 /**
  * 订单Service
@@ -24,13 +21,13 @@ public interface OrderService {
     OrderInfoDTO getOrderInfoByOrderId(String orderId);
 
     /**
-     * 根据OrderInfoQuery查询订单信息
+     * 根据会员编号和调用方订单编号查询订单信息
      * 
-     * @param orderInfo
-     * @param page
+     * @param memberId
+     * @param callerOrderId
      * @return
      */
-    List<OrderInfoDTO> listOrderInfoByOrderInfoQuerys(OrderInfoDTO orderInfo, Page page);
+    OrderInfoDTO getOrderInfoByMemberIdAndCallerOrderId(String memberId, String callerOrderId);
 
     /**
      * 创建订单

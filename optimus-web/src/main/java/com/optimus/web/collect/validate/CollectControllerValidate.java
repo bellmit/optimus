@@ -43,7 +43,7 @@ public class CollectControllerValidate {
 
             // 订单金额精度
             if (req.getAmount().scale() > Integer.parseInt(BaseEnum.SCALE_TWO.getCode())) {
-                throw new OptimusException(RespCodeEnum.INVALID_PARAM, "订单金额精度为小数点后两位");
+                throw new OptimusException(RespCodeEnum.INVALID_PARAM, "订单金额精度为2");
             }
         }
     }
@@ -83,7 +83,7 @@ public class CollectControllerValidate {
         // 基础验证
         validateBaseCollect(req);
         // 自身业务
-        AssertUtil.notEmpty(req.getOrderId(), RespCodeEnum.INVALID_PARAM, "订单ID不能为空");
+        AssertUtil.notEmpty(req.getOrderId(), RespCodeEnum.INVALID_PARAM, "订单编号不能为空");
         AssertUtil.notEmpty(req.getSubMemberId(), RespCodeEnum.INVALID_PARAM, "下级会员编号不能为空");
         AssertUtil.notEmpty(req.getConfirmType(), RespCodeEnum.INVALID_PARAM, "确认类型不能为空");
     }
@@ -122,7 +122,7 @@ public class CollectControllerValidate {
         // 基础验证
         validateBaseCollect(req);
         // 自身业务
-        AssertUtil.notEmpty(req.getOrderId(), RespCodeEnum.INVALID_PARAM, "订单ID不能为空");
+        AssertUtil.notEmpty(req.getOrderId(), RespCodeEnum.INVALID_PARAM, "订单编号不能为空");
         AssertUtil.notEmpty(req.getSubMemberId(), RespCodeEnum.INVALID_PARAM, "下级会员编号不能为空");
         AssertUtil.notEmpty(req.getConfirmType(), RespCodeEnum.INVALID_PARAM, "确认类型不能为空");
     }

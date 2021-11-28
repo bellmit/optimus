@@ -24,6 +24,11 @@ public class OrderInfoDTO implements Serializable {
     private static final long serialVersionUID = 366023563632364578L;
 
     /**
+     * 主键
+     */
+    private Long id;
+
+    /**
      * 会员编号
      */
     private String memberId;

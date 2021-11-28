@@ -16,6 +16,11 @@ public class MemberChannelDTO implements Serializable {
     private static final long serialVersionUID = 4346737603163148270L;
 
     /**
+     * 主键
+     */
+    private Long id;
+
+    /**
      * 会员编号
      */
     private String memberId;

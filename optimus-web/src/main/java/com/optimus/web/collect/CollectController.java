@@ -11,6 +11,7 @@ import com.optimus.service.gateway.GatewayService;
 import com.optimus.service.member.MemberService;
 import com.optimus.service.order.OrderService;
 import com.optimus.util.AssertUtil;
+import com.optimus.util.annotation.OptimusRateLimiter;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.gateway.GatewayChannelStatusEnum;
 import com.optimus.util.constants.member.MemberMerchantOrderSwitchEnum;
@@ -68,6 +69,7 @@ public class CollectController {
      * @param req
      * @return ApplyForRechargeResp
      */
+    @OptimusRateLimiter(permits = 100D, timeout = 0)
     @PostMapping("/applyForRecharge")
     public ApplyForRechargeResp applyForRecharge(@RequestBody ApplyForRechargeReq req) {
 
@@ -78,7 +80,7 @@ public class CollectController {
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
 
         // 验证会员类型
-        AssertUtil.notEquals(MemberTypeEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType(), RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为代理");
+        AssertUtil.notEquals(MemberTypeEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType(), RespCodeEnum.MEMBER_ERROR, "会员类型必须为代理");
 
         // 创建订单
         CreateOrderDTO createOrder = CollectControllerConvert.getCreateOrderDTO(req);
@@ -108,7 +110,7 @@ public class CollectController {
 
         // 会员信息:平台
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
-        AssertUtil.notEquals(MemberTypeEnum.MEMBER_TYPE_S.getCode(), memberInfo.getMemberType(), RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为平台");
+        AssertUtil.notEquals(MemberTypeEnum.MEMBER_TYPE_S.getCode(), memberInfo.getMemberType(), RespCodeEnum.MEMBER_ERROR, "会员类型必须为平台");
 
         // 订单信息
         OrderInfoDTO orderInfo = orderService.getOrderInfoByOrderId(req.getOrderId());
@@ -146,13 +148,13 @@ public class CollectController {
 
         // 验证会员类型
         if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType()) && !StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_C.getCode(), memberInfo.getMemberType())) {
-            throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为代理或码商");
+            throw new OptimusException(RespCodeEnum.MEMBER_ERROR, "会员类型必须为代理或码商");
         }
 
         // 下级必须是商户或者码商
         MemberInfoDTO subDirectMemberInfo = memberService.getMemberInfoByMemberId(req.getSubDirectMemberId());
         if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_B.getCode(), subDirectMemberInfo.getMemberType()) && !StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_C.getCode(), subDirectMemberInfo.getMemberType())) {
-            throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "下级会员类型必须为商户或码商");
+            throw new OptimusException(RespCodeEnum.MEMBER_ERROR, "下级会员类型必须为商户或码商");
         }
 
         // 创建订单
@@ -187,7 +189,7 @@ public class CollectController {
 
         // 验证会员类型
         if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType()) && !StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_M.getCode(), memberInfo.getMemberType())) {
-            throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为代理或管理");
+            throw new OptimusException(RespCodeEnum.MEMBER_ERROR, "会员类型必须为代理或管理");
         }
 
         // 创建订单
@@ -217,7 +219,7 @@ public class CollectController {
 
         // 会员信息:平台
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
-        AssertUtil.notEquals(MemberTypeEnum.MEMBER_TYPE_S.getCode(), memberInfo.getMemberType(), RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为平台");
+        AssertUtil.notEquals(MemberTypeEnum.MEMBER_TYPE_S.getCode(), memberInfo.getMemberType(), RespCodeEnum.MEMBER_ERROR, "会员类型必须为平台");
 
         // 订单信息
         OrderInfoDTO orderInfo = orderService.getOrderInfoByOrderId(req.getOrderId());
@@ -253,7 +255,7 @@ public class CollectController {
 
         // 验证会员类型
         if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType()) && !StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_C.getCode(), memberInfo.getMemberType())) {
-            throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为代理或码商");
+            throw new OptimusException(RespCodeEnum.MEMBER_ERROR, "会员类型必须为代理或码商");
         }
 
         // 验证上下级关系
@@ -290,7 +292,7 @@ public class CollectController {
 
         // 验证会员类型
         if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType()) && !StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_M.getCode(), memberInfo.getMemberType())) {
-            throw new OptimusException(RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为代理或管理");
+            throw new OptimusException(RespCodeEnum.MEMBER_ERROR, "会员类型必须为代理或管理");
         }
 
         // 创建订单
@@ -321,7 +323,7 @@ public class CollectController {
 
         // 会员信息
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
-        AssertUtil.notEquals(MemberTypeEnum.MEMBER_TYPE_B.getCode(), memberInfo.getMemberType(), RespCodeEnum.MEMBER_TYPE_ERROR, "会员类型必须为商户");
+        AssertUtil.notEquals(MemberTypeEnum.MEMBER_TYPE_B.getCode(), memberInfo.getMemberType(), RespCodeEnum.MEMBER_ERROR, "会员类型必须为商户");
 
         // 验证会员交易限制
         MemberTransConfineDTO memberTransConfine = memberService.getMemberTransConfineByMemberId(req.getMemberId());
@@ -329,7 +331,7 @@ public class CollectController {
 
         // 验证主渠道
         GatewayChannelDTO gatewayChannel = gatewayService.getGatewayChannelByChannelCode(req.getChannelCode());
-        AssertUtil.notEquals(GatewayChannelStatusEnum.CHANNEL_STATUS_Y.getCode(), gatewayChannel.getChannelStatus(), RespCodeEnum.GATEWAY_CHANNEL_ERROR, "渠道未启用");
+        AssertUtil.notEquals(GatewayChannelStatusEnum.CHANNEL_STATUS_Y.getCode(), gatewayChannel.getChannelStatus(), RespCodeEnum.GATEWAY_CHANNEL_ERROR, "未启用渠道");
 
         // 匹配子渠道
         MatchChannelDTO matchChannel = gatewayService.matchChannel(memberInfo, gatewayChannel, req.getAmount());

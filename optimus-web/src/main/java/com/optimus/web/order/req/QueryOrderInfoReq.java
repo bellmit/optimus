@@ -1,6 +1,6 @@
 package com.optimus.web.order.req;
 
-import com.optimus.util.req.Req;
+import com.optimus.util.model.req.Req;
 
 import lombok.Data;
 
@@ -18,11 +18,6 @@ public class QueryOrderInfoReq extends Req {
      * 会员编号
      */
     private String memberId;
-
-    /**
-     * 订单编号
-     */
-    private String orderId;
 
     /**
      * 调用方订单编号

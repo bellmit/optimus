@@ -18,12 +18,17 @@ public class AccountInfoDTO implements Serializable {
     private static final long serialVersionUID = 8500512400560688302L;
 
     /**
+     * 主键
+     */
+    private Long id;
+
+    /**
      * 会员编号
      */
     private String memberId;
 
     /**
-     * 账户ID
+     * 账户编号
      */
     private String accountId;
 

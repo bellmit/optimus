@@ -40,6 +40,15 @@ public interface OrderInfoDao {
     OrderInfoDO getOrderInfoByCallerOrderId(String callerOrderId);
 
     /**
+     * 根据会员编号和上游订单编号查询订单信息
+     * 
+     * @param memberId
+     * @param callerOrderId
+     * @return
+     */
+    OrderInfoDO getOrderInfoByMemberIdAndCallerOrderId(@Param("memberId") String memberId, @Param("callerOrderId") String callerOrderId);
+
+    /**
      * 根据订单信息Query查询订单信息
      *
      * @param query
@@ -75,7 +84,7 @@ public interface OrderInfoDao {
     int updateOrderInfoByOrderIdAndOrderStatus(@Param("orderId") String orderId, @Param("orderStatus") String orderStatus, @Param("originOrderStatus") String originOrderStatus, @Param("updateTime") Date updateTime);
 
     /**
-     * 根据订单ID和释放状态更新订单信息
+     * 根据订单编号和释放状态更新订单信息
      * 
      * @param orderId
      * @param releaseStatus
@@ -86,7 +95,7 @@ public interface OrderInfoDao {
     int updateOrderInfoByOrderIdAndReleaseStatus(@Param("orderId") String orderId, @Param("releaseStatus") String releaseStatus, @Param("originReleaseStatus") String originReleaseStatus, @Param("updateTime") Date updateTime);
 
     /**
-     * 根据订单ID和分润状态更新订单信息
+     * 根据订单编号和分润状态更新订单信息
      * 
      * @param orderId
      * @param splitProfitStatus

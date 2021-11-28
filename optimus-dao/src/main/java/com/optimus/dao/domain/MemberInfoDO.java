@@ -30,34 +30,9 @@ public class MemberInfoDO implements Serializable {
     private String memberId;
 
     /**
-     * 登录名
-     */
-    private String loginName;
-
-    /**
-     * 登录密码
-     */
-    private String loginPassword;
-
-    /**
      * 会员密钥
      */
     private String memberKey;
-
-    /**
-     * 手机号
-     */
-    private String mobile;
-
-    /**
-     * 邮箱
-     */
-    private String email;
-
-    /**
-     * 展示名称
-     */
-    private String showName;
 
     /**
      * 会员类型

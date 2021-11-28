@@ -1,8 +1,10 @@
-package com.optimus.util.page;
+package com.optimus.util.model.page;
 
 import java.io.Serializable;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 分页对象
@@ -10,6 +12,8 @@ import lombok.Data;
  * @author sunxp
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Page implements Serializable {
 
     private static final long serialVersionUID = 6257341442895693999L;
@@ -22,6 +26,6 @@ public class Page implements Serializable {
     /**
      * 页面大小
      */
-    private Integer pageSize = 1000;
+    private Integer pageSize = 10;
 
 }

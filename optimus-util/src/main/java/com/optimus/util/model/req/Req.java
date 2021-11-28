@@ -1,4 +1,4 @@
-package com.optimus.util.req;
+package com.optimus.util.model.req;
 
 import java.io.Serializable;
 import java.util.Date;

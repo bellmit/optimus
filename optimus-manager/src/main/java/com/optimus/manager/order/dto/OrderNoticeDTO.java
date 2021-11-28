@@ -8,12 +8,12 @@ import com.optimus.util.constants.order.OrderStatusEnum;
 import lombok.Data;
 
 /**
- * 订单通知输入DTO
+ * 订单通知DTO
  * 
  * @author sunxp
  */
 @Data
-public class OrderNoticeInputDTO implements Serializable {
+public class OrderNoticeDTO implements Serializable {
 
     private static final long serialVersionUID = 3304557384990623101L;
 

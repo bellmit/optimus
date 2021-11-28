@@ -6,14 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 import com.optimus.dao.domain.OrderInfoDO;
-import com.optimus.dao.query.OrderInfoQuery;
 import com.optimus.dao.result.MemberInfoChainResult;
 import com.optimus.manager.account.dto.DoTransDTO;
 import com.optimus.manager.gateway.dto.ExecuteScriptInputDTO;
 import com.optimus.manager.gateway.dto.ExecuteScriptOutputDTO;
 import com.optimus.manager.order.dto.CreateOrderDTO;
 import com.optimus.manager.order.dto.OrderInfoDTO;
-import com.optimus.manager.order.dto.OrderNoticeInputDTO;
+import com.optimus.manager.order.dto.OrderNoticeDTO;
 import com.optimus.manager.order.dto.PayOrderDTO;
 import com.optimus.util.DateUtil;
 import com.optimus.util.constants.RespCodeEnum;
@@ -25,7 +24,6 @@ import com.optimus.util.constants.order.OrderReleaseStatusEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
 import com.optimus.util.exception.OptimusException;
-import com.optimus.util.page.Page;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
@@ -57,7 +55,7 @@ public class OrderManagerConvert {
     }
 
     /**
-     * 获取账户交易
+     * 获取账户交易List
      * 
      * @param orderInfo
      * @param chainList
@@ -89,13 +87,13 @@ public class OrderManagerConvert {
                         amount = orderInfo.getActualAmount().subtract(amount);
                     }
 
-                    doTransList.add(new DoTransDTO(l.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "渠道回调码商分润"));
+                    doTransList.add(new DoTransDTO(l.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "码商分润"));
                 }
 
                 // 其他码商
                 changeType = AccountChangeTypeEnum.B_PLUS.getCode();
                 amount = orderInfo.getActualAmount().multiply(map.get(r.getMemberId()).subtract(map.get(l.getMemberId())));
-                doTransList.add(new DoTransDTO(r.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "渠道回调码商分润"));
+                doTransList.add(new DoTransDTO(r.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "码商分润"));
 
                 return r;
             }
@@ -107,7 +105,7 @@ public class OrderManagerConvert {
 
                     changeType = AccountChangeTypeEnum.P_PLUS.getCode();
                     amount = orderInfo.getActualAmount().multiply(map.get(l.getMemberId()));
-                    doTransList.add(new DoTransDTO(r.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "渠道回调平台分润"));
+                    doTransList.add(new DoTransDTO(r.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "平台分润"));
 
                     return r;
                 }
@@ -115,7 +113,7 @@ public class OrderManagerConvert {
                 // 管理/代理
                 changeType = AccountChangeTypeEnum.A_PLUS.getCode();
                 amount = orderInfo.getActualAmount().multiply(map.get(l.getMemberId()).subtract(map.get(r.getMemberId())));
-                doTransList.add(new DoTransDTO(r.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "渠道回调管理或代理分润"));
+                doTransList.add(new DoTransDTO(r.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, r.getMemberType() + "分润"));
 
                 return r;
             }
@@ -125,21 +123,21 @@ public class OrderManagerConvert {
                 // 代理
                 changeType = AccountChangeTypeEnum.A_MINUS.getCode();
                 amount = orderInfo.getActualAmount().multiply(map.get(r.getMemberId()));
-                doTransList.add(new DoTransDTO(r.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "渠道回调代理系统使用费"));
+                doTransList.add(new DoTransDTO(r.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "代理系统使用费"));
 
                 changeType = AccountChangeTypeEnum.E_PLUS.getCode();
                 amount = orderInfo.getActualAmount().multiply(map.get(orderInfo.getMemberId()).subtract(map.get(l.getMemberId())));
-                doTransList.add(new DoTransDTO(r.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "渠道回调代理收益"));
+                doTransList.add(new DoTransDTO(r.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "代理收益"));
 
                 // 商户
                 changeType = AccountChangeTypeEnum.B_PLUS.getCode();
                 amount = orderInfo.getActualAmount().subtract(orderInfo.getActualAmount().multiply(map.get(orderInfo.getMemberId())));
-                doTransList.add(new DoTransDTO(orderInfo.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "渠道回调商户费用"));
+                doTransList.add(new DoTransDTO(orderInfo.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "商户费用"));
 
                 return r;
             }
 
-            throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "渠道回调账户交易构建记账异常");
+            throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "获取账户交易异常");
         });
 
         return doTransList;
@@ -300,45 +298,24 @@ public class OrderManagerConvert {
     }
 
     /**
-     * 获取订单通知输入DTO
+     * 获取订单通知DTO
      * 
-     * @param payOrder
+     * @param orderInfo
      * @return
      */
-    public static OrderNoticeInputDTO getOrderNoticeInputDTO(PayOrderDTO payOrder) {
+    public static OrderNoticeDTO getOrderNoticeDTO(OrderInfoDTO orderInfo) {
 
-        // 订单通知输入DTO
-        OrderNoticeInputDTO input = new OrderNoticeInputDTO();
+        // 订单通知DTO
+        OrderNoticeDTO input = new OrderNoticeDTO();
 
-        input.setMemberId(payOrder.getMemberId());
-        input.setOrderId(payOrder.getOrderId());
-        input.setCallerOrderId(payOrder.getCallerOrderId());
-        input.setOrderStatus(payOrder.getOrderStatus());
-        input.setOrderAmount(payOrder.getOrderAmount());
-        input.setActualAmount(payOrder.getActualAmount());
+        input.setMemberId(orderInfo.getMemberId());
+        input.setOrderId(orderInfo.getOrderId());
+        input.setCallerOrderId(orderInfo.getCallerOrderId());
+        input.setOrderStatus(orderInfo.getOrderStatus());
+        input.setOrderAmount(orderInfo.getOrderAmount());
+        input.setActualAmount(orderInfo.getActualAmount());
 
         return input;
-
-    }
-
-    /**
-     * 获取订单Query
-     *
-     * @param orderInfo
-     * @param page
-     * @return
-     */
-    public static OrderInfoQuery getOrderInfoQuery(OrderInfoDTO orderInfo, Page page) {
-
-        // 订单Query
-        OrderInfoQuery query = new OrderInfoQuery();
-
-        query.setPage(page);
-        query.setMemberId(orderInfo.getMemberId());
-        query.setOrderId(orderInfo.getOrderId());
-        query.setCallerOrderId(orderInfo.getCallerOrderId());
-
-        return query;
 
     }
 

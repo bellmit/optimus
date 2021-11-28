@@ -60,11 +60,11 @@ public class WithdrawOrder extends BaseOrder {
 
         // 验证会员交易限制
         MemberTransConfineDTO memberTransConfine = memberManager.getMemberTransConfineByMemberId(createOrder.getMemberId());
-        AssertUtil.notEmpty(memberTransConfine.getCollectFeeWay(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "手续费收取方式未配置");
+        AssertUtil.notEmpty(memberTransConfine.getCollectFeeWay(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置手续费收取方式");
 
         // 验证提现金额:最小金额<=提现金额<=最大金额
         if (createOrder.getOrderAmount().compareTo(memberTransConfine.getSingleMaxAmount()) > 0 || createOrder.getOrderAmount().compareTo(memberTransConfine.getSingleMinAmount()) < 0) {
-            throw new OptimusException(RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "提现金额不在交易限制范围内");
+            throw new OptimusException(RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "金额不在限制范围内");
         }
 
         // 验证账户余额是否充足
@@ -105,7 +105,7 @@ public class WithdrawOrder extends BaseOrder {
 
         // 账户交易失败,冻结余额异常
         if (!doTrans) {
-            throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "提现冻结余额异常");
+            throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "冻结余额异常");
         }
 
         return orderInfo;
@@ -135,7 +135,7 @@ public class WithdrawOrder extends BaseOrder {
 
             // 账户交易失败
             if (!doTrans) {
-                throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "提现驳回冻结余额异常");
+                throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "驳回冻结余额异常");
             }
             return;
         }

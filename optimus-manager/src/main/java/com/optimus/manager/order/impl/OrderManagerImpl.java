@@ -20,17 +20,20 @@ import com.optimus.manager.account.dto.DoTransDTO;
 import com.optimus.manager.order.OrderManager;
 import com.optimus.manager.order.convert.OrderManagerConvert;
 import com.optimus.manager.order.dto.OrderInfoDTO;
-import com.optimus.manager.order.dto.OrderNoticeInputDTO;
+import com.optimus.manager.order.dto.OrderNoticeDTO;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.DateUtil;
 import com.optimus.util.JacksonUtil;
 import com.optimus.util.SignUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.account.AccountChangeTypeEnum;
+import com.optimus.util.constants.order.OrderMerchantNotifyStatusEnum;
 import com.optimus.util.constants.order.OrderReleaseStatusEnum;
 import com.optimus.util.constants.order.OrderSplitProfitStatusEnum;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -70,39 +73,37 @@ public class OrderManagerImpl implements OrderManager {
 
     }
 
-    @Async
     @Override
-    public void asyncRelease(OrderInfoDTO orderInfo) {
+    public boolean release(OrderInfoDTO orderInfo) {
 
         // 无需释放的订单
         if (StringUtils.pathEquals(OrderReleaseStatusEnum.RELEASE_STATUS_D.getCode(), orderInfo.getReleaseStatus())) {
-            return;
+            return false;
         }
 
         // 更新释放状态
         int update = orderInfoDao.updateOrderInfoByOrderIdAndReleaseStatus(orderInfo.getOrderId(), OrderReleaseStatusEnum.RELEASE_STATUS_Y.getCode(), OrderReleaseStatusEnum.RELEASE_STATUS_N.getCode(), DateUtil.currentDate());
         if (update != 1) {
-            return;
+            return false;
         }
 
         // 记账
         List<DoTransDTO> doTransList = new ArrayList<>();
-        doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_PLUS, orderInfo, "渠道回调释放加余额户"));
-        doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_MINUS, orderInfo, "渠道回调释放减冻结户"));
+        doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_PLUS, orderInfo, "释放加余额户"));
+        doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_MINUS, orderInfo, "释放减冻结户"));
 
         boolean doTrans = accountManager.doTrans(doTransList);
-        if (doTrans) {
-            return;
+        if (!doTrans) {
+            // 记账失败,回滚释放状态
+            orderInfoDao.updateOrderInfoByOrderIdAndReleaseStatus(orderInfo.getOrderId(), OrderReleaseStatusEnum.RELEASE_STATUS_N.getCode(), OrderReleaseStatusEnum.RELEASE_STATUS_Y.getCode(), DateUtil.currentDate());
         }
 
-        // 记账失败,回滚释放状态
-        orderInfoDao.updateOrderInfoByOrderIdAndReleaseStatus(orderInfo.getOrderId(), OrderReleaseStatusEnum.RELEASE_STATUS_N.getCode(), OrderReleaseStatusEnum.RELEASE_STATUS_Y.getCode(), DateUtil.currentDate());
+        return doTrans;
 
     }
 
-    @Async
     @Override
-    public void asyncSplitProfit(OrderInfoDTO orderInfo, List<MemberInfoChainResult> chainList, List<MemberChannelDO> memberChannelList) {
+    public boolean splitProfit(OrderInfoDTO orderInfo, List<MemberInfoChainResult> chainList, List<MemberChannelDO> memberChannelList) {
 
         // 构建会员费率Map
         Map<String, BigDecimal> map = memberChannelList.stream().collect(Collectors.toMap(MemberChannelDO::getMemberId, MemberChannelDO::getRate));
@@ -113,44 +114,89 @@ public class OrderManagerImpl implements OrderManager {
         // 更新订单分润状态
         int update = orderInfoDao.updateOrderInfoByOrderIdAndSplitProfitStatus(orderInfo.getOrderId(), OrderSplitProfitStatusEnum.SPLIT_PROFIT_STATUS_Y.getCode(), OrderSplitProfitStatusEnum.SPLIT_PROFIT_STATUS_N.getCode(), DateUtil.currentDate());
         if (update != 1) {
-            return;
+            return false;
         }
 
         // 记账
         boolean doTrans = accountManager.doTrans(doTransList);
-        if (doTrans) {
-            return;
+        if (!doTrans) {
+            // 记账失败,回滚分润状态
+            orderInfoDao.updateOrderInfoByOrderIdAndSplitProfitStatus(orderInfo.getOrderId(), OrderSplitProfitStatusEnum.SPLIT_PROFIT_STATUS_N.getCode(), OrderSplitProfitStatusEnum.SPLIT_PROFIT_STATUS_Y.getCode(), DateUtil.currentDate());
         }
 
-        // 记账失败,回滚分润状态
-        orderInfoDao.updateOrderInfoByOrderIdAndSplitProfitStatus(orderInfo.getOrderId(), OrderSplitProfitStatusEnum.SPLIT_PROFIT_STATUS_N.getCode(), OrderSplitProfitStatusEnum.SPLIT_PROFIT_STATUS_Y.getCode(), DateUtil.currentDate());
+        return doTrans;
+
+    }
+
+    @Override
+    public boolean orderNotice(OrderInfoDTO orderInfo) {
+
+        // 获取订单通知DTO
+        OrderNoticeDTO orderNotice = OrderManagerConvert.getOrderNoticeDTO(orderInfo);
+
+        // 查询会员信息
+        MemberInfoDO memberInfo = memberInfoDao.getMemberInfoByMemberId(orderNotice.getMemberId());
+
+        // 加签
+        Map<String, Object> map = JacksonUtil.toBean(JacksonUtil.toString(orderNotice), new TypeReference<Map<String, Object>>() {
+        });
+
+        // 设置签名
+        orderNotice.setSign(SignUtil.sign(map, memberInfo.getMemberKey()));
+
+        // Post
+        ResponseEntity<String> entity = restTemplate.postForEntity(orderInfo.getMerchantCallbackUrl(), orderNotice, String.class);
+
+        // 更新订单通知状态
+        if (StringUtils.pathEquals(HttpStatus.OK.name(), entity.getBody())) {
+            OrderInfoDO orderInfoDO = new OrderInfoDO();
+            orderInfoDO.setId(orderInfo.getId());
+            orderInfoDO.setMerchantNotifyStatus(OrderMerchantNotifyStatusEnum.MERCHANT_NOTIFY_STATUS_NS.getCode());
+            orderInfoDO.setUpdateTime(DateUtil.currentDate());
+            orderInfoDao.updateOrderInfo(orderInfoDO);
+            return true;
+        }
+
+        return false;
 
     }
 
     @Async
     @Override
-    public void asyncOrderNotice(OrderNoticeInputDTO input, String noticeUrl) {
-
-        log.info("asyncOrderNotice orderNoticeInput is {}, noticeUrl is {}", input, noticeUrl);
+    public void asyncRelease(OrderInfoDTO orderInfo) {
 
         try {
 
-            // 查询会员信息
-            MemberInfoDO memberInfo = memberInfoDao.getMemberInfoByMemberId(input.getMemberId());
-
-            // 加签
-            String inputString = JacksonUtil.toString(input);
-            Map<String, Object> map = JacksonUtil.toBean(inputString, new TypeReference<Map<String, Object>>() {
-            });
-
-            // 设置签名
-            input.setSign(SignUtil.sign(map, memberInfo.getMemberKey()));
-
-            // Post
-            restTemplate.postForEntity(noticeUrl, input, String.class);
+            release(orderInfo);
 
         } catch (Exception e) {
-            log.error("asyncOrderNotice is error", e);
+            log.error("asyncRelease error is {}", e);
+        }
+    }
+
+    @Async
+    @Override
+    public void asyncSplitProfit(OrderInfoDTO orderInfo, List<MemberInfoChainResult> chainList, List<MemberChannelDO> memberChannelList) {
+
+        try {
+
+            splitProfit(orderInfo, chainList, memberChannelList);
+
+        } catch (Exception e) {
+            log.error("asyncSplitProfit error is {}", e);
+        }
+    }
+
+    @Async
+    @Override
+    public void asyncOrderNotice(OrderInfoDTO orderInfo) {
+
+        try {
+
+            orderNotice(orderInfo);
+
+        } catch (Exception e) {
+            log.error("asyncOrderNotice error is {}", e);
         }
 
     }

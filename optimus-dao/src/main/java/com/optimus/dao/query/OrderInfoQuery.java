@@ -1,8 +1,12 @@
 package com.optimus.dao.query;
 
 import java.io.Serializable;
+import java.util.Date;
 
-import com.optimus.util.page.Page;
+import com.optimus.util.constants.order.OrderMerchantNotifyStatusEnum;
+import com.optimus.util.constants.order.OrderStatusEnum;
+import com.optimus.util.constants.order.OrderTypeEnum;
+import com.optimus.util.model.page.Page;
 
 import lombok.Data;
 
@@ -17,19 +21,35 @@ public class OrderInfoQuery implements Serializable {
     private static final long serialVersionUID = -9075042761874255007L;
 
     /**
-     * 会员编号
+     * 订单类型
+     * 
+     * @see OrderTypeEnum
      */
-    private String memberId;
+    private String orderType;
 
     /**
-     * 订单编号
+     * 订单状态
+     * 
+     * @see OrderStatusEnum
      */
-    private String orderId;
+    private String orderStatus;
 
     /**
-     * 调用方订单编号
+     * 商户通知状态
+     * 
+     * @see OrderMerchantNotifyStatusEnum
      */
-    private String callerOrderId;
+    private String merchantNotifyStatus;
+
+    /**
+     * 商户回调次数
+     */
+    private Short merchantCallbackCount;
+
+    /**
+     * 最后时间
+     */
+    private Date lastTime;
 
     /**
      * 分页对象

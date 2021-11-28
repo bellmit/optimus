@@ -5,11 +5,13 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.optimus.dao.domain.MemberInfoDO;
 import com.optimus.dao.domain.MemberTransConfineDO;
 import com.optimus.dao.mapper.MemberInfoDao;
 import com.optimus.dao.mapper.MemberTransConfineDao;
 import com.optimus.dao.result.MemberInfoChainResult;
 import com.optimus.manager.member.MemberManager;
+import com.optimus.manager.member.dto.MemberInfoDTO;
 import com.optimus.manager.member.dto.MemberTransConfineDTO;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
@@ -49,7 +51,7 @@ public class MemberManagerImpl implements MemberManager {
         }
 
         // 断言:收取手续费类型
-        AssertUtil.notEmpty(memberTransConfine.getCollectFeeType(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "手续费类型未配置");
+        AssertUtil.notEmpty(memberTransConfine.getCollectFeeType(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置手续费类型");
 
         // 单笔
         if (StringUtils.pathEquals(MemberCollectFeeTypeEnum.COLLECT_FEE_TYPE_S.getCode(), memberTransConfine.getCollectFeeType())) {
@@ -72,13 +74,27 @@ public class MemberManagerImpl implements MemberManager {
     }
 
     @Override
+    public MemberInfoDTO getMemberInfoByMemberId(String memberId) {
+
+        // 根据会员编号查询会员信息
+        MemberInfoDO memberInfoDO = memberInfoDao.getMemberInfoByMemberId(memberId);
+
+        // 会员信息DTO
+        MemberInfoDTO memberInfo = new MemberInfoDTO();
+        BeanUtils.copyProperties(memberInfoDO, memberInfo);
+
+        return memberInfo;
+
+    }
+
+    @Override
     public MemberTransConfineDTO getMemberTransConfineByMemberId(String memberId) {
 
         // 查询会员交易限制
         MemberTransConfineDO memberTransConfineDO = memberTransConfineDao.getMemberTransConfineByMemberId(memberId);
 
         // 断言:会员交易限制
-        AssertUtil.notEmpty(memberTransConfineDO, RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "会员交易限制为空");
+        AssertUtil.notEmpty(memberTransConfineDO, RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "会员交易限制不能为空");
 
         // 会员交易限制DTO
         MemberTransConfineDTO memberTransConfine = new MemberTransConfineDTO();
