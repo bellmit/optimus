@@ -27,9 +27,9 @@ public interface MemberManager {
 
     /**
      * 根据主键编号查询会员信息
-     * 
+     *
      * 重要:调用方根据业务需求判断会员删除标识
-     * 
+     *
      * @param memberId
      * @return
      */
@@ -45,10 +45,19 @@ public interface MemberManager {
 
     /**
      * 递归查询会员信息链
-     * 
+     *
      * @param memberId
      * @return
      */
     List<MemberInfoChainResult> listMemberInfoChains(String memberId);
+
+
+    /**
+     * 根据普通用户ID获取平台用户ID
+     *
+     * @param memberId 普通用户ID
+     * @return
+     */
+    MemberInfoChainResult getPlatformMemberId(String memberId);
 
 }

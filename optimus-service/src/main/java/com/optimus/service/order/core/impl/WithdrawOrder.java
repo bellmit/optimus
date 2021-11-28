@@ -151,6 +151,7 @@ public class WithdrawOrder extends BaseOrder {
         if (Objects.nonNull(payOrder.getFee()) && payOrder.getFee().compareTo(BigDecimal.ZERO) > 0) {
             // 平台加一笔
             DoTransDTO sysTrans = new DoTransDTO();
+            sysTrans.setMemberId(memberManager.getPlatformMemberId(payOrder.getMemberId()).getMemberId());
             sysTrans.setOrderId(payOrder.getOrderId());
             sysTrans.setChangeType(AccountChangeTypeEnum.P_PLUS.getCode());
             sysTrans.setAmount(payOrder.getFee());

@@ -1,6 +1,7 @@
 package com.optimus.manager.member.impl;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -117,6 +118,23 @@ public class MemberManagerImpl implements MemberManager {
         }
 
         return chainList;
+    }
+
+    @Override
+    public MemberInfoChainResult getPlatformMemberId(String memberId) {
+
+        // 根据会员编号查询会员信息
+        List<MemberInfoChainResult> memberInfoChainResultList = listMemberInfoChains(memberId);
+
+        if (CollectionUtils.isEmpty(memberInfoChainResultList)) {
+            return null;
+        }
+
+        // 排序，倒叙
+        memberInfoChainResultList.sort(Comparator.comparing(MemberInfoChainResult::getLevel).reversed());
+
+        // 取第一个
+        return memberInfoChainResultList.get(0);
     }
 
 }
