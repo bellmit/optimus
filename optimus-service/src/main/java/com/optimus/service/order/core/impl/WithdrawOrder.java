@@ -8,6 +8,7 @@ import java.util.Objects;
 import javax.annotation.Resource;
 
 import com.optimus.dao.mapper.OrderInfoDao;
+import com.optimus.dao.result.MemberInfoChainResult;
 import com.optimus.manager.account.AccountManager;
 import com.optimus.manager.account.dto.AccountInfoDTO;
 import com.optimus.manager.account.dto.DoTransDTO;
@@ -151,7 +152,10 @@ public class WithdrawOrder extends BaseOrder {
         if (Objects.nonNull(payOrder.getFee()) && payOrder.getFee().compareTo(BigDecimal.ZERO) > 0) {
             // 平台加一笔
             DoTransDTO sysTrans = new DoTransDTO();
-            sysTrans.setMemberId(memberManager.getPlatformMemberId(payOrder.getMemberId()).getMemberId());
+            MemberInfoChainResult memberInfoChainResult = memberManager.getPlatformMemberId(payOrder.getMemberId());
+            if (Objects.nonNull(memberInfoChainResult)) {
+                sysTrans.setMemberId(memberInfoChainResult.getMemberId());
+            }
             sysTrans.setOrderId(payOrder.getOrderId());
             sysTrans.setChangeType(AccountChangeTypeEnum.P_PLUS.getCode());
             sysTrans.setAmount(payOrder.getFee());
