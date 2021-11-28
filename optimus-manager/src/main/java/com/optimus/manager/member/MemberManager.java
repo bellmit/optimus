@@ -58,6 +58,6 @@ public interface MemberManager {
      * @param memberId 普通用户ID
      * @return
      */
-    MemberInfoChainResult getPlatformMemberId(String memberId);
+    String getSystemMemberId(String memberId);
 
 }

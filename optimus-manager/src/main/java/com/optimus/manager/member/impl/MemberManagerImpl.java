@@ -17,6 +17,7 @@ import com.optimus.manager.member.dto.MemberTransConfineDTO;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.member.MemberCollectFeeTypeEnum;
+import com.optimus.util.constants.member.MemberTypeEnum;
 import com.optimus.util.constants.member.MemberWithdrawFeeSwitchEnum;
 import com.optimus.util.exception.OptimusException;
 
@@ -121,20 +122,25 @@ public class MemberManagerImpl implements MemberManager {
     }
 
     @Override
-    public MemberInfoChainResult getPlatformMemberId(String memberId) {
+    public String getSystemMemberId(String memberId) {
 
         // 根据会员编号查询会员信息
         List<MemberInfoChainResult> memberInfoChainResultList = listMemberInfoChains(memberId);
 
         if (CollectionUtils.isEmpty(memberInfoChainResultList)) {
-            return null;
+            throw new OptimusException(RespCodeEnum.MEMBER_ERROR, "未查回平台用户");
         }
 
-        // 排序，倒叙
+        // 排序:倒叙
         memberInfoChainResultList.sort(Comparator.comparing(MemberInfoChainResult::getLevel).reversed());
 
         // 取第一个
-        return memberInfoChainResultList.get(0);
+        MemberInfoChainResult memberInfoChainResult = memberInfoChainResultList.get(0);
+        if(!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_S.getCode(), memberInfoChainResult.getMemberType())){
+            throw new OptimusException(RespCodeEnum.MEMBER_ERROR, "未查回平台用户");
+        }
+
+        return memberInfoChainResult.getMemberId();
     }
 
 }
