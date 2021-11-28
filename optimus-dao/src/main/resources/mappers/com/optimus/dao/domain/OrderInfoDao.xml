@@ -75,14 +75,20 @@
     <include refid="Base_Column_List" />
     from T_ORDER_INFO
     <where>
-      <if test="memberId != null">
-        and MEMBER_ID = #{memberId,jdbcType=VARCHAR}
+      <if test="orderType != null">
+        ORDER_TYPE = #{orderType,jdbcType=VARCHAR},
       </if>
-      <if test="orderId != null">
-        and ORDER_ID = #{orderId,jdbcType=VARCHAR}
+      <if test="orderStatus != null">
+        ORDER_STATUS = #{orderStatus,jdbcType=VARCHAR},
       </if>
-      <if test="callerOrderId != null">
-        and CALLER_ORDER_ID = #{callerOrderId,jdbcType=VARCHAR}
+      <if test="merchantNotifyStatus != null">
+        MERCHANT_NOTIFY_STATUS != #{merchantNotifyStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantCallbackCount != null">
+        MERCHANT_CALLBACK_COUNT &lt; #{merchantCallbackCount,jdbcType=NUMERIC},
+      </if>
+      <if test="lastTime != null">
+        UPDATE_TIME &lt; #{updateTime,jdbcType=TIMESTAMP}
       </if>
     </where>
     offset ((#{page.pageNo,jdbcType=NUMERIC} - 1) * #{page.pageSize,jdbcType=NUMERIC}) rows

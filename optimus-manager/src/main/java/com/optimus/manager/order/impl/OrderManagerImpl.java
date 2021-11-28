@@ -74,17 +74,17 @@ public class OrderManagerImpl implements OrderManager {
     }
 
     @Override
-    public void release(OrderInfoDTO orderInfo) {
+    public boolean release(OrderInfoDTO orderInfo) {
 
         // 无需释放的订单
         if (StringUtils.pathEquals(OrderReleaseStatusEnum.RELEASE_STATUS_D.getCode(), orderInfo.getReleaseStatus())) {
-            return;
+            return false;
         }
 
         // 更新释放状态
         int update = orderInfoDao.updateOrderInfoByOrderIdAndReleaseStatus(orderInfo.getOrderId(), OrderReleaseStatusEnum.RELEASE_STATUS_Y.getCode(), OrderReleaseStatusEnum.RELEASE_STATUS_N.getCode(), DateUtil.currentDate());
         if (update != 1) {
-            return;
+            return false;
         }
 
         // 记账
@@ -98,10 +98,12 @@ public class OrderManagerImpl implements OrderManager {
             orderInfoDao.updateOrderInfoByOrderIdAndReleaseStatus(orderInfo.getOrderId(), OrderReleaseStatusEnum.RELEASE_STATUS_N.getCode(), OrderReleaseStatusEnum.RELEASE_STATUS_Y.getCode(), DateUtil.currentDate());
         }
 
+        return doTrans;
+
     }
 
     @Override
-    public void splitProfit(OrderInfoDTO orderInfo, List<MemberInfoChainResult> chainList, List<MemberChannelDO> memberChannelList) {
+    public boolean splitProfit(OrderInfoDTO orderInfo, List<MemberInfoChainResult> chainList, List<MemberChannelDO> memberChannelList) {
 
         // 构建会员费率Map
         Map<String, BigDecimal> map = memberChannelList.stream().collect(Collectors.toMap(MemberChannelDO::getMemberId, MemberChannelDO::getRate));
@@ -112,7 +114,7 @@ public class OrderManagerImpl implements OrderManager {
         // 更新订单分润状态
         int update = orderInfoDao.updateOrderInfoByOrderIdAndSplitProfitStatus(orderInfo.getOrderId(), OrderSplitProfitStatusEnum.SPLIT_PROFIT_STATUS_Y.getCode(), OrderSplitProfitStatusEnum.SPLIT_PROFIT_STATUS_N.getCode(), DateUtil.currentDate());
         if (update != 1) {
-            return;
+            return false;
         }
 
         // 记账
@@ -122,10 +124,12 @@ public class OrderManagerImpl implements OrderManager {
             orderInfoDao.updateOrderInfoByOrderIdAndSplitProfitStatus(orderInfo.getOrderId(), OrderSplitProfitStatusEnum.SPLIT_PROFIT_STATUS_N.getCode(), OrderSplitProfitStatusEnum.SPLIT_PROFIT_STATUS_Y.getCode(), DateUtil.currentDate());
         }
 
+        return doTrans;
+
     }
 
     @Override
-    public void orderNotice(OrderInfoDTO orderInfo) {
+    public boolean orderNotice(OrderInfoDTO orderInfo) {
 
         // 获取订单通知DTO
         OrderNoticeDTO orderNotice = OrderManagerConvert.getOrderNoticeDTO(orderInfo);
@@ -150,7 +154,10 @@ public class OrderManagerImpl implements OrderManager {
             orderInfoDO.setMerchantNotifyStatus(OrderMerchantNotifyStatusEnum.MERCHANT_NOTIFY_STATUS_NS.getCode());
             orderInfoDO.setUpdateTime(DateUtil.currentDate());
             orderInfoDao.updateOrderInfo(orderInfoDO);
+            return true;
         }
+
+        return false;
 
     }
 

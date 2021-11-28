@@ -100,6 +100,7 @@ public class PlaceOrder extends BaseOrder {
 
         // 验证下单状态
         if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_NP.getCode(), orderInfo.getOrderStatus())) {
+            orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_AF.getCode());
             return orderInfo;
         }
 
@@ -118,6 +119,7 @@ public class PlaceOrder extends BaseOrder {
         boolean doTrans = accountManager.doTrans(doTransList);
         if (!doTrans) {
             orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_AF.getCode());
+            return orderInfo;
         }
 
         orderInfo.setReleaseStatus(OrderReleaseStatusEnum.RELEASE_STATUS_N.getCode());

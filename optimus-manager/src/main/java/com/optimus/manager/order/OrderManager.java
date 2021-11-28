@@ -25,8 +25,9 @@ public interface OrderManager {
      * 释放订单
      * 
      * @param orderInfo
+     * @return
      */
-    void release(OrderInfoDTO orderInfo);
+    boolean release(OrderInfoDTO orderInfo);
 
     /**
      * 分润
@@ -34,15 +35,17 @@ public interface OrderManager {
      * @param orderInfo
      * @param chainList
      * @param memberChannelList
+     * @return
      */
-    void splitProfit(OrderInfoDTO orderInfo, List<MemberInfoChainResult> chainList, List<MemberChannelDO> memberChannelList);
+    boolean splitProfit(OrderInfoDTO orderInfo, List<MemberInfoChainResult> chainList, List<MemberChannelDO> memberChannelList);
 
     /**
      * 订单通知
      * 
      * @param orderInfo
+     * @return
      */
-    void orderNotice(OrderInfoDTO orderInfo);
+    boolean orderNotice(OrderInfoDTO orderInfo);
 
     /**
      * 异步释放订单
