@@ -18,6 +18,11 @@ public class GatewaySubChannelDTO implements Serializable {
     private static final long serialVersionUID = -5313332376577888327L;
 
     /**
+     * 主键
+     */
+    private Long id;
+
+    /**
      * 代理会员编号
      */
     private String agentMemberId;

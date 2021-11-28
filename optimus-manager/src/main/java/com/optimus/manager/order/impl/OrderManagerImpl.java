@@ -27,10 +27,13 @@ import com.optimus.util.JacksonUtil;
 import com.optimus.util.SignUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.account.AccountChangeTypeEnum;
+import com.optimus.util.constants.order.OrderMerchantNotifyStatusEnum;
 import com.optimus.util.constants.order.OrderReleaseStatusEnum;
 import com.optimus.util.constants.order.OrderSplitProfitStatusEnum;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -138,8 +141,21 @@ public class OrderManagerImpl implements OrderManager {
         orderNotice.setSign(SignUtil.sign(map, memberInfo.getMemberKey()));
 
         // Post
-        restTemplate.postForEntity(orderInfo.getMerchantCallbackUrl(), orderNotice, String.class);
+        ResponseEntity<String> entity = restTemplate.postForEntity(orderInfo.getMerchantCallbackUrl(), orderNotice, String.class);
 
+        // 更新订单通知状态
+        if (StringUtils.pathEquals(HttpStatus.OK.name(), entity.getBody())) {
+            OrderInfoDO orderInfoDO = new OrderInfoDO();
+            orderInfoDO.setId(orderInfo.getId());
+            orderInfoDO.setMerchantNotifyStatus(OrderMerchantNotifyStatusEnum.MERCHANT_NOTIFY_STATUS_NS.getCode());
+            orderInfoDO.setUpdateTime(DateUtil.currentDate());
+            orderInfoDao.updateOrderInfo(orderInfoDO);
+        }
+
+    }
+
+    public static void main(String[] args) {
+        System.out.println();
     }
 
     @Async

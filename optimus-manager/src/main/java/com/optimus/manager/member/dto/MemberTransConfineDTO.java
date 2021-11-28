@@ -23,6 +23,11 @@ public class MemberTransConfineDTO implements Serializable {
     private static final long serialVersionUID = -7558397689952495672L;
 
     /**
+     * 主键
+     */
+    private Long id;
+
+    /**
      * 会员编号
      */
     private String memberId;

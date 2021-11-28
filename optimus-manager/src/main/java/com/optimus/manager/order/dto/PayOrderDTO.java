@@ -25,6 +25,11 @@ public class PayOrderDTO implements Serializable {
     private static final long serialVersionUID = -7473515200152564812L;
 
     /**
+     * 主键
+     */
+    private Long id;
+
+    /**
      * 会员编号
      */
     private String memberId;

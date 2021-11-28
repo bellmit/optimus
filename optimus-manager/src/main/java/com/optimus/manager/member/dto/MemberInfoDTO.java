@@ -21,6 +21,11 @@ public class MemberInfoDTO implements Serializable {
     private static final long serialVersionUID = -2479933606115676567L;
 
     /**
+     * 主键
+     */
+    private Long id;
+
+    /**
      * 会员编号
      */
     private String memberId;
