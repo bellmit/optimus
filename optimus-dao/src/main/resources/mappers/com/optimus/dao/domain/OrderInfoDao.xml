@@ -88,7 +88,10 @@
         MERCHANT_CALLBACK_COUNT &lt; #{merchantCallbackCount,jdbcType=NUMERIC},
       </if>
       <if test="lastTime != null">
-        UPDATE_TIME &lt; #{updateTime,jdbcType=TIMESTAMP}
+        UPDATE_TIME &lt; #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shard != null and totalShard != null">
+        ID % #{totalShard,jdbcType=NUMERIC} = #{shard,jdbcType=NUMERIC},
       </if>
     </where>
     offset ((#{page.pageNo,jdbcType=NUMERIC} - 1) * #{page.pageSize,jdbcType=NUMERIC}) rows
@@ -329,6 +332,25 @@
       </if>
     </set>
     where ID = #{id,jdbcType=NUMERIC}
+  </update>
+
+  <update id="updateOrderInfoForMerchantOrChannel" parameterType="com.optimus.dao.domain.OrderInfoDO">
+    update T_ORDER_INFO
+    <set>
+      <if test="merchantCallbackCount != null">
+        MERCHANT_CALLBACK_COUNT = MERCHANT_CALLBACK_COUNT + 1,
+      </if>
+      <if test="merchantNotifyStatus != null">
+        MERCHANT_NOTIFY_STATUS = #{merchantNotifyStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=NUMERIC}
+    <if test="merchantCallbackCount != null">
+      and MERCHANT_CALLBACK_COUNT &lt; #{merchantCallbackCount,jdbcType=NUMERIC}
+    </if>
   </update>
 
   <update id="updateOrderStatusByOrderIdAndOrderStatus">

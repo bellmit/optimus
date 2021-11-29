@@ -148,17 +148,19 @@ public class OrderManagerImpl implements OrderManager {
         // Post
         ResponseEntity<String> entity = restTemplate.postForEntity(orderInfo.getMerchantCallbackUrl(), orderNotice, String.class);
 
-        // 更新订单通知状态
-        if (StringUtils.pathEquals(HttpStatus.OK.name(), entity.getBody())) {
-            OrderInfoDO orderInfoDO = new OrderInfoDO();
-            orderInfoDO.setId(orderInfo.getId());
-            orderInfoDO.setMerchantNotifyStatus(OrderMerchantNotifyStatusEnum.MERCHANT_NOTIFY_STATUS_NS.getCode());
-            orderInfoDO.setUpdateTime(DateUtil.currentDate());
-            orderInfoDao.updateOrderInfo(orderInfoDO);
-            return true;
+        // 下游响应不成功
+        if (!StringUtils.pathEquals(HttpStatus.OK.name(), entity.getBody())) {
+            return false;
         }
 
-        return false;
+        // 更新订单通知状态
+        OrderInfoDO orderInfoDO = new OrderInfoDO();
+        orderInfoDO.setId(orderInfo.getId());
+        orderInfoDO.setMerchantNotifyStatus(OrderMerchantNotifyStatusEnum.MERCHANT_NOTIFY_STATUS_NS.getCode());
+        orderInfoDO.setUpdateTime(DateUtil.currentDate());
+        orderInfoDao.updateOrderInfo(orderInfoDO);
+
+        return true;
 
     }
 

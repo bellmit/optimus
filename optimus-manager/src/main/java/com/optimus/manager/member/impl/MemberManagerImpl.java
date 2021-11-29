@@ -107,21 +107,6 @@ public class MemberManagerImpl implements MemberManager {
     }
 
     @Override
-    @Cacheable(value = "memberChainConfig", key = "#memberId", unless = "#result == null")
-    public List<MemberInfoChainResult> listMemberInfoChains(String memberId) {
-
-        // 递归查询会员信息链
-        List<MemberInfoChainResult> chainList = memberInfoDao.listMemberInfoChains(memberId);
-        log.info("memberInfo chain is {}", chainList);
-
-        if (CollectionUtils.isEmpty(chainList)) {
-            return null;
-        }
-
-        return chainList;
-    }
-
-    @Override
     public String getSystemMemberId(String memberId) {
 
         // 根据会员编号查询会员信息
@@ -136,6 +121,21 @@ public class MemberManagerImpl implements MemberManager {
         AssertUtil.notEquals(MemberTypeEnum.MEMBER_TYPE_S.getCode(), memberInfoChainResult.getMemberType(), RespCodeEnum.MEMBER_ERROR, "未查询到平台会员");
 
         return memberInfoChainResult.getMemberId();
+    }
+
+    @Override
+    @Cacheable(value = "memberChainConfig", key = "#memberId", unless = "#result == null")
+    public List<MemberInfoChainResult> listMemberInfoChains(String memberId) {
+
+        // 递归查询会员信息链
+        List<MemberInfoChainResult> chainList = memberInfoDao.listMemberInfoChains(memberId);
+        log.info("memberInfo chain is {}", chainList);
+
+        if (CollectionUtils.isEmpty(chainList)) {
+            return null;
+        }
+
+        return chainList;
     }
 
 }

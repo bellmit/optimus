@@ -44,14 +44,6 @@ public interface MemberManager {
     MemberTransConfineDTO getMemberTransConfineByMemberId(String memberId);
 
     /**
-     * 递归查询会员信息链
-     *
-     * @param memberId
-     * @return
-     */
-    List<MemberInfoChainResult> listMemberInfoChains(String memberId);
-
-    /**
      * 根据会员编号获取平台会员编号
      *
      * @param memberId
@@ -59,5 +51,13 @@ public interface MemberManager {
      * @return
      */
     String getSystemMemberId(String memberId);
+
+    /**
+     * 递归查询会员信息链
+     *
+     * @param memberId
+     * @return
+     */
+    List<MemberInfoChainResult> listMemberInfoChains(String memberId);
 
 }

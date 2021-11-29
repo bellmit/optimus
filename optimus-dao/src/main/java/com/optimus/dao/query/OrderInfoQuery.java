@@ -21,6 +21,21 @@ public class OrderInfoQuery implements Serializable {
     private static final long serialVersionUID = -9075042761874255007L;
 
     /**
+     * 分片号
+     */
+    private Integer shard;
+
+    /**
+     * 分片总数
+     */
+    private Integer totalShard;
+
+    /**
+     * 最后时间
+     */
+    private Date lastTime;
+
+    /**
      * 订单类型
      * 
      * @see OrderTypeEnum
@@ -45,11 +60,6 @@ public class OrderInfoQuery implements Serializable {
      * 商户回调次数
      */
     private Short merchantCallbackCount;
-
-    /**
-     * 最后时间
-     */
-    private Date lastTime;
 
     /**
      * 分页对象
