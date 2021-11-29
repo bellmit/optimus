@@ -24,7 +24,15 @@ import lombok.extern.slf4j.Slf4j;
 public class RespBodyConfig implements ResponseBodyAdvice<Object> {
 
     /**
-     * beforeBodyWrite
+     * supports
+     */
+    @Override
+    public boolean supports(MethodParameter arg0, Class<? extends HttpMessageConverter<?>> arg1) {
+        return true;
+    }
+
+    /**
+     * 前置写
      */
     @Override
     public Object beforeBodyWrite(Object arg0, MethodParameter arg1, MediaType arg2, Class<? extends HttpMessageConverter<?>> arg3, ServerHttpRequest arg4, ServerHttpResponse arg5) {
@@ -46,14 +54,6 @@ public class RespBodyConfig implements ResponseBodyAdvice<Object> {
         log.info("{}.{} resp is {}", className, methodName, resp);
 
         return resp;
-    }
-
-    /**
-     * supports
-     */
-    @Override
-    public boolean supports(MethodParameter arg0, Class<? extends HttpMessageConverter<?>> arg1) {
-        return true;
     }
 
 }

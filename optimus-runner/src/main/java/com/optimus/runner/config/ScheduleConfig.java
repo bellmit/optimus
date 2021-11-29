@@ -21,6 +21,9 @@ public class ScheduleConfig implements SchedulingConfigurer {
     /** 线程数 */
     private static final int POOL_SIZE = 10;
 
+    /**
+     * 定时任务线程池
+     */
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
 

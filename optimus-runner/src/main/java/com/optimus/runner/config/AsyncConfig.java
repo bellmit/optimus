@@ -32,6 +32,11 @@ public class AsyncConfig {
     /** 缓冲队列中线程的空闲时间 */
     private static final int KEEP_ALIVE_SECONDS = 100;
 
+    /**
+     * 异步线程池
+     * 
+     * @return
+     */
     @Bean("asyncTaskExecutor")
     public AsyncTaskExecutor asyncTaskExecutor() {
 

@@ -24,6 +24,12 @@ public class RestTemplateConfig {
     /** 读超时时间 */
     private static final int READ_TIMEOUT = 5000;
 
+    /**
+     * Rest模版
+     * 
+     * @param factory
+     * @return
+     */
     @Bean
     public RestTemplate restTemplate(ClientHttpRequestFactory factory) {
 
@@ -34,6 +40,11 @@ public class RestTemplateConfig {
 
     }
 
+    /**
+     * HttpClient简单工厂
+     * 
+     * @return
+     */
     @Bean
     public ClientHttpRequestFactory simpleClientHttpRequestFactory() {
 

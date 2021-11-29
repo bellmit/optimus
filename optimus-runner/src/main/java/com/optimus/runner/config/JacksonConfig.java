@@ -20,7 +20,7 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 public class JacksonConfig {
 
     /**
-     * jackson对象管理器
+     * Jackson对象管理器
      * 
      * @param builder
      * @return

@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.optimus.dao.domain.GatewaySubChannelDO;
 import com.optimus.dao.domain.MemberChannelDO;
 import com.optimus.dao.domain.MemberInfoDO;
@@ -23,6 +22,7 @@ import com.optimus.manager.gateway.dto.GatewayChannelDTO;
 import com.optimus.manager.gateway.dto.MatchChannelDTO;
 import com.optimus.manager.member.dto.MemberInfoDTO;
 import com.optimus.util.AssertUtil;
+import com.optimus.util.JacksonUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.exception.OptimusException;
 
@@ -65,12 +65,12 @@ public class GatewayManagerImpl implements GatewayManager {
             binding.setVariable("redirectUrl", input.getRedirectUrl());
 
             String scriptName = input.getScriptMethod() + ".groovy";
-            Object result1 = engine.run(scriptName, binding);
-            ObjectMapper objectMapper = new ObjectMapper();
+            Object result = engine.run(scriptName, binding);
 
-            ExecuteScriptOutputDTO executeScriptOutput = objectMapper.readValue(objectMapper.writeValueAsString(result1), ExecuteScriptOutputDTO.class);
+            ExecuteScriptOutputDTO executeScriptOutput = JacksonUtil.toBean(JacksonUtil.toString(result), ExecuteScriptOutputDTO.class);
 
             return executeScriptOutput;
+
         } catch (OptimusException e) {
             log.error("执行脚本异常:[{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo());
             return null;

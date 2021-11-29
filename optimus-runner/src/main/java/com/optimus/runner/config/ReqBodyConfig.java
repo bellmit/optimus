@@ -52,7 +52,7 @@ public class ReqBodyConfig implements RequestBodyAdvice {
     }
 
     /**
-     * beforeBodyRead
+     * 前置读
      */
     @Override
     public HttpInputMessage beforeBodyRead(HttpInputMessage arg0, MethodParameter arg1, Type arg2, Class<? extends HttpMessageConverter<?>> arg3) throws IOException {
@@ -81,7 +81,7 @@ public class ReqBodyConfig implements RequestBodyAdvice {
     }
 
     /**
-     * afterBodyRead
+     * 后置读
      */
     @Override
     public Object afterBodyRead(Object arg0, HttpInputMessage arg1, MethodParameter arg2, Type arg3, Class<? extends HttpMessageConverter<?>> arg4) {
@@ -89,7 +89,7 @@ public class ReqBodyConfig implements RequestBodyAdvice {
     }
 
     /**
-     * handleEmptyBody
+     * 后置空处理
      */
     @Override
     public Object handleEmptyBody(Object arg0, HttpInputMessage arg1, MethodParameter arg2, Type arg3, Class<? extends HttpMessageConverter<?>> arg4) {
