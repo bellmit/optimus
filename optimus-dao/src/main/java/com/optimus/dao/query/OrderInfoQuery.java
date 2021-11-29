@@ -57,7 +57,7 @@ public class OrderInfoQuery implements Serializable {
     private String merchantNotifyStatus;
 
     /**
-     * 商户回调次数
+     * 回调商户次数
      */
     private Short merchantCallbackCount;
 

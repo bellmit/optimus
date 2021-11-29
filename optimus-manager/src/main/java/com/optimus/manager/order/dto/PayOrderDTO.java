@@ -108,7 +108,7 @@ public class PayOrderDTO implements Serializable {
     private String behavior;
 
     /**
-     * 商户回调地址[商户下单时传入]
+     * 回调商户地址[商户下单时传入]
      */
     private String merchantCallbackUrl;
 

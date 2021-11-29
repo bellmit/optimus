@@ -119,12 +119,12 @@ public class OrderInfoDTO implements Serializable {
     private String behavior;
 
     /**
-     * 商户回调地址[商户下单时传入]
+     * 回调商户地址[商户下单时传入]
      */
     private String merchantCallbackUrl;
 
     /**
-     * 商户回调次数
+     * 回调商户次数
      */
     private Short merchantCallbackCount;
 

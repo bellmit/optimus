@@ -73,7 +73,7 @@ public class CreateOrderDTO implements Serializable {
     private String clientIp;
 
     /**
-     * 商户回调地址[商户下单时传入]
+     * 回调商户地址[商户下单时传入]
      */
     private String merchantCallBackUrl;
 

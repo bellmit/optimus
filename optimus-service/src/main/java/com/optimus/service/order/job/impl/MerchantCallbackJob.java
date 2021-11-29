@@ -29,16 +29,16 @@ import org.springframework.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 订单通知
+ * 回调商户
  * 
  * @author sunxp
  */
 @Component
 @Slf4j
-public class NoticeOrderJob extends BaseOrderJob {
+public class MerchantCallbackJob extends BaseOrderJob {
 
-    /** 订单通知定时任务分片配置项 */
-    private static final String NOTICE_ORDER_JOB_SHARDING_BASE_KEY = "NOTICE_ORDER_JOB_SHARDING";
+    /** 回调商户定时任务分片配置项 */
+    private static final String MERCHANT_CALLBACK_JOB_SHARDING_BASE_KEY = "MERCHANT_CALLBACK_JOB_SHARDING";
 
     /** 回调商户次数系统配置项 */
     private static final String MERCHANT_CALLBACK_COUNT_BASE_KEY = "MERCHANT_CALLBACK_COUNT";
@@ -138,7 +138,7 @@ public class NoticeOrderJob extends BaseOrderJob {
     private OrderInfoQuery getOrderInfoQuery() {
 
         // 分片
-        Map<Integer, Integer> shardingMap = super.sharding(NOTICE_ORDER_JOB_SHARDING_BASE_KEY);
+        Map<Integer, Integer> shardingMap = super.sharding(MERCHANT_CALLBACK_JOB_SHARDING_BASE_KEY);
         if (CollectionUtils.isEmpty(shardingMap)) {
             return null;
         }

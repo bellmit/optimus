@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 /**
- * 调单查询
+ * 渠道订单查询
  * 
  * @author sunxp
  */
 @Component
-public class QueryOrderJob extends BaseOrderJob {
+public class ChannelOrderQueryJob extends BaseOrderJob {
 
     @Scheduled(initialDelay = 60000, fixedDelay = 120000)
     @Override
