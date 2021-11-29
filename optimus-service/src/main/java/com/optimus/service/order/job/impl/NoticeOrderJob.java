@@ -37,17 +37,26 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class NoticeOrderJob extends BaseOrderJob {
 
+    /** 订单通知定时任务分片配置项 */
+    private static final String NOTICE_ORDER_JOB_SHARDING_BASE_KEY = "NOTICE_ORDER_JOB_SHARDING";
+
     /** 回调商户次数系统配置项 */
     private static final String MERCHANT_CALLBACK_COUNT_BASE_KEY = "MERCHANT_CALLBACK_COUNT";
 
+    /** 回调商户一次执行上限配置项 */
+    private static final String MERCHANT_CALLBACK_ONCE_EXECUTE_LIMIT_BASE_KEY = "MERCHANT_CALLBACK_ONCE_EXECUTE_LIMIT";
+
+    /** 回调商户间隔配置项 */
+    private static final String MERCHANT_CALLBACK_INTERVAL_BASE_KEY = "MERCHANT_CALLBACK_INTERVAL";
+
     /** 回调商户次数默认值 */
-    private static final Short MERCHANT_CALLBACK_COUNT = 3;
+    private static Short merchantCallbackCount = 3;
 
-    /** 一次执行上限 */
-    private static final Integer ONCE_EXECUTE_LIMIT = 100;
+    /** 回调商户一次执行上限默认值 */
+    private static Integer merchantCallbackOnceExecuteLimit = 100;
 
-    /** 间隔 */
-    private static final Integer INTERVAL = 10;
+    /** 回调商户间隔默认值 */
+    private static Integer merchantCallbackInterval = 10;
 
     @Autowired
     private OrderManager orderManager;
@@ -59,15 +68,11 @@ public class NoticeOrderJob extends BaseOrderJob {
     @Override
     public void execute() {
 
-        // 回调商户次数
-        Short merchantCallbackCount = MERCHANT_CALLBACK_COUNT;
-        String value = super.loadSystemConfig(MERCHANT_CALLBACK_COUNT_BASE_KEY);
-        if (StringUtils.hasLength(value)) {
-            merchantCallbackCount = Short.parseShort(value);
-        }
+        // 初始化
+        init();
 
         // 订单信息Query
-        OrderInfoQuery query = getOrderInfoQuery(merchantCallbackCount);
+        OrderInfoQuery query = getOrderInfoQuery();
         if (Objects.isNull(query)) {
             return;
         }
@@ -75,7 +80,7 @@ public class NoticeOrderJob extends BaseOrderJob {
         // 下标
         Integer index = 0;
 
-        while (index.compareTo(ONCE_EXECUTE_LIMIT) < 0) {
+        while (index.compareTo(merchantCallbackOnceExecuteLimit) < 0) {
 
             index++;
 
@@ -91,8 +96,8 @@ public class NoticeOrderJob extends BaseOrderJob {
                 OrderInfoDTO orderInfo = new OrderInfoDTO();
                 BeanUtils.copyProperties(item, orderInfo);
 
-                // 订单通知
-                noticeOrder(orderInfo, merchantCallbackCount);
+                // 回调商户:订单通知
+                noticeOrder(orderInfo);
 
             }
 
@@ -101,15 +106,39 @@ public class NoticeOrderJob extends BaseOrderJob {
     }
 
     /**
+     * 初始化
+     */
+    private void init() {
+
+        // 回调商户次数
+        String value0 = super.loadSystemConfig(MERCHANT_CALLBACK_COUNT_BASE_KEY);
+        if (StringUtils.hasLength(value0)) {
+            merchantCallbackCount = Short.parseShort(value0);
+        }
+
+        // 一次执行上限
+        String value1 = super.loadSystemConfig(MERCHANT_CALLBACK_ONCE_EXECUTE_LIMIT_BASE_KEY);
+        if (StringUtils.hasLength(value1)) {
+            merchantCallbackOnceExecuteLimit = Integer.parseInt(value1);
+        }
+
+        // 间隔
+        String value2 = super.loadSystemConfig(MERCHANT_CALLBACK_INTERVAL_BASE_KEY);
+        if (StringUtils.hasLength(value2)) {
+            merchantCallbackInterval = Integer.parseInt(value2);
+        }
+
+    }
+
+    /**
      * 获取订单信息Query
      * 
-     * @param merchantCallbackCount
      * @return
      */
-    private OrderInfoQuery getOrderInfoQuery(Short merchantCallbackCount) {
+    private OrderInfoQuery getOrderInfoQuery() {
 
         // 分片
-        Map<Integer, Integer> shardingMap = super.sharding(this.getClass().getSimpleName());
+        Map<Integer, Integer> shardingMap = super.sharding(NOTICE_ORDER_JOB_SHARDING_BASE_KEY);
         if (CollectionUtils.isEmpty(shardingMap)) {
             return null;
         }
@@ -119,7 +148,7 @@ public class NoticeOrderJob extends BaseOrderJob {
         query.setPage(new Page(1, 1000));
         query.setShard(shardingMap.entrySet().stream().findFirst().get().getKey());
         query.setTotalShard(shardingMap.entrySet().stream().findFirst().get().getValue());
-        query.setLastTime(DateUtil.offsetForMinute(DateUtil.currentDate(), -INTERVAL));
+        query.setLastTime(DateUtil.offsetForMinute(DateUtil.currentDate(), -merchantCallbackInterval));
         query.setMerchantCallbackCount(merchantCallbackCount);
         query.setMerchantNotifyStatus(OrderMerchantNotifyStatusEnum.MERCHANT_NOTIFY_STATUS_NS.getCode());
         query.setOrderStatus(OrderStatusEnum.ORDER_STATUS_AP.getCode());
@@ -133,9 +162,8 @@ public class NoticeOrderJob extends BaseOrderJob {
      * 订单通知
      * 
      * @param orderInfo
-     * @param merchantCallbackCount
      */
-    private void noticeOrder(OrderInfoDTO orderInfo, Short merchantCallbackCount) {
+    private void noticeOrder(OrderInfoDTO orderInfo) {
 
         // 订单通知结果
         boolean result = false;
@@ -146,7 +174,7 @@ public class NoticeOrderJob extends BaseOrderJob {
             result = orderManager.orderNotice(orderInfo);
 
         } catch (OptimusException e) {
-            log.error("订单通知异常:[{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo());
+            log.error("订单通知异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
         } catch (Exception e) {
             log.error("订单通知异常:{}", e);
         }

@@ -44,7 +44,7 @@ public abstract class BaseOrderJob {
             return commonSystemConfigManager.getCommonSystemConfigByBaseKey(baseKey);
 
         } catch (OptimusException e) {
-            log.error("加载系统配置异常:[{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo());
+            log.error("加载系统配置异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
             return null;
         } catch (Exception e) {
             log.error("加载系统配置异常:{}", e);
@@ -69,20 +69,20 @@ public abstract class BaseOrderJob {
 
             // 转换为JsonNode
             JsonNode jsonNode = JacksonUtil.toTree(value);
-            Integer shard = jsonNode.get(InetAddress.getLocalHost().getHostAddress()).asInt();
+            JsonNode shardJsonNode = jsonNode.get(InetAddress.getLocalHost().getHostAddress());
             Integer totalShard = jsonNode.size();
 
-            AssertUtil.notEmpty(shard, RespCodeEnum.FAILE, "未配置系统定时任务参数");
+            AssertUtil.notEmpty(shardJsonNode, RespCodeEnum.FAILE, "未配置系统定时任务参数");
             AssertUtil.notEmpty(totalShard, RespCodeEnum.FAILE, "未配置系统定时任务参数");
 
             // 分片信息
             Map<Integer, Integer> shardingMap = new HashMap<>(16);
-            shardingMap.put(shard, totalShard);
+            shardingMap.put(shardJsonNode.asInt(), totalShard);
 
             return shardingMap;
 
         } catch (OptimusException e) {
-            log.error("未配置定时任务分片异常:[{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo());
+            log.error("未配置定时任务分片异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
             return null;
         } catch (Exception e) {
             log.error("系统异常:", e);

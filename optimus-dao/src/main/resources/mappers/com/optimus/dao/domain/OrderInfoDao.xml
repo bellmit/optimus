@@ -76,24 +76,25 @@
     from T_ORDER_INFO
     <where>
       <if test="orderType != null">
-        ORDER_TYPE = #{orderType,jdbcType=VARCHAR},
+        and ORDER_TYPE = #{orderType,jdbcType=VARCHAR}
       </if>
       <if test="orderStatus != null">
-        ORDER_STATUS = #{orderStatus,jdbcType=VARCHAR},
+        and ORDER_STATUS = #{orderStatus,jdbcType=VARCHAR}
       </if>
       <if test="merchantNotifyStatus != null">
-        MERCHANT_NOTIFY_STATUS != #{merchantNotifyStatus,jdbcType=VARCHAR},
+        and MERCHANT_NOTIFY_STATUS != #{merchantNotifyStatus,jdbcType=VARCHAR}
       </if>
       <if test="merchantCallbackCount != null">
-        MERCHANT_CALLBACK_COUNT &lt; #{merchantCallbackCount,jdbcType=NUMERIC},
+        and MERCHANT_CALLBACK_COUNT &lt; #{merchantCallbackCount,jdbcType=NUMERIC}
       </if>
       <if test="lastTime != null">
-        UPDATE_TIME &lt; #{updateTime,jdbcType=TIMESTAMP},
+        and UPDATE_TIME &lt; #{lastTime,jdbcType=TIMESTAMP}
       </if>
       <if test="shard != null and totalShard != null">
-        ID % #{totalShard,jdbcType=NUMERIC} = #{shard,jdbcType=NUMERIC},
+        and ID % #{totalShard,jdbcType=NUMERIC} = #{shard,jdbcType=NUMERIC}
       </if>
     </where>
+    order by ID
     offset ((#{page.pageNo,jdbcType=NUMERIC} - 1) * #{page.pageSize,jdbcType=NUMERIC}) rows
     fetch next #{page.pageSize,jdbcType=NUMERIC} rows only
   </select>
