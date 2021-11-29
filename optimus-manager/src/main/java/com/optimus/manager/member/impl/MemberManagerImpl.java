@@ -126,19 +126,14 @@ public class MemberManagerImpl implements MemberManager {
 
         // 根据会员编号查询会员信息
         List<MemberInfoChainResult> memberInfoChainResultList = listMemberInfoChains(memberId);
-
-        if (CollectionUtils.isEmpty(memberInfoChainResultList)) {
-            throw new OptimusException(RespCodeEnum.MEMBER_ERROR, "未查回平台用户");
-        }
+        AssertUtil.notEmpty(memberInfoChainResultList, RespCodeEnum.MEMBER_ERROR, "未查询到平台会员");
 
         // 排序:倒叙
         memberInfoChainResultList.sort(Comparator.comparing(MemberInfoChainResult::getLevel).reversed());
 
         // 取第一个
         MemberInfoChainResult memberInfoChainResult = memberInfoChainResultList.get(0);
-        if(!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_S.getCode(), memberInfoChainResult.getMemberType())){
-            throw new OptimusException(RespCodeEnum.MEMBER_ERROR, "未查回平台用户");
-        }
+        AssertUtil.notEquals(MemberTypeEnum.MEMBER_TYPE_S.getCode(), memberInfoChainResult.getMemberType(), RespCodeEnum.MEMBER_ERROR, "未查询到平台会员");
 
         return memberInfoChainResult.getMemberId();
     }

@@ -51,11 +51,11 @@ public interface MemberManager {
      */
     List<MemberInfoChainResult> listMemberInfoChains(String memberId);
 
-
     /**
-     * 根据普通用户ID获取平台用户ID
+     * 根据会员编号获取平台会员编号
      *
-     * @param memberId 普通用户ID
+     * @param memberId
+     *            会员编号
      * @return
      */
     String getSystemMemberId(String memberId);
