@@ -35,7 +35,7 @@ public class BeanUtil {
                 targetList.add(t);
 
             } catch (Exception e) {
-                throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "copyProperties error");
+                throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "复制集合异常");
             }
 
         });

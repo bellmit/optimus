@@ -30,6 +30,7 @@ import com.optimus.util.constants.account.AccountChangeTypeEnum;
 import com.optimus.util.constants.order.OrderMerchantNotifyStatusEnum;
 import com.optimus.util.constants.order.OrderReleaseStatusEnum;
 import com.optimus.util.constants.order.OrderSplitProfitStatusEnum;
+import com.optimus.util.exception.OptimusException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -169,8 +170,10 @@ public class OrderManagerImpl implements OrderManager {
 
             release(orderInfo);
 
+        } catch (OptimusException e) {
+            log.error("异步释放订单异常:[{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo());
         } catch (Exception e) {
-            log.error("asyncRelease error is {}", e);
+            log.error("异步释放订单异常:", e);
         }
     }
 
@@ -182,8 +185,10 @@ public class OrderManagerImpl implements OrderManager {
 
             splitProfit(orderInfo, chainList, memberChannelList);
 
+        } catch (OptimusException e) {
+            log.error("异步订单分润异常:[{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo());
         } catch (Exception e) {
-            log.error("asyncSplitProfit error is {}", e);
+            log.error("异步订单分润异常:", e);
         }
     }
 
@@ -195,8 +200,10 @@ public class OrderManagerImpl implements OrderManager {
 
             orderNotice(orderInfo);
 
+        } catch (OptimusException e) {
+            log.error("异步订单通知异常:[{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo());
         } catch (Exception e) {
-            log.error("asyncOrderNotice error is {}", e);
+            log.error("异步订单通知异常:", e);
         }
 
     }

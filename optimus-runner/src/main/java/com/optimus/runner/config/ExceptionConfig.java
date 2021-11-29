@@ -44,7 +44,7 @@ public class ExceptionConfig {
         resp.setCode(code);
         resp.setMemo(memo);
 
-        log.warn("warn resp is {}", resp);
+        log.warn("自定义业务异常:{}", resp);
 
         return ResponseEntity.status(HttpStatus.OK).body(resp);
 
@@ -63,7 +63,7 @@ public class ExceptionConfig {
         resp.setCode(RespCodeEnum.FAILE.getCode());
         resp.setMemo(RespCodeEnum.FAILE.getMemo());
 
-        log.error("error resp is {}", e);
+        log.error("系统服务异常:{}", e);
 
         return ResponseEntity.status(HttpStatus.OK).body(resp);
 

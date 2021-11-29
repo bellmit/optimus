@@ -105,7 +105,7 @@ public class GatewayControllerConvert {
             body = new String(req.getInputStream().readAllBytes());
 
         } catch (Exception e) {
-            throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "读取参数异常");
+            throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "读取网关渠道参数异常");
         }
 
         // 合并参数

@@ -1,6 +1,5 @@
 package com.optimus.manager.gateway.impl;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -25,12 +24,13 @@ import com.optimus.manager.gateway.dto.MatchChannelDTO;
 import com.optimus.manager.member.dto.MemberInfoDTO;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
+import com.optimus.util.exception.OptimusException;
+
+import org.springframework.stereotype.Component;
 
 import groovy.lang.Binding;
 import groovy.util.GroovyScriptEngine;
-import groovy.util.ResourceException;
-import groovy.util.ScriptException;
-import org.springframework.stereotype.Component;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 网关ManagerImpl
@@ -38,6 +38,7 @@ import org.springframework.stereotype.Component;
  * @author sunxp
  */
 @Component
+@Slf4j
 public class GatewayManagerImpl implements GatewayManager {
 
     @Resource
@@ -70,16 +71,13 @@ public class GatewayManagerImpl implements GatewayManager {
             ExecuteScriptOutputDTO executeScriptOutput = objectMapper.readValue(objectMapper.writeValueAsString(result1), ExecuteScriptOutputDTO.class);
 
             return executeScriptOutput;
-        } catch (ResourceException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ScriptException e) {
-            e.printStackTrace();
+        } catch (OptimusException e) {
+            log.error("执行脚本异常:[{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo());
+            return null;
+        } catch (Exception e) {
+            log.error("执行脚本异常:", e);
+            return null;
         }
-
-
-        return null;
 
     }
 

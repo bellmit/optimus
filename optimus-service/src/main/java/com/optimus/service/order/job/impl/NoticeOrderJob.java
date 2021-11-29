@@ -15,6 +15,7 @@ import com.optimus.util.DateUtil;
 import com.optimus.util.constants.order.OrderMerchantNotifyStatusEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
+import com.optimus.util.exception.OptimusException;
 import com.optimus.util.model.page.Page;
 
 import org.springframework.beans.BeanUtils;
@@ -97,8 +98,11 @@ public class NoticeOrderJob extends BaseOrderJob {
 
                     }
 
+                } catch (OptimusException e) {
+                    log.error("订单通知异常:[{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo());
+                    continue;
                 } catch (Exception e) {
-                    log.error("订单通知,异常:{}", e);
+                    log.error("订单通知异常:{}", e);
                     continue;
                 }
 

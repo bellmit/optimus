@@ -9,6 +9,7 @@ import com.optimus.manager.common.CommonSystemConfigManager;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.JacksonUtil;
 import com.optimus.util.constants.RespCodeEnum;
+import com.optimus.util.exception.OptimusException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -42,8 +43,11 @@ public abstract class BaseOrderJob {
 
             return commonSystemConfigManager.getCommonSystemConfigByBaseKey(baseKey);
 
+        } catch (OptimusException e) {
+            log.error("加载系统配置异常:[{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo());
+            return null;
         } catch (Exception e) {
-            log.error("加载系统配置,异常:{}", e);
+            log.error("加载系统配置异常:{}", e);
             return null;
         }
 
@@ -61,15 +65,15 @@ public abstract class BaseOrderJob {
 
             // 查询系统配置
             String value = loadSystemConfig(baseKey);
-            AssertUtil.notEmpty(value, RespCodeEnum.FAILE, "系统定时任务参数未配置");
+            AssertUtil.notEmpty(value, RespCodeEnum.FAILE, "未配置系统定时任务参数");
 
             // 转换为JsonNode
             JsonNode jsonNode = JacksonUtil.toTree(value);
             Integer shard = jsonNode.get(InetAddress.getLocalHost().getHostAddress()).asInt();
             Integer totalShard = jsonNode.size();
 
-            AssertUtil.notEmpty(shard, RespCodeEnum.FAILE, "系统定时任务参数未配置");
-            AssertUtil.notEmpty(totalShard, RespCodeEnum.FAILE, "系统定时任务参数未配置");
+            AssertUtil.notEmpty(shard, RespCodeEnum.FAILE, "未配置系统定时任务参数");
+            AssertUtil.notEmpty(totalShard, RespCodeEnum.FAILE, "未配置系统定时任务参数");
 
             // 分片信息
             Map<Integer, Integer> shardingMap = new HashMap<>(16);
@@ -77,8 +81,11 @@ public abstract class BaseOrderJob {
 
             return shardingMap;
 
+        } catch (OptimusException e) {
+            log.error("未配置定时任务分片异常:[{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo());
+            return null;
         } catch (Exception e) {
-            log.error("未配置定时任务分片,异常:{}", e);
+            log.error("系统异常:", e);
             return null;
         }
 
