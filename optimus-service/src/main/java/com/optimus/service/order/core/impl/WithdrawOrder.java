@@ -8,7 +8,6 @@ import java.util.Objects;
 import javax.annotation.Resource;
 
 import com.optimus.dao.mapper.OrderInfoDao;
-import com.optimus.dao.result.MemberInfoChainResult;
 import com.optimus.manager.account.AccountManager;
 import com.optimus.manager.account.dto.AccountInfoDTO;
 import com.optimus.manager.account.dto.DoTransDTO;
