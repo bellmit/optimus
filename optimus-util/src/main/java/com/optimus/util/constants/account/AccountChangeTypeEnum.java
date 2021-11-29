@@ -16,25 +16,25 @@ public enum AccountChangeTypeEnum {
 
     /* ---------账户变更类型--------- */
 
-    P_PLUS("P+", "加平台内部余额户金额"),
+    P_PLUS("PP", "加平台内部余额户金额"),
 
-    P_MINUS("P-", "减平台内部余额户金额"),
+    P_MINUS("PM", "减平台内部余额户金额"),
 
-    B_PLUS("B+", "加余额户金额"),
+    B_PLUS("BP", "加余额户金额"),
 
-    B_MINUS("B-", "减余额户金额"),
+    B_MINUS("BM", "减余额户金额"),
 
-    F_PLUS("F+", "加冻结户金额"),
+    F_PLUS("FP", "加冻结户金额"),
 
-    F_MINUS("F-", "减冻结户金额"),
+    F_MINUS("FM", "减冻结户金额"),
 
-    A_PLUS("A+", "加预付款户金额"),
+    A_PLUS("AP", "加预付款户金额"),
 
-    A_MINUS("A-", "减预付款户金额"),
+    A_MINUS("AM", "减预付款户金额"),
 
-    E_PLUS("E+", "加收益户金额"),
+    E_PLUS("EP", "加收益户金额"),
 
-    E_MINUS("E-", "减收益户金额"),
+    E_MINUS("EM", "减收益户金额"),
 
     ;
 
