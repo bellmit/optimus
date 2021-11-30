@@ -1,5 +1,7 @@
 package com.optimus.util.constants.member;
 
+import org.springframework.util.StringUtils;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -30,5 +32,19 @@ public enum MemberTypeEnum {
 
     private String code;
     private String memo;
+
+    public static MemberTypeEnum instanceOf(String code) {
+
+        for (MemberTypeEnum item : MemberTypeEnum.values()) {
+
+            if (StringUtils.pathEquals(item.getCode(), code)) {
+                return item;
+            }
+
+        }
+
+        return null;
+
+    }
 
 }

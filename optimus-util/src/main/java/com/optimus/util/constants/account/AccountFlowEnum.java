@@ -16,9 +16,9 @@ public enum AccountFlowEnum {
 
     /* ---------账户流--------- */
 
-    FLOW_I("I", "+", "收入"),
+    FLOW_I("I", "P", "收入"),
 
-    FLOW_S("S", "-", "支出"),
+    FLOW_S("S", "M", "支出"),
 
     ;
 

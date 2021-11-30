@@ -78,7 +78,6 @@ public class OrderManagerConvert {
             if (StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_C.getCode(), r.getMemberType())) {
                 // 第一个码商
                 if (StringUtils.pathEquals(orderInfo.getCodeMemberId(), l.getMemberId())) {
-
                     changeType = AccountChangeTypeEnum.B_PLUS.getCode();
                     amount = orderInfo.getActualAmount().multiply(map.get(l.getMemberId()));
 
@@ -102,18 +101,16 @@ public class OrderManagerConvert {
             if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_C.getCode(), l.getMemberType())) {
                 // 平台
                 if (StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_S.getCode(), r.getMemberType())) {
-
                     changeType = AccountChangeTypeEnum.P_PLUS.getCode();
                     amount = orderInfo.getActualAmount().multiply(map.get(l.getMemberId()));
                     doTransList.add(new DoTransDTO(r.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "平台分润"));
-
                     return r;
                 }
 
                 // 管理/代理
                 changeType = AccountChangeTypeEnum.A_PLUS.getCode();
                 amount = orderInfo.getActualAmount().multiply(map.get(l.getMemberId()).subtract(map.get(r.getMemberId())));
-                doTransList.add(new DoTransDTO(r.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, r.getMemberType() + "分润"));
+                doTransList.add(new DoTransDTO(r.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, MemberTypeEnum.instanceOf(r.getMemberType()).getMemo() + "分润"));
 
                 return r;
             }
