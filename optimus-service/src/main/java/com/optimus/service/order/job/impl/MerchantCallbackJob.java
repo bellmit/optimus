@@ -176,7 +176,7 @@ public class MerchantCallbackJob extends BaseOrderJob {
         } catch (OptimusException e) {
             log.error("订单通知异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
         } catch (Exception e) {
-            log.error("订单通知异常:{}", e);
+            log.error("订单通知异常:", e);
         }
 
         // 通知成功
@@ -192,10 +192,10 @@ public class MerchantCallbackJob extends BaseOrderJob {
             orderInfoDO.setMerchantCallbackCount(merchantCallbackCount);
             orderInfoDO.setUpdateTime(DateUtil.currentDate());
 
-            orderInfoDao.updateOrderInfoForMerchantOrChannel(orderInfoDO);
+            orderInfoDao.updateOrderInfoForMerchantCallback(orderInfoDO);
 
         } catch (Exception e) {
-            log.error("订单通知失败更新记录异常:{}", e);
+            log.error("订单通知失败更新记录异常:", e);
         }
 
     }

@@ -62,6 +62,11 @@ public class OrderInfoQuery implements Serializable {
     private Short merchantCallbackCount;
 
     /**
+     * 网关渠道订单查询次数
+     */
+    private Short channelOrderQueryCount;
+
+    /**
      * 分页对象
      */
     private Page page;

@@ -87,6 +87,9 @@
       <if test="merchantCallbackCount != null">
         and MERCHANT_CALLBACK_COUNT &lt; #{merchantCallbackCount,jdbcType=NUMERIC}
       </if>
+      <if test="channelOrderQueryCount != null">
+        and CHANNEL_ORDER_QUERY_COUNT &lt; #{channelOrderQueryCount,jdbcType=NUMERIC}
+      </if>
       <if test="lastTime != null">
         and UPDATE_TIME &lt; #{lastTime,jdbcType=TIMESTAMP}
       </if>
@@ -335,7 +338,7 @@
     where ID = #{id,jdbcType=NUMERIC}
   </update>
 
-  <update id="updateOrderInfoForMerchantOrChannel" parameterType="com.optimus.dao.domain.OrderInfoDO">
+  <update id="updateOrderInfoForMerchantCallback" parameterType="com.optimus.dao.domain.OrderInfoDO">
     update T_ORDER_INFO
     <set>
       <if test="merchantCallbackCount != null">
@@ -351,6 +354,22 @@
     where ID = #{id,jdbcType=NUMERIC}
     <if test="merchantCallbackCount != null">
       and MERCHANT_CALLBACK_COUNT &lt; #{merchantCallbackCount,jdbcType=NUMERIC}
+    </if>
+  </update>
+
+  <update id="updateOrderInfoForChannelOrderQuery" parameterType="com.optimus.dao.domain.OrderInfoDO">
+    update T_ORDER_INFO
+    <set>
+      <if test="channelOrderQueryCount != null">
+        CHANNEL_ORDER_QUERY_COUNT = CHANNEL_ORDER_QUERY_COUNT + 1,
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=NUMERIC}
+    <if test="channelOrderQueryCount != null">
+      and CHANNEL_ORDER_QUERY_COUNT &lt; #{channelOrderQueryCount,jdbcType=NUMERIC}
     </if>
   </update>
 

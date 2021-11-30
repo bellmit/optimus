@@ -47,7 +47,7 @@ public abstract class BaseOrderJob {
             log.error("加载系统配置异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
             return null;
         } catch (Exception e) {
-            log.error("加载系统配置异常:{}", e);
+            log.error("加载系统配置异常:", e);
             return null;
         }
 

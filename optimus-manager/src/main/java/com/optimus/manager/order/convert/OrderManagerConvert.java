@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.optimus.dao.domain.GatewaySubChannelDO;
 import com.optimus.dao.domain.MemberChannelDO;
 import com.optimus.dao.domain.OrderInfoDO;
 import com.optimus.dao.result.MemberInfoChainResult;
@@ -269,7 +270,7 @@ public class OrderManagerConvert {
     /**
      * 获取执行脚本输入DTO
      * 
-     * 创建订单
+     * 下单
      * 
      * @param createOrder
      * @return
@@ -293,6 +294,31 @@ public class OrderManagerConvert {
             input.setImplPath(createOrder.getGatewaySubChannel().getImplPath());
             input.setBizContent(createOrder.getGatewaySubChannel().getBizContent());
         }
+
+        return input;
+
+    }
+
+    /**
+     * 获取执行脚本输入DTO
+     * 
+     * 渠道订单查询
+     * 
+     * @param orderInfo
+     * @param gatewaySubChannel
+     * @return
+     */
+    public static ExecuteScriptInputDTO getExecuteScriptInputDTO(OrderInfoDO orderInfo, GatewaySubChannelDO gatewaySubChannel) {
+
+        // 执行脚本输入DTO
+        ExecuteScriptInputDTO input = new ExecuteScriptInputDTO();
+        input.setScriptMethod(ScriptEnum.QUERY.getCode());
+        input.setMemberId(orderInfo.getMemberId());
+        input.setOrderId(orderInfo.getOrderId());
+        input.setCalleeOrderId(orderInfo.getCalleeOrderId());
+        input.setImplType(gatewaySubChannel.getImplType());
+        input.setImplPath(gatewaySubChannel.getImplPath());
+        input.setBizContent(gatewaySubChannel.getBizContent());
 
         return input;
 

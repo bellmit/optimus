@@ -135,11 +135,8 @@ public class PlaceOrder extends BaseOrder {
     @Override
     public void payOrder(PayOrderDTO payOrder) {
 
-        // 获取订单信息DTO
-        OrderInfoDTO orderInfo = OrderManagerConvert.getOrderInfoDTO(payOrder);
-
         // 查询会员信息链
-        List<MemberInfoChainResult> chainList = memberManager.listMemberInfoChains(orderInfo.getCodeMemberId());
+        List<MemberInfoChainResult> chainList = memberManager.listMemberInfoChains(payOrder.getCodeMemberId());
         AssertUtil.notEmpty(chainList, RespCodeEnum.MEMBER_ERROR, "会员信息链不能为空");
 
         // 查询会员关系链的会员渠道费率
@@ -148,13 +145,16 @@ public class PlaceOrder extends BaseOrder {
         List<MemberChannelDO> memberChannelList = memberChannelDao.listMemberChannelByMemberIdLists(memberIdList);
 
         // 验证链及渠道
-        OrderManagerValidate.validateChainAndChannel(chainList, memberChannelList, orderInfo.getCodeMemberId());
+        OrderManagerValidate.validateChainAndChannel(chainList, memberChannelList, payOrder.getCodeMemberId());
 
         // 更新订单状态
-        int update = orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(orderInfo.getOrderId(), orderInfo.getOrderStatus(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());
+        int update = orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(payOrder.getOrderId(), payOrder.getOrderStatus(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());
         if (update != 1) {
             throw new OptimusException(RespCodeEnum.ORDER_ERROR, "订单状态异常");
         }
+
+        // 获取订单信息DTO
+        OrderInfoDTO orderInfo = OrderManagerConvert.getOrderInfoDTO(payOrder);
 
         // 异步释放订单
         orderManager.asyncRelease(orderInfo);
