@@ -5,6 +5,7 @@ import java.util.List;
 import com.optimus.dao.domain.MemberChannelDO;
 import com.optimus.dao.result.MemberInfoChainResult;
 import com.optimus.manager.order.dto.OrderInfoDTO;
+import com.optimus.manager.order.validate.OrderManagerValidate;
 
 /**
  * 订单manager
@@ -31,6 +32,10 @@ public interface OrderManager {
 
     /**
      * 分润
+     * 
+     * 调用方保证参数的合法性
+     * 
+     * @see OrderManagerValidate.validateChainAndChannel
      * 
      * @param orderInfo
      * @param chainList

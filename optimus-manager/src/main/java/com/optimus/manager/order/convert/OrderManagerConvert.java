@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import com.optimus.dao.domain.MemberChannelDO;
 import com.optimus.dao.domain.OrderInfoDO;
 import com.optimus.dao.result.MemberInfoChainResult;
 import com.optimus.manager.account.dto.DoTransDTO;
@@ -59,13 +61,16 @@ public class OrderManagerConvert {
      * 
      * @param orderInfo
      * @param chainList
-     * @param map
+     * @param memberChannelList
      * @return
      */
-    public static List<DoTransDTO> getDoTransDTOList(OrderInfoDTO orderInfo, List<MemberInfoChainResult> chainList, Map<String, BigDecimal> map) {
+    public static List<DoTransDTO> getDoTransDTOList(OrderInfoDTO orderInfo, List<MemberInfoChainResult> chainList, List<MemberChannelDO> memberChannelList) {
 
         // 账户交易List
         List<DoTransDTO> doTransList = new ArrayList<>();
+
+        // 构建会员费率Map
+        Map<String, BigDecimal> map = memberChannelList.stream().collect(Collectors.toMap(MemberChannelDO::getMemberId, MemberChannelDO::getRate));
 
         // 排序:码商[n]->代理[n]->管理[1]->平台[1]
         chainList.sort((l, r) -> Short.compare(l.getLevel(), r.getLevel()));
@@ -74,26 +79,25 @@ public class OrderManagerConvert {
             String changeType = null;
             BigDecimal amount = null;
 
-            // 码商->码商
-            if (StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_C.getCode(), r.getMemberType())) {
-                // 第一个码商
-                if (StringUtils.pathEquals(orderInfo.getCodeMemberId(), l.getMemberId())) {
-                    changeType = AccountChangeTypeEnum.B_PLUS.getCode();
-                    amount = orderInfo.getActualAmount().multiply(map.get(l.getMemberId()));
+            // 第一个码商
+            if (StringUtils.pathEquals(orderInfo.getCodeMemberId(), l.getMemberId())) {
+                changeType = AccountChangeTypeEnum.B_PLUS.getCode();
+                amount = orderInfo.getActualAmount().multiply(map.get(l.getMemberId()));
 
-                    if (!StringUtils.pathEquals(OrderReleaseStatusEnum.RELEASE_STATUS_D.getCode(), orderInfo.getReleaseStatus())) {
-                        changeType = AccountChangeTypeEnum.B_MINUS.getCode();
-                        amount = orderInfo.getActualAmount().subtract(amount);
-                    }
-
-                    doTransList.add(new DoTransDTO(l.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "码商分润"));
+                // 释放
+                if (!StringUtils.pathEquals(OrderReleaseStatusEnum.RELEASE_STATUS_D.getCode(), orderInfo.getReleaseStatus())) {
+                    changeType = AccountChangeTypeEnum.B_MINUS.getCode();
+                    amount = orderInfo.getActualAmount().subtract(amount);
                 }
 
-                // 其他码商
+                doTransList.add(new DoTransDTO(l.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "码商分润"));
+            }
+
+            // 码商->码商
+            if (StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_C.getCode(), r.getMemberType())) {
                 changeType = AccountChangeTypeEnum.B_PLUS.getCode();
                 amount = orderInfo.getActualAmount().multiply(map.get(r.getMemberId()).subtract(map.get(l.getMemberId())));
                 doTransList.add(new DoTransDTO(r.getMemberId(), orderInfo.getOrderId(), orderInfo.getOrderType(), changeType, amount, "码商分润"));
-
                 return r;
             }
 

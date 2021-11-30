@@ -148,7 +148,7 @@ public class PlaceOrder extends BaseOrder {
         List<MemberChannelDO> memberChannelList = memberChannelDao.listMemberChannelByMemberIdLists(memberIdList);
 
         // 验证链及渠道
-        OrderManagerValidate.validateChainAndChannel(chainList, memberChannelList);
+        OrderManagerValidate.validateChainAndChannel(chainList, memberChannelList, orderInfo.getCodeMemberId());
 
         // 更新订单状态
         int update = orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(orderInfo.getOrderId(), orderInfo.getOrderStatus(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());

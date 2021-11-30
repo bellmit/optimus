@@ -35,8 +35,9 @@ public class OrderManagerValidate {
      * 
      * @param chainList
      * @param memberChannelList
+     * @param memberId
      */
-    public static void validateChainAndChannel(List<MemberInfoChainResult> chainList, List<MemberChannelDO> memberChannelList) {
+    public static void validateChainAndChannel(List<MemberInfoChainResult> chainList, List<MemberChannelDO> memberChannelList, String memberId) {
 
         // 断言:非空
         AssertUtil.notEmpty(chainList, RespCodeEnum.MEMBER_ERROR, "会员信息链不能为空");
@@ -50,8 +51,8 @@ public class OrderManagerValidate {
         // 验证会员渠道
         validateMerchant(memberChannelList);
 
-        // 验证会员类型
-        validateMemberType(chainList);
+        // 验证会员信息
+        validateMemberInfo(chainList, memberId);
 
         // 验证会员信息链费率
         validateRate(chainList, memberChannelList);
@@ -90,14 +91,18 @@ public class OrderManagerValidate {
     }
 
     /**
-     * 验证会员类型
+     * 验证会员信息
      * 
      * @param chainList
+     * @param memberId
      */
-    private static void validateMemberType(List<MemberInfoChainResult> chainList) {
+    private static void validateMemberInfo(List<MemberInfoChainResult> chainList, String memberId) {
 
         // 排序:码商[n]->代理[n]->管理[1]->平台[1]
         chainList.sort((l, r) -> Short.compare(l.getLevel(), r.getLevel()));
+
+        // 断言:第一个会员和入参会员
+        AssertUtil.notEquals(chainList.get(0).getMemberId(), memberId, RespCodeEnum.MEMBER_ERROR, "会员信息链第一个会员不合法");
 
         // 会员信息链:类型
         String chain = chainList.stream().map(MemberInfoChainResult::getMemberType).collect(Collectors.joining(""));
