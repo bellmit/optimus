@@ -73,6 +73,15 @@ public interface OrderInfoDao {
     int updateOrderInfo(OrderInfoDO orderInfoDO);
 
     /**
+     * 根据主键和订单状态更新订单信息
+     * 
+     * @param orderInfoDO
+     * @param originOrderStatus
+     * @return
+     */
+    int updateOrderInfoByIdAndOrderStatus(@Param("orderInfo") OrderInfoDO orderInfoDO, @Param("originOrderStatus") String originOrderStatus);
+
+    /**
      * 更新订单信息:回调商户
      * 
      * @param orderInfoDO

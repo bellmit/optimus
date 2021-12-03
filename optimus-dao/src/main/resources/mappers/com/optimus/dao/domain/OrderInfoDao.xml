@@ -347,6 +347,23 @@
     where ID = #{id,jdbcType=NUMERIC}
   </update>
 
+  <update id="updateOrderInfoByIdAndOrderStatus">
+    update T_ORDER_INFO
+    <set>
+      <if test="orderStatus != null">
+        ORDER_STATUS = #{orderInfo.orderStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="splitProfitStatus != null">
+        SPLIT_PROFIT_STATUS = #{splitProfitStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{orderInfo.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{orderInfo.id,jdbcType=NUMERIC}
+    and ORDER_STATUS = #{originOrderStatus,jdbcType=VARCHAR}
+  </update>
+
   <update id="updateOrderInfoForMerchantCallback" parameterType="com.optimus.dao.domain.OrderInfoDO">
     update T_ORDER_INFO
     <set>

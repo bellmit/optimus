@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Resource;
 
 import com.optimus.dao.domain.MemberChannelDO;
+import com.optimus.dao.domain.OrderInfoDO;
 import com.optimus.dao.mapper.MemberChannelDao;
 import com.optimus.dao.mapper.OrderInfoDao;
 import com.optimus.dao.result.MemberInfoChainResult;
@@ -26,7 +27,6 @@ import com.optimus.manager.order.dto.PayOrderDTO;
 import com.optimus.manager.order.validate.OrderManagerValidate;
 import com.optimus.service.order.core.BaseOrder;
 import com.optimus.util.AssertUtil;
-import com.optimus.util.DateUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.account.AccountChangeTypeEnum;
 import com.optimus.util.constants.account.AccountTypeEnum;
@@ -107,7 +107,6 @@ public class PlaceOrder extends BaseOrder {
         // 不冻结码商余额
         if (StringUtils.pathEquals(MemberFreezeBalanceSwitchEnum.FREEZE_BALANCE_SWITCH_N.getCode(), memberTransConfine.getFreezeBalanceSwitch())) {
             orderInfo.setReleaseStatus(OrderReleaseStatusEnum.RELEASE_STATUS_D.getCode());
-            orderInfo.setSplitProfitStatus(OrderSplitProfitStatusEnum.SPLIT_PROFIT_STATUS_N.getCode());
             return orderInfo;
         }
 
@@ -123,7 +122,6 @@ public class PlaceOrder extends BaseOrder {
         }
 
         orderInfo.setReleaseStatus(OrderReleaseStatusEnum.RELEASE_STATUS_N.getCode());
-        orderInfo.setSplitProfitStatus(OrderSplitProfitStatusEnum.SPLIT_PROFIT_STATUS_N.getCode());
         return orderInfo;
     }
 
@@ -147,11 +145,12 @@ public class PlaceOrder extends BaseOrder {
         // 验证链及渠道
         OrderManagerValidate.validateChainAndChannel(chainList, memberChannelList, payOrder.getCodeMemberId());
 
-        // 获取订单信息DTO
+        // 获取订单信息DTO及DO
         OrderInfoDTO orderInfo = OrderManagerConvert.getOrderInfoDTO(payOrder);
+        OrderInfoDO orderInfoDO = OrderManagerConvert.getOrderInfoDO(payOrder, OrderSplitProfitStatusEnum.SPLIT_PROFIT_STATUS_N.getCode());
 
         // 更新订单状态
-        int update = orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(orderInfo.getOrderId(), orderInfo.getOrderStatus(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());
+        int update = orderInfoDao.updateOrderInfoByIdAndOrderStatus(orderInfoDO, OrderStatusEnum.ORDER_STATUS_NP.getCode());
         if (update != 1) {
             throw new OptimusException(RespCodeEnum.ORDER_ERROR, "订单状态异常");
         }

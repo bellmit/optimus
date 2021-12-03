@@ -40,13 +40,33 @@ public class OrderManagerConvert {
 
     /**
      * 获取订单信息DO
+     * 
+     * @param payOrder
+     * @param splitProfitStatus
+     * @return
+     */
+    public static OrderInfoDO getOrderInfoDO(PayOrderDTO payOrder, String splitProfitStatus) {
+
+        // 订单信息DO
+        OrderInfoDO orderInfo = new OrderInfoDO();
+
+        orderInfo.setId(payOrder.getId());
+        orderInfo.setOrderStatus(payOrder.getOrderStatus());
+        orderInfo.setSplitProfitStatus(splitProfitStatus);
+        orderInfo.setUpdateTime(DateUtil.currentDate());
+
+        return orderInfo;
+    }
+
+    /**
+     * 获取订单信息DO
      *
      * @param orderInfo
      * @return
      */
     public static OrderInfoDO getOrderInfoDO(OrderInfoDTO orderInfo) {
 
-        // 订单信息DTO
+        // 订单信息DO
         OrderInfoDO orderInfoDO = new OrderInfoDO();
         BeanUtils.copyProperties(orderInfo, orderInfoDO);
 
