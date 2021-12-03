@@ -45,7 +45,7 @@ public class MemberManagerImpl implements MemberManager {
     private MemberTransConfineDao memberTransConfineDao;
 
     @Override
-    public BigDecimal getFee(BigDecimal orderAmount, MemberTransConfineDTO memberTransConfine) {
+    public BigDecimal getFeeForWithdraw(BigDecimal orderAmount, MemberTransConfineDTO memberTransConfine) {
 
         // 验证会员交易限制
         if (!StringUtils.pathEquals(MemberWithdrawFeeSwitchEnum.WITHDRAW_FEE_SWITCH_Y.getCode(), memberTransConfine.getWithdrawFeeSwitch())) {

@@ -76,8 +76,8 @@ public class WithdrawOrder extends BaseOrder {
         // 订单信息DTO
         OrderInfoDTO orderInfo = OrderManagerConvert.getOrderInfoDTO(createOrder);
 
-        // 计算手续费
-        BigDecimal fee = memberManager.getFee(createOrder.getOrderAmount(), memberTransConfine);
+        // 获取提现手续费
+        BigDecimal fee = memberManager.getFeeForWithdraw(createOrder.getOrderAmount(), memberTransConfine);
         orderInfo.setFee(fee);
 
         // 手续费收取方式为到账余额:实际金额与订单金额一致
@@ -94,12 +94,10 @@ public class WithdrawOrder extends BaseOrder {
         List<DoTransDTO> doTransList = new ArrayList<>();
 
         // 减一笔余额
-        DoTransDTO bMinus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_MINUS, orderInfo, "提现减余额户");
-        doTransList.add(bMinus);
+        doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_MINUS, orderInfo, "提现减余额户"));
 
         // 加一笔冻结
-        DoTransDTO fPlus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_PLUS, orderInfo, "提现加冻结户");
-        doTransList.add(fPlus);
+        doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_PLUS, orderInfo, "提现加冻结户"));
 
         boolean doTrans = accountManager.doTrans(doTransList);
 
@@ -124,12 +122,10 @@ public class WithdrawOrder extends BaseOrder {
             // 回账
             List<DoTransDTO> doTransList = new ArrayList<>();
             // 加一笔余额
-            DoTransDTO bPlus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_PLUS, payOrder, "提现驳回加余额户");
-            doTransList.add(bPlus);
+            doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_PLUS, payOrder, "提现驳回加余额户"));
 
             // 减一笔冻结
-            DoTransDTO fMinus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_MINUS, payOrder, "提现驳回减冻结户");
-            doTransList.add(fMinus);
+            doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_MINUS, payOrder, "提现驳回减冻结户"));
 
             boolean doTrans = accountManager.doTrans(doTransList);
 
@@ -144,8 +140,7 @@ public class WithdrawOrder extends BaseOrder {
         List<DoTransDTO> doTransList = new ArrayList<>();
 
         // 减一笔冻结
-        DoTransDTO fMinus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_MINUS, payOrder, "提现确认减冻结户");
-        doTransList.add(fMinus);
+        doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_MINUS, payOrder, "提现确认减冻结户"));
 
         // 如果有手续费,则平台加一笔手续费
         if (Objects.nonNull(payOrder.getFee()) && payOrder.getFee().compareTo(BigDecimal.ZERO) > 0) {

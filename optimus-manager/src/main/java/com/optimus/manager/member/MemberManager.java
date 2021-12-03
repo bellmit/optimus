@@ -15,7 +15,7 @@ import com.optimus.manager.member.dto.MemberTransConfineDTO;
 public interface MemberManager {
 
     /**
-     * 获取手续费
+     * 获取提现手续费
      *
      * @param orderAmount
      *            订单金额
@@ -23,7 +23,7 @@ public interface MemberManager {
      *            交易限制
      * @return
      */
-    BigDecimal getFee(BigDecimal orderAmount, MemberTransConfineDTO memberTransConfine);
+    BigDecimal getFeeForWithdraw(BigDecimal orderAmount, MemberTransConfineDTO memberTransConfine);
 
     /**
      * 根据主键编号查询会员信息
