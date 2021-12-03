@@ -82,7 +82,7 @@ public abstract class BaseOrderJob {
             return shardingMap;
 
         } catch (OptimusException e) {
-            log.error("未配置定时任务分片异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
+            log.error("定时任务分片异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
             return null;
         } catch (Exception e) {
             log.error("系统异常:", e);

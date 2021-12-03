@@ -2,7 +2,7 @@
 <configuration debug="false">
 
     <!-- log address -->
-    <property name="LOG-HOME" value="/Users/admin/logs" />
+    <property name="LOG-HOME" value="${LOG_PATH}" />
     <!-- app name -->
     <property name="APP-NAME" value="optimus" />
 
