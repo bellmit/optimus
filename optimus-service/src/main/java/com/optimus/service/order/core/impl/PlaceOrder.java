@@ -147,14 +147,14 @@ public class PlaceOrder extends BaseOrder {
         // 验证链及渠道
         OrderManagerValidate.validateChainAndChannel(chainList, memberChannelList, payOrder.getCodeMemberId());
 
+        // 获取订单信息DTO
+        OrderInfoDTO orderInfo = OrderManagerConvert.getOrderInfoDTO(payOrder);
+
         // 更新订单状态
-        int update = orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(payOrder.getOrderId(), payOrder.getOrderStatus(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());
+        int update = orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(orderInfo.getOrderId(), orderInfo.getOrderStatus(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());
         if (update != 1) {
             throw new OptimusException(RespCodeEnum.ORDER_ERROR, "订单状态异常");
         }
-
-        // 获取订单信息DTO
-        OrderInfoDTO orderInfo = OrderManagerConvert.getOrderInfoDTO(payOrder);
 
         // 异步释放订单
         orderManager.asyncRelease(orderInfo);

@@ -158,9 +158,9 @@ public class ChannelOrderQueryJob extends BaseOrderJob {
         query.setShard(shardingMap.entrySet().stream().findFirst().get().getKey());
         query.setTotalShard(shardingMap.entrySet().stream().findFirst().get().getValue());
         query.setLastTime(DateUtil.offsetForMinute(DateUtil.currentDate(), -channelOrderQueryInterval));
-        query.setChannelOrderQueryCount(channelOrderQueryCount);
-        query.setOrderStatus(OrderStatusEnum.ORDER_STATUS_NP.getCode());
         query.setOrderType(OrderTypeEnum.ORDER_TYPE_C.getCode());
+        query.setOrderStatus(OrderStatusEnum.ORDER_STATUS_NP.getCode());
+        query.setChannelOrderQueryCount(channelOrderQueryCount);
 
         return query;
 

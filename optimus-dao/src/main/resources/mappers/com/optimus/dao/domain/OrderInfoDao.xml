@@ -75,11 +75,26 @@
     <include refid="Base_Column_List" />
     from T_ORDER_INFO
     <where>
+      <if test="shard != null and totalShard != null">
+        and ID % #{totalShard,jdbcType=NUMERIC} = #{shard,jdbcType=NUMERIC}
+      </if>
+      <if test="initTime != null">
+        and CREATE_TIME &lt;= #{initTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="lastTime != null">
+        and UPDATE_TIME &lt; #{lastTime,jdbcType=TIMESTAMP}
+      </if>
       <if test="orderType != null">
         and ORDER_TYPE = #{orderType,jdbcType=VARCHAR}
       </if>
       <if test="orderStatus != null">
         and ORDER_STATUS = #{orderStatus,jdbcType=VARCHAR}
+      </if>
+      <if test="releaseStatus != null">
+        and RELEASE_STATUS = #{releaseStatus,jdbcType=VARCHAR}
+      </if>
+      <if test="splitProfitStatus != null">
+        and SPLIT_PROFIT_STATUS = #{splitProfitStatus,jdbcType=VARCHAR}
       </if>
       <if test="merchantNotifyStatus != null">
         and MERCHANT_NOTIFY_STATUS != #{merchantNotifyStatus,jdbcType=VARCHAR}
@@ -89,12 +104,6 @@
       </if>
       <if test="channelOrderQueryCount != null">
         and CHANNEL_ORDER_QUERY_COUNT &lt; #{channelOrderQueryCount,jdbcType=NUMERIC}
-      </if>
-      <if test="lastTime != null">
-        and UPDATE_TIME &lt; #{lastTime,jdbcType=TIMESTAMP}
-      </if>
-      <if test="shard != null and totalShard != null">
-        and ID % #{totalShard,jdbcType=NUMERIC} = #{shard,jdbcType=NUMERIC}
       </if>
     </where>
     order by ID

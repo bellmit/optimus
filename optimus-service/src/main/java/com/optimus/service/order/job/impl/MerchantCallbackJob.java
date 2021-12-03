@@ -149,10 +149,10 @@ public class MerchantCallbackJob extends BaseOrderJob {
         query.setShard(shardingMap.entrySet().stream().findFirst().get().getKey());
         query.setTotalShard(shardingMap.entrySet().stream().findFirst().get().getValue());
         query.setLastTime(DateUtil.offsetForMinute(DateUtil.currentDate(), -merchantCallbackInterval));
-        query.setMerchantCallbackCount(merchantCallbackCount);
-        query.setMerchantNotifyStatus(OrderMerchantNotifyStatusEnum.MERCHANT_NOTIFY_STATUS_NS.getCode());
-        query.setOrderStatus(OrderStatusEnum.ORDER_STATUS_AP.getCode());
         query.setOrderType(OrderTypeEnum.ORDER_TYPE_C.getCode());
+        query.setOrderStatus(OrderStatusEnum.ORDER_STATUS_AP.getCode());
+        query.setMerchantNotifyStatus(OrderMerchantNotifyStatusEnum.MERCHANT_NOTIFY_STATUS_NS.getCode());
+        query.setMerchantCallbackCount(merchantCallbackCount);
 
         return query;
 
