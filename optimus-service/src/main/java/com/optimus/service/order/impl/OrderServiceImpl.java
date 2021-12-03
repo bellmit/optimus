@@ -74,8 +74,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderInfoDTO createOrder(CreateOrderDTO createOrder) {
 
-        // 验证上游订单是否重复
-        orderManager.checkCallerOrderId(createOrder.getCallerOrderId());
+        // 订单幂等
+        Long id = orderManager.idempotent(OrderManagerConvert.getOrderInfoDTO(createOrder));
+        AssertUtil.notEmpty(id, RespCodeEnum.ORDER_ERROR, "订单幂等异常");
 
         // 订单工厂实例
         BaseOrder baseOrder = orderFactory.getOrderInstance(createOrder.getOrderType());
@@ -88,8 +89,8 @@ public class OrderServiceImpl implements OrderService {
         OrderInfoDTO orderInfo = baseOrder.createOrder(createOrder);
         orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_NP.getCode());
 
-        // 落库
-        orderInfoDao.addOrderInfo(OrderManagerConvert.getOrderInfoDO(orderInfo));
+        // 更新订单信息
+        orderInfoDao.updateOrderInfo(OrderManagerConvert.getOrderInfoDO(orderInfo));
 
         return orderInfo;
 

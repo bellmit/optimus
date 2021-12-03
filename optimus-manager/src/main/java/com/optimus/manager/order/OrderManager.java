@@ -15,12 +15,12 @@ import com.optimus.manager.order.validate.OrderManagerValidate;
 public interface OrderManager {
 
     /**
-     * 检查上游单号重复
+     * 幂等
      *
-     * @param callerOrderId
+     * @param orderInfo
      * @return
      */
-    void checkCallerOrderId(String callerOrderId);
+    Long idempotent(OrderInfoDTO orderInfo);
 
     /**
      * 释放订单

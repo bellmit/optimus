@@ -20,14 +20,14 @@ import com.optimus.web.collect.resp.PlaceOrderResp;
 public class CollectControllerConvert {
 
     /**
-     * 获取网关渠道DTO
+     * 获取创建订单DTO
      * 
      * @param req
      * @return
      */
     public static CreateOrderDTO getCreateOrderDTO(PlaceOrderReq req) {
 
-        // 网关渠道DTO
+        // 创建订单DTO
         CreateOrderDTO createOrder = new CreateOrderDTO();
         createOrder.setMemberId(req.getMemberId());
         createOrder.setCallerOrderId(req.getCallerOrderId());

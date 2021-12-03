@@ -62,13 +62,27 @@ public class OrderManagerImpl implements OrderManager {
     private OrderInfoDao orderInfoDao;
 
     @Override
-    public void checkCallerOrderId(String callerOrderId) {
+    public Long idempotent(OrderInfoDTO orderInfo) {
 
         // 查询订单信息
-        OrderInfoDO orderInfo = orderInfoDao.getOrderInfoByCallerOrderId(callerOrderId);
+        OrderInfoDO orderInfoDO = orderInfoDao.getOrderInfoByCallerOrderId(orderInfo.getCallerOrderId());
+        AssertUtil.empty(orderInfoDO, RespCodeEnum.ORDER_EXIST_ERROR, null);
 
-        // 验证订单是否存在
-        AssertUtil.empty(orderInfo, RespCodeEnum.ORDER_EXIST_ERROR, null);
+        try {
+
+            // 获取订单信息DO
+            orderInfoDO = OrderManagerConvert.getOrderInfoDO(orderInfo);
+
+            // 新增订单信息
+            orderInfoDao.addOrderInfo(orderInfoDO);
+
+        } catch (Exception e) {
+            log.error("订单幂等异常:", e);
+            return null;
+        }
+
+        // 返回订单信息主键
+        return orderInfoDO.getId();
 
     }
 

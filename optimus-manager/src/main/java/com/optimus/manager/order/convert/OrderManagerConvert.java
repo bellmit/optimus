@@ -39,45 +39,6 @@ import org.springframework.util.StringUtils;
 public class OrderManagerConvert {
 
     /**
-     * 获取订单信息DO
-     * 
-     * @param payOrder
-     * @param splitProfitStatus
-     * @return
-     */
-    public static OrderInfoDO getOrderInfoDO(PayOrderDTO payOrder, String splitProfitStatus) {
-
-        // 订单信息DO
-        OrderInfoDO orderInfo = new OrderInfoDO();
-
-        orderInfo.setId(payOrder.getId());
-        orderInfo.setOrderStatus(payOrder.getOrderStatus());
-        orderInfo.setSplitProfitStatus(splitProfitStatus);
-        orderInfo.setUpdateTime(DateUtil.currentDate());
-
-        return orderInfo;
-    }
-
-    /**
-     * 获取订单信息DO
-     *
-     * @param orderInfo
-     * @return
-     */
-    public static OrderInfoDO getOrderInfoDO(OrderInfoDTO orderInfo) {
-
-        // 订单信息DO
-        OrderInfoDO orderInfoDO = new OrderInfoDO();
-        BeanUtils.copyProperties(orderInfo, orderInfoDO);
-
-        orderInfoDO.setCreateTime(DateUtil.currentDate());
-        orderInfoDO.setUpdateTime(DateUtil.currentDate());
-        orderInfoDO.setOrderTime(DateUtil.currentDate());
-
-        return orderInfoDO;
-    }
-
-    /**
      * 获取账户交易List
      * 
      * @param orderInfo
@@ -163,6 +124,45 @@ public class OrderManagerConvert {
         });
 
         return doTransList;
+    }
+
+    /**
+     * 获取订单信息DO
+     * 
+     * @param payOrder
+     * @param splitProfitStatus
+     * @return
+     */
+    public static OrderInfoDO getOrderInfoDO(PayOrderDTO payOrder, String splitProfitStatus) {
+
+        // 订单信息DO
+        OrderInfoDO orderInfo = new OrderInfoDO();
+
+        orderInfo.setId(payOrder.getId());
+        orderInfo.setOrderStatus(payOrder.getOrderStatus());
+        orderInfo.setSplitProfitStatus(splitProfitStatus);
+        orderInfo.setUpdateTime(DateUtil.currentDate());
+
+        return orderInfo;
+    }
+
+    /**
+     * 获取订单信息DO
+     *
+     * @param orderInfo
+     * @return
+     */
+    public static OrderInfoDO getOrderInfoDO(OrderInfoDTO orderInfo) {
+
+        // 订单信息DO
+        OrderInfoDO orderInfoDO = new OrderInfoDO();
+        BeanUtils.copyProperties(orderInfo, orderInfoDO);
+
+        orderInfoDO.setCreateTime(DateUtil.currentDate());
+        orderInfoDO.setUpdateTime(DateUtil.currentDate());
+        orderInfoDO.setOrderTime(DateUtil.currentDate());
+
+        return orderInfoDO;
     }
 
     /**

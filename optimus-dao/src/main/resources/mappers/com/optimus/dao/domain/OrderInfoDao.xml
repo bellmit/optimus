@@ -111,7 +111,7 @@
     fetch next #{page.pageSize,jdbcType=NUMERIC} rows only
   </select>
 
-  <insert id="addOrderInfo" parameterType="com.optimus.dao.domain.OrderInfoDO">
+  <insert id="addOrderInfo" parameterType="com.optimus.dao.domain.OrderInfoDO" useGeneratedKeys="true" keyProperty="id">
     insert into T_ORDER_INFO
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
