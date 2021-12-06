@@ -188,8 +188,8 @@ public class CollectController {
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
 
         // 验证会员类型
-        if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType()) && !StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_M.getCode(), memberInfo.getMemberType())) {
-            throw new OptimusException(RespCodeEnum.MEMBER_ERROR, "会员类型必须为代理或管理");
+        if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_M.getCode(), memberInfo.getMemberType()) && !StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType())) {
+            throw new OptimusException(RespCodeEnum.MEMBER_ERROR, "会员类型必须为管理或代理");
         }
 
         // 创建订单
@@ -291,8 +291,8 @@ public class CollectController {
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
 
         // 验证会员类型
-        if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType()) && !StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_M.getCode(), memberInfo.getMemberType())) {
-            throw new OptimusException(RespCodeEnum.MEMBER_ERROR, "会员类型必须为代理或管理");
+        if (!StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_M.getCode(), memberInfo.getMemberType()) && !StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_A.getCode(), memberInfo.getMemberType())) {
+            throw new OptimusException(RespCodeEnum.MEMBER_ERROR, "会员类型必须为管理或代理");
         }
 
         // 创建订单
