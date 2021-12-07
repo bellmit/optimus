@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 
 import com.optimus.dao.mapper.OrderInfoDao;
 import com.optimus.manager.account.AccountManager;
+import com.optimus.manager.account.dto.AccountInfoDTO;
 import com.optimus.manager.account.dto.DoTransDTO;
 import com.optimus.manager.order.convert.OrderManagerConvert;
 import com.optimus.manager.order.dto.CreateOrderDTO;
@@ -16,6 +17,7 @@ import com.optimus.service.order.core.BaseOrder;
 import com.optimus.util.DateUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.account.AccountChangeTypeEnum;
+import com.optimus.util.constants.account.AccountTypeEnum;
 import com.optimus.util.constants.member.MemberTypeEnum;
 import com.optimus.util.constants.order.OrderConfirmTypeEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
@@ -70,14 +72,7 @@ public class RechargeOrder extends BaseOrder {
             return;
         }
 
-        // 更新订单状态
-        int update = orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_AP.getCode(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());
-        if (update != 1) {
-            throw new OptimusException(RespCodeEnum.ORDER_ERROR, "订单状态异常");
-        }
-
-        // 通过
-        // 记账
+        // 记账List
         List<DoTransDTO> doTransList = new ArrayList<>();
 
         // 加一笔余额
@@ -86,10 +81,29 @@ public class RechargeOrder extends BaseOrder {
         // 如果是码商给下级充值,则码商自己需要减一笔余额
         // 若supMemberInfo为空,则作为异常处理
         if (StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_C.getCode(), payOrder.getSupMemberInfo().getMemberType())) {
+
+            // 验证账户余额是否充足
+            AccountInfoDTO accountInfo = accountManager.getAccountInfoByMemberIdAndAccountType(payOrder.getSupMemberInfo().getMemberId(), AccountTypeEnum.ACCOUNT_TYPE_B.getCode());
+            if (accountInfo.getAmount().compareTo(payOrder.getOrderAmount()) < 0) {
+                throw new OptimusException(RespCodeEnum.ACCOUNT_AMOUNT_ERROR);
+            }
+
+            // 注意:减上级码商余额
+            DoTransDTO bMinus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_MINUS, payOrder, "充值减余额");
+            bMinus.setMemberId(payOrder.getSupMemberInfo().getMemberId());
+
             // 减一笔余额
-            doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_MINUS, payOrder, "充值减余额"));
+            doTransList.add(bMinus);
+
         }
 
+        // 更新订单状态
+        int update = orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_AP.getCode(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());
+        if (update != 1) {
+            throw new OptimusException(RespCodeEnum.ORDER_ERROR, "订单状态异常");
+        }
+
+        // 记账
         boolean doTrans = accountManager.doTrans(doTransList);
 
         // 账户交易失败,回滚订单状态

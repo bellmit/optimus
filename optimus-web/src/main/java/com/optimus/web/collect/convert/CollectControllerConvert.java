@@ -92,6 +92,7 @@ public class CollectControllerConvert {
         CreateOrderDTO createOrder = new CreateOrderDTO();
 
         createOrder.setMemberId(req.getSubDirectMemberId());
+        createOrder.setSupMemberId(req.getMemberId());
         createOrder.setOrderAmount(req.getAmount());
         createOrder.setCallerOrderId(req.getCallerOrderId());
 
@@ -111,6 +112,7 @@ public class CollectControllerConvert {
         CreateOrderDTO createOrder = new CreateOrderDTO();
 
         createOrder.setMemberId(req.getSubDirectMemberId());
+        createOrder.setSupMemberId(req.getMemberId());
         createOrder.setOrderAmount(req.getAmount());
         createOrder.setCallerOrderId(req.getCallerOrderId());
 
@@ -148,6 +150,7 @@ public class CollectControllerConvert {
         PayOrderDTO payOrder = new PayOrderDTO();
 
         payOrder.setMemberId(orderInfo.getMemberId());
+        payOrder.setSupMemberId(orderInfo.getSupMemberId());
         payOrder.setOrderId(orderInfo.getOrderId());
         payOrder.setActualAmount(orderInfo.getActualAmount());
         payOrder.setOrderAmount(orderInfo.getOrderAmount());

@@ -1,5 +1,6 @@
 package com.optimus.manager.account.convert;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,7 +57,7 @@ public class AccountManagerConvert {
             accountInfo = accountInfoMap.get(key);
 
             accountInfo.setAmount(item.getAmount());
-            if (StringUtils.pathEquals(AccountFlowEnum.FLOW_S.getCode(), symbol)) {
+            if (StringUtils.pathEquals(AccountFlowEnum.FLOW_S.getSymbol(), symbol)) {
                 accountInfo.setAmount(item.getAmount().negate());
             }
 
@@ -103,24 +104,22 @@ public class AccountManagerConvert {
             }
 
             AccountInfoDO accountInfo = accountInfoMap.get(key);
+            BigDecimal beforeChangeAmount = accountInfo.getAmount().subtract(item.getAmount());
+            if (StringUtils.pathEquals(AccountFlowEnum.FLOW_S.getSymbol(), symbol)) {
+                beforeChangeAmount = accountInfo.getAmount().add(item.getAmount());
+            }
 
             accountLog = new AccountLogDO();
-
             accountLog.setAccountId(accountInfo.getAccountId());
             accountLog.setOrderId(item.getOrderId());
             accountLog.setAmount(item.getAmount());
-            accountLog.setBeforeChangeAmount(accountInfo.getAmount().subtract(item.getAmount()));
+            accountLog.setBeforeChangeAmount(beforeChangeAmount);
             accountLog.setAfterChangeAmount(accountInfo.getAmount());
             accountLog.setChangeType(changeType);
             accountLog.setRemark(item.getRemark());
             accountLog.setCreateTime(DateUtil.currentDate());
             accountLog.setUpdateTime(DateUtil.currentDate());
-
-            AccountFlowEnum accountFlowEnum = AccountFlowEnum.instanceOfSymbol(symbol);
-            if (accountFlowEnum == null) {
-                return null;
-            }
-            accountLog.setFlow(accountFlowEnum.getCode());
+            accountLog.setFlow(AccountFlowEnum.instanceOfSymbol(symbol).getCode());
 
             accountLogList.add(accountLog);
 

@@ -122,6 +122,7 @@ public class CollectController {
         // 支付订单
         PayOrderDTO payOrder = CollectControllerConvert.getPayOrderDTO(orderInfo);
         payOrder.setConfirmType(req.getConfirmType());
+        payOrder.setSupMemberId(req.getMemberId());
         payOrder.setSupMemberInfo(memberInfo);
         orderService.payOrder(payOrder);
 
@@ -227,6 +228,7 @@ public class CollectController {
         // 支付订单
         PayOrderDTO payOrder = CollectControllerConvert.getPayOrderDTO(orderInfo);
         payOrder.setConfirmType(req.getConfirmType());
+        payOrder.setSupMemberId(req.getMemberId());
         payOrder.setSupMemberInfo(memberInfo);
         orderService.payOrder(payOrder);
 
