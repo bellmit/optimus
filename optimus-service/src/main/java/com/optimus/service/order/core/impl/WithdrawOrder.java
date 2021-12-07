@@ -119,6 +119,13 @@ public class WithdrawOrder extends BaseOrder {
         // 驳回
         if (StringUtils.pathEquals(OrderConfirmTypeEnum.CONFIRM_TYPE_R.getCode(), payOrder.getConfirmType())) {
 
+            // 更新订单状态
+            int update = orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_AC.getCode(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());
+            if (update != 1) {
+                throw new OptimusException(RespCodeEnum.ORDER_ERROR, "订单状态异常");
+            }
+
+            // 回滚
             doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_PLUS, payOrder, "提现驳回加余额户"));
             doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_MINUS, payOrder, "提现驳回减冻结户"));
 
@@ -136,14 +143,11 @@ public class WithdrawOrder extends BaseOrder {
 
         // 如果有手续费,则平台加一笔手续费
         if (Objects.nonNull(payOrder.getFee()) && payOrder.getFee().compareTo(BigDecimal.ZERO) > 0) {
-            // 平台加一笔
-            DoTransDTO sysTrans = new DoTransDTO();
-            sysTrans.setMemberId(memberManager.getSystemMemberId(payOrder.getMemberId()));
-            sysTrans.setOrderId(payOrder.getOrderId());
-            sysTrans.setChangeType(AccountChangeTypeEnum.P_PLUS.getCode());
-            sysTrans.setAmount(payOrder.getFee());
-            sysTrans.setRemark("提现手续费");
-            doTransList.add(sysTrans);
+            // 查询平台会员编号
+            String systemMemberId = memberManager.getSystemMemberId(payOrder.getMemberId());
+
+            // 平台收取手续费
+            doTransList.add(new DoTransDTO(systemMemberId, payOrder.getOrderId(), payOrder.getOrderType(), AccountChangeTypeEnum.P_PLUS.getCode(), payOrder.getFee(), "提现手续费"));
         }
 
         // 更新订单状态
@@ -157,7 +161,7 @@ public class WithdrawOrder extends BaseOrder {
 
         // 账户交易失败,回滚订单状态
         if (!doTrans) {
-            orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), OrderStatusEnum.ORDER_STATUS_AP.getCode(), DateUtil.currentDate());
+            orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_AF.getCode(), OrderStatusEnum.ORDER_STATUS_AP.getCode(), DateUtil.currentDate());
             throw new OptimusException(RespCodeEnum.ORDER_PLACE_ERROR, "订单记账异常");
         }
 
