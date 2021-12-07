@@ -132,6 +132,7 @@ public class WithdrawOrder extends BaseOrder {
             // 记账
             boolean doTrans = accountManager.doTrans(doTransList);
             if (!doTrans) {
+                orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_AF.getCode(), OrderStatusEnum.ORDER_STATUS_AC.getCode(), DateUtil.currentDate());
                 throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "驳回冻结余额异常");
             }
 
