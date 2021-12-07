@@ -183,6 +183,7 @@ public class OrderManagerConvert {
         doTrans.setOrderId(payOrder.getOrderId());
         doTrans.setOrderType(payOrder.getOrderType());
         doTrans.setAmount(payOrder.getActualAmount());
+        doTrans.setRemark(remark);
 
         return doTrans;
 
@@ -206,6 +207,7 @@ public class OrderManagerConvert {
         doTrans.setOrderId(orderInfo.getOrderId());
         doTrans.setOrderType(orderInfo.getOrderType());
         doTrans.setAmount(orderInfo.getActualAmount());
+        doTrans.setRemark(remark);
 
         return doTrans;
 

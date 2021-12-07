@@ -95,6 +95,7 @@ public class RechargeOrder extends BaseOrder {
         // 账户交易失败,回滚订单状态
         if (!doTrans) {
             orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), OrderStatusEnum.ORDER_STATUS_AP.getCode(), DateUtil.currentDate());
+            throw new OptimusException(RespCodeEnum.ORDER_PLACE_ERROR, "订单记账异常");
         }
 
     }

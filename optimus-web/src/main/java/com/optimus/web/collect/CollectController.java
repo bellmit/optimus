@@ -121,6 +121,8 @@ public class CollectController {
 
         // 支付订单
         PayOrderDTO payOrder = CollectControllerConvert.getPayOrderDTO(orderInfo);
+        payOrder.setConfirmType(req.getConfirmType());
+        payOrder.setSupMemberInfo(memberInfo);
         orderService.payOrder(payOrder);
 
         return new ConfirmForRechargeResp();
@@ -159,9 +161,8 @@ public class CollectController {
         OrderInfoDTO orderInfo = orderService.createOrder(createOrder);
 
         // 支付订单
-        PayOrderDTO payOrder = CollectControllerConvert.getPayOrderDTO(orderInfo);
-
         // 注意:由于后面的订单信息的会员ID是下级的,所以这里会员信息看作是上级会员
+        PayOrderDTO payOrder = CollectControllerConvert.getPayOrderDTO(orderInfo);
         payOrder.setSupMemberInfo(memberInfo);
         orderService.payOrder(payOrder);
 
@@ -189,7 +190,6 @@ public class CollectController {
         // 创建订单
         CreateOrderDTO createOrder = CollectControllerConvert.getCreateOrderDTO(req);
         createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_W.getCode());
-
         orderService.createOrder(createOrder);
 
         // 响应信息
@@ -226,6 +226,7 @@ public class CollectController {
 
         // 支付订单
         PayOrderDTO payOrder = CollectControllerConvert.getPayOrderDTO(orderInfo);
+        payOrder.setConfirmType(req.getConfirmType());
         payOrder.setSupMemberInfo(memberInfo);
         orderService.payOrder(payOrder);
 

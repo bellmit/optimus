@@ -399,7 +399,7 @@
     </if>
   </update>
 
-  <update id="updateOrderStatusByOrderIdAndOrderStatus">
+  <update id="updateOrderInfoByOrderIdAndOrderStatus">
     update T_ORDER_INFO
     set ORDER_STATUS = #{orderStatus,jdbcType=VARCHAR},
         UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}

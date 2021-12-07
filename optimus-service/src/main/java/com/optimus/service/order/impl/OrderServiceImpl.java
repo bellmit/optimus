@@ -74,6 +74,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderInfoDTO createOrder(CreateOrderDTO createOrder) {
 
+        // 订单编号
+        createOrder.setOrderId(GenerateUtil.generate(createOrder.getOrderType()));
+
         // 订单幂等
         Long id = orderManager.idempotent(OrderManagerConvert.getOrderInfoDTO(createOrder));
         AssertUtil.notEmpty(id, RespCodeEnum.ORDER_ERROR, "订单幂等异常");
@@ -82,11 +85,9 @@ public class OrderServiceImpl implements OrderService {
         BaseOrder baseOrder = orderFactory.getOrderInstance(createOrder.getOrderType());
         AssertUtil.notEmpty(baseOrder, RespCodeEnum.ORDER_ERROR, "订单类型异常");
 
-        // 生成订单编号
-        createOrder.setOrderId(GenerateUtil.generate(createOrder.getOrderType()));
-
         // 工厂处理订单信息
         OrderInfoDTO orderInfo = baseOrder.createOrder(createOrder);
+        orderInfo.setId(id);
         orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_NP.getCode());
 
         // 更新订单信息

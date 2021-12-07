@@ -80,6 +80,7 @@ public class AccountManagerImpl implements AccountManager {
 
         } catch (OptimusException e) {
             log.error("账户交易异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return false;
         } catch (Exception e) {
             log.error("账户交易异常:", e);
@@ -157,7 +158,7 @@ public class AccountManagerImpl implements AccountManager {
         log.info("addBatchAccountLog accountLogList is {}", accountLogList);
 
         // 验证获取的账户日志
-        AssertUtil.empty(accountLogList, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易账户日志为空");
+        AssertUtil.notEmpty(accountLogList, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易账户日志不能为空");
 
         // 记录账户日志
         accountLogDao.addBatchAccountLog(accountLogList);
