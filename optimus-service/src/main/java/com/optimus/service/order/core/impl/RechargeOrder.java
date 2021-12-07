@@ -85,6 +85,7 @@ public class RechargeOrder extends BaseOrder {
             // 验证账户余额是否充足
             AccountInfoDTO accountInfo = accountManager.getAccountInfoByMemberIdAndAccountType(payOrder.getSupMemberInfo().getMemberId(), AccountTypeEnum.ACCOUNT_TYPE_B.getCode());
             if (accountInfo.getAmount().compareTo(payOrder.getOrderAmount()) < 0) {
+                orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_AC.getCode(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());
                 throw new OptimusException(RespCodeEnum.ACCOUNT_AMOUNT_ERROR);
             }
 
@@ -108,7 +109,7 @@ public class RechargeOrder extends BaseOrder {
 
         // 账户交易失败,回滚订单状态
         if (!doTrans) {
-            orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), OrderStatusEnum.ORDER_STATUS_AP.getCode(), DateUtil.currentDate());
+            orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_AC.getCode(), OrderStatusEnum.ORDER_STATUS_AP.getCode(), DateUtil.currentDate());
             throw new OptimusException(RespCodeEnum.ORDER_PLACE_ERROR, "订单记账异常");
         }
 
