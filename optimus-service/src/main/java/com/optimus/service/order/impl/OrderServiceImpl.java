@@ -18,10 +18,13 @@ import com.optimus.util.AssertUtil;
 import com.optimus.util.GenerateUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
+import com.optimus.util.exception.OptimusException;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 订单ServiceImpl
@@ -29,6 +32,7 @@ import org.springframework.stereotype.Service;
  * @author sunxp
  */
 @Service
+@Slf4j
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
@@ -72,6 +76,19 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public void updateOrderinfoToFail(Long id) {
+
+        // 订单信息
+        OrderInfoDTO orderInfo = new OrderInfoDTO();
+        orderInfo.setId(id);
+        orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_AF.getCode());
+
+        // 更新订单信息
+        orderInfoDao.updateOrderInfo(OrderManagerConvert.getOrderInfoDO(orderInfo));
+
+    }
+
+    @Override
     public OrderInfoDTO createOrder(CreateOrderDTO createOrder) {
 
         // 订单编号
@@ -81,19 +98,37 @@ public class OrderServiceImpl implements OrderService {
         Long id = orderManager.idempotent(OrderManagerConvert.getOrderInfoDTO(createOrder));
         AssertUtil.notEmpty(id, RespCodeEnum.ORDER_ERROR, "订单幂等异常");
 
-        // 订单工厂实例
-        BaseOrder baseOrder = orderFactory.getOrderInstance(createOrder.getOrderType());
-        AssertUtil.notEmpty(baseOrder, RespCodeEnum.ORDER_ERROR, "订单类型异常");
+        try {
 
-        // 工厂处理订单信息
-        OrderInfoDTO orderInfo = baseOrder.createOrder(createOrder);
-        orderInfo.setId(id);
-        orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_NP.getCode());
+            // 订单工厂实例
+            BaseOrder baseOrder = orderFactory.getOrderInstance(createOrder.getOrderType());
+            AssertUtil.notEmpty(baseOrder, RespCodeEnum.ORDER_ERROR, "订单类型异常");
 
-        // 更新订单信息
-        orderInfoDao.updateOrderInfo(OrderManagerConvert.getOrderInfoDO(orderInfo));
+            // 工厂处理订单信息
+            OrderInfoDTO orderInfo = baseOrder.createOrder(createOrder);
+            orderInfo.setId(id);
+            orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_NP.getCode());
 
-        return orderInfo;
+            // 更新订单信息
+            orderInfoDao.updateOrderInfo(OrderManagerConvert.getOrderInfoDO(orderInfo));
+
+            return orderInfo;
+
+        } catch (OptimusException e) {
+            log.error("创建订单异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
+
+            // 更新订单信息为失败
+            updateOrderinfoToFail(id);
+
+            throw e;
+        } catch (Exception e) {
+            log.error("创建订单异常:", e);
+
+            // 更新订单信息为失败
+            updateOrderinfoToFail(id);
+
+            throw new OptimusException(RespCodeEnum.FAILE);
+        }
 
     }
 

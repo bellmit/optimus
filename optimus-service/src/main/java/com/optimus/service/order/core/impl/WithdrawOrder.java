@@ -92,11 +92,7 @@ public class WithdrawOrder extends BaseOrder {
 
         // 记账
         List<DoTransDTO> doTransList = new ArrayList<>();
-
-        // 减一笔余额
         doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_MINUS, orderInfo, "提现减余额户"));
-
-        // 加一笔冻结
         doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_PLUS, orderInfo, "提现加冻结户"));
 
         boolean doTrans = accountManager.doTrans(doTransList);
@@ -117,27 +113,23 @@ public class WithdrawOrder extends BaseOrder {
     @Override
     public void payOrder(PayOrderDTO payOrder) {
 
+        // 记账List
+        List<DoTransDTO> doTransList = new ArrayList<>();
+
         // 驳回
         if (StringUtils.pathEquals(OrderConfirmTypeEnum.CONFIRM_TYPE_R.getCode(), payOrder.getConfirmType())) {
-            // 回账
-            List<DoTransDTO> doTransList = new ArrayList<>();
-            // 加一笔余额
-            doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_PLUS, payOrder, "提现驳回加余额户"));
 
-            // 减一笔冻结
+            doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_PLUS, payOrder, "提现驳回加余额户"));
             doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_MINUS, payOrder, "提现驳回减冻结户"));
 
+            // 记账
             boolean doTrans = accountManager.doTrans(doTransList);
-
-            // 账户交易失败
             if (!doTrans) {
                 throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "驳回冻结余额异常");
             }
+
             return;
         }
-
-        // 记账
-        List<DoTransDTO> doTransList = new ArrayList<>();
 
         // 减一笔冻结
         doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_MINUS, payOrder, "提现确认减冻结户"));
@@ -154,11 +146,19 @@ public class WithdrawOrder extends BaseOrder {
             doTransList.add(sysTrans);
         }
 
+        // 更新订单状态
+        int update = orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_AP.getCode(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());
+        if (update != 1) {
+            throw new OptimusException(RespCodeEnum.ORDER_ERROR, "订单状态异常");
+        }
+
+        // 记账
         boolean doTrans = accountManager.doTrans(doTransList);
 
         // 账户交易失败,回滚订单状态
         if (!doTrans) {
             orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), OrderStatusEnum.ORDER_STATUS_AP.getCode(), DateUtil.currentDate());
+            throw new OptimusException(RespCodeEnum.ORDER_PLACE_ERROR, "订单记账异常");
         }
 
     }

@@ -100,6 +100,7 @@ public class CollectController {
      * @param req
      * @return ConfirmForRechargeResp
      */
+    @OptimusRateLimiter(permits = 100D, timeout = 0)
     @PostMapping("/confirmForRecharge")
     public ConfirmForRechargeResp confirmForRecharge(@RequestBody ConfirmForRechargeReq req) {
 
@@ -135,6 +136,7 @@ public class CollectController {
      * @param req
      * @return RechargeResp
      */
+    @OptimusRateLimiter(permits = 100D, timeout = 0)
     @PostMapping("/recharge")
     public RechargeResp recharge(@RequestBody RechargeReq req) {
 

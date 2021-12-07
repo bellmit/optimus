@@ -110,11 +110,12 @@ public class PlaceOrder extends BaseOrder {
             return orderInfo;
         }
 
-        // 记账
+        // 记账List
         List<DoTransDTO> doTransList = new ArrayList<>();
         doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_MINUS, orderInfo, "下单减余额户"));
         doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_PLUS, orderInfo, "下单加冻结户"));
 
+        // 记账
         boolean doTrans = accountManager.doTrans(doTransList);
         if (!doTrans) {
             orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_AF.getCode());

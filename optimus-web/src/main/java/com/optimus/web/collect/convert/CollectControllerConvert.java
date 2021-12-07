@@ -74,6 +74,7 @@ public class CollectControllerConvert {
 
         createOrder.setMemberId(req.getMemberId());
         createOrder.setOrderAmount(req.getAmount());
+        createOrder.setCallerOrderId(req.getCallerOrderId());
 
         return createOrder;
 
@@ -133,6 +134,7 @@ public class CollectControllerConvert {
 
         createOrder.setMemberId(req.getMemberId());
         createOrder.setOrderAmount(req.getAmount());
+        createOrder.setCallerOrderId(req.getCallerOrderId());
 
         return createOrder;
 
