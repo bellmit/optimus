@@ -1,56 +1,29 @@
 package com.optimus.manager.gateway;
 
-import groovy.lang.GroovyClassLoader;
-import groovy.lang.GroovyObject;
-import groovy.lang.GroovyShell;
-import groovy.lang.Script;
+import groovy.lang.Binding;
 import groovy.util.GroovyScriptEngine;
-import groovy.util.ResourceException;
-import groovy.util.ScriptException;
-
-import java.io.File;
-import java.io.IOException;
 
 /**
  * @author hongp
  */
 public class GroovyIntoJavaDemo {
 
+    public static void main(String[] args) {
 
-    public static void main(String[] args) throws IOException, ResourceException, ScriptException {
-
-        /*
-        GroovyClassLoader
-         */
-        GroovyClassLoader loader = new GroovyClassLoader();
-        Class aClass = loader.parseClass(new File("/Users/zhouhonglin/work/groovy/Demo.groovy"));
         try {
-            GroovyObject instance = (GroovyObject) aClass.newInstance();
-            instance.invokeMethod("getExecuteScriptJson", null);
 
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+            GroovyScriptEngine engine = new GroovyScriptEngine("/Users/admin/");
 
-        /*
-        GroovyShell
-         */
-        new GroovyShell().parse(new File("/Users/zhouhonglin/work/groovy/Demo.groovy"))
-                .invokeMethod("getExecuteScriptJson", null);
+            Binding binding = new Binding();
+            binding.setVariable("codeMemberId", "123");
+            binding.setVariable("orderId", "111");
 
-        /*
-        GroovyScriptEngine
-         */
-        Class script = new GroovyScriptEngine("/Users/zhouhonglin/work/groovy/")
-                .loadScriptByName("Demo.groovy");
-        try {
-            Script instance = (Script) script.newInstance();
-            instance.invokeMethod("getExecuteScriptJson", new Object[]{});
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+            String scriptName = "demo.groovy";
+
+            Object result = engine.run(scriptName, binding);
+            System.out.println("-----" + result);
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
