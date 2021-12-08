@@ -28,6 +28,7 @@ import com.optimus.util.constants.account.AccountChangeTypeEnum;
 import com.optimus.util.constants.order.OrderMerchantNotifyStatusEnum;
 import com.optimus.util.constants.order.OrderReleaseStatusEnum;
 import com.optimus.util.constants.order.OrderSplitProfitStatusEnum;
+import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.exception.OptimusException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,20 @@ public class OrderManagerImpl implements OrderManager {
 
     @Resource
     private OrderInfoDao orderInfoDao;
+
+    @Override
+    public void updateOrderInfoToFail(Long id) {
+
+        // 订单信息
+        OrderInfoDO orderInfo = new OrderInfoDO();
+        orderInfo.setId(id);
+        orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_AF.getCode());
+        orderInfo.setUpdateTime(DateUtil.currentDate());
+
+        // 更新订单信息
+        orderInfoDao.updateOrderInfo(orderInfo);
+
+    }
 
     @Override
     public Long idempotent(OrderInfoDTO orderInfo) {

@@ -18,7 +18,7 @@ public enum AccountTypeEnum {
 
     ACCOUNT_TYPE_B("B", "余额户(管理/代理/商户/码商)"),
 
-    ACCOUNT_TYPE_F("F", "冻结户(商户/码商)"),
+    ACCOUNT_TYPE_F("F", "冻结户(管理/代理/商户/码商)"),
 
     ACCOUNT_TYPE_A("A", "预付款户(管理/代理)"),
 

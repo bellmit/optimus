@@ -9,7 +9,6 @@ import javax.annotation.Resource;
 
 import com.optimus.dao.mapper.OrderInfoDao;
 import com.optimus.manager.account.AccountManager;
-import com.optimus.manager.account.dto.AccountInfoDTO;
 import com.optimus.manager.account.dto.DoTransDTO;
 import com.optimus.manager.member.MemberManager;
 import com.optimus.manager.member.dto.MemberTransConfineDTO;
@@ -61,16 +60,13 @@ public class WithdrawOrder extends BaseOrder {
         // 验证会员交易限制
         MemberTransConfineDTO memberTransConfine = memberManager.getMemberTransConfineByMemberId(createOrder.getMemberId());
         AssertUtil.notEmpty(memberTransConfine.getCollectFeeWay(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置手续费收取方式");
+        AssertUtil.notEmpty(memberTransConfine.getWithdrawFeeSwitch(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置提现手续费开关");
+        AssertUtil.notEmpty(memberTransConfine.getSingleMinAmount(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置单笔最小金额");
+        AssertUtil.notEmpty(memberTransConfine.getSingleMaxAmount(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置单笔最大金额");
 
         // 验证提现金额:最小金额<=提现金额<=最大金额
         if (createOrder.getOrderAmount().compareTo(memberTransConfine.getSingleMaxAmount()) > 0 || createOrder.getOrderAmount().compareTo(memberTransConfine.getSingleMinAmount()) < 0) {
             throw new OptimusException(RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "金额不在限制范围内");
-        }
-
-        // 验证账户余额是否充足
-        AccountInfoDTO accountInfo = accountManager.getAccountInfoByMemberIdAndAccountType(createOrder.getMemberId(), AccountTypeEnum.ACCOUNT_TYPE_B.getCode());
-        if (accountInfo.getAmount().compareTo(createOrder.getOrderAmount()) < 0) {
-            throw new OptimusException(RespCodeEnum.ACCOUNT_AMOUNT_ERROR);
         }
 
         // 订单信息DTO
@@ -89,6 +85,9 @@ public class WithdrawOrder extends BaseOrder {
         if (StringUtils.pathEquals(MemberCollectFeeWayEnum.COLLECT_FEE_WAY_B.getCode(), memberTransConfine.getCollectFeeWay())) {
             orderInfo.setActualAmount(orderInfo.getOrderAmount().add(fee));
         }
+
+        // 验证账户金额是否充足
+        super.checkAccountAmount(createOrder.getMemberId(), createOrder.getActualAmount(), AccountTypeEnum.ACCOUNT_TYPE_B);
 
         // 记账
         List<DoTransDTO> doTransList = new ArrayList<>();
@@ -132,7 +131,6 @@ public class WithdrawOrder extends BaseOrder {
             // 记账
             boolean doTrans = accountManager.doTrans(doTransList);
             if (!doTrans) {
-                orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_AF.getCode(), OrderStatusEnum.ORDER_STATUS_AC.getCode(), DateUtil.currentDate());
                 throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "驳回冻结余额异常");
             }
 
@@ -160,9 +158,8 @@ public class WithdrawOrder extends BaseOrder {
         // 记账
         boolean doTrans = accountManager.doTrans(doTransList);
 
-        // 账户交易失败,回滚订单状态
+        // 账户交易失败
         if (!doTrans) {
-            orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_AF.getCode(), OrderStatusEnum.ORDER_STATUS_AP.getCode(), DateUtil.currentDate());
             throw new OptimusException(RespCodeEnum.ORDER_PLACE_ERROR, "订单记账异常");
         }
 

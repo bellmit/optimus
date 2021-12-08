@@ -15,6 +15,15 @@ import com.optimus.manager.order.validate.OrderManagerValidate;
 public interface OrderManager {
 
     /**
+     * 更新订单信息为订单失败
+     * 
+     * 注意:此方法不验证原状态
+     * 
+     * @param id
+     */
+    void updateOrderInfoToFail(Long id);
+
+    /**
      * 幂等
      *
      * @param orderInfo

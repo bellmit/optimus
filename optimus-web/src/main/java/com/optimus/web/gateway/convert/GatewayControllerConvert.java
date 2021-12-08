@@ -39,6 +39,7 @@ public class GatewayControllerConvert {
         // 支付订单DTO
         PayOrderDTO payOrder = new PayOrderDTO();
 
+        payOrder.setId(orderInfo.getId());
         payOrder.setOrderId(output.getOrderId());
         payOrder.setCalleeOrderId(output.getCalleeOrderId());
         payOrder.setOrderAmount(output.getAmount());

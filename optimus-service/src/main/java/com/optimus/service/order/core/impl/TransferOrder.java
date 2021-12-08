@@ -16,6 +16,7 @@ import com.optimus.service.order.core.BaseOrder;
 import com.optimus.util.DateUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.account.AccountChangeTypeEnum;
+import com.optimus.util.constants.account.AccountTypeEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.constants.order.OrderTransferTypeEnum;
 import com.optimus.util.exception.OptimusException;
@@ -52,7 +53,6 @@ public class TransferOrder extends BaseOrder {
         orderInfo.setActualAmount(createOrder.getOrderAmount());
 
         return orderInfo;
-
     }
 
     /**
@@ -66,16 +66,24 @@ public class TransferOrder extends BaseOrder {
         // 记账List
         List<DoTransDTO> doTransList = new ArrayList<>();
 
-        // 预付款户到余额户
-        if (StringUtils.pathEquals(OrderTransferTypeEnum.TRANSFER_TYPE_A2B.getCode(), payOrder.getTransferType())) {
-            doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_PLUS, payOrder, "划账加余额户"));
-            doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.A_MINUS, payOrder, "划账减预付款户"));
-        }
-
         // 余额户到预付款户
         if (StringUtils.pathEquals(OrderTransferTypeEnum.TRANSFER_TYPE_B2A.getCode(), payOrder.getTransferType())) {
+
+            // 验证账户金额是否充足
+            super.checkAccountAmount(payOrder.getMemberId(), payOrder.getOrderAmount(), AccountTypeEnum.ACCOUNT_TYPE_B);
+
             doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_MINUS, payOrder, "划账减余额户"));
             doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.A_PLUS, payOrder, "划账加预付款户"));
+        }
+
+        // 预付款户到余额户
+        if (StringUtils.pathEquals(OrderTransferTypeEnum.TRANSFER_TYPE_A2B.getCode(), payOrder.getTransferType())) {
+
+            // 验证账户金额是否充足
+            super.checkAccountAmount(payOrder.getMemberId(), payOrder.getOrderAmount(), AccountTypeEnum.ACCOUNT_TYPE_A);
+
+            doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_PLUS, payOrder, "划账加余额户"));
+            doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.A_MINUS, payOrder, "划账减预付款户"));
         }
 
         // 更新订单状态
@@ -87,11 +95,11 @@ public class TransferOrder extends BaseOrder {
         // 记账
         boolean doTrans = accountManager.doTrans(doTransList);
 
-        // 账户交易失败,回滚订单状态
+        // 账户交易失败
         if (!doTrans) {
-            orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_AF.getCode(), OrderStatusEnum.ORDER_STATUS_AP.getCode(), DateUtil.currentDate());
             throw new OptimusException(RespCodeEnum.ORDER_PLACE_ERROR, "订单记账异常");
         }
 
     }
+
 }

@@ -38,11 +38,11 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderFactory orderFactory;
 
-    @Resource
-    private OrderInfoDao orderInfoDao;
+    @Autowired
+    private OrderManager orderManager;
 
     @Resource
-    private OrderManager orderManager;
+    private OrderInfoDao orderInfoDao;
 
     @Override
     public OrderInfoDTO getOrderInfoByOrderId(String orderId) {
@@ -76,20 +76,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void updateOrderinfoToFail(Long id) {
-
-        // 订单信息
-        OrderInfoDTO orderInfo = new OrderInfoDTO();
-        orderInfo.setId(id);
-        orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_AF.getCode());
-
-        // 更新订单信息
-        orderInfoDao.updateOrderInfo(OrderManagerConvert.getOrderInfoDO(orderInfo));
-
-    }
-
-    @Override
     public OrderInfoDTO createOrder(CreateOrderDTO createOrder) {
+
+        // 订单工厂实例
+        BaseOrder baseOrder = orderFactory.getOrderInstance(createOrder.getOrderType());
+        AssertUtil.notEmpty(baseOrder, RespCodeEnum.ORDER_ERROR, "订单类型异常");
 
         // 订单编号
         createOrder.setOrderId(GenerateUtil.generate(createOrder.getOrderType()));
@@ -98,38 +89,29 @@ public class OrderServiceImpl implements OrderService {
         Long id = orderManager.idempotent(OrderManagerConvert.getOrderInfoDTO(createOrder));
         AssertUtil.notEmpty(id, RespCodeEnum.ORDER_ERROR, "订单幂等异常");
 
+        // 订单信息
+        OrderInfoDTO orderInfo = null;
+
         try {
 
-            // 订单工厂实例
-            BaseOrder baseOrder = orderFactory.getOrderInstance(createOrder.getOrderType());
-            AssertUtil.notEmpty(baseOrder, RespCodeEnum.ORDER_ERROR, "订单类型异常");
-
-            // 工厂处理订单信息
-            OrderInfoDTO orderInfo = baseOrder.createOrder(createOrder);
+            // 创建订单
+            orderInfo = baseOrder.createOrder(createOrder);
             orderInfo.setId(id);
             orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_NP.getCode());
 
-            // 更新订单信息
-            orderInfoDao.updateOrderInfo(OrderManagerConvert.getOrderInfoDO(orderInfo));
-
-            return orderInfo;
-
         } catch (OptimusException e) {
             log.error("创建订单异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
-
-            // 更新订单信息为失败
-            updateOrderinfoToFail(id);
-
+            orderManager.updateOrderInfoToFail(id);
             throw e;
         } catch (Exception e) {
             log.error("创建订单异常:", e);
-
-            // 更新订单信息为失败
-            updateOrderinfoToFail(id);
-
+            orderManager.updateOrderInfoToFail(id);
             throw new OptimusException(RespCodeEnum.FAILE);
         }
 
+        // 更新订单信息
+        orderInfoDao.updateOrderInfo(OrderManagerConvert.getOrderInfoDO(orderInfo));
+        return orderInfo;
     }
 
     @Override
@@ -139,9 +121,20 @@ public class OrderServiceImpl implements OrderService {
         BaseOrder baseOrder = orderFactory.getOrderInstance(payOrder.getOrderType());
         AssertUtil.notEmpty(baseOrder, RespCodeEnum.ORDER_ERROR, "订单类型异常");
 
-        // 工厂处理订单信息
-        baseOrder.payOrder(payOrder);
+        try {
 
+            // 支付订单
+            baseOrder.payOrder(payOrder);
+
+        } catch (OptimusException e) {
+            log.error("支付订单异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
+            orderManager.updateOrderInfoToFail(payOrder.getId());
+            throw e;
+        } catch (Exception e) {
+            log.error("支付订单异常:", e);
+            orderManager.updateOrderInfoToFail(payOrder.getId());
+            throw new OptimusException(RespCodeEnum.FAILE);
+        }
     }
 
 }

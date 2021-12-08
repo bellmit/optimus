@@ -17,7 +17,7 @@ public interface AccountManager {
      *
      * @param memberId
      * @param accountType
-     * @return OrderInfoDTO
+     * @return
      */
     AccountInfoDTO getAccountInfoByMemberIdAndAccountType(String memberId, String accountType);
 

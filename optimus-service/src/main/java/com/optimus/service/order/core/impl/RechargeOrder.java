@@ -7,7 +7,6 @@ import javax.annotation.Resource;
 
 import com.optimus.dao.mapper.OrderInfoDao;
 import com.optimus.manager.account.AccountManager;
-import com.optimus.manager.account.dto.AccountInfoDTO;
 import com.optimus.manager.account.dto.DoTransDTO;
 import com.optimus.manager.order.convert.OrderManagerConvert;
 import com.optimus.manager.order.dto.CreateOrderDTO;
@@ -81,12 +80,8 @@ public class RechargeOrder extends BaseOrder {
         // 若supMemberInfo为空,则作为异常处理
         if (StringUtils.pathEquals(MemberTypeEnum.MEMBER_TYPE_C.getCode(), payOrder.getSupMemberInfo().getMemberType())) {
 
-            // 验证账户余额是否充足
-            AccountInfoDTO accountInfo = accountManager.getAccountInfoByMemberIdAndAccountType(payOrder.getSupMemberInfo().getMemberId(), AccountTypeEnum.ACCOUNT_TYPE_B.getCode());
-            if (accountInfo.getAmount().compareTo(payOrder.getOrderAmount()) < 0) {
-                orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_AF.getCode(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());
-                throw new OptimusException(RespCodeEnum.ACCOUNT_AMOUNT_ERROR);
-            }
+            // 验证账户金额是否充足
+            super.checkAccountAmount(payOrder.getSupMemberInfo().getMemberId(), payOrder.getOrderAmount(), AccountTypeEnum.ACCOUNT_TYPE_B);
 
             // 注意:减上级码商余额
             DoTransDTO bMinus = OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_MINUS, payOrder, "充值减余额");
@@ -108,7 +103,6 @@ public class RechargeOrder extends BaseOrder {
 
         // 账户交易失败
         if (!doTrans) {
-            orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_AF.getCode(), OrderStatusEnum.ORDER_STATUS_AP.getCode(), DateUtil.currentDate());
             throw new OptimusException(RespCodeEnum.ORDER_PLACE_ERROR, "订单记账异常");
         }
 

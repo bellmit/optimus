@@ -12,7 +12,6 @@ import com.optimus.dao.mapper.MemberChannelDao;
 import com.optimus.dao.mapper.OrderInfoDao;
 import com.optimus.dao.result.MemberInfoChainResult;
 import com.optimus.manager.account.AccountManager;
-import com.optimus.manager.account.dto.AccountInfoDTO;
 import com.optimus.manager.account.dto.DoTransDTO;
 import com.optimus.manager.gateway.GatewayManager;
 import com.optimus.manager.gateway.dto.ExecuteScriptInputDTO;
@@ -80,20 +79,18 @@ public class PlaceOrder extends BaseOrder {
         // 查询码商会员交易限制
         MemberTransConfineDTO memberTransConfine = memberManager.getMemberTransConfineByMemberId(createOrder.getCodeMemberId());
         AssertUtil.notEmpty(memberTransConfine.getCodeBalanceSwitch(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置码商余额限制开关");
+        AssertUtil.notEmpty(memberTransConfine.getReleaseFreezeBalanceAging(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置释放冻结余额时效");
 
         // 验证码商余额:非自研渠道且非关闭
         if (!StringUtils.pathEquals(GatewayChannelGroupEnum.CHANNEL_GROUP_I.getCode(), createOrder.getGatewayChannel().getChannelGroup())
                 && !StringUtils.pathEquals(MemberCodeBalanceSwitchEnum.CODE_BALANCE_SWITCH_N.getCode(), memberTransConfine.getCodeBalanceSwitch())) {
-            // 查询账户信息
-            AccountInfoDTO accountInfo = accountManager.getAccountInfoByMemberIdAndAccountType(createOrder.getCodeMemberId(), AccountTypeEnum.ACCOUNT_TYPE_B.getCode());
-            if (accountInfo.getAmount().compareTo(createOrder.getOrderAmount()) < 0) {
-                throw new OptimusException(RespCodeEnum.ACCOUNT_AMOUNT_ERROR);
-            }
+            // 验证账户金额是否充足
+            super.checkAccountAmount(createOrder.getCodeMemberId(), createOrder.getOrderAmount(), AccountTypeEnum.ACCOUNT_TYPE_B);
         }
 
         // 执行脚本
-        ExecuteScriptInputDTO executeScriptInput = OrderManagerConvert.getExecuteScriptInputDTO(createOrder);
-        ExecuteScriptOutputDTO output = gatewayManager.executeScript(executeScriptInput);
+        ExecuteScriptInputDTO input = OrderManagerConvert.getExecuteScriptInputDTO(createOrder);
+        ExecuteScriptOutputDTO output = gatewayManager.executeScript(input);
 
         // 订单信息DTO
         OrderInfoDTO orderInfo = OrderManagerConvert.getOrderInfoDTO(createOrder, output);

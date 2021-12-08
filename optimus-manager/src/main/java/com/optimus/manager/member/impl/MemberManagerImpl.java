@@ -52,9 +52,6 @@ public class MemberManagerImpl implements MemberManager {
             return BigDecimal.ZERO;
         }
 
-        // 断言:收取手续费类型
-        AssertUtil.notEmpty(memberTransConfine.getCollectFeeType(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置手续费类型");
-
         // 单笔
         if (StringUtils.pathEquals(MemberCollectFeeTypeEnum.COLLECT_FEE_TYPE_S.getCode(), memberTransConfine.getCollectFeeType())) {
             return memberTransConfine.getSingleCollectFee();

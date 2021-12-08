@@ -151,6 +151,7 @@ public class CollectControllerConvert {
 
         PayOrderDTO payOrder = new PayOrderDTO();
 
+        payOrder.setId(orderInfo.getId());
         payOrder.setMemberId(orderInfo.getMemberId());
         payOrder.setSupMemberId(orderInfo.getSupMemberId());
         payOrder.setOrderId(orderInfo.getOrderId());

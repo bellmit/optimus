@@ -30,13 +30,6 @@ public interface OrderService {
     OrderInfoDTO getOrderInfoByMemberIdAndCallerOrderId(String memberId, String callerOrderId);
 
     /**
-     * 更新订单信息为失败
-     * 
-     * @param id
-     */
-    void updateOrderinfoToFail(Long id);
-
-    /**
      * 创建订单
      *
      * 适用场景-申请充值/充值/申请提现/提现/划账/下单

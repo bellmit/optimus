@@ -42,7 +42,7 @@ public enum RespCodeEnum {
 
     ACCOUNT_NO("3000", "账户不存在"),
 
-    ACCOUNT_AMOUNT_ERROR("3001", "账户余额不足"),
+    ACCOUNT_AMOUNT_ERROR("3001", "账户金额不足"),
 
     ACCOUNT_TRANSACTION_ERROR("3002", "账户交易异常"),
 
