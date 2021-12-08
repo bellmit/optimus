@@ -35,7 +35,6 @@ import com.optimus.util.constants.member.MemberFreezeBalanceSwitchEnum;
 import com.optimus.util.constants.order.OrderReleaseStatusEnum;
 import com.optimus.util.constants.order.OrderSplitProfitStatusEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
-import com.optimus.util.exception.OptimusException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -150,7 +149,7 @@ public class PlaceOrder extends BaseOrder {
         // 更新订单状态
         int update = orderInfoDao.updateOrderInfoByIdAndOrderStatus(orderInfoDO, OrderStatusEnum.ORDER_STATUS_NP.getCode());
         if (update != 1) {
-            throw new OptimusException(RespCodeEnum.ORDER_ERROR, "订单状态异常");
+            return;
         }
 
         // 异步释放订单

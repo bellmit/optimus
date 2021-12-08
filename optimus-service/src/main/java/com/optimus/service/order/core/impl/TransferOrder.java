@@ -89,7 +89,7 @@ public class TransferOrder extends BaseOrder {
         // 更新订单状态
         int update = orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_AP.getCode(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());
         if (update != 1) {
-            throw new OptimusException(RespCodeEnum.ORDER_ERROR, "订单状态异常");
+            return;
         }
 
         // 记账
