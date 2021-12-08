@@ -82,22 +82,18 @@ public class OrderServiceImpl implements OrderService {
         BaseOrder baseOrder = orderFactory.getOrderInstance(createOrder.getOrderType());
         AssertUtil.notEmpty(baseOrder, RespCodeEnum.ORDER_ERROR, "订单类型异常");
 
-        // 订单编号
-        createOrder.setOrderId(GenerateUtil.generate(createOrder.getOrderType()));
+        // 订单信息
+        OrderInfoDTO orderInfo = OrderManagerConvert.getOrderInfoDTO(createOrder);
+        orderInfo.setOrderId(GenerateUtil.generate(createOrder.getOrderType()));
 
         // 订单幂等
-        Long id = orderManager.idempotent(OrderManagerConvert.getOrderInfoDTO(createOrder));
+        Long id = orderManager.idempotent(orderInfo);
         AssertUtil.notEmpty(id, RespCodeEnum.ORDER_ERROR, "订单幂等异常");
-
-        // 订单信息
-        OrderInfoDTO orderInfo = null;
 
         try {
 
             // 创建订单
             orderInfo = baseOrder.createOrder(createOrder);
-            orderInfo.setId(id);
-            orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_NP.getCode());
 
         } catch (OptimusException e) {
             log.error("创建订单异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
@@ -110,7 +106,10 @@ public class OrderServiceImpl implements OrderService {
         }
 
         // 更新订单信息
+        orderInfo.setId(id);
+        orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_NP.getCode());
         orderInfoDao.updateOrderInfo(OrderManagerConvert.getOrderInfoDO(orderInfo));
+
         return orderInfo;
     }
 
