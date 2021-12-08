@@ -13,6 +13,7 @@ import com.optimus.service.gateway.GatewayService;
 import com.optimus.service.member.MemberService;
 import com.optimus.service.order.OrderService;
 import com.optimus.util.AssertUtil;
+import com.optimus.util.annotation.OptimusRateLimiter;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.order.OrderBehaviorEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
@@ -51,6 +52,7 @@ public class GatewayController {
      *
      * @return
      */
+    @OptimusRateLimiter(permits = 500D, timeout = 0)
     @RequestMapping(value = "/channelCallback", method = { RequestMethod.GET, RequestMethod.POST })
     public String channelCallback(HttpServletRequest req, @RequestParam("subChannelCode") String subChannelCode) {
 
