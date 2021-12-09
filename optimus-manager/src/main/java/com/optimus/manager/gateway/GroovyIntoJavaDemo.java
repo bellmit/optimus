@@ -15,8 +15,7 @@ public class GroovyIntoJavaDemo {
             GroovyScriptEngine engine = new GroovyScriptEngine("/Users/admin/");
 
             Binding binding = new Binding();
-            binding.setVariable("codeMemberId", "123");
-            binding.setVariable("orderId", "111");
+            binding.setVariable("codeMemberId", "hello");
 
             String scriptName = "demo.groovy";
 

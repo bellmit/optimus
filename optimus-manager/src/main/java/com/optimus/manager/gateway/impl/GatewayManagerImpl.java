@@ -26,6 +26,7 @@ import com.optimus.util.JacksonUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.exception.OptimusException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import groovy.lang.Binding;
@@ -41,6 +42,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class GatewayManagerImpl implements GatewayManager {
 
+    @Autowired
+    private GroovyScriptEngine groovyScriptEngine;
+
     @Resource
     private MemberInfoDao memberInfoDao;
 
@@ -55,21 +59,16 @@ public class GatewayManagerImpl implements GatewayManager {
 
         try {
 
-            GroovyScriptEngine engine = new GroovyScriptEngine("/Users/zhouhonglin/work/groovy/");
-
+            // 绑定参数
             Binding binding = new Binding();
-            binding.setVariable("memberId", input.getMemberId());
-            binding.setVariable("orderId", input.getOrderId());
-            binding.setVariable("amount", input.getAmount());
-            binding.setVariable("clientIp", input.getClientIp());
-            binding.setVariable("redirectUrl", input.getRedirectUrl());
+            binding.setVariable("args", JacksonUtil.toString(input));
 
-            String scriptName = input.getScriptMethod() + ".groovy";
-            Object result = engine.run(scriptName, binding);
+            // 执行脚本
+            Object result = groovyScriptEngine.run(input.getImplPath(), binding);
+            AssertUtil.notEmpty(result, RespCodeEnum.GATEWAY_EXECUTE_SCRIPT_ERROR, "执行脚本输出对象不能为空");
 
-            ExecuteScriptOutputDTO executeScriptOutput = JacksonUtil.toBean(JacksonUtil.toString(result), ExecuteScriptOutputDTO.class);
-
-            return executeScriptOutput;
+            // 脚本输出对象
+            return JacksonUtil.toBean((String) result, ExecuteScriptOutputDTO.class);
 
         } catch (OptimusException e) {
             log.error("执行脚本异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
