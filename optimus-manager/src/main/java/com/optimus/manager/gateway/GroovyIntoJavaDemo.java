@@ -14,13 +14,13 @@ public class GroovyIntoJavaDemo {
 
             GroovyScriptEngine engine = new GroovyScriptEngine("/Users/admin/Appspace/optimus/groovy");
 
-            Binding binding = new Binding();
-            binding.setVariable("codeMemberId", "hello");
+            Binding binding1 = new Binding();
+            binding1.setVariable("codeMemberId", "hello");
+            System.out.println("-----" + engine.run("demo.groovy", binding1));
 
-            String scriptName = "demo.groovy";
-
-            Object result = engine.run(scriptName, binding);
-            System.out.println("-----" + result);
+            Binding binding2 = new Binding();
+            binding2.setVariable("input", "{\"scriptMethod\":\"create\"}");
+            System.out.println("-----" + engine.run("Template.groovy", binding2));
 
         } catch (Exception e) {
             e.printStackTrace();
