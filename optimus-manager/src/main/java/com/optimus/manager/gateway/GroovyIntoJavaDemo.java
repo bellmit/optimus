@@ -12,7 +12,7 @@ public class GroovyIntoJavaDemo {
 
         try {
 
-            GroovyScriptEngine engine = new GroovyScriptEngine("/Users/admin/app/optimus/groovy");
+            GroovyScriptEngine engine = new GroovyScriptEngine("/Users/admin/Appspace/optimus/groovy");
 
             Binding binding = new Binding();
             binding.setVariable("codeMemberId", "hello");

@@ -41,5 +41,5 @@ mybatis:
 
 logging:
     file:
-        path: /Users/admin/app/optimus/logs
+        path: /Users/admin/Appspace/optimus/logs
     config: classpath:logback-spring.xml
