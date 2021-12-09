@@ -14,7 +14,6 @@
     <result column="FACE_VALUE" jdbcType="VARCHAR" property="faceValue" />
     <result column="WEIGHT" jdbcType="NUMERIC" property="weight" />
     <result column="FATIGUE" jdbcType="NUMERIC" property="fatigue" />
-    <result column="IMPL_TYPE" jdbcType="VARCHAR" property="implType" />
     <result column="IMPL_PATH" jdbcType="VARCHAR" property="implPath" />
     <result column="CALLBACK_IP" jdbcType="VARCHAR" property="callbackIp" />
     <result column="BIZ_CONTENT" jdbcType="VARCHAR" property="bizContent" />
@@ -26,7 +25,7 @@
 
   <sql id="Base_Column_List">
     ID, AGENT_MEMBER_ID, PARENT_CHANNEL_CODE, CHANNEL_CODE, CHANNEL_NAME, CHANNEL_STATUS, 
-    CLASSIFY, FACE_VALUE_TYPE, FACE_VALUE, WEIGHT, FATIGUE, IMPL_TYPE, IMPL_PATH, CALLBACK_IP, 
+    CLASSIFY, FACE_VALUE_TYPE, FACE_VALUE, WEIGHT, FATIGUE, IMPL_PATH, CALLBACK_IP, 
     BIZ_CONTENT, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME
   </sql>
 
@@ -89,9 +88,6 @@
       <if test="fatigue != null">
         FATIGUE,
       </if>
-      <if test="implType != null">
-        IMPL_TYPE,
-      </if>
       <if test="implPath != null">
         IMPL_PATH,
       </if>
@@ -136,8 +132,6 @@
       <if test="weight != null"> #{weight,jdbcType=NUMERIC},
       </if>
       <if test="fatigue != null"> #{fatigue,jdbcType=NUMERIC},
-      </if>
-      <if test="implType != null"> #{implType,jdbcType=VARCHAR},
       </if>
       <if test="implPath != null"> #{implPath,jdbcType=VARCHAR},
       </if>
@@ -188,9 +182,6 @@
       </if>
       <if test="fatigue != null">
         FATIGUE = #{fatigue,jdbcType=NUMERIC},
-      </if>
-      <if test="implType != null">
-        IMPL_TYPE = #{implType,jdbcType=VARCHAR},
       </if>
       <if test="implPath != null">
         IMPL_PATH = #{implPath,jdbcType=VARCHAR},

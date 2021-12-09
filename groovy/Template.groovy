@@ -80,7 +80,6 @@ class ExecuteScriptInputDTO {
     String calleeOrderId
     BigDecimal amount
     Date orderTime
-    String implType
     String implPath
     String bizContent
     String args

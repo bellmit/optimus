@@ -69,7 +69,6 @@ public class GatewayControllerConvert {
         input.setScriptMethod(ScriptEnum.PARSE.getCode());
         input.setBizContent(gatewaySubChannel.getBizContent());
         input.setImplPath(gatewaySubChannel.getImplPath());
-        input.setImplType(gatewaySubChannel.getImplType());
 
         return input;
 

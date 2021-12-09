@@ -312,7 +312,6 @@ public class OrderManagerConvert {
         if (StringUtils.pathEquals(OrderTypeEnum.ORDER_TYPE_C.getCode(), createOrder.getOrderType())) {
             input.setClientIp(createOrder.getClientIp());
             input.setRedirectUrl(createOrder.getRedirectUrl());
-            input.setImplType(createOrder.getGatewaySubChannel().getImplType());
             input.setImplPath(createOrder.getGatewaySubChannel().getImplPath());
             input.setBizContent(createOrder.getGatewaySubChannel().getBizContent());
         }
@@ -338,7 +337,6 @@ public class OrderManagerConvert {
         input.setMemberId(orderInfo.getMemberId());
         input.setOrderId(orderInfo.getOrderId());
         input.setCalleeOrderId(orderInfo.getCalleeOrderId());
-        input.setImplType(gatewaySubChannel.getImplType());
         input.setImplPath(gatewaySubChannel.getImplPath());
         input.setBizContent(gatewaySubChannel.getBizContent());
 

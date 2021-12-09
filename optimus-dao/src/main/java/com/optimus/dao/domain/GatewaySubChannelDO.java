@@ -78,11 +78,6 @@ public class GatewaySubChannelDO implements Serializable {
     private Short fatigue;
 
     /**
-     * 实现类型
-     */
-    private String implType;
-
-    /**
      * 实现路径
      */
     private String implPath;

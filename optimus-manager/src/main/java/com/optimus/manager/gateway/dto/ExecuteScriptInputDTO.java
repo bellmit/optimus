@@ -47,11 +47,6 @@ public class ExecuteScriptInputDTO implements Serializable {
     private Date orderTime;
 
     /**
-     * 实现类型
-     */
-    private String implType;
-
-    /**
      * 实现路径
      */
     private String implPath;
