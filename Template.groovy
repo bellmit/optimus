@@ -14,23 +14,23 @@ import java.util.Date
 action(input)
 
 // 主程式
-def action(String input) {
+def action(String params) {
 
     // 执行脚本输入对象
-    GroovyExecuteScriptInputDTO esInput = JSON.parseObject(input, GroovyExecuteScriptInputDTO.class)
+    GroovyExecuteScriptInputDTO input = JSON.parseObject(params, GroovyExecuteScriptInputDTO.class)
 
     // 渠道服务
     GroovyChannelService service = new GroovyChannelService()
 
     // 执行方法
-    if ("create".equals(esInput.getScriptMethod())) {
-        return service.create(esInput)
+    if ("create".equals(input.getScriptMethod())) {
+        return service.create(input)
     }
-    if ("query".equals(esInput.getScriptMethod())) {
-        return service.query(esInput)
+    if ("query".equals(input.getScriptMethod())) {
+        return service.query(input)
     }
-    if ("parse".equals(esInput.getScriptMethod())) {
-        return service.parse(esInput)
+    if ("parse".equals(input.getScriptMethod())) {
+        return service.parse(input)
     }
 
     return null
@@ -41,7 +41,7 @@ def action(String input) {
 class GroovyChannelService {
 
     // 创建订单
-    def create(GroovyExecuteScriptInputDTO esInput) {
+    def create(GroovyExecuteScriptInputDTO input) {
 
         // 在此处编写创建订单实现
 
@@ -51,7 +51,7 @@ class GroovyChannelService {
     }
 
     // 调单查询
-    def query(GroovyExecuteScriptInputDTO esInput) {
+    def query(GroovyExecuteScriptInputDTO input) {
 
         // 在此处编写调单查询实现
 
@@ -61,7 +61,7 @@ class GroovyChannelService {
     }
 
     // 渠道回调解析请求参数
-    def parse(GroovyExecuteScriptInputDTO esInput) {
+    def parse(GroovyExecuteScriptInputDTO input) {
 
         // 在此处编写渠道回调解析请求参数实现
 
