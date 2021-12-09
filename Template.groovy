@@ -17,20 +17,20 @@ action(input)
 def action(String input) {
 
     // 执行脚本输入对象
-    ExecuteScriptInputDTO esInput = JSON.parseObject(input, ExecuteScriptInputDTO.class)
+    GroovyExecuteScriptInputDTO esInput = JSON.parseObject(input, GroovyExecuteScriptInputDTO.class)
 
     // 渠道服务
-    ChannelService channelService = new ChannelService()
+    GroovyChannelService service = new GroovyChannelService()
 
     // 执行方法
     if ("create".equals(esInput.getScriptMethod())) {
-        return channelService.create(esInput)
+        return service.create(esInput)
     }
     if ("query".equals(esInput.getScriptMethod())) {
-        return channelService.query(esInput)
+        return service.query(esInput)
     }
     if ("parse".equals(esInput.getScriptMethod())) {
-        return channelService.parse(esInput)
+        return service.parse(esInput)
     }
 
     return null
@@ -38,42 +38,42 @@ def action(String input) {
 }
 
 // 渠道服务
-class ChannelService {
+class GroovyChannelService {
 
     // 创建订单
-    def create(ExecuteScriptInputDTO esInput) {
+    def create(GroovyExecuteScriptInputDTO esInput) {
 
         // 在此处编写创建订单实现
 
-        ExecuteScriptOutputDTO output = new ExecuteScriptOutputDTO()
+        GroovyExecuteScriptOutputDTO output = new GroovyExecuteScriptOutputDTO()
         output.setOrderStatus("AP")
         return JSON.toJSONString(output)
     }
 
     // 调单查询
-    def query(ExecuteScriptInputDTO esInput) {
+    def query(GroovyExecuteScriptInputDTO esInput) {
 
         // 在此处编写调单查询实现
 
-        ExecuteScriptOutputDTO output = new ExecuteScriptOutputDTO()
+        GroovyExecuteScriptOutputDTO output = new GroovyExecuteScriptOutputDTO()
         output.setOrderStatus("AP")
         return JSON.toJSONString(output)
     }
 
     // 渠道回调解析请求参数
-    def parse(ExecuteScriptInputDTO esInput) {
+    def parse(GroovyExecuteScriptInputDTO esInput) {
 
         // 在此处编写渠道回调解析请求参数实现
 
-        ExecuteScriptOutputDTO output = new ExecuteScriptOutputDTO()
+        GroovyExecuteScriptOutputDTO output = new GroovyExecuteScriptOutputDTO()
         output.setOrderStatus("AP")
         return JSON.toJSONString(output)
     }
 
 }
 
-// 脚本输入对象
-class ExecuteScriptInputDTO {
+// 输入对象
+class GroovyExecuteScriptInputDTO {
     String scriptMethod
     String memberId
     String orderId
@@ -87,8 +87,8 @@ class ExecuteScriptInputDTO {
     String redirectUrl
 }
 
-// 脚本输出对象
-class ExecuteScriptOutputDTO {
+// 输出对象
+class GroovyExecuteScriptOutputDTO {
     String codeMemberId
     String orderId
     String calleeOrderId
