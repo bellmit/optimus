@@ -61,7 +61,7 @@ public class GatewayManagerImpl implements GatewayManager {
 
             // 绑定参数
             Binding binding = new Binding();
-            binding.setVariable("args", JacksonUtil.toString(input));
+            binding.setVariable("input", JacksonUtil.toString(input));
 
             // 执行脚本
             Object result = groovyScriptEngine.run(input.getImplPath(), binding);
