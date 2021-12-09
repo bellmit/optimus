@@ -98,7 +98,7 @@ public class WithdrawOrder extends BaseOrder {
 
         // 账户交易失败,冻结余额异常
         if (!doTrans) {
-            throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "冻结余额异常");
+            throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "提现冻结余额异常");
         }
 
         return orderInfo;
@@ -112,9 +112,6 @@ public class WithdrawOrder extends BaseOrder {
     @Override
     public void payOrder(PayOrderDTO payOrder) {
 
-        // 记账List
-        List<DoTransDTO> doTransList = new ArrayList<>();
-
         // 驳回
         if (StringUtils.pathEquals(OrderConfirmTypeEnum.CONFIRM_TYPE_R.getCode(), payOrder.getConfirmType())) {
 
@@ -124,29 +121,20 @@ public class WithdrawOrder extends BaseOrder {
                 return;
             }
 
-            // 回滚
-            doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_PLUS, payOrder, "提现驳回加余额户"));
-            doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_MINUS, payOrder, "提现驳回减冻结户"));
-
-            // 记账
-            boolean doTrans = accountManager.doTrans(doTransList);
-            if (!doTrans) {
-                throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "驳回冻结余额异常");
-            }
+            // 回滚账户信息
+            rollbackAccountInfo(payOrder);
 
             return;
         }
 
-        // 减一笔冻结
+        // 记账List
+        List<DoTransDTO> doTransList = new ArrayList<>();
         doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_MINUS, payOrder, "提现确认减冻结户"));
 
         // 如果有手续费,则平台加一笔手续费
         if (Objects.nonNull(payOrder.getFee()) && payOrder.getFee().compareTo(BigDecimal.ZERO) > 0) {
-            // 查询平台会员编号
-            String systemMemberId = memberManager.getSystemMemberId(payOrder.getMemberId());
-
             // 平台收取手续费
-            doTransList.add(new DoTransDTO(systemMemberId, payOrder.getOrderId(), payOrder.getOrderType(), AccountChangeTypeEnum.P_PLUS.getCode(), payOrder.getFee(), "提现手续费"));
+            doTransList.add(new DoTransDTO(memberManager.getSystemMemberId(payOrder.getMemberId()), payOrder.getOrderId(), payOrder.getOrderType(), AccountChangeTypeEnum.P_PLUS.getCode(), payOrder.getFee(), "提现手续费"));
         }
 
         // 更新订单状态
@@ -160,7 +148,30 @@ public class WithdrawOrder extends BaseOrder {
 
         // 账户交易失败
         if (!doTrans) {
-            throw new OptimusException(RespCodeEnum.ORDER_PLACE_ERROR, "订单记账异常");
+            rollbackAccountInfo(payOrder);
+            throw new OptimusException(RespCodeEnum.ORDER_PLACE_ERROR, "提现记账异常");
+        }
+
+    }
+
+    /**
+     * 回滚账户信息
+     * 
+     * @param payOrder
+     */
+    private void rollbackAccountInfo(PayOrderDTO payOrder) {
+
+        // 记账List
+        List<DoTransDTO> doTransList = new ArrayList<>();
+
+        // 回滚
+        doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_PLUS, payOrder, "提现回滚加余额户"));
+        doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_MINUS, payOrder, "提现回滚减冻结户"));
+
+        // 记账
+        boolean doTrans = accountManager.doTrans(doTransList);
+        if (!doTrans) {
+            throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "提现回滚账户信息异常");
         }
 
     }

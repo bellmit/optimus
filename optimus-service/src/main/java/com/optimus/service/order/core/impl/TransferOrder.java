@@ -97,7 +97,7 @@ public class TransferOrder extends BaseOrder {
 
         // 账户交易失败
         if (!doTrans) {
-            throw new OptimusException(RespCodeEnum.ORDER_PLACE_ERROR, "订单记账异常");
+            throw new OptimusException(RespCodeEnum.ORDER_PLACE_ERROR, "划账记账异常");
         }
 
     }
