@@ -3,10 +3,10 @@
 @Grab("org.codehaus.groovy:http-builder:0.4.1")
 
 // 导入包
-import com.alibaba.fastjson.JSON
-import groovyx.net.http.HTTPBuilder
 import static groovyx.net.http.ContentType.*
 import static groovyx.net.http.Method.*
+import groovyx.net.http.HTTPBuilder
+import com.alibaba.fastjson.JSON
 import java.math.BigDecimal
 import java.util.Date
 
