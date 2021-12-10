@@ -95,6 +95,6 @@ class GroovyExecuteScriptOutputDTO {
     String orderStatus          // 订单状态
     BigDecimal amount           // 订单金额
     BigDecimal actualAmount     // 实际金额
-    String memo                 // 描述[渠道回调时返回渠道]
-    String channelReturnMessage // 网关渠道返回信息[{"text":"html代码","url":"url地址"}]
+    String channelReturnMessage // 网关渠道返回信息
+    String content              // 报文[作用一:商户下单后返回商户({"text":"html代码","url":"url地址"});作用二:渠道回调时返回渠道(不同渠道的成功标识)]
 }

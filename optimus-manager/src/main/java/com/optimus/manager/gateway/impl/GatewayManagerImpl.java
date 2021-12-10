@@ -68,7 +68,18 @@ public class GatewayManagerImpl implements GatewayManager {
             AssertUtil.notEmpty(result, RespCodeEnum.GATEWAY_EXECUTE_SCRIPT_ERROR, "执行脚本输出对象不能为空");
 
             // 脚本输出对象
-            return JacksonUtil.toBean((String) result, ExecuteScriptOutputDTO.class);
+            ExecuteScriptOutputDTO output = JacksonUtil.toBean((String) result, ExecuteScriptOutputDTO.class);
+
+            // 断言:非空
+            AssertUtil.notEmpty(output.getOrderId(), RespCodeEnum.GATEWAY_EXECUTE_SCRIPT_ERROR, "执行脚本订单编号不能为空");
+            AssertUtil.notEmpty(output.getCalleeOrderId(), RespCodeEnum.GATEWAY_EXECUTE_SCRIPT_ERROR, "执行脚本被调用方订单编号不能为空");
+            AssertUtil.notEmpty(output.getOrderStatus(), RespCodeEnum.GATEWAY_EXECUTE_SCRIPT_ERROR, "执行脚本订单状态不能为空");
+            AssertUtil.notEmpty(output.getAmount(), RespCodeEnum.GATEWAY_EXECUTE_SCRIPT_ERROR, "执行脚本订单金额不能为空");
+            AssertUtil.notEmpty(output.getActualAmount(), RespCodeEnum.GATEWAY_EXECUTE_SCRIPT_ERROR, "执行脚本实际金额不能为空");
+            AssertUtil.notEmpty(output.getChannelReturnMessage(), RespCodeEnum.GATEWAY_EXECUTE_SCRIPT_ERROR, "执行脚本网关渠道返回信息不能为空");
+            AssertUtil.notEmpty(output.getContent(), RespCodeEnum.GATEWAY_EXECUTE_SCRIPT_ERROR, "执行脚本内容不能为空");
+
+            return output;
 
         } catch (OptimusException e) {
             log.error("执行脚本异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());

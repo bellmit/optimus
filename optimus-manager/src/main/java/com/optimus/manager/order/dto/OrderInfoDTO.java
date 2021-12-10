@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.optimus.manager.gateway.dto.ExecuteScriptOutputDTO;
 import com.optimus.util.constants.order.OrderBehaviorEnum;
 import com.optimus.util.constants.order.OrderMerchantNotifyStatusEnum;
 import com.optimus.util.constants.order.OrderReleaseStatusEnum;
@@ -146,7 +147,7 @@ public class OrderInfoDTO implements Serializable {
     private String subChannelCode;
 
     /**
-     * 网关渠道返回信息[商户下单后返回商户]
+     * 网关渠道返回信息[商户下单后渠道返回报文]
      */
     private String channelReturnMessage;
 
@@ -154,5 +155,15 @@ public class OrderInfoDTO implements Serializable {
      * 网关渠道订单查询次数
      */
     private Short channelOrderQueryCount;
+
+    /**
+     * 备注
+     */
+    private String remark;
+
+    /**
+     * 执行脚本输出DTO
+     */
+    private ExecuteScriptOutputDTO output;
 
 }

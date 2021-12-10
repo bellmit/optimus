@@ -146,7 +146,7 @@ public class OrderInfoDO implements Serializable {
     private String subChannelCode;
 
     /**
-     * 网关渠道返回信息
+     * 网关渠道返回信息[商户下单后渠道返回报文]
      */
     private String channelReturnMessage;
 
@@ -154,6 +154,11 @@ public class OrderInfoDO implements Serializable {
      * 网关渠道订单查询次数
      */
     private Short channelOrderQueryCount;
+
+    /**
+     * 备注
+     */
+    private String remark;
 
     private String createBy;
 

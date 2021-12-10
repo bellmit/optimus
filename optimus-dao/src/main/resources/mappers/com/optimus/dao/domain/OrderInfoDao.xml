@@ -27,6 +27,7 @@
     <result column="SUB_CHANNEL_CODE" jdbcType="VARCHAR" property="subChannelCode" />
     <result column="CHANNEL_RETURN_MESSAGE" jdbcType="VARCHAR" property="channelReturnMessage" />
     <result column="CHANNEL_ORDER_QUERY_COUNT" jdbcType="NUMERIC" property="channelOrderQueryCount" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
     <result column="CREATE_BY" jdbcType="VARCHAR" property="createBy" />
     <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
     <result column="UPDATE_BY" jdbcType="VARCHAR" property="updateBy" />
@@ -38,7 +39,7 @@
     ORDER_TYPE, ORDER_STATUS, RELEASE_STATUS, SPLIT_PROFIT_STATUS, ORDER_AMOUNT, ACTUAL_AMOUNT, 
     FEE, ORDER_TIME, PAY_TIME, BEHAVIOR, MERCHANT_CALLBACK_URL, MERCHANT_CALLBACK_COUNT, 
     MERCHANT_NOTIFY_STATUS, CHANNEL_CODE, SUB_CHANNEL_CODE, CHANNEL_RETURN_MESSAGE, 
-    CHANNEL_ORDER_QUERY_COUNT, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME
+    CHANNEL_ORDER_QUERY_COUNT, REMARK, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME
   </sql>
 
   <select id="getOrderInfoById" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -186,6 +187,9 @@
       <if test="channelOrderQueryCount != null">
         CHANNEL_ORDER_QUERY_COUNT,
       </if>
+      <if test="remark != null">
+        REMARK,
+      </if>
       <if test="createBy != null">
         CREATE_BY,
       </if>
@@ -247,6 +251,8 @@
       <if test="channelReturnMessage != null"> #{channelReturnMessage,jdbcType=VARCHAR},
       </if>
       <if test="channelOrderQueryCount != null"> #{channelOrderQueryCount,jdbcType=NUMERIC},
+      </if>
+      <if test="remark != null"> #{remark,jdbcType=VARCHAR},
       </if>
       <if test="createBy != null"> #{createBy,jdbcType=VARCHAR},
       </if>
@@ -330,6 +336,9 @@
       </if>
       <if test="channelOrderQueryCount != null">
         CHANNEL_ORDER_QUERY_COUNT = #{channelOrderQueryCount,jdbcType=NUMERIC},
+      </if>
+      <if test="remark != null">
+        REMARK = #{remark,jdbcType=VARCHAR},
       </if>
       <if test="createBy != null">
         CREATE_BY = #{createBy,jdbcType=VARCHAR},

@@ -23,7 +23,6 @@ import com.optimus.web.gateway.convert.GatewayControllerConvert;
 import com.optimus.web.gateway.validate.GatewayControllerValidate;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -82,11 +81,7 @@ public class GatewayController {
         OrderInfoDTO orderInfo = orderService.getOrderInfoByOrderId(output.getOrderId());
         AssertUtil.notEquals(OrderTypeEnum.ORDER_TYPE_C.getCode(), orderInfo.getOrderType(), RespCodeEnum.ORDER_ERROR, "订单类型异常");
         AssertUtil.notEquals(orderInfo.getSubChannelCode(), subChannelCode, RespCodeEnum.ORDER_ERROR, "订单子渠道异常");
-
-        // 原订单状态:等待支付
-        if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_NP.getCode(), orderInfo.getOrderStatus())) {
-            throw new OptimusException(RespCodeEnum.ORDER_ERROR, "原订单状态不合法");
-        }
+        AssertUtil.notEquals(OrderStatusEnum.ORDER_STATUS_NP.getCode(), orderInfo.getOrderStatus(), RespCodeEnum.ORDER_ERROR, "原订单状态不合法");
 
         // 支付
         PayOrderDTO payOrder = GatewayControllerConvert.getPayOrderDTO(output, orderInfo);
@@ -95,8 +90,7 @@ public class GatewayController {
 
         orderService.payOrder(payOrder);
 
-        return output.getMemo();
-
+        return output.getContent();
     }
 
 }

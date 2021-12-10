@@ -35,6 +35,7 @@ public class CollectControllerConvert {
         createOrder.setMerchantCallBackUrl(req.getMerchantCallBackUrl());
         createOrder.setClientIp(req.getClientIp());
         createOrder.setRedirectUrl(req.getRedirectUrl());
+        createOrder.setRemark(req.getRemark());
 
         return createOrder;
 
@@ -110,6 +111,7 @@ public class CollectControllerConvert {
      */
     public static CreateOrderDTO getCreateOrderDTO(RechargeReq req) {
 
+        // 创建订单DTO
         CreateOrderDTO createOrder = new CreateOrderDTO();
 
         createOrder.setMemberId(req.getSubDirectMemberId());
@@ -130,6 +132,7 @@ public class CollectControllerConvert {
      */
     public static CreateOrderDTO getCreateOrderDTO(TransferReq req) {
 
+        // 创建订单DTO
         CreateOrderDTO createOrder = new CreateOrderDTO();
 
         createOrder.setMemberId(req.getMemberId());
@@ -149,6 +152,7 @@ public class CollectControllerConvert {
      */
     public static PayOrderDTO getPayOrderDTO(OrderInfoDTO orderInfo) {
 
+        // 支付订单DTO
         PayOrderDTO payOrder = new PayOrderDTO();
 
         payOrder.setId(orderInfo.getId());
@@ -173,14 +177,17 @@ public class CollectControllerConvert {
      */
     public static PlaceOrderResp getPlaceOrderResp(OrderInfoDTO orderInfo) {
 
+        // 下单Resp
         PlaceOrderResp resp = new PlaceOrderResp();
+
         resp.setMemberId(orderInfo.getMemberId());
         resp.setOrderStatus(orderInfo.getOrderStatus());
         resp.setOrderId(orderInfo.getOrderId());
         resp.setCallerOrderId(orderInfo.getCallerOrderId());
         resp.setAmount(orderInfo.getOrderAmount());
         resp.setActualAmount(orderInfo.getActualAmount());
-        resp.setChannelReturnMessage(orderInfo.getChannelReturnMessage());
+        resp.setRemark(orderInfo.getRemark());
+        resp.setMessage(orderInfo.getOutput().getContent());
 
         return resp;
 

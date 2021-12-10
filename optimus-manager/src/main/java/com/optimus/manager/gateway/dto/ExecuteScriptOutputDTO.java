@@ -50,13 +50,16 @@ public class ExecuteScriptOutputDTO implements Serializable {
     private BigDecimal actualAmount;
 
     /**
-     * 描述[渠道回调时返回渠道]
-     */
-    private String memo;
-
-    /**
-     * 网关渠道返回信息[商户下单后返回商户]
+     * 网关渠道返回信息[商户下单后渠道返回报文]
      */
     private String channelReturnMessage;
+
+    /**
+     * 内容
+     * 
+     * 作用一:商户下单后返回商户({"text":"html代码","url":"url地址"})
+     * 作用二:渠道回调时返回渠道(不同渠道的成功标识)
+     */
+    private String content;
 
 }

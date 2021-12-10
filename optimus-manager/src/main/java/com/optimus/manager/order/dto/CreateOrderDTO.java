@@ -68,6 +68,11 @@ public class CreateOrderDTO implements Serializable {
     private Date orderTime;
 
     /**
+     * 备注
+     */
+    private String remark;
+
+    /**
      * 商户客户端IP[商户下单时传入]
      */
     private String clientIp;

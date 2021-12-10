@@ -59,6 +59,6 @@ public class PlaceOrderResp implements Serializable {
      * 
      * {"text":"html代码","url":"url地址"}
      */
-    private String channelReturnMessage;
+    private String message;
 
 }
