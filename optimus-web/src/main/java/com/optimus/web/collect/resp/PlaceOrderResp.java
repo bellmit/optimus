@@ -50,7 +50,14 @@ public class PlaceOrderResp implements Serializable {
     private BigDecimal actualAmount;
 
     /**
+     * 备注
+     */
+    private String remark;
+
+    /**
      * 网关渠道返回信息[商户下单后返回商户]
+     * 
+     * {"text":"html代码","url":"url地址"}
      */
     private String channelReturnMessage;
 

@@ -74,27 +74,27 @@ class GroovyChannelService {
 
 // 输入对象
 class GroovyExecuteScriptInputDTO {
-    String scriptMethod
-    String memberId
-    String orderId
-    String calleeOrderId
-    BigDecimal amount
-    Date orderTime
-    String implPath
-    String bizContent
-    String args
-    String clientIp
-    String redirectUrl
+    String scriptMethod         // 脚本方法
+    String memberId             // 会员编号
+    String orderId              // 订单编号
+    String calleeOrderId        // 被调用方订单编号
+    BigDecimal amount           // 订单金额
+    Date orderTime              // 订单时间
+    String implPath             // 实现路径
+    String bizContent           // 业务大字段[json]
+    String args                 // 参数[json]
+    String clientIp             // 商户客户端IP
+    String redirectUrl          // 商户重定向地址
 }
 
 // 输出对象
 class GroovyExecuteScriptOutputDTO {
-    String codeMemberId
-    String orderId
-    String calleeOrderId
-    String orderStatus
-    BigDecimal amount
-    BigDecimal actualAmount
-    String memo
-    String channelReturnMessage
+    String codeMemberId         // 码商会员编号[自研渠道必须返回]
+    String orderId              // 订单编号
+    String calleeOrderId        // 被调用方订单编号
+    String orderStatus          // 订单状态
+    BigDecimal amount           // 订单金额
+    BigDecimal actualAmount     // 实际金额
+    String memo                 // 描述[渠道回调时返回渠道]
+    String channelReturnMessage // 网关渠道返回信息[{"text":"html代码","url":"url地址"}]
 }

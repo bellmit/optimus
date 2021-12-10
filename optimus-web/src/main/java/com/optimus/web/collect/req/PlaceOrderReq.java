@@ -32,4 +32,9 @@ public class PlaceOrderReq extends BaseCollectReq {
      */
     private String redirectUrl;
 
+    /**
+     * 备注
+     */
+    private String remark;
+
 }
