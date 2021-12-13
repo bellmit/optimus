@@ -81,8 +81,8 @@ class GroovyExecuteScriptInputDTO {
     BigDecimal amount           // 订单金额
     Date orderTime              // 订单时间
     String implPath             // 实现路径
-    String bizContent           // 业务大字段[json]
-    String args                 // 参数[json]
+    String bizContent           // 业务大字段[{"channelMerchnatId":"商户编号","channelMerchnatKey":"商户密钥","channelCode":"渠道编号","callbackUrl":"回调地址","redirectUrl":"重定向地址","createOrderUrl":"创建订单地址","queryOrderUrl":"调单查询地址"}]
+    String args                 // 参数[{"parameter":{},"header":{},"body":{}}]
     String clientIp             // 商户客户端IP
     String redirectUrl          // 商户重定向地址
 }
