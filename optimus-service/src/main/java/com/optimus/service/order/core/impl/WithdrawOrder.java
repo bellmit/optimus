@@ -87,7 +87,7 @@ public class WithdrawOrder extends BaseOrder {
         }
 
         // 验证账户金额是否充足
-        super.checkAccountAmount(createOrder.getMemberId(), createOrder.getActualAmount(), AccountTypeEnum.ACCOUNT_TYPE_B);
+        super.checkAccountAmount(createOrder.getMemberId(), orderInfo.getActualAmount(), AccountTypeEnum.ACCOUNT_TYPE_B);
 
         // 记账
         List<DoTransDTO> doTransList = new ArrayList<>();
