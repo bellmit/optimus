@@ -214,6 +214,30 @@ public class OrderManagerConvert {
     }
 
     /**
+     * 获取码商账户交易DTO
+     *
+     * @param accountChangeTypeEnum
+     * @param orderInfo
+     * @param remark
+     * @return DoTransDTO
+     */
+    public static DoTransDTO getDoTransForCode(AccountChangeTypeEnum accountChangeTypeEnum, OrderInfoDTO orderInfo, String remark) {
+
+        // 账户交易DTO
+        DoTransDTO doTrans = new DoTransDTO();
+
+        doTrans.setChangeType(accountChangeTypeEnum.getCode());
+        doTrans.setMemberId(orderInfo.getCodeMemberId());
+        doTrans.setOrderId(orderInfo.getOrderId());
+        doTrans.setOrderType(orderInfo.getOrderType());
+        doTrans.setAmount(orderInfo.getActualAmount());
+        doTrans.setRemark(remark);
+
+        return doTrans;
+
+    }
+
+    /**
      * 获取订单信息DTO
      *
      * @param createOrder
@@ -258,6 +282,7 @@ public class OrderManagerConvert {
         OrderInfoDTO orderInfo = new OrderInfoDTO();
         BeanUtils.copyProperties(createOrder, orderInfo);
 
+        orderInfo.setOutput(output);
         orderInfo.setChannelCode(createOrder.getGatewayChannel().getChannelCode());
         orderInfo.setSubChannelCode(createOrder.getGatewaySubChannel().getChannelCode());
         orderInfo.setCalleeOrderId(output.getCalleeOrderId());

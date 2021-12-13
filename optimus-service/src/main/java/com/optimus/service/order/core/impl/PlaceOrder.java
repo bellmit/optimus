@@ -1,5 +1,6 @@
 package com.optimus.service.order.core.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,7 +15,6 @@ import com.optimus.dao.result.MemberInfoChainResult;
 import com.optimus.manager.account.AccountManager;
 import com.optimus.manager.account.dto.DoTransDTO;
 import com.optimus.manager.gateway.GatewayManager;
-import com.optimus.manager.gateway.dto.ExecuteScriptInputDTO;
 import com.optimus.manager.gateway.dto.ExecuteScriptOutputDTO;
 import com.optimus.manager.member.MemberManager;
 import com.optimus.manager.member.dto.MemberTransConfineDTO;
@@ -75,30 +75,27 @@ public class PlaceOrder extends BaseOrder {
     @Override
     public OrderInfoDTO createOrder(CreateOrderDTO createOrder) {
 
-        // 查询码商会员交易限制
-        MemberTransConfineDTO memberTransConfine = memberManager.getMemberTransConfineByMemberId(createOrder.getCodeMemberId());
-        AssertUtil.notEmpty(memberTransConfine.getCodeBalanceSwitch(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置码商余额限制开关");
-        AssertUtil.notEmpty(memberTransConfine.getReleaseFreezeBalanceAging(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置释放冻结余额时效");
+        // 会员交易限制
+        MemberTransConfineDTO memberTransConfine = null;
 
-        // 验证码商余额:非自研渠道且非关闭
-        if (!StringUtils.pathEquals(GatewayChannelGroupEnum.CHANNEL_GROUP_I.getCode(), createOrder.getGatewayChannel().getChannelGroup())
-                && !StringUtils.pathEquals(MemberCodeBalanceSwitchEnum.CODE_BALANCE_SWITCH_N.getCode(), memberTransConfine.getCodeBalanceSwitch())) {
-            // 验证账户金额是否充足
-            super.checkAccountAmount(createOrder.getCodeMemberId(), createOrder.getOrderAmount(), AccountTypeEnum.ACCOUNT_TYPE_B);
+        // 验证会员交易:外部
+        if (StringUtils.pathEquals(GatewayChannelGroupEnum.CHANNEL_GROUP_O.getCode(), createOrder.getGatewayChannel().getChannelGroup())) {
+            memberTransConfine = checkMemberTrans(createOrder.getCodeMemberId(), createOrder.getOrderAmount());
         }
 
         // 执行脚本
-        ExecuteScriptInputDTO input = OrderManagerConvert.getExecuteScriptInputDTO(createOrder);
-        ExecuteScriptOutputDTO output = gatewayManager.executeScript(input);
+        ExecuteScriptOutputDTO output = gatewayManager.executeScript(OrderManagerConvert.getExecuteScriptInputDTO(createOrder));
 
-        // 订单信息DTO
+        // 订单信息
         OrderInfoDTO orderInfo = OrderManagerConvert.getOrderInfoDTO(createOrder, output);
-        orderInfo.setOutput(output);
-
-        // 验证下单状态
         if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_NP.getCode(), orderInfo.getOrderStatus())) {
             orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_AF.getCode());
             return orderInfo;
+        }
+
+        // 验证会员交易:自研
+        if (StringUtils.pathEquals(GatewayChannelGroupEnum.CHANNEL_GROUP_I.getCode(), createOrder.getGatewayChannel().getChannelGroup())) {
+            memberTransConfine = checkMemberTrans(createOrder.getCodeMemberId());
         }
 
         // 不冻结码商余额
@@ -109,8 +106,8 @@ public class PlaceOrder extends BaseOrder {
 
         // 记账List
         List<DoTransDTO> doTransList = new ArrayList<>();
-        doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.B_MINUS, orderInfo, "下单减余额户"));
-        doTransList.add(OrderManagerConvert.getDoTransDTO(AccountChangeTypeEnum.F_PLUS, orderInfo, "下单加冻结户"));
+        doTransList.add(OrderManagerConvert.getDoTransForCode(AccountChangeTypeEnum.B_MINUS, orderInfo, "下单减余额户"));
+        doTransList.add(OrderManagerConvert.getDoTransForCode(AccountChangeTypeEnum.F_PLUS, orderInfo, "下单加冻结户"));
 
         // 记账
         boolean doTrans = accountManager.doTrans(doTransList);
@@ -161,6 +158,46 @@ public class PlaceOrder extends BaseOrder {
 
         // 异步通知商户
         orderManager.asyncOrderNotice(orderInfo);
+
+    }
+
+    /**
+     * 验证会员交易:外部
+     * 
+     * @param codeMemberId
+     * @param orderAmount
+     * @return
+     */
+    private MemberTransConfineDTO checkMemberTrans(String codeMemberId, BigDecimal orderAmount) {
+
+        // 查询码商会员交易限制
+        MemberTransConfineDTO memberTransConfine = memberManager.getMemberTransConfineByMemberId(codeMemberId);
+        AssertUtil.notEmpty(memberTransConfine.getCodeBalanceSwitch(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置码商余额限制开关");
+        AssertUtil.notEmpty(memberTransConfine.getReleaseFreezeBalanceAging(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置释放冻结余额时效");
+
+        // 验证账户金额是否充足
+        if (!StringUtils.pathEquals(MemberCodeBalanceSwitchEnum.CODE_BALANCE_SWITCH_N.getCode(), memberTransConfine.getCodeBalanceSwitch())) {
+            super.checkAccountAmount(codeMemberId, orderAmount, AccountTypeEnum.ACCOUNT_TYPE_B);
+        }
+
+        return memberTransConfine;
+
+    }
+
+    /**
+     * 验证会员交易:自研
+     * 
+     * @param codeMemberId
+     * @return
+     */
+    private MemberTransConfineDTO checkMemberTrans(String codeMemberId) {
+
+        // 查询码商会员交易限制
+        MemberTransConfineDTO memberTransConfine = memberManager.getMemberTransConfineByMemberId(codeMemberId);
+        AssertUtil.notEmpty(memberTransConfine.getFreezeBalanceSwitch(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置码商订单释放状态开关");
+        AssertUtil.notEmpty(memberTransConfine.getReleaseFreezeBalanceAging(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置释放冻结余额时效");
+
+        return memberTransConfine;
 
     }
 
