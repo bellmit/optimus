@@ -133,6 +133,11 @@ public class OrderManagerImpl implements OrderManager {
     @Override
     public boolean splitProfit(OrderInfoDTO orderInfo, List<MemberInfoChainResult> chainList, List<MemberChannelDO> memberChannelList) {
 
+        // 订单状态不为成功
+        if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_AP.getCode(), orderInfo.getOrderStatus())) {
+            return false;
+        }
+
         // 账户交易List
         List<DoTransDTO> doTransList = OrderManagerConvert.getDoTransDTOList(orderInfo, chainList, memberChannelList);
 
@@ -155,6 +160,12 @@ public class OrderManagerImpl implements OrderManager {
 
     @Override
     public boolean orderNotice(OrderInfoDTO orderInfo) {
+
+        // 订单状态不为成功或失败
+        if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_AP.getCode(), orderInfo.getOrderStatus())
+                && !StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_AF.getCode(), orderInfo.getOrderStatus())) {
+            return false;
+        }
 
         // 获取订单通知DTO
         OrderNoticeDTO orderNotice = OrderManagerConvert.getOrderNoticeDTO(orderInfo);

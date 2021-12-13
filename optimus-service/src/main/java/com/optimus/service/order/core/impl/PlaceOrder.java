@@ -95,7 +95,7 @@ public class PlaceOrder extends BaseOrder {
 
         // 验证会员交易:自研
         if (StringUtils.pathEquals(GatewayChannelGroupEnum.CHANNEL_GROUP_I.getCode(), createOrder.getGatewayChannel().getChannelGroup())) {
-            memberTransConfine = checkMemberTrans(createOrder.getCodeMemberId());
+            memberTransConfine = checkMemberTrans(orderInfo.getCodeMemberId());
         }
 
         // 不冻结码商余额

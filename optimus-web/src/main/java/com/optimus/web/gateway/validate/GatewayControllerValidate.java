@@ -7,6 +7,8 @@ import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.exception.OptimusException;
 
+import org.springframework.util.StringUtils;
+
 /**
  * 网关渠道ControllerValidate
  * 
@@ -29,8 +31,11 @@ public class GatewayControllerValidate {
         AssertUtil.notEmpty(output.getAmount(), RespCodeEnum.INVALID_PARAM, "订单金额不能为空");
         AssertUtil.notEmpty(output.getActualAmount(), RespCodeEnum.INVALID_PARAM, "订单实际金额不能为空");
 
-        // 订单状态:成功
-        AssertUtil.notEquals(OrderStatusEnum.ORDER_STATUS_AP.getCode(), output.getOrderStatus(), RespCodeEnum.INVALID_PARAM, "订单状态必须为成功");
+        // 订单状态:成功或失败
+        if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_AP.getCode(), output.getOrderStatus())
+                && !StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_AF.getCode(), output.getOrderStatus())) {
+            throw new OptimusException(RespCodeEnum.INVALID_PARAM, "订单状态只能为成功或失败");
+        }
 
         // 金额合法性
         if (output.getAmount().scale() > Integer.parseInt(BaseEnum.SCALE_TWO.getCode())) {
