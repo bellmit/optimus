@@ -37,8 +37,8 @@ public class MemberServiceImpl implements MemberService {
         MemberInfoDTO memberInfo = memberManager.getMemberInfoByMemberId(memberId);
 
         // 断言:不为空,未删除
-        AssertUtil.notEmpty(memberInfo, RespCodeEnum.MEMBER_NO, null);
-        AssertUtil.notEquals(MemberDeleteFlagEnum.DELETE_FLAG_ND.getCode(), memberInfo.getDeleteFlag(), RespCodeEnum.MEMBER_NO, null);
+        AssertUtil.notEmpty(memberInfo, RespCodeEnum.MEMBER_ERROR, "会员不存在");
+        AssertUtil.notEquals(MemberDeleteFlagEnum.DELETE_FLAG_ND.getCode(), memberInfo.getDeleteFlag(), RespCodeEnum.MEMBER_ERROR, "会员已删除");
 
         return memberInfo;
 
@@ -54,7 +54,7 @@ public class MemberServiceImpl implements MemberService {
 
         // 根据直接上级会员编号查询会员信息
         MemberInfoDTO subMemberInfo = memberManager.getMemberInfoByMemberId(subDirectMemberId);
-        AssertUtil.notEmpty(subMemberInfo, RespCodeEnum.MEMBER_NO, "下级会员不能为空");
+        AssertUtil.notEmpty(subMemberInfo, RespCodeEnum.MEMBER_ERROR, "下级会员不能为空");
 
         // 验证上下级关系
         AssertUtil.notEquals(memberInfo.getMemberId(), subMemberInfo.getSupDirectMemberId(), RespCodeEnum.MEMBER_ERROR, "上下级关系异常");

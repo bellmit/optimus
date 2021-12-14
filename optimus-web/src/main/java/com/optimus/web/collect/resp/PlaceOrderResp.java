@@ -23,13 +23,6 @@ public class PlaceOrderResp implements Serializable {
     private String memberId;
 
     /**
-     * 订单状态
-     * 
-     * @see OrderStatusEnum
-     */
-    private String orderStatus;
-
-    /**
      * 订单编号
      */
     private String orderId;
@@ -38,6 +31,13 @@ public class PlaceOrderResp implements Serializable {
      * 调用方订单编号
      */
     private String callerOrderId;
+
+    /**
+     * 订单状态
+     * 
+     * @see OrderStatusEnum
+     */
+    private String orderStatus;
 
     /**
      * 订单金额

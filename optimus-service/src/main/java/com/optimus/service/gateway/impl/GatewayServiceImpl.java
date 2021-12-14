@@ -48,7 +48,7 @@ public class GatewayServiceImpl implements GatewayService {
 
         // 根据渠道编号查询网关渠道
         GatewayChannelDO gatewayChannelDO = gatewayChannelDao.getGatewayChannelByChannelCode(channelCode);
-        AssertUtil.notEmpty(gatewayChannelDO, RespCodeEnum.GATEWAY_CHANNEL_NO, null);
+        AssertUtil.notEmpty(gatewayChannelDO, RespCodeEnum.GATEWAY_CHANNEL_ERROR, "网关渠道不存在");
 
         // 网关渠道DTO
         GatewayChannelDTO gatewayChannel = new GatewayChannelDTO();
@@ -63,7 +63,7 @@ public class GatewayServiceImpl implements GatewayService {
 
         // 根据网关子渠道编号查询网关子渠道
         GatewaySubChannelDO gatewaySubChannelDO = gatewaySubChannelDao.getGatewaySubChannelBySubChannelCode(channelCode);
-        AssertUtil.notEmpty(gatewaySubChannelDO, RespCodeEnum.GATEWAY_CHANNEL_NO, null);
+        AssertUtil.notEmpty(gatewaySubChannelDO, RespCodeEnum.GATEWAY_CHANNEL_ERROR, "网关子渠道不存在");
 
         // 网关子渠道DTO
         GatewaySubChannelDTO gatewaySubChannel = new GatewaySubChannelDTO();

@@ -28,7 +28,7 @@ public class AccountManagerValidate {
     public static void validateDoTrans(List<DoTransDTO> doTransList) {
 
         // 断言:账户交易入参
-        AssertUtil.notEmpty(doTransList, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易入参不能为空");
+        AssertUtil.notEmpty(doTransList, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易对象不能为空");
 
         // 账户交易重复性
         Set<String> maSet = new HashSet<>();

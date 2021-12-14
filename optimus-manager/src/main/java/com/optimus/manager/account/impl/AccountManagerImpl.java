@@ -107,14 +107,14 @@ public class AccountManagerImpl implements AccountManager {
         List<AccountInfoDO> accountInfoList = accountInfoDao.listAccountInfoByMemberIdLists(memberIdList);
 
         // 断言:账户信息
-        AssertUtil.notEmpty(accountInfoList, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易账户信息不能为空");
+        AssertUtil.notEmpty(accountInfoList, RespCodeEnum.ACCOUNT_ERROR, "账户信息不能为空");
 
         // 获取涉及的账户信息
         accountInfoList = AccountManagerConvert.getAccountInfoDOList(accountInfoList, doTransList);
         log.info("buildAccountInfoList accountInfoList is {}", accountInfoList);
 
         // 断言:涉及账户信息
-        AssertUtil.notEmpty(accountInfoList, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易账户信息不能为空");
+        AssertUtil.notEmpty(accountInfoList, RespCodeEnum.ACCOUNT_ERROR, "账户信息不能为空");
 
         return accountInfoList;
 
@@ -158,7 +158,7 @@ public class AccountManagerImpl implements AccountManager {
         log.info("addBatchAccountLog accountLogList is {}", accountLogList);
 
         // 验证获取的账户日志
-        AssertUtil.notEmpty(accountLogList, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易账户日志不能为空");
+        AssertUtil.notEmpty(accountLogList, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易账户日志对象不能为空");
 
         // 记录账户日志
         accountLogDao.addBatchAccountLog(accountLogList);

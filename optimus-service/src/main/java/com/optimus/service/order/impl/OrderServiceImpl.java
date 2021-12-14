@@ -65,7 +65,7 @@ public class OrderServiceImpl implements OrderService {
 
         // 查询订单信息
         OrderInfoDO orderInfoDO = orderInfoDao.getOrderInfoByMemberIdAndCallerOrderId(memberId, callerOrderId);
-        AssertUtil.notEmpty(orderInfoDO, RespCodeEnum.ORDER_NO, null);
+        AssertUtil.notEmpty(orderInfoDO, RespCodeEnum.ORDER_ERROR, "订单不存在");
 
         // 订单信息DTO
         OrderInfoDTO orderInfo = new OrderInfoDTO();

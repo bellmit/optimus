@@ -115,7 +115,7 @@ public class CollectController {
         OrderInfoDTO orderInfo = orderService.getOrderInfoByOrderId(req.getOrderId());
 
         // 验证:订单/会员编号合法性/订单类型/订单状态
-        AssertUtil.notEmpty(orderInfo, RespCodeEnum.ORDER_NO, null);
+        AssertUtil.notEmpty(orderInfo, RespCodeEnum.ORDER_ERROR, "订单不存在");
         AssertUtil.notEquals(orderInfo.getMemberId(), req.getSubMemberId(), RespCodeEnum.ORDER_ERROR, null);
         AssertUtil.notEquals(OrderTypeEnum.ORDER_TYPE_R.getCode(), orderInfo.getOrderType(), RespCodeEnum.ORDER_ERROR, "订单类型异常");
         AssertUtil.notEquals(OrderStatusEnum.ORDER_STATUS_NP.getCode(), orderInfo.getOrderStatus(), RespCodeEnum.ORDER_ERROR, "订单状态异常");
@@ -224,7 +224,7 @@ public class CollectController {
         OrderInfoDTO orderInfo = orderService.getOrderInfoByOrderId(req.getOrderId());
 
         // 验证:订单/会员编号合法性/订单类型/订单状态
-        AssertUtil.notEmpty(orderInfo, RespCodeEnum.ORDER_NO, null);
+        AssertUtil.notEmpty(orderInfo, RespCodeEnum.ORDER_ERROR, "订单不存在");
         AssertUtil.notEquals(orderInfo.getMemberId(), req.getSubMemberId(), RespCodeEnum.ORDER_ERROR, null);
         AssertUtil.notEquals(OrderTypeEnum.ORDER_TYPE_W.getCode(), orderInfo.getOrderType(), RespCodeEnum.ORDER_ERROR, "订单类型异常");
         AssertUtil.notEquals(OrderStatusEnum.ORDER_STATUS_NP.getCode(), orderInfo.getOrderStatus(), RespCodeEnum.ORDER_ERROR, "订单状态异常");

@@ -120,7 +120,7 @@ public class OrderManagerConvert {
                 return r;
             }
 
-            throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "获取账户交易异常");
+            throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "获取账户交易对象异常");
         });
 
         return doTransList;

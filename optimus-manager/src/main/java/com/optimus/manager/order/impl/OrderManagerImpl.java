@@ -81,7 +81,7 @@ public class OrderManagerImpl implements OrderManager {
 
         // 查询订单信息
         OrderInfoDO orderInfoDO = orderInfoDao.getOrderInfoByCallerOrderId(orderInfo.getCallerOrderId());
-        AssertUtil.empty(orderInfoDO, RespCodeEnum.ORDER_EXIST_ERROR, null);
+        AssertUtil.empty(orderInfoDO, RespCodeEnum.ORDER_ERROR, "订单已存在");
 
         try {
 

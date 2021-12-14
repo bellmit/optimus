@@ -52,7 +52,7 @@ public abstract class BaseOrder {
 
         // 账户金额不足
         if (accountInfo.getAmount().compareTo(orderAmount) < 0) {
-            throw new OptimusException(RespCodeEnum.ACCOUNT_AMOUNT_ERROR);
+            throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户金额不足");
         }
 
     }
