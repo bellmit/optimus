@@ -26,6 +26,11 @@ public class MemberChannelDTO implements Serializable {
     private String memberId;
 
     /**
+     * 代理会员编号
+     */
+    private String agentMemberId;
+
+    /**
      * 网关渠道编号
      */
     private String channelCode;
@@ -34,11 +39,6 @@ public class MemberChannelDTO implements Serializable {
      * 网关子渠道编号
      */
     private String subChannelCode;
-
-    /**
-     * 代理会员编号
-     */
-    private String agentMemberId;
 
     /**
      * 会员类型[冗余一份用以匹配渠道]

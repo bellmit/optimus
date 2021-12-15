@@ -5,9 +5,9 @@
   <resultMap id="BaseResultMap" type="com.optimus.dao.domain.MemberChannelDO">
     <id column="ID" jdbcType="NUMERIC" property="id" />
     <result column="MEMBER_ID" jdbcType="VARCHAR" property="memberId" />
+    <result column="AGENT_MEMBER_ID" jdbcType="VARCHAR" property="agentMemberId" />
     <result column="CHANNEL_CODE" jdbcType="VARCHAR" property="channelCode" />
     <result column="SUB_CHANNEL_CODE" jdbcType="VARCHAR" property="subChannelCode" />
-    <result column="AGENT_MEMBER_ID" jdbcType="VARCHAR" property="agentMemberId" />
     <result column="MEMBER_TYPE" jdbcType="VARCHAR" property="memberType" />
     <result column="RATE" jdbcType="NUMERIC" property="rate" />
     <result column="CREATE_BY" jdbcType="VARCHAR" property="createBy" />
@@ -17,8 +17,8 @@
   </resultMap>
 
   <sql id="Base_Column_List">
-    ID, MEMBER_ID, CHANNEL_CODE, SUB_CHANNEL_CODE, AGENT_MEMBER_ID, MEMBER_TYPE, 
-    RATE, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME
+    ID, MEMBER_ID, AGENT_MEMBER_ID, CHANNEL_CODE, SUB_CHANNEL_CODE, 
+    MEMBER_TYPE, RATE, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME
   </sql>
 
   <select id="getMemberChannelById" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -38,7 +38,7 @@
   </select>
 
   <select id="listMemberChannelTopByMemberChannelQuerys" resultMap="BaseResultMap">
-    select top 100
+    select top 1000
     <include refid="Base_Column_List" />
     from T_MEMBER_CHANNEL
     where AGENT_MEMBER_ID = #{memberChannelQuery.agentMemberId,jdbcType=VARCHAR}
@@ -58,14 +58,14 @@
       <if test="memberId != null">
         MEMBER_ID,
       </if>
+      <if test="agentMemberId != null">
+        AGENT_MEMBER_ID,
+      </if>
       <if test="channelCode != null">
         CHANNEL_CODE,
       </if>
       <if test="subChannelCode != null">
         SUB_CHANNEL_CODE,
-      </if>
-      <if test="agentMemberId != null">
-        AGENT_MEMBER_ID,
       </if>
       <if test="memberType != null">
         MEMBER_TYPE,
@@ -91,11 +91,11 @@
       </if>
       <if test="memberId != null"> #{memberId,jdbcType=VARCHAR},
       </if>
+      <if test="agentMemberId != null"> #{agentMemberId,jdbcType=VARCHAR},
+      </if>
       <if test="channelCode != null"> #{channelCode,jdbcType=VARCHAR},
       </if>
       <if test="subChannelCode != null"> #{subChannelCode,jdbcType=VARCHAR},
-      </if>
-      <if test="agentMemberId != null"> #{agentMemberId,jdbcType=VARCHAR},
       </if>
       <if test="memberType != null"> #{memberType,jdbcType=VARCHAR},
       </if>
@@ -118,14 +118,14 @@
       <if test="memberId != null">
         MEMBER_ID = #{memberId,jdbcType=VARCHAR},
       </if>
+      <if test="agentMemberId != null">
+        AGENT_MEMBER_ID = #{agentMemberId,jdbcType=VARCHAR},
+      </if>
       <if test="channelCode != null">
         CHANNEL_CODE = #{channelCode,jdbcType=VARCHAR},
       </if>
       <if test="subChannelCode != null">
         SUB_CHANNEL_CODE = #{subChannelCode,jdbcType=VARCHAR},
-      </if>
-      <if test="agentMemberId != null">
-        AGENT_MEMBER_ID = #{agentMemberId,jdbcType=VARCHAR},
       </if>
       <if test="memberType != null">
         MEMBER_TYPE = #{memberType,jdbcType=VARCHAR},
