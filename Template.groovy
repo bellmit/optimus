@@ -45,7 +45,7 @@ class GroovyChannelService {
 
         // 在此处编写创建订单实现
 
-        GroovyExecuteScriptOutputDTO output = new GroovyExecuteScriptOutputDTO(codeMemberId: "自研渠道必有码商会员编号", orderId: input.getOrderId(), calleeOrderId: "被调用方订单编号", orderStatus: "NP", amount: input.getAmount(), actualAmount: new BigDecimal("100"), channelReturnMessage: "乱七八糟一大堆", content: "{\"text\":\"html代码\",\"url\":\"url地址\"}")
+        GroovyExecuteScriptOutputDTO output = new GroovyExecuteScriptOutputDTO(codeMemberId: "自研渠道必有", orderId: input.getOrderId(), calleeOrderId: "被调用方订单编号", orderStatus: "NP", amount: input.getAmount(), actualAmount: new BigDecimal("100"), channelReturnMessage: "乱七八糟一大堆", content: "{\"text\":\"html代码\",\"url\":\"url地址\"}")
         
         return JSON.toJSONString(output)
     }
@@ -55,7 +55,7 @@ class GroovyChannelService {
 
         // 在此处编写调单查询实现
 
-        GroovyExecuteScriptOutputDTO output = new GroovyExecuteScriptOutputDTO(orderId: input.getOrderId(), calleeOrderId: input.getCalleeOrderId(), orderStatus: "AP")
+        GroovyExecuteScriptOutputDTO output = new GroovyExecuteScriptOutputDTO(orderId: input.getOrderId(), calleeOrderId: input.getCalleeOrderId(), orderStatus: "AP", amount: input.getAmount(), actualAmount: new BigDecimal("100"))
         
         return JSON.toJSONString(output)
     }
@@ -65,7 +65,7 @@ class GroovyChannelService {
 
         // 在此处编写渠道回调解析请求参数实现
 
-        GroovyExecuteScriptOutputDTO output = new GroovyExecuteScriptOutputDTO(orderId: "订单编号", calleeOrderId: "被调用方订单编号", orderStatus: "AP")
+        GroovyExecuteScriptOutputDTO output = new GroovyExecuteScriptOutputDTO(orderId: "订单编号", calleeOrderId: "被调用方订单编号", orderStatus: "AP", amount: new BigDecimal("100"), actualAmount: new BigDecimal("100"))
 
         return JSON.toJSONString(output)
     }
