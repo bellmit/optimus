@@ -80,7 +80,7 @@ public class CreateOrderDTO implements Serializable {
     /**
      * 回调商户地址[商户下单时传入]
      */
-    private String merchantCallBackUrl;
+    private String merchantCallbackUrl;
 
     /**
      * 商户重定向地址[商户下单时传入]

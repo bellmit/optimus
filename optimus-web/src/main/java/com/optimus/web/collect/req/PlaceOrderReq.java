@@ -20,7 +20,7 @@ public class PlaceOrderReq extends BaseCollectReq {
     /**
      * 回调商户地址[商户下单时传入]
      */
-    private String merchantCallBackUrl;
+    private String merchantCallbackUrl;
 
     /**
      * 商户客户端IP[商户下单时传入]

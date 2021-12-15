@@ -59,7 +59,7 @@ public class CollectControllerValidate {
         // 自身业务
         AssertUtil.notEmpty(req.getAmount(), RespCodeEnum.INVALID_PARAM, "订单金额不能为空");
         AssertUtil.notEmpty(req.getChannelCode(), RespCodeEnum.INVALID_PARAM, "网关渠道编号不能为空");
-        AssertUtil.notEmpty(req.getMerchantCallBackUrl(), RespCodeEnum.INVALID_PARAM, "回调商户地址不能为空");
+        AssertUtil.notEmpty(req.getMerchantCallbackUrl(), RespCodeEnum.INVALID_PARAM, "回调商户地址不能为空");
     }
 
     /**

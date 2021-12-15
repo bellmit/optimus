@@ -26,6 +26,7 @@ public class OrderManagerValidate {
     /** 会员信息链表达式 */
     private static final String MERCHANT_CHAIN_EXP = "^C+A+MS$";
 
+    private static final String MEMBER_TYPE_S = MemberTypeEnum.MEMBER_TYPE_S.getCode();
     private static final String MEMBER_TYPE_A = MemberTypeEnum.MEMBER_TYPE_A.getCode();
     private static final String MEMBER_TYPE_B = MemberTypeEnum.MEMBER_TYPE_B.getCode();
     private static final String MEMBER_TYPE_C = MemberTypeEnum.MEMBER_TYPE_C.getCode();
@@ -43,8 +44,8 @@ public class OrderManagerValidate {
         AssertUtil.notEmpty(chainList, RespCodeEnum.MEMBER_ERROR, "会员信息链不能为空");
         AssertUtil.notEmpty(memberChannelList, RespCodeEnum.MEMBER_CHANNEL_ERROR, "会员渠道不能为空");
 
-        // 注意:会员信息链上没有商户会员编号,需加上商户会员编号作为验证依据
-        if ((chainList.size() + 1) != memberChannelList.size()) {
+        // 注意:会员信息链无商户会员编号,会员渠道List无平台
+        if (chainList.size() != memberChannelList.size()) {
             throw new OptimusException(RespCodeEnum.MEMBER_ERROR, "会员信息链和会员渠道不匹配");
         }
 
@@ -145,6 +146,11 @@ public class OrderManagerValidate {
             // 费率
             BigDecimal lRate = map.get(l.getMemberId());
             BigDecimal rRate = map.get(r.getMemberId());
+
+            // 平台
+            if (StringUtils.pathEquals(MEMBER_TYPE_S, rMemberType)) {
+                return r;
+            }
 
             // 码商->码商:费率依次递减
             if (StringUtils.pathEquals(MEMBER_TYPE_C, rMemberType) && lRate.compareTo(rRate) <= 0) {

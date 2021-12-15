@@ -359,13 +359,13 @@
   <update id="updateOrderInfoByIdAndOrderStatus">
     update T_ORDER_INFO
     <set>
-      <if test="orderStatus != null">
+      <if test="orderInfo.orderStatus != null">
         ORDER_STATUS = #{orderInfo.orderStatus,jdbcType=VARCHAR},
       </if>
-      <if test="splitProfitStatus != null">
-        SPLIT_PROFIT_STATUS = #{splitProfitStatus,jdbcType=VARCHAR},
+      <if test="orderInfo.splitProfitStatus != null">
+        SPLIT_PROFIT_STATUS = #{orderInfo.splitProfitStatus,jdbcType=VARCHAR},
       </if>
-      <if test="updateTime != null">
+      <if test="orderInfo.updateTime != null">
         UPDATE_TIME = #{orderInfo.updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
