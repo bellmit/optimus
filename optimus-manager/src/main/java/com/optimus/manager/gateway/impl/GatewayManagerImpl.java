@@ -125,7 +125,7 @@ public class GatewayManagerImpl implements GatewayManager {
 
         // 查询代理在子渠道下配置的码商会员渠道List
         MemberChannelQuery memberChannelQuery = GatewayManagerConvert.getMemberChannelQuery(memberInfo, gatewaySubChannelList);
-        List<MemberChannelDO> memberChannelList = memberChannelDao.listMemberChannelTopByMemberChannelQuerys(memberChannelQuery);
+        List<MemberChannelDO> memberChannelList = memberChannelDao.listMemberChannelHundredByMemberChannelQuerys(memberChannelQuery);
         AssertUtil.notEmpty(memberChannelList, RespCodeEnum.MEMBER_CHANNEL_ERROR, "无会员渠道");
 
         // 查询码商会员的有效性

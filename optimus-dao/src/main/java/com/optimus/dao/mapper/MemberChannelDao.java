@@ -31,12 +31,12 @@ public interface MemberChannelDao {
     List<MemberChannelDO> listMemberChannelByMemberIdLists(@Param("memberIdList") List<String> memberIdList);
 
     /**
-     * 根据会员渠道Query随机查询头N条会员渠道
+     * 根据会员渠道Query随机查询100条会员渠道
      * 
      * @param query
      * @return
      */
-    List<MemberChannelDO> listMemberChannelTopByMemberChannelQuerys(@Param("memberChannelQuery") MemberChannelQuery query);
+    List<MemberChannelDO> listMemberChannelHundredByMemberChannelQuerys(@Param("memberChannelQuery") MemberChannelQuery query);
 
     /**
      * 新增一条会员渠道

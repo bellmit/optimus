@@ -37,8 +37,8 @@
     </foreach>
   </select>
 
-  <select id="listMemberChannelTopByMemberChannelQuerys" resultMap="BaseResultMap">
-    select top 1000
+  <select id="listMemberChannelHundredByMemberChannelQuerys" resultMap="BaseResultMap">
+    select top 100
     <include refid="Base_Column_List" />
     from T_MEMBER_CHANNEL
     where AGENT_MEMBER_ID = #{memberChannelQuery.agentMemberId,jdbcType=VARCHAR}
