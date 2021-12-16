@@ -69,7 +69,7 @@ class GroovyChannelService {
 }
 
 // Http工具
-class HttpUtil {
+class GroovyHttpUtil {
 
     // Post请求
     def doPost(url, data) {
@@ -84,6 +84,17 @@ class HttpUtil {
         writer.close()
 
         return conn.content.text
+    }
+
+}
+
+// 加签工具
+class GroovySignUtil {
+
+    // 加签
+    def doSign(GroovyExecuteScriptInputDTO input) {
+
+        return "签名串"
     }
 
 }
