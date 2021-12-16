@@ -1,11 +1,7 @@
 // 依赖
 @Grab("com.alibaba:fastjson:1.2.9")
-@Grab("org.codehaus.groovy:http-builder:0.4.1")
 
 // 导入包
-import static groovyx.net.http.ContentType.*
-import static groovyx.net.http.Method.*
-import groovyx.net.http.HTTPBuilder
 import com.alibaba.fastjson.JSON
 import java.math.BigDecimal
 import java.util.Date
@@ -68,6 +64,26 @@ class GroovyChannelService {
         GroovyExecuteScriptOutputDTO output = new GroovyExecuteScriptOutputDTO(orderId: "订单编号", calleeOrderId: "被调用方订单编号", orderStatus: "AP", amount: new BigDecimal("100"), actualAmount: new BigDecimal("100"))
 
         return JSON.toJSONString(output)
+    }
+
+}
+
+// Http工具
+class HttpUtil {
+
+    // Post请求
+    def doPost(url, data) {
+        def conn = new URL(url).openConnection()
+        conn.setRequestMethod("POST")
+        conn.setRequestProperty("Content-Type", "application/json")
+        conn.doOutput = true
+
+        def writer = new OutputStreamWriter(conn.outputStream)
+        writer.write(data)
+        writer.flush()
+        writer.close()
+
+        return conn.content.text
     }
 
 }
