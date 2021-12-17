@@ -4,7 +4,11 @@
 // 导入包
 import com.alibaba.fastjson.JSON
 import java.math.BigDecimal
+import java.security.MessageDigest
+import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.TreeMap
+import org.springframework.util.StringUtils
 
 // 程式执行
 action(input)
@@ -94,7 +98,29 @@ class GroovySignUtil {
     // 加签
     def doSign(GroovyExecuteScriptInputDTO input) {
 
-        return "签名串"
+        def bizContent = JSON.parseObject(input.getBizContent())
+
+        Map<String, Object> treeMap = new TreeMap<>(String::compareTo)
+
+        treeMap.put("MchId", bizContent.channelMerchnatId)
+        treeMap.put("MchOrderNo", input.getCalleeOrderId())
+        treeMap.put("NotifyUrl", bizContent.callbackUrl)
+        treeMap.put("RequestTime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(input.getOrderTime()))
+        treeMap.put("CategoryCode", bizContent.channelCode)
+        treeMap.put("amount", input.getAmount())
+        treeMap.put("Attach", "这是附加信息")
+        treeMap.put("Title", "这是一笔订单")
+
+        def strRes = ""
+        for(String str:treeMap.keySet()){
+            if(StringUtils.isEmpty(strRes)){
+                strRes = str.toLowerCase() + "=" + treeMap.get(str)
+            } else {
+                strRes = strRes + "&" + str.toLowerCase() + "=" + treeMap.get(str)
+            }
+        }
+        def sn = MessageDigest.getInstance("MD5").digest("$strRes".bytes).encodeHex().toString().toLowerCase()
+        return strRes + "&sign=" + sn
     }
 
 }
