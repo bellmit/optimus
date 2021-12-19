@@ -46,34 +46,19 @@ class GroovyChannelService {
         // 在此处编写创建订单实现
         GroovySignUtil groovySignUtil = new GroovySignUtil()
         GroovyHttpUtil groovyHttpUtil = new GroovyHttpUtil()
-
         def bizContent = JSON.parseObject(input.getBizContent())
         Map<String, Object> treeMap = new TreeMap<>(String::compareTo)
-
-        // treeMap.put("MchId", bizContent.channelMerchnatId)
-        // treeMap.put("MchOrderNo", input.getCalleeOrderId())
-        // treeMap.put("NotifyUrl", bizContent.callbackUrl)
-        // treeMap.put("RequestTime", new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(input.getOrderTime()))
-        // treeMap.put("CategoryCode", bizContent.channelCode)
-        // treeMap.put("Amount", input.getAmount())
-        // treeMap.put("Attach", "这是附加信息")
-        // treeMap.put("Title", "这是一笔订单")
-        // treeMap.put("Sign", groovySignUtil.doSign(input))
-
-        treeMap.put("MchId", 574306)
-        treeMap.put("MchOrderNo", "LD1210101240980847")
-        treeMap.put("NotifyUrl", "www.baidu.com")
-        treeMap.put("RequestTime", "2021-12-19 12:59:54")
-        treeMap.put("CategoryCode", 100)
-        treeMap.put("Amount", 100)
+        treeMap.put("MchId", bizContent.channelMerchnatId)
+        treeMap.put("MchOrderNo", input.getCalleeOrderId())
+        treeMap.put("NotifyUrl", bizContent.callbackUrl)
+        treeMap.put("RequestTime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(input.getOrderTime()))
+        treeMap.put("CategoryCode", bizContent.channelCode)
+        treeMap.put("Amount", input.getAmount())
         treeMap.put("Attach", "这是附加信息")
         treeMap.put("Title", "这是一笔订单")
-        treeMap.put("Sign", groovySignUtil.doSign(treeMap, "45b066904eb6cd4a5fe3c10bc7e070fd"))
+        treeMap.put("Sign", groovySignUtil.doSign(treeMap, bizContent.channelMerchnatKey))
 
-        def res = groovyHttpUtil.doPost("http://150.109.121.163:9000/api/Pay/Create", JSON.toJSONString(treeMap))
-        println '========' + res
-
-        // def res = groovyHttpUtil.doPost(bizContent.createOrderUrl, JSON.toJSONString(treeMap))
+        def res = groovyHttpUtil.doPost(bizContent.createOrderUrl, JSON.toJSONString(treeMap))
         def resJson = JSON.parseObject(res)
 
         GroovyExecuteScriptOutputDTO output = new GroovyExecuteScriptOutputDTO()
@@ -81,13 +66,14 @@ class GroovyChannelService {
             output.setOrderStatus("AF")
             return JSON.toJSONString(output)
         }
-        // output.setCodeMemberId(bizContent.channelMerchnatId)
-        // output.setOrderId(input.getOrderId())
-        // output.setCalleeOrderId(input.getCalleeOrderId())
-        // output.setOrderStatus("NP")
-        // output.setAmount(input.getAmount())
-        // output.setActualAmount(input.getAmount())
-        // output.setChannelReturnMessage(res)
+        output.setCodeMemberId(bizContent.channelMerchnatId)
+        output.setOrderId(input.getOrderId())
+        output.setCalleeOrderId(input.getCalleeOrderId())
+        output.setOrderStatus("NP")
+        output.setAmount(input.getAmount())
+        output.setActualAmount(input.getAmount())
+        output.setChannelReturnMessage(JSON.toJSONString(resJson.ResData))
+        output.setContent(res)
         return JSON.toJSONString(output)
     }
 
@@ -167,7 +153,8 @@ class GroovyExecuteScriptInputDTO {
     BigDecimal amount           // 订单金额
     Date orderTime              // 订单时间
     String implPath             // 实现路径
-    String bizContent           // 业务大字段[{"channelMerchnatId":"商户编号","channelMerchnatKey":"商户密钥","channelCode":"渠道编号","subChannelCode":"子渠道编号","callbackUrl":"回调地址","redirectUrl":"重定向地址","createOrderUrl":"创建订单地址","queryOrderUrl":"调单查询地址"}]
+    String bizContent
+    // 业务大字段[{"channelMerchnatId":"商户编号","channelMerchnatKey":"商户密钥","channelCode":"渠道编号","subChannelCode":"子渠道编号","callbackUrl":"回调地址","redirectUrl":"重定向地址","createOrderUrl":"创建订单地址","queryOrderUrl":"调单查询地址"}]
     String args                 // 参数[{"parameter":{},"header":{},"body":{}}]
     String clientIp             // 商户客户端IP
     String redirectUrl          // 商户重定向地址
