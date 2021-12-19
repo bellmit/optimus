@@ -81,9 +81,28 @@ class GroovyChannelService {
     def query(GroovyExecuteScriptInputDTO input) {
 
         // 在此处编写调单查询实现
+        GroovySignUtil groovySignUtil = new GroovySignUtil()
+        GroovyHttpUtil groovyHttpUtil = new GroovyHttpUtil()
+        def bizContent = JSON.parseObject(input.getBizContent())
+        Map<String, Object> treeMap = new TreeMap<>(String::compareTo)
+        treeMap.put("MchId", bizContent.channelMerchnatId)
+        treeMap.put("MchOrderNo", input.getCalleeOrderId())
+        treeMap.put("OrderNo", input.getOrderId())
+        treeMap.put("Sign", groovySignUtil.doSign(treeMap, bizContent.channelMerchnatKey))
 
-        GroovyExecuteScriptOutputDTO output = new GroovyExecuteScriptOutputDTO(orderId: input.getOrderId(), calleeOrderId: input.getCalleeOrderId(), orderStatus: "AP", amount: input.getAmount(), actualAmount: new BigDecimal("100"))
+        def res = groovyHttpUtil.doPost(bizContent.queryOrderUrl, JSON.toJSONString(treeMap))
+        def resJson = JSON.parseObject(res)
 
+        GroovyExecuteScriptOutputDTO output = new GroovyExecuteScriptOutputDTO()
+        if ("0".equals(resJson.ErrCode) && 0 == resJson.ResData) {
+            output.setOrderStatus("NP")
+            return JSON.toJSONString(output)
+        }
+        if ("0".equals(resJson.ErrCode) && 1 == resJson.ResData) {
+            output.setOrderStatus("AP")
+            return JSON.toJSONString(output)
+        }
+        output.setOrderStatus("AF")
         return JSON.toJSONString(output)
     }
 
