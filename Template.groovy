@@ -192,27 +192,67 @@ class GroovySignUtil {
 
 // 输入对象
 class GroovyExecuteScriptInputDTO {
-    String scriptMethod         // 脚本方法
-    String memberId             // 会员编号
-    String orderId              // 订单编号
-    String calleeOrderId        // 被调用方订单编号
-    BigDecimal amount           // 订单金额
-    Date orderTime              // 订单时间
-    String implPath             // 实现路径
-    String bizContent           // 业务大字段[{"channelMerchantId":"商户编号","channelMerchantKey":"商户密钥","channelCode":"渠道编号","subChannelCode":"子渠道编号","callbackUrl":"回调地址","redirectUrl":"重定向地址","createOrderUrl":"创建订单地址","queryOrderUrl":"调单查询地址"}]
-    String args                 // 参数[{"parameter":{},"header":{},"body":{}}]
-    String clientIp             // 商户客户端IP
-    String redirectUrl          // 商户重定向地址
+
+    // 脚本方法
+    String scriptMethod
+
+    // 会员编号
+    String memberId
+
+    // 订单编号
+    String orderId
+
+    // 被调用方订单编号
+    String calleeOrderId
+
+    // 订单金额
+    BigDecimal amount
+
+    // 订单时间
+    Date orderTime
+
+    // 实现路径
+    String implPath
+
+    // 业务大字段[{"channelMerchantId":"商户编号","channelMerchantKey":"商户密钥","channelCode":"渠道编号","subChannelCode":"子渠道编号","callbackUrl":"回调地址","redirectUrl":"重定向地址","createOrderUrl":"创建订单地址","queryOrderUrl":"调单查询地址"}]
+    String bizContent
+
+    // 参数[{"parameter":{},"header":{},"body":{}}]
+    String args
+
+    // 商户客户端IP
+    String clientIp
+
+    // 商户重定向地址
+    String redirectUrl
+
 }
 
 // 输出对象
 class GroovyExecuteScriptOutputDTO {
-    String codeMemberId         // 码商会员编号[自研渠道必须返回]
-    String orderId              // 订单编号
-    String calleeOrderId        // 被调用方订单编号
-    String orderStatus          // 订单状态
-    BigDecimal amount           // 订单金额
-    BigDecimal actualAmount     // 实际金额
-    String channelReturnMessage // 网关渠道返回信息
-    String content              // 报文[作用一:商户下单后返回商户({"text":"html代码","url":"url地址"});作用二:渠道回调时返回渠道(不同渠道的成功标识)]
+
+    // 码商会员编号[自研渠道必须返回]
+    String codeMemberId
+
+    // 订单编号
+    String orderId
+
+    // 被调用方订单编号
+    String calleeOrderId
+
+    // 订单状态
+    String orderStatus
+
+    // 订单金额
+    BigDecimal amount
+
+    // 实际金额
+    BigDecimal actualAmount
+
+    // 网关渠道返回信息
+    String channelReturnMessage
+
+    // 报文[作用一:商户下单后返回商户({"text":"html代码","url":"url地址"});作用二:渠道回调时返回渠道(不同渠道的成功标识)]
+    String content
+
 }
