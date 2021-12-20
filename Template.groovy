@@ -63,22 +63,25 @@ class GroovyChannelService {
         // Post
         def post = groovyHttpUtil.doPost(bizContentJson.createOrderUrl, JSON.toJSONString(treeMap))
         def json = JSON.parseObject(post)
-        def resDataJson = json.getJSONObject("ResData")
 
         // 响应对象
         GroovyExecuteScriptOutputDTO output = new GroovyExecuteScriptOutputDTO()
         // output.setCodeMemberId()    // 渠道方修改后调整此处
         output.setOrderId(input.getOrderId())
-        output.setCalleeOrderId(resDataJson.OrderNo)
         output.setOrderStatus(json.Success ? "NP" : "AF")
         output.setAmount(input.getAmount())
-        output.setActualAmount(resDataJson.Amount)
         output.setChannelReturnMessage(post)
 
         if (json.Success) {
+
+            def resDataJson = json.getJSONObject("ResData")
+            output.setCalleeOrderId(resDataJson.OrderNo)
+            output.setActualAmount(resDataJson.Amount)
+
             JSONObject contentJson = new JSONObject();
             contentJson.put("url", resDataJson.CallBackUrl)
             output.setContent(contentJson.toJSONString())
+
         }
         
         return JSON.toJSONString(output)

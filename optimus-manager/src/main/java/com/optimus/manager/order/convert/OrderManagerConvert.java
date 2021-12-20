@@ -249,6 +249,9 @@ public class OrderManagerConvert {
         OrderInfoDTO orderInfo = new OrderInfoDTO();
         BeanUtils.copyProperties(createOrder, orderInfo);
 
+        // 等待支付
+        orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_NP.getCode());
+
         return orderInfo;
 
     }

@@ -2,7 +2,7 @@ package com.optimus.manager.order.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.util.Date;
 
 import com.optimus.manager.gateway.dto.GatewayChannelDTO;
 import com.optimus.manager.gateway.dto.GatewaySubChannelDTO;

@@ -17,7 +17,6 @@ import com.optimus.service.order.core.factory.OrderFactory;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.GenerateUtil;
 import com.optimus.util.constants.RespCodeEnum;
-import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.exception.OptimusException;
 
 import org.springframework.beans.BeanUtils;
@@ -109,7 +108,6 @@ public class OrderServiceImpl implements OrderService {
 
         // 更新订单信息
         orderInfo.setId(id);
-        orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_NP.getCode());
         orderInfoDao.updateOrderInfo(OrderManagerConvert.getOrderInfoDO(orderInfo));
 
         return orderInfo;

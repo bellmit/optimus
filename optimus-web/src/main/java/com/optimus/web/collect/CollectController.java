@@ -351,6 +351,7 @@ public class CollectController {
         createOrder.setGatewaySubChannel(matchChannel.getGatewaySubChannel());
 
         OrderInfoDTO orderInfo = orderService.createOrder(createOrder);
+        AssertUtil.notEquals(OrderStatusEnum.ORDER_STATUS_NP.getCode(), orderInfo.getOrderStatus(), RespCodeEnum.ORDER_PLACE_ERROR, "下单失败");
 
         return CollectControllerConvert.getPlaceOrderResp(orderInfo);
     }

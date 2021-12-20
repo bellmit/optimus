@@ -32,6 +32,7 @@ public class CollectControllerConvert {
         createOrder.setMemberId(req.getMemberId());
         createOrder.setCallerOrderId(req.getCallerOrderId());
         createOrder.setOrderAmount(req.getAmount());
+        createOrder.setOrderTime(DateUtil.currentDate());
         createOrder.setMerchantCallbackUrl(req.getMerchantCallbackUrl());
         createOrder.setClientIp(req.getClientIp());
         createOrder.setRedirectUrl(req.getRedirectUrl());
