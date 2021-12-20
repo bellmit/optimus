@@ -3,12 +3,12 @@
 
 // 导入包
 import com.alibaba.fastjson.JSON
+import com.alibaba.fastjson.JSONObject
 import java.math.BigDecimal
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.TreeMap
-import org.springframework.util.StringUtils
 
 // 程式执行
 action(input)
@@ -40,40 +40,47 @@ def action(String params) {
 // 渠道服务
 class GroovyChannelService {
 
+    GroovySignUtil groovySignUtil = new GroovySignUtil()
+    GroovyHttpUtil groovyHttpUtil = new GroovyHttpUtil()
+
     // 创建订单
     def create(GroovyExecuteScriptInputDTO input) {
 
         // 在此处编写创建订单实现
-        GroovySignUtil groovySignUtil = new GroovySignUtil()
-        GroovyHttpUtil groovyHttpUtil = new GroovyHttpUtil()
-        def bizContent = JSON.parseObject(input.getBizContent())
+        def bizContentJson = JSON.parseObject(input.getBizContent())
+
         Map<String, Object> treeMap = new TreeMap<>(String::compareTo)
-        treeMap.put("MchId", bizContent.channelMerchnatId)
-        treeMap.put("MchOrderNo", input.getCalleeOrderId())
-        treeMap.put("NotifyUrl", bizContent.callbackUrl)
+        treeMap.put("MchId", bizContentJson.channelMerchantId)
+        treeMap.put("MchOrderNo", input.getOrderId())
+        treeMap.put("NotifyUrl", bizContentJson.callbackUrl)
         treeMap.put("RequestTime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(input.getOrderTime()))
-        treeMap.put("CategoryCode", bizContent.channelCode)
+        treeMap.put("CategoryCode", bizContentJson.channelCode)
         treeMap.put("Amount", input.getAmount())
         treeMap.put("Attach", "这是附加信息")
         treeMap.put("Title", "这是一笔订单")
-        treeMap.put("Sign", groovySignUtil.doSign(treeMap, bizContent.channelMerchnatKey))
+        treeMap.put("Sign", groovySignUtil.doSign(treeMap, bizContentJson.channelMerchantKey))
 
-        def res = groovyHttpUtil.doPost(bizContent.createOrderUrl, JSON.toJSONString(treeMap))
-        def resJson = JSON.parseObject(res)
+        // Post
+        def post = groovyHttpUtil.doPost(bizContentJson.createOrderUrl, JSON.toJSONString(treeMap))
+        def json = JSON.parseObject(post)
+        def resDataJson = json.getJSONObject("ResData")
 
+        // 响应对象
         GroovyExecuteScriptOutputDTO output = new GroovyExecuteScriptOutputDTO()
-        if (!resJson.Success) {
-            output.setOrderStatus("AF")
-            return JSON.toJSONString(output)
-        }
-        output.setCodeMemberId(bizContent.channelMerchnatId)
+        // output.setCodeMemberId()    // 渠道方修改后调整此处
         output.setOrderId(input.getOrderId())
-        output.setCalleeOrderId(input.getCalleeOrderId())
-        output.setOrderStatus("NP")
+        output.setCalleeOrderId(resDataJson.OrderNo)
+        output.setOrderStatus(json.Success ? "NP" : "AF")
         output.setAmount(input.getAmount())
-        output.setActualAmount(input.getAmount())
-        output.setChannelReturnMessage(JSON.toJSONString(resJson.ResData))
-        output.setContent(res)
+        output.setActualAmount(resDataJson.Amount)
+        output.setChannelReturnMessage(post)
+
+        if (json.Success) {
+            JSONObject contentJson = new JSONObject();
+            contentJson.put("url", resDataJson.CallBackUrl)
+            output.setContent(contentJson.toJSONString())
+        }
+        
         return JSON.toJSONString(output)
     }
 
@@ -81,28 +88,34 @@ class GroovyChannelService {
     def query(GroovyExecuteScriptInputDTO input) {
 
         // 在此处编写调单查询实现
-        GroovySignUtil groovySignUtil = new GroovySignUtil()
-        GroovyHttpUtil groovyHttpUtil = new GroovyHttpUtil()
-        def bizContent = JSON.parseObject(input.getBizContent())
+        def bizContentJson = JSON.parseObject(input.getBizContent())
+
         Map<String, Object> treeMap = new TreeMap<>(String::compareTo)
-        treeMap.put("MchId", bizContent.channelMerchnatId)
-        treeMap.put("MchOrderNo", input.getCalleeOrderId())
-        treeMap.put("OrderNo", input.getOrderId())
-        treeMap.put("Sign", groovySignUtil.doSign(treeMap, bizContent.channelMerchnatKey))
+        treeMap.put("MchId", bizContentJson.channelMerchantId)
+        treeMap.put("MchOrderNo", input.getOrderId())
+        treeMap.put("OrderNo", input.getCalleeOrderId())
+        treeMap.put("Sign", groovySignUtil.doSign(treeMap, bizContentJson.channelMerchantKey))
 
-        def res = groovyHttpUtil.doPost(bizContent.queryOrderUrl, JSON.toJSONString(treeMap))
-        def resJson = JSON.parseObject(res)
+        // Post
+        def post = groovyHttpUtil.doPost(bizContentJson.queryOrderUrl, JSON.toJSONString(treeMap))
+        def postJson = JSON.parseObject(post)
 
+        // 响应对象
         GroovyExecuteScriptOutputDTO output = new GroovyExecuteScriptOutputDTO()
-        if ("0".equals(resJson.ErrCode) && 0 == resJson.ResData) {
+        output.setOrderId(input.getOrderId())
+        output.setCalleeOrderId(input.getCalleeOrderId())
+        output.setOrderStatus("AF")
+        output.setChannelReturnMessage(post)
+
+        if ("0".equals(postJson.ErrCode) && 0 == postJson.ResData) {
             output.setOrderStatus("NP")
             return JSON.toJSONString(output)
         }
-        if ("0".equals(resJson.ErrCode) && 1 == resJson.ResData) {
+        if ("0".equals(postJson.ErrCode) && 1 == postJson.ResData) {
             output.setOrderStatus("AP")
             return JSON.toJSONString(output)
         }
-        output.setOrderStatus("AF")
+
         return JSON.toJSONString(output)
     }
 
@@ -110,8 +123,16 @@ class GroovyChannelService {
     def parse(GroovyExecuteScriptInputDTO input) {
 
         // 在此处编写渠道回调解析请求参数实现
+        def argsJson = JSON.parseObject(input.getArgs())
+        def bodyJson = argsJson.getJSONObject("body")
 
-        GroovyExecuteScriptOutputDTO output = new GroovyExecuteScriptOutputDTO(orderId: "订单编号", calleeOrderId: "被调用方订单编号", orderStatus: "AP", amount: new BigDecimal("100"), actualAmount: new BigDecimal("100"))
+        // 响应对象
+        GroovyExecuteScriptOutputDTO output = new GroovyExecuteScriptOutputDTO()
+        output.setOrderId(bodyJson.MchOrderNo)
+        output.setCalleeOrderId(bodyJson.OrderNo)
+        output.setOrderStatus("AP")
+        output.setAmount(bodyJson.Amount)
+        output.setActualAmount(bodyJson.ActualAmount)
 
         return JSON.toJSONString(output)
     }
@@ -125,7 +146,7 @@ class GroovyHttpUtil {
     def doPost(url, data) {
         def conn = new URL(url).openConnection()
         conn.setRequestMethod("POST")
-        conn.setRequestProperty("Content-Type", "application/json")
+        conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8")
         conn.doOutput = true
 
         def writer = new OutputStreamWriter(conn.outputStream)
@@ -144,21 +165,27 @@ class GroovySignUtil {
     // 加签
     def doSign(Map<String, Object> map, String key) {
 
-        def result = ""
+        def postult = ""
 
         for (String item : map.keySet()) {
 
-            if (StringUtils.isEmpty(result)) {
-                result = item.toLowerCase() + "=" + map.get(item)
+            def value = map.get(item)
+
+            if (null == value) {
                 continue
             }
 
-            result = result + "&" + item.toLowerCase() + "=" + map.get(item)
+            if (null == postult || "".equals(postult)) {
+                postult = item.toLowerCase() + "=" + value
+                continue
+            }
+
+            postult = postult + "&" + item.toLowerCase() + "=" + value
         }
 
-        result = result + "&key=" + key
+        postult = postult + "&key=" + key
 
-        return MessageDigest.getInstance("MD5").digest("$result".bytes).encodeHex().toString().toLowerCase()
+        return MessageDigest.getInstance("MD5").digest("$postult".bytes).encodeHex().toString().toLowerCase()
     }
 
 }
@@ -172,8 +199,7 @@ class GroovyExecuteScriptInputDTO {
     BigDecimal amount           // 订单金额
     Date orderTime              // 订单时间
     String implPath             // 实现路径
-    String bizContent
-    // 业务大字段[{"channelMerchnatId":"商户编号","channelMerchnatKey":"商户密钥","channelCode":"渠道编号","subChannelCode":"子渠道编号","callbackUrl":"回调地址","redirectUrl":"重定向地址","createOrderUrl":"创建订单地址","queryOrderUrl":"调单查询地址"}]
+    String bizContent           // 业务大字段[{"channelMerchantId":"商户编号","channelMerchantKey":"商户密钥","channelCode":"渠道编号","subChannelCode":"子渠道编号","callbackUrl":"回调地址","redirectUrl":"重定向地址","createOrderUrl":"创建订单地址","queryOrderUrl":"调单查询地址"}]
     String args                 // 参数[{"parameter":{},"header":{},"body":{}}]
     String clientIp             // 商户客户端IP
     String redirectUrl          // 商户重定向地址
