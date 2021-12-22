@@ -6,11 +6,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.exception.OptimusException;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * JacksonUtil
  * 
  * @author sunxp
  */
+@Slf4j
 public class JacksonUtil {
 
     private static ObjectMapper objectMapper;
@@ -37,6 +40,7 @@ public class JacksonUtil {
             return objectMapper.readTree(json);
 
         } catch (Exception e) {
+            log.error("String->JsonNode异常:", e);
             throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "String->JsonNode异常");
         }
 
@@ -55,6 +59,7 @@ public class JacksonUtil {
             return objectMapper.writeValueAsString(object);
 
         } catch (Exception e) {
+            log.error("Jackson->String异常:", e);
             throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "Jackson->String异常");
         }
 
@@ -75,6 +80,7 @@ public class JacksonUtil {
             return objectMapper.readValue(json, clazz);
 
         } catch (Exception e) {
+            log.error("Jackson->Bean异常:", e);
             throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "Jackson->Bean异常");
         }
 
@@ -95,6 +101,7 @@ public class JacksonUtil {
             return objectMapper.readValue(json, typeReference);
 
         } catch (Exception e) {
+            log.error("String->Collection异常:", e);
             throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "String->Collection异常");
         }
 

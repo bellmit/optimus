@@ -45,15 +45,20 @@ public class AccountManagerImpl implements AccountManager {
     @Override
     public AccountInfoDTO getAccountInfoByMemberIdAndAccountType(String memberId, String accountType) {
 
+        log.info("根据会员编号和账户类型查询账户信息,会员编号:{},账户类型:{}", memberId, accountType);
+
         // 根据会员编号和账户类型查询账户信息
         AccountInfoDO accountInfoDO = accountInfoDao.getAccountInfoByMemberIdAndAccountType(memberId, accountType);
         if (Objects.isNull(accountInfoDO)) {
+            log.warn("根据会员编号和账户类型查询账户信息:{}", accountInfoDO);
             return null;
         }
 
         // 账户信息DTO
         AccountInfoDTO accountInfo = new AccountInfoDTO();
         BeanUtils.copyProperties(accountInfoDO, accountInfo);
+
+        log.warn("根据会员编号和账户类型查询账户信息:{}", accountInfo);
 
         return accountInfo;
     }
@@ -62,9 +67,9 @@ public class AccountManagerImpl implements AccountManager {
     @Override
     public boolean doTrans(List<DoTransDTO> doTransList) {
 
-        try {
+        log.info("账户交易入参:{}", doTransList);
 
-            log.info("doTrans doTransList is {}", doTransList);
+        try {
 
             // 验证账户交易参数
             AccountManagerValidate.validateDoTrans(doTransList);
@@ -111,10 +116,11 @@ public class AccountManagerImpl implements AccountManager {
 
         // 获取涉及的账户信息
         accountInfoList = AccountManagerConvert.getAccountInfoDOList(accountInfoList, doTransList);
-        log.info("buildAccountInfoList accountInfoList is {}", accountInfoList);
 
         // 断言:涉及账户信息
-        AssertUtil.notEmpty(accountInfoList, RespCodeEnum.ACCOUNT_ERROR, "账户信息不能为空");
+        AssertUtil.notEmpty(accountInfoList, RespCodeEnum.ACCOUNT_ERROR, "账户信息涉及的账户不能为空");
+
+        log.info("账户交易涉及的账户信息:{}", accountInfoList);
 
         return accountInfoList;
 
@@ -129,10 +135,10 @@ public class AccountManagerImpl implements AccountManager {
 
         // 更新账户信息
         int update = accountInfoDao.updateAccountInfoForTrans(accountInfoList, DateUtil.currentDate());
-        log.info("updateAccountInfoForTrans update is {}", update);
 
         // 验证更新结果
         if (update != accountInfoList.size()) {
+            log.warn("账户交易更新账户信息结果:{},期望结果:{}", update, accountInfoList.size());
             throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易更新账户信息异常");
         }
 
@@ -151,11 +157,11 @@ public class AccountManagerImpl implements AccountManager {
 
         // 查询账户交易后的数据
         List<AccountInfoDO> accountInfoList = accountInfoDao.listAccountInfoByIdLists(idList);
-        log.info("addBatchAccountLog accountInfoList is {}", accountInfoList);
+        log.info("账户交易更新后的账户信息:{}", accountInfoList);
 
         // 获取账户日志
         List<AccountLogDO> accountLogList = AccountManagerConvert.getAccountLogDOList(accountInfoList, doTransList);
-        log.info("addBatchAccountLog accountLogList is {}", accountLogList);
+        log.info("账户交易日志记录:{}", accountLogList);
 
         // 验证获取的账户日志
         AssertUtil.notEmpty(accountLogList, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易账户日志对象不能为空");

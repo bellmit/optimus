@@ -31,12 +31,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 提现
  *
  * @author hongp
  */
 @Component
+@Slf4j
 public class WithdrawOrder extends BaseOrder {
 
     @Autowired
@@ -66,6 +69,7 @@ public class WithdrawOrder extends BaseOrder {
 
         // 验证提现金额:最小金额<=提现金额<=最大金额
         if (createOrder.getOrderAmount().compareTo(memberTransConfine.getSingleMaxAmount()) > 0 || createOrder.getOrderAmount().compareTo(memberTransConfine.getSingleMinAmount()) < 0) {
+            log.warn("提现失败,订单金额:{},最小限制金额:{},最大限制金额:{}", createOrder.getOrderAmount(), memberTransConfine.getSingleMinAmount(), memberTransConfine.getSingleMaxAmount());
             throw new OptimusException(RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "金额不在限制范围内");
         }
 
@@ -98,6 +102,7 @@ public class WithdrawOrder extends BaseOrder {
 
         // 账户交易失败,冻结余额异常
         if (!doTrans) {
+            log.warn("提现失败记账失败,订单信息:{}", orderInfo);
             throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "提现冻结余额异常");
         }
 
@@ -148,6 +153,7 @@ public class WithdrawOrder extends BaseOrder {
 
         // 账户交易失败
         if (!doTrans) {
+            log.warn("提现失败记账失败,订单信息:{}", payOrder);
             rollbackAccountInfo(payOrder);
             throw new OptimusException(RespCodeEnum.ORDER_PLACE_ERROR, "提现记账异常");
         }
@@ -171,6 +177,7 @@ public class WithdrawOrder extends BaseOrder {
         // 记账
         boolean doTrans = accountManager.doTrans(doTransList);
         if (!doTrans) {
+            log.warn("提现回滚账户信息失败,订单信息:{}", payOrder);
             throw new OptimusException(RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "提现回滚账户信息异常");
         }
 

@@ -25,12 +25,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 划账
  *
  * @author hongp
  */
 @Component
+@Slf4j
 public class TransferOrder extends BaseOrder {
 
     @Autowired
@@ -97,6 +100,7 @@ public class TransferOrder extends BaseOrder {
 
         // 账户交易失败
         if (!doTrans) {
+            log.warn("划账失败记账失败,订单信息:{}", payOrder);
             throw new OptimusException(RespCodeEnum.ORDER_PLACE_ERROR, "划账记账异常");
         }
 

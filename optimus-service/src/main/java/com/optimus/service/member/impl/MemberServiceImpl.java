@@ -12,12 +12,15 @@ import com.optimus.util.constants.member.MemberDeleteFlagEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 会员ServiceImpl
  *
  * @author sunxp
  */
 @Service
+@Slf4j
 public class MemberServiceImpl implements MemberService {
 
     @Autowired
@@ -51,6 +54,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void checkMemberLevel(MemberInfoDTO memberInfo, String subDirectMemberId) {
+
+        log.info("验证会员级别,会员信息:{},直接上级会员编号:{}", memberInfo, subDirectMemberId);
 
         // 根据直接上级会员编号查询会员信息
         MemberInfoDTO subMemberInfo = memberManager.getMemberInfoByMemberId(subDirectMemberId);

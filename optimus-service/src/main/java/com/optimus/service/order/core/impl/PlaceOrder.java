@@ -40,12 +40,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 下单
  *
  * @author hongp
  */
 @Component
+@Slf4j
 public class PlaceOrder extends BaseOrder {
 
     @Autowired
@@ -90,6 +93,7 @@ public class PlaceOrder extends BaseOrder {
         OrderInfoDTO orderInfo = OrderManagerConvert.getOrderInfoDTO(createOrder, output);
         if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_NP.getCode(), orderInfo.getOrderStatus())) {
             orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_AF.getCode());
+            log.warn("下单失败,订单信息:{}", orderInfo);
             return orderInfo;
         }
 
@@ -113,6 +117,7 @@ public class PlaceOrder extends BaseOrder {
         boolean doTrans = accountManager.doTrans(doTransList);
         if (!doTrans) {
             orderInfo.setOrderStatus(OrderStatusEnum.ORDER_STATUS_AF.getCode());
+            log.warn("下单失败记账失败,订单信息:{}", orderInfo);
             return orderInfo;
         }
 

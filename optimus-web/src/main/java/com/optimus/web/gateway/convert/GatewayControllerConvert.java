@@ -20,11 +20,14 @@ import com.optimus.util.exception.OptimusException;
 
 import org.springframework.util.StringUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 网关ControllerConvert
  * 
  * @author sunxp
  */
+@Slf4j
 public class GatewayControllerConvert {
 
     /**
@@ -105,6 +108,7 @@ public class GatewayControllerConvert {
             body = new String(req.getInputStream().readAllBytes());
 
         } catch (Exception e) {
+            log.error("读取网关渠道参数异常:", e);
             throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "读取网关渠道参数异常");
         }
 

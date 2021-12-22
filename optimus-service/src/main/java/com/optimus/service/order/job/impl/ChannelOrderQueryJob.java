@@ -177,8 +177,7 @@ public class ChannelOrderQueryJob extends BaseOrderJob {
         try {
 
             // 查询网关子渠道
-            GatewaySubChannelDO gatewaySubChannel = gatewaySubChannelDao.getGatewaySubChannelBySubChannelCode(orderInfo.getSubChannelCode());
-            return gatewaySubChannel;
+            return gatewaySubChannelDao.getGatewaySubChannelBySubChannelCode(orderInfo.getSubChannelCode());
 
         } catch (Exception e) {
             log.error("渠道订单查询网关子渠道异常:", e);

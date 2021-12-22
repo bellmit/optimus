@@ -26,12 +26,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 充值
  *
  * @author hongp
  */
 @Component
+@Slf4j
 public class RechargeOrder extends BaseOrder {
 
     @Autowired
@@ -103,6 +106,7 @@ public class RechargeOrder extends BaseOrder {
 
         // 账户交易失败
         if (!doTrans) {
+            log.warn("充值失败记账失败,订单信息:{}", payOrder);
             throw new OptimusException(RespCodeEnum.ORDER_PLACE_ERROR, "充值记账异常");
         }
 

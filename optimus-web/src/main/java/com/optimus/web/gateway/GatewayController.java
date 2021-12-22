@@ -28,6 +28,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 网关Controller
  *
@@ -35,6 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping(value = "/optimus/gateway")
+@Slf4j
 public class GatewayController {
 
     @Autowired
@@ -54,6 +57,8 @@ public class GatewayController {
     @OptimusRateLimiter(permits = 500D, timeout = 0)
     @RequestMapping(value = "/channelCallback", method = { RequestMethod.GET, RequestMethod.POST })
     public String channelCallback(HttpServletRequest req, @RequestParam("subChannelCode") String subChannelCode) {
+
+        log.info("渠道回调,请求:{}", subChannelCode);
 
         // 商户客户端IP
         String ip = GatewayControllerConvert.getRemoteIp(req);
@@ -87,10 +92,11 @@ public class GatewayController {
         PayOrderDTO payOrder = GatewayControllerConvert.getPayOrderDTO(output, orderInfo);
         payOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_C.getCode());
         payOrder.setBehavior(OrderBehaviorEnum.BEHAVIOR_S.getCode());
-
         orderService.payOrder(payOrder);
 
-        return output.getContent();
-    }
+        String resp = output.getContent();
+        log.info("渠道回调,响应:{}", resp);
 
+        return resp;
+    }
 }

@@ -47,6 +47,8 @@ public class MemberManagerImpl implements MemberManager {
     @Override
     public BigDecimal getFeeForWithdraw(BigDecimal orderAmount, MemberTransConfineDTO memberTransConfine) {
 
+        log.info("获取提现手续费订单金额:{},会员交易限制:{}", orderAmount, memberTransConfine);
+
         // 验证会员交易限制
         if (!StringUtils.pathEquals(MemberWithdrawFeeSwitchEnum.WITHDRAW_FEE_SWITCH_Y.getCode(), memberTransConfine.getWithdrawFeeSwitch())) {
             return BigDecimal.ZERO;
@@ -67,6 +69,8 @@ public class MemberManagerImpl implements MemberManager {
             return orderAmount.multiply(memberTransConfine.getRatioCollectFee()).add(memberTransConfine.getSingleCollectFee());
         }
 
+        log.warn("获取提现手续费异常:{}", memberTransConfine.getCollectFeeType());
+
         // 手续费类型不匹配
         throw new OptimusException(RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "手续费类型不匹配");
 
@@ -75,6 +79,8 @@ public class MemberManagerImpl implements MemberManager {
     @Override
     public MemberInfoDTO getMemberInfoByMemberId(String memberId) {
 
+        log.info("根据会员编号查询会员信息,会员编号:{}", memberId);
+
         // 根据会员编号查询会员信息
         MemberInfoDO memberInfoDO = memberInfoDao.getMemberInfoByMemberId(memberId);
 
@@ -82,12 +88,16 @@ public class MemberManagerImpl implements MemberManager {
         MemberInfoDTO memberInfo = new MemberInfoDTO();
         BeanUtils.copyProperties(memberInfoDO, memberInfo);
 
+        log.info("根据会员编号查询会员信息:{}", memberInfo);
+
         return memberInfo;
 
     }
 
     @Override
     public MemberTransConfineDTO getMemberTransConfineByMemberId(String memberId) {
+
+        log.info("根据会员编号查询会员交易限制,会员编号:{}", memberId);
 
         // 查询会员交易限制
         MemberTransConfineDO memberTransConfineDO = memberTransConfineDao.getMemberTransConfineByMemberId(memberId);
@@ -99,12 +109,16 @@ public class MemberManagerImpl implements MemberManager {
         MemberTransConfineDTO memberTransConfine = new MemberTransConfineDTO();
         BeanUtils.copyProperties(memberTransConfineDO, memberTransConfine);
 
+        log.info("根据会员编号查询会员交易限制:{}", memberTransConfine);
+
         return memberTransConfine;
 
     }
 
     @Override
     public String getSystemMemberId(String memberId) {
+
+        log.info("查询系统会员信息,会员编号:{}", memberId);
 
         // 根据会员编号查询会员信息
         List<MemberInfoChainResult> memberInfoChainResultList = listMemberInfoChains(memberId);
@@ -117,6 +131,8 @@ public class MemberManagerImpl implements MemberManager {
         MemberInfoChainResult memberInfoChainResult = memberInfoChainResultList.get(0);
         AssertUtil.notEquals(MemberTypeEnum.MEMBER_TYPE_S.getCode(), memberInfoChainResult.getMemberType(), RespCodeEnum.MEMBER_ERROR, "未查询到平台会员");
 
+        log.info("系统会员信息:{}", memberInfoChainResult);
+
         return memberInfoChainResult.getMemberId();
     }
 
@@ -124,9 +140,11 @@ public class MemberManagerImpl implements MemberManager {
     @Cacheable(value = "memberChainConfig", key = "#memberId", unless = "#result == null")
     public List<MemberInfoChainResult> listMemberInfoChains(String memberId) {
 
+        log.info("查询会员信息链,会员编号:{}", memberId);
+
         // 递归查询会员信息链
         List<MemberInfoChainResult> chainList = memberInfoDao.listMemberInfoChains(memberId);
-        log.info("memberInfo chain is {}", chainList);
+        log.info("查询会员信息链:{}", chainList);
 
         if (CollectionUtils.isEmpty(chainList)) {
             return null;

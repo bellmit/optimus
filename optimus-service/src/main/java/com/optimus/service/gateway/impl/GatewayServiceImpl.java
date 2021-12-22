@@ -26,12 +26,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 网关ServiceImpl
  * 
  * @author sunxp
  */
 @Service
+@Slf4j
 public class GatewayServiceImpl implements GatewayService {
 
     @Autowired
@@ -46,6 +49,8 @@ public class GatewayServiceImpl implements GatewayService {
     @Override
     public GatewayChannelDTO getGatewayChannelByChannelCode(String channelCode) {
 
+        log.info("根据渠道编号查询网关渠道,渠道编号:{}", channelCode);
+
         // 根据渠道编号查询网关渠道
         GatewayChannelDO gatewayChannelDO = gatewayChannelDao.getGatewayChannelByChannelCode(channelCode);
         AssertUtil.notEmpty(gatewayChannelDO, RespCodeEnum.GATEWAY_CHANNEL_ERROR, "网关渠道不存在");
@@ -54,12 +59,16 @@ public class GatewayServiceImpl implements GatewayService {
         GatewayChannelDTO gatewayChannel = new GatewayChannelDTO();
         BeanUtils.copyProperties(gatewayChannelDO, gatewayChannel);
 
+        log.info("根据渠道编号查询网关渠道:{}", gatewayChannel);
+
         return gatewayChannel;
 
     }
 
     @Override
     public GatewaySubChannelDTO getGatewaySubChannelBySubChannelCode(String channelCode) {
+
+        log.info("根据子渠道编号查询网关子渠道,子渠道编号:{}", channelCode);
 
         // 根据网关子渠道编号查询网关子渠道
         GatewaySubChannelDO gatewaySubChannelDO = gatewaySubChannelDao.getGatewaySubChannelBySubChannelCode(channelCode);
@@ -68,6 +77,8 @@ public class GatewayServiceImpl implements GatewayService {
         // 网关子渠道DTO
         GatewaySubChannelDTO gatewaySubChannel = new GatewaySubChannelDTO();
         BeanUtils.copyProperties(gatewaySubChannelDO, gatewaySubChannel);
+
+        log.info("根据子渠道编号查询网关子渠道:{}", gatewaySubChannel);
 
         return gatewaySubChannel;
 

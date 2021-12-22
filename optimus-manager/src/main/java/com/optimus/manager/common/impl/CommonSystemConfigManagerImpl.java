@@ -33,12 +33,12 @@ public class CommonSystemConfigManagerImpl implements CommonSystemConfigManager 
         String value = null;
 
         if (!StringUtils.hasLength(baseKey)) {
-            log.warn("baseKey is null");
+            log.warn("根据键查询系统配置:{}", baseKey);
             return value;
         }
 
         CommonSystemConfigDO commonSystemConfigDO = commonSystemConfigDao.getCommonSystemConfigByBaseKey(baseKey);
-        log.info("getCommonSystemConfigByBaseKey is {}", commonSystemConfigDO);
+        log.info("根据键查询系统配置:{}", commonSystemConfigDO);
 
         if (Objects.isNull(commonSystemConfigDO)) {
             return value;

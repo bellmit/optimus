@@ -10,12 +10,15 @@ import com.optimus.util.constants.RespCodeEnum;
 
 import org.springframework.stereotype.Component;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 系统配置ServiceImpl
  * 
  * @author sunxp
  */
 @Component
+@Slf4j
 public class CommonSystemConfigServiceImpl implements CommonSystemConfigService {
 
     @Resource
@@ -24,9 +27,13 @@ public class CommonSystemConfigServiceImpl implements CommonSystemConfigService 
     @Override
     public String getCommonSystemConfigByBaseKey(String baseKey) {
 
+        log.info("根据键查询系统配置,键:{}", baseKey);
+
         // 根据baseKey查询系统配置
         CommonSystemConfigDO commonSystemConfigDO = commonSystemConfigDao.getCommonSystemConfigByBaseKey(baseKey);
         AssertUtil.notEmpty(commonSystemConfigDO, RespCodeEnum.FAILE, "系统配置不能为空");
+
+        log.info("根据键查询系统配置:{}", commonSystemConfigDO);
 
         // 系统配置值
         String value = commonSystemConfigDO.getValue();

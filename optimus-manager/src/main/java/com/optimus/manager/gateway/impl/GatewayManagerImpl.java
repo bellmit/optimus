@@ -57,6 +57,8 @@ public class GatewayManagerImpl implements GatewayManager {
     @Override
     public ExecuteScriptOutputDTO executeScript(ExecuteScriptInputDTO input) {
 
+        log.info("执行脚本输入参数:{}", input);
+
         try {
 
             // 绑定参数
@@ -77,6 +79,8 @@ public class GatewayManagerImpl implements GatewayManager {
             AssertUtil.notEmpty(output.getAmount(), RespCodeEnum.GATEWAY_EXECUTE_SCRIPT_ERROR, "执行脚本订单金额不能为空");
             AssertUtil.notEmpty(output.getActualAmount(), RespCodeEnum.GATEWAY_EXECUTE_SCRIPT_ERROR, "执行脚本实际金额不能为空");
 
+            log.info("执行脚本输出:{}", output);
+
             return output;
 
         } catch (OptimusException e) {
@@ -92,6 +96,8 @@ public class GatewayManagerImpl implements GatewayManager {
     @Override
     public MatchChannelDTO insideMatch(MemberInfoDTO memberInfo, GatewayChannelDTO gatewayChannel, BigDecimal amount) {
 
+        log.info("匹配渠道内部,会员信息:{},网关渠道:{},金额:{}", memberInfo, gatewayChannel, amount);
+
         // 查询代理当前渠道下启用的子渠道List
         GatewaySubChannelQuery gatewaySubChannelQuery = GatewayManagerConvert.getGatewaySubChannelQuery(memberInfo, gatewayChannel);
         List<GatewaySubChannelDO> gatewaySubChannelList = gatewaySubChannelDao.listGatewaySubChannelByGatewaySubChannelQuerys(gatewaySubChannelQuery);
@@ -105,12 +111,16 @@ public class GatewayManagerImpl implements GatewayManager {
         MatchChannelDTO matchChannel = GatewayManagerConvert.getMatchChannelDTO(gatewaySubChannelList);
         AssertUtil.notEmpty(matchChannel, RespCodeEnum.GATEWAY_CHANNEL_ERROR, "未匹配到子渠道");
 
+        log.info("匹配渠道内部:{}", matchChannel);
+
         return matchChannel;
 
     }
 
     @Override
     public MatchChannelDTO outsideMatch(MemberInfoDTO memberInfo, GatewayChannelDTO gatewayChannel, BigDecimal amount) {
+
+        log.info("匹配渠道外部,会员信息:{},网关渠道:{},金额:{}", memberInfo, gatewayChannel, amount);
 
         // 查询代理当前渠道下启用的子渠道List
         GatewaySubChannelQuery gatewaySubChannelQuery = GatewayManagerConvert.getGatewaySubChannelQuery(memberInfo, gatewayChannel);
@@ -134,6 +144,9 @@ public class GatewayManagerImpl implements GatewayManager {
         // 选择码商和子渠道
         MatchChannelDTO matchChannel = GatewayManagerConvert.getMatchChannelDTO(memberInfoList, memberChannelList, gatewaySubChannelList);
         AssertUtil.notEmpty(matchChannel, RespCodeEnum.GATEWAY_CHANNEL_ERROR, "未匹配到子渠道");
+
+        log.info("匹配渠道外部:{}", matchChannel);
+
         return matchChannel;
 
     }

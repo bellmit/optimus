@@ -7,11 +7,14 @@ import com.optimus.util.exception.OptimusException;
 
 import org.springframework.beans.BeanUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * BeanUtil
  * 
  * @author sunxp
  */
+@Slf4j
 public class BeanUtil {
 
     /**
@@ -35,7 +38,8 @@ public class BeanUtil {
                 targetList.add(t);
 
             } catch (Exception e) {
-                throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "复制集合异常");
+                log.error("复制属性异常:", e);
+                throw new OptimusException(RespCodeEnum.ERROR_CONVERT, "复制属性异常");
             }
 
         });

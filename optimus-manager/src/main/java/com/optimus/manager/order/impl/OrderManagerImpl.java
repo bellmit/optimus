@@ -65,6 +65,8 @@ public class OrderManagerImpl implements OrderManager {
     @Override
     public void updateOrderInfoToFail(Long id) {
 
+        log.info("更新订单信息为失败,主键:{}", id);
+
         // 订单信息
         OrderInfoDO orderInfo = new OrderInfoDO();
         orderInfo.setId(id);
@@ -78,6 +80,8 @@ public class OrderManagerImpl implements OrderManager {
 
     @Override
     public Long idempotent(OrderInfoDTO orderInfo) {
+
+        log.info("订单幂等,订单信息:{}", orderInfo);
 
         // 查询订单信息
         OrderInfoDO orderInfoDO = orderInfoDao.getOrderInfoByCallerOrderId(orderInfo.getCallerOrderId());
@@ -104,6 +108,8 @@ public class OrderManagerImpl implements OrderManager {
     @Override
     public boolean release(OrderInfoDTO orderInfo) {
 
+        log.info("订单释放,订单信息:{}", orderInfo);
+
         // 无需释放的订单
         if (StringUtils.pathEquals(OrderReleaseStatusEnum.RELEASE_STATUS_D.getCode(), orderInfo.getReleaseStatus())) {
             return false;
@@ -112,6 +118,7 @@ public class OrderManagerImpl implements OrderManager {
         // 更新释放状态
         int update = orderInfoDao.updateOrderInfoByOrderIdAndReleaseStatus(orderInfo.getOrderId(), OrderReleaseStatusEnum.RELEASE_STATUS_Y.getCode(), OrderReleaseStatusEnum.RELEASE_STATUS_N.getCode(), DateUtil.currentDate());
         if (update != 1) {
+            log.warn("订单释放更新释放状态结果:{}", update);
             return false;
         }
 
@@ -126,12 +133,16 @@ public class OrderManagerImpl implements OrderManager {
             orderInfoDao.updateOrderInfoByOrderIdAndReleaseStatus(orderInfo.getOrderId(), OrderReleaseStatusEnum.RELEASE_STATUS_N.getCode(), OrderReleaseStatusEnum.RELEASE_STATUS_Y.getCode(), DateUtil.currentDate());
         }
 
+        log.info("订单释放结果:{}", doTrans);
+
         return doTrans;
 
     }
 
     @Override
     public boolean splitProfit(OrderInfoDTO orderInfo, List<MemberInfoChainResult> chainList, List<MemberChannelDO> memberChannelList) {
+
+        log.info("订单信息分润,订单信息:{},会员信息链:{},会员渠道:{}", orderInfo, chainList, memberChannelList);
 
         // 订单状态不为成功
         if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_AP.getCode(), orderInfo.getOrderStatus())) {
@@ -144,6 +155,7 @@ public class OrderManagerImpl implements OrderManager {
         // 更新订单分润状态
         int update = orderInfoDao.updateOrderInfoByOrderIdAndSplitProfitStatus(orderInfo.getOrderId(), OrderSplitProfitStatusEnum.SPLIT_PROFIT_STATUS_Y.getCode(), OrderSplitProfitStatusEnum.SPLIT_PROFIT_STATUS_N.getCode(), DateUtil.currentDate());
         if (update != 1) {
+            log.warn("订单信息分润更新分润状态结果:{}", update);
             return false;
         }
 
@@ -154,12 +166,16 @@ public class OrderManagerImpl implements OrderManager {
             orderInfoDao.updateOrderInfoByOrderIdAndSplitProfitStatus(orderInfo.getOrderId(), OrderSplitProfitStatusEnum.SPLIT_PROFIT_STATUS_N.getCode(), OrderSplitProfitStatusEnum.SPLIT_PROFIT_STATUS_Y.getCode(), DateUtil.currentDate());
         }
 
+        log.info("订单信息分润结果:{}", doTrans);
+
         return doTrans;
 
     }
 
     @Override
     public boolean orderNotice(OrderInfoDTO orderInfo) {
+
+        log.info("订单信息通知,订单信息:{}", orderInfo);
 
         // 订单状态不为成功或失败
         if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_AP.getCode(), orderInfo.getOrderStatus())
@@ -179,9 +195,11 @@ public class OrderManagerImpl implements OrderManager {
 
         // 设置签名
         orderNotice.setSign(SignUtil.sign(map, memberInfo.getMemberKey()));
+        log.info("订单信息通知报文:{}", orderNotice);
 
         // Post
         ResponseEntity<String> entity = restTemplate.postForEntity(orderInfo.getMerchantCallbackUrl(), orderNotice, String.class);
+        log.info("订单信息通知结果:{}", entity);
 
         // 下游响应不成功
         if (!StringUtils.pathEquals(HttpStatus.OK.name(), entity.getBody())) {
