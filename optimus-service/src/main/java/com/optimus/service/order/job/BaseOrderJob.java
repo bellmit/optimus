@@ -26,6 +26,21 @@ public abstract class BaseOrderJob {
     @Autowired
     private CommonSystemConfigManager commonSystemConfigManager;
 
+    private static String ip;
+
+    static {
+
+        try {
+
+            ip = InetAddress.getLocalHost().getHostAddress();
+            log.info("订单定时任务,服务器IP:{}", ip);
+
+        } catch (Exception e) {
+            log.error("系统异常:", e);
+        }
+
+    }
+
     /**
      * 执行定时任务
      */
@@ -69,7 +84,7 @@ public abstract class BaseOrderJob {
 
             // 转换为JsonNode
             JsonNode jsonNode = JacksonUtil.toTree(value);
-            JsonNode shardJsonNode = jsonNode.get(InetAddress.getLocalHost().getHostAddress());
+            JsonNode shardJsonNode = jsonNode.get(ip);
             Integer totalShard = jsonNode.size();
 
             AssertUtil.notEmpty(shardJsonNode, RespCodeEnum.FAILE, "未配置系统定时任务参数");
