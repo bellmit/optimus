@@ -94,8 +94,8 @@ public abstract class BaseOrderJob {
             JsonNode shardJsonNode = jsonNode.get(ip);
             Integer totalShard = jsonNode.size();
 
-            AssertUtil.notEmpty(shardJsonNode, RespCodeEnum.FAILE, "未配置系统定时任务参数");
-            AssertUtil.notEmpty(totalShard, RespCodeEnum.FAILE, "未配置系统定时任务参数");
+            AssertUtil.notEmpty(shardJsonNode, RespCodeEnum.FAILE, "未配置系统定时任务数据分片号");
+            AssertUtil.notEmpty(totalShard, RespCodeEnum.FAILE, "未配置系统定时任务数据分片总数");
 
             // 分片信息
             Map<Integer, Integer> shardingMap = new HashMap<>(16);
