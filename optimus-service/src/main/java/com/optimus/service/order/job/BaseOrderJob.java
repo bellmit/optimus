@@ -12,6 +12,7 @@ import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.exception.OptimusException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -77,6 +78,12 @@ public abstract class BaseOrderJob {
     public Map<Integer, Integer> sharding(String baseKey) {
 
         try {
+
+            // 初始化IP
+            if (!StringUtils.hasLength(ip)) {
+                ip = InetAddress.getLocalHost().getHostAddress();
+                log.info("订单定时任务,服务器IP:{}", ip);
+            }
 
             // 查询系统配置
             String value = loadSystemConfig(baseKey);
