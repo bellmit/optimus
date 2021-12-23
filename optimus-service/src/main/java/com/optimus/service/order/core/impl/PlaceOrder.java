@@ -88,6 +88,7 @@ public class PlaceOrder extends BaseOrder {
 
         // 执行脚本
         ExecuteScriptOutputDTO output = gatewayManager.executeScript(OrderManagerConvert.getExecuteScriptInputDTO(createOrder));
+        AssertUtil.notEmpty(output, RespCodeEnum.GATEWAY_EXECUTE_SCRIPT_ERROR, "下单执行脚本输出不能为空");
 
         // 订单信息
         OrderInfoDTO orderInfo = OrderManagerConvert.getOrderInfoDTO(createOrder, output);

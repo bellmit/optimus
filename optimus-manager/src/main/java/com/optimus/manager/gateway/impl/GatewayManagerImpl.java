@@ -20,6 +20,7 @@ import com.optimus.manager.gateway.dto.ExecuteScriptInputDTO;
 import com.optimus.manager.gateway.dto.ExecuteScriptOutputDTO;
 import com.optimus.manager.gateway.dto.GatewayChannelDTO;
 import com.optimus.manager.gateway.dto.MatchChannelDTO;
+import com.optimus.manager.gateway.validate.GatewayManagerValidate;
 import com.optimus.manager.member.dto.MemberInfoDTO;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.JacksonUtil;
@@ -57,9 +58,12 @@ public class GatewayManagerImpl implements GatewayManager {
     @Override
     public ExecuteScriptOutputDTO executeScript(ExecuteScriptInputDTO input) {
 
-        log.info("执行脚本输入参数:{}", input);
+        log.info("执行脚本输入对象:{}", input);
 
         try {
+
+            // 验证输入对象
+            GatewayManagerValidate.validateExecuteScript(input);
 
             // 绑定参数
             Binding binding = new Binding();
@@ -71,13 +75,8 @@ public class GatewayManagerImpl implements GatewayManager {
 
             // 脚本输出对象
             ExecuteScriptOutputDTO output = JacksonUtil.toBean((String) result, ExecuteScriptOutputDTO.class);
-
-            // 断言:非空
-            AssertUtil.notEmpty(output.getOrderId(), RespCodeEnum.GATEWAY_EXECUTE_SCRIPT_ERROR, "执行脚本订单编号不能为空");
-            AssertUtil.notEmpty(output.getCalleeOrderId(), RespCodeEnum.GATEWAY_EXECUTE_SCRIPT_ERROR, "执行脚本被调用方订单编号不能为空");
-            AssertUtil.notEmpty(output.getOrderStatus(), RespCodeEnum.GATEWAY_EXECUTE_SCRIPT_ERROR, "执行脚本订单状态不能为空");
-            AssertUtil.notEmpty(output.getAmount(), RespCodeEnum.GATEWAY_EXECUTE_SCRIPT_ERROR, "执行脚本订单金额不能为空");
-            AssertUtil.notEmpty(output.getActualAmount(), RespCodeEnum.GATEWAY_EXECUTE_SCRIPT_ERROR, "执行脚本实际金额不能为空");
+            AssertUtil.notEmpty(output.getOrderId(), RespCodeEnum.GATEWAY_EXECUTE_SCRIPT_ERROR, "执行脚本输出对象订单编号不能为空");
+            AssertUtil.notEmpty(output.getOrderStatus(), RespCodeEnum.GATEWAY_EXECUTE_SCRIPT_ERROR, "执行脚本输出对象订单状态不能为空");
 
             log.info("执行脚本输出:{}", output);
 
