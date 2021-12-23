@@ -174,9 +174,12 @@ public class MerchantCallbackJob extends BaseOrderJob {
             result = orderManager.orderNotice(orderInfo);
 
         } catch (OptimusException e) {
-            log.error("订单通知异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
+            log.error("订单通知业务异常:", e);
+            log.warn("订单通知异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
+            return;
         } catch (Exception e) {
             log.error("订单通知异常:", e);
+            return;
         }
 
         // 通知成功

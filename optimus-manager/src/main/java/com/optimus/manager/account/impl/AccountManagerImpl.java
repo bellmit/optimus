@@ -84,7 +84,8 @@ public class AccountManagerImpl implements AccountManager {
             addBatchAccountLog(accountInfoList, doTransList);
 
         } catch (OptimusException e) {
-            log.error("账户交易异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
+            log.error("账户交易业务异常:", e);
+            log.warn("账户交易异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return false;
         } catch (Exception e) {

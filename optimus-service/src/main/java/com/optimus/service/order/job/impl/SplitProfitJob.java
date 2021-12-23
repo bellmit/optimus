@@ -122,9 +122,12 @@ public class SplitProfitJob extends BaseOrderJob {
                     orderManager.splitProfit(orderInfo, chainList, memberChannelList);
 
                 } catch (OptimusException e) {
-                    log.error("订单分润异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
+                    log.error("订单分润业务异常:", e);
+                    log.warn("订单分润异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
+                    continue;
                 } catch (Exception e) {
                     log.error("订单分润异常:", e);
+                    continue;
                 }
 
             }

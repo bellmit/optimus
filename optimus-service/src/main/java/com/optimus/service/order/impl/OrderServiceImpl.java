@@ -97,7 +97,8 @@ public class OrderServiceImpl implements OrderService {
             orderInfo = baseOrder.createOrder(createOrder);
 
         } catch (OptimusException e) {
-            log.error("创建订单异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
+            log.error("创建订单业务异常:", e);
+            log.warn("创建订单异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
             orderManager.updateOrderInfoToFail(id);
             throw e;
         } catch (Exception e) {
@@ -126,7 +127,8 @@ public class OrderServiceImpl implements OrderService {
             baseOrder.payOrder(payOrder);
 
         } catch (OptimusException e) {
-            log.error("支付订单异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
+            log.error("支付订单业务异常:", e);
+            log.warn("支付订单异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
             orderManager.updateOrderInfoToFail(payOrder.getId());
             throw e;
         } catch (Exception e) {

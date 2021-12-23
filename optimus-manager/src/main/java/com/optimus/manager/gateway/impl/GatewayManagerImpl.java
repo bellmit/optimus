@@ -84,7 +84,8 @@ public class GatewayManagerImpl implements GatewayManager {
             return output;
 
         } catch (OptimusException e) {
-            log.error("执行脚本异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
+            log.error("执行脚本业务异常:", e);
+            log.warn("执行脚本异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
             return null;
         } catch (Exception e) {
             log.error("执行脚本异常:", e);
