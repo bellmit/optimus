@@ -72,7 +72,7 @@ public class SplitProfitJob extends BaseOrderJob {
     @Resource
     private OrderInfoDao orderInfoDao;
 
-    @Scheduled(initialDelay = 60000, fixedDelay = 10000)
+    @Scheduled(initialDelay = 60000, fixedDelay = 30000)
     @Override
     public void execute() {
 

@@ -2,9 +2,7 @@
 <configuration debug="false">
 
     <!-- 日志地址 -->
-    <property name="LOG-HOME" value="${LOG_PATH}" />
-    <!-- 应用名称 -->
-    <property name="APP-NAME" value="optimus" />
+    <property name="LOG_HOME" value="${LOG_PATH}" />
 
     <!-- 控制台 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
@@ -16,8 +14,30 @@
         </encoder>
     </appender>
 
-    <!-- 非异常日志 -->
-    <appender name="NOT-ERROR-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <!-- SQL日志 -->
+    <appender name="SQL_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <!-- 日志级别 -->
+            <level>DEBUG</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 日志文件输出的文件名 -->
+            <FileNamePattern>${LOG_HOME}/sql/%d{yyyy-MM-dd, GMT+8}/sql.%d{yyyy-MM-dd, GMT+8}.%i.log</FileNamePattern>
+            <!-- 文件大小 -->
+            <MaxFileSize>20MB</MaxFileSize>
+            <!-- 日志文件保留天数 -->
+            <MaxHistory>30</MaxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!-- 格式化输出:%d表示日期,%thread表示线程名,%-5level:级别从左显示5个字符宽度%msg:日志消息,%n是换行符 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS, GMT+8} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <!-- 编码 -->
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 普通日志 -->
+    <appender name="COMMON_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <!-- 日志级别 -->
             <level>ERROR</level>
@@ -28,7 +48,7 @@
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- 日志文件输出的文件名 -->
-            <FileNamePattern>${LOG-HOME}/%d{yyyy-MM-dd, GMT+8}/${APP-NAME}.%d{yyyy-MM-dd, GMT+8}.%i.log</FileNamePattern>
+            <FileNamePattern>${LOG_HOME}/common/%d{yyyy-MM-dd, GMT+8}/common.%d{yyyy-MM-dd, GMT+8}.%i.log</FileNamePattern>
             <!-- 文件大小 -->
             <MaxFileSize>20MB</MaxFileSize>
             <!-- 日志文件保留天数 -->
@@ -43,7 +63,7 @@
     </appender>
 
     <!-- 异常日志 -->
-    <appender name="ERROR-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <!-- 日志级别 -->
             <level>ERROR</level>
@@ -54,7 +74,7 @@
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- 日志文件输出的文件名 -->
-            <FileNamePattern>${LOG-HOME}/error/%d{yyyy-MM-dd, GMT+8}/${APP-NAME}.%d{yyyy-MM-dd, GMT+8}.%i.log</FileNamePattern>
+            <FileNamePattern>${LOG_HOME}/error/%d{yyyy-MM-dd, GMT+8}/error.%d{yyyy-MM-dd, GMT+8}.%i.log</FileNamePattern>
             <!-- 文件大小 -->
             <MaxFileSize>20MB</MaxFileSize>
             <!-- 日志文件保留天数 -->
@@ -68,38 +88,52 @@
         </encoder>
     </appender>
 
-    <!-- 异步打印非异常日志 -->
-    <appender name="ASYNC-NOT-ERROR-FILE-APPENDER" class="ch.qos.logback.classic.AsyncAppender">
+    <!-- 异步打印SQL日志 -->
+    <appender name="ASYNC_SQL_FILE" class="ch.qos.logback.classic.AsyncAppender">
         <!-- 不丢弃日志 -->
         <discardingThreshold>0</discardingThreshold>
         <!-- 队列深度 -->
         <queueSize>1024</queueSize>
         <!-- 队列入队时非阻塞 -->
         <neverBlock>true</neverBlock>
-        <!-- 非异常日志文件 -->
-        <appender-ref ref="NOT-ERROR-FILE" />
+        <!-- SQL日志 -->
+        <appender-ref ref="SQL_FILE" />
+    </appender>
+
+    <!-- 异步打印普通日志 -->
+    <appender name="ASYNC_COMMON_FILE" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- 不丢弃日志 -->
+        <discardingThreshold>0</discardingThreshold>
+        <!-- 队列深度 -->
+        <queueSize>1024</queueSize>
+        <!-- 队列入队时非阻塞 -->
+        <neverBlock>true</neverBlock>
+        <!-- 普通日志 -->
+        <appender-ref ref="COMMON_FILE" />
     </appender>
 
     <!-- 异步打印异常日志 -->
-    <appender name="ASYNC-ERROR-FILE-APPENDER" class="ch.qos.logback.classic.AsyncAppender">
+    <appender name="ASYNC_ERROR_FILE" class="ch.qos.logback.classic.AsyncAppender">
         <!-- 不丢弃日志 -->
         <discardingThreshold>0</discardingThreshold>
         <!-- 队列深度 -->
         <queueSize>1024</queueSize>
         <!-- 队列入队时非阻塞 -->
         <neverBlock>true</neverBlock>
-        <!-- 异常日志文件 -->
-        <appender-ref ref="ERROR-FILE" />
+        <!-- 异常日志 -->
+        <appender-ref ref="ERROR_FILE" />
     </appender>
 
-    <!-- 数据库日志 -->
-    <logger name="com.optimus.dao.mapper" level="DEBUG" />
+    <!-- SQL日志 -->
+    <logger name="com.optimus.dao.mapper" level="DEBUG" additivity="false">
+        <appender-ref ref="ASYNC_SQL_FILE" />
+    </logger>
 
     <!-- 日志级别 -->
     <root level="INFO">
         <appender-ref ref="STDOUT" level="DEBUG" />
-        <appender-ref ref="ASYNC-NOT-ERROR-FILE-APPENDER" />
-        <appender-ref ref="ASYNC-ERROR-FILE-APPENDER" />
+        <appender-ref ref="ASYNC_COMMON_FILE" />
+        <appender-ref ref="ASYNC_ERROR_FILE" />
     </root>
 
 </configuration>
