@@ -89,7 +89,7 @@ public class GatewayController {
         AssertUtil.notEquals(OrderStatusEnum.ORDER_STATUS_NP.getCode(), orderInfo.getOrderStatus(), RespCodeEnum.ORDER_ERROR, "原订单状态不合法");
 
         // 支付
-        PayOrderDTO payOrder = GatewayControllerConvert.getPayOrderDTO(output, orderInfo);
+        PayOrderDTO payOrder = GatewayControllerConvert.getPayOrderDTO(orderInfo, output);
         payOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_C.getCode());
         payOrder.setBehavior(OrderBehaviorEnum.BEHAVIOR_S.getCode());
         orderService.payOrder(payOrder);

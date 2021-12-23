@@ -33,11 +33,11 @@ public class GatewayControllerConvert {
     /**
      * 获取支付订单DTO
      * 
-     * @param output
      * @param orderInfo
+     * @param output
      * @return
      */
-    public static PayOrderDTO getPayOrderDTO(ExecuteScriptOutputDTO output, OrderInfoDTO orderInfo) {
+    public static PayOrderDTO getPayOrderDTO(OrderInfoDTO orderInfo, ExecuteScriptOutputDTO output) {
 
         // 支付订单DTO
         PayOrderDTO payOrder = new PayOrderDTO();
