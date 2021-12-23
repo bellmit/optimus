@@ -3,6 +3,7 @@ package com.optimus.web.gateway.convert;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,6 +17,7 @@ import com.optimus.util.JacksonUtil;
 import com.optimus.util.constants.BaseEnum;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.gateway.ScriptEnum;
+import com.optimus.util.constants.order.OrderBehaviorEnum;
 import com.optimus.util.exception.OptimusException;
 
 import org.springframework.util.StringUtils;
@@ -48,6 +50,7 @@ public class GatewayControllerConvert {
         payOrder.setOrderAmount(output.getAmount());
         payOrder.setActualAmount(output.getActualAmount());
         payOrder.setOrderStatus(output.getOrderStatus());
+        payOrder.setOrderType(orderInfo.getOrderType());
         payOrder.setReleaseStatus(orderInfo.getReleaseStatus());
         payOrder.setMerchantCallbackUrl(orderInfo.getMerchantCallbackUrl());
         payOrder.setMemberId(orderInfo.getMemberId());
@@ -62,9 +65,10 @@ public class GatewayControllerConvert {
      * 获取执行脚本输入DTO
      * 
      * @param gatewaySubChannel
+     * @param args
      * @return
      */
-    public static ExecuteScriptInputDTO getExecuteScriptInputDTO(GatewaySubChannelDTO gatewaySubChannel) {
+    public static ExecuteScriptInputDTO getExecuteScriptInputDTO(GatewaySubChannelDTO gatewaySubChannel, String args) {
 
         // 执行脚本输入DTO
         ExecuteScriptInputDTO input = new ExecuteScriptInputDTO();
@@ -72,6 +76,7 @@ public class GatewayControllerConvert {
         input.setScriptMethod(ScriptEnum.PARSE.getCode());
         input.setBizContent(gatewaySubChannel.getBizContent());
         input.setImplPath(gatewaySubChannel.getImplPath());
+        input.setArgs(args);
 
         return input;
 
@@ -90,12 +95,11 @@ public class GatewayControllerConvert {
 
         Enumeration<String> headers = req.getHeaderNames();
         while (headers.hasMoreElements()) {
-
             String element = headers.nextElement();
             headerMap.put(element, req.getHeader(element));
-
         }
 
+        // header参数
         String header = JacksonUtil.toString(headerMap);
 
         // Parameter参数
@@ -174,6 +178,41 @@ public class GatewayControllerConvert {
 
         return ip;
 
+    }
+
+    /**
+     * 获取行为
+     * 
+     * @param args
+     * @return
+     */
+    public static String getBehavior(String args) {
+
+        // 默认系统触发
+        String behavior = OrderBehaviorEnum.BEHAVIOR_S.getCode();
+
+        if (!StringUtils.hasLength(args)) {
+            return behavior;
+        }
+
+        try {
+
+            // 解析人为触发行为
+            JsonNode jsonNode = JacksonUtil.toTree(args);
+            jsonNode = jsonNode.get("parameter");
+            jsonNode = jsonNode.get("behavior");
+
+            if (Objects.isNull(jsonNode)) {
+                return behavior;
+            }
+
+            behavior = OrderBehaviorEnum.BEHAVIOR_A.getCode();
+
+        } catch (Exception e) {
+            log.error("渠道回调,获取行为异常:{}", e);
+        }
+
+        return behavior;
     }
 
 }

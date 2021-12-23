@@ -15,7 +15,6 @@ import com.optimus.service.order.OrderService;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.annotation.OptimusRateLimiter;
 import com.optimus.util.constants.RespCodeEnum;
-import com.optimus.util.constants.order.OrderBehaviorEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
 import com.optimus.util.exception.OptimusException;
@@ -58,7 +57,9 @@ public class GatewayController {
     @RequestMapping(value = "/channelCallback", method = { RequestMethod.GET, RequestMethod.POST })
     public String channelCallback(HttpServletRequest req, @RequestParam("subChannelCode") String subChannelCode) {
 
-        log.info("渠道回调,请求:{}", subChannelCode);
+        // 解析参数
+        String args = GatewayControllerConvert.getAllArgs(req);
+        log.info("渠道回调,子渠道:{},参数:{}", subChannelCode, args);
 
         // 商户客户端IP
         String ip = GatewayControllerConvert.getRemoteIp(req);
@@ -71,12 +72,12 @@ public class GatewayController {
         // 验证IP
         String[] ips = gatewaySubChannel.getCallbackIp().split(",");
         if (!Arrays.asList(ips).contains(ip)) {
+            log.warn("渠道回调,客户端IP:{},配置IP:{}", ip, ips);
             throw new OptimusException(RespCodeEnum.ERROR_IP, "客户端IP异常");
         }
 
         // 执行脚本输入DTO
-        ExecuteScriptInputDTO input = GatewayControllerConvert.getExecuteScriptInputDTO(gatewaySubChannel);
-        input.setArgs(GatewayControllerConvert.getAllArgs(req));
+        ExecuteScriptInputDTO input = GatewayControllerConvert.getExecuteScriptInputDTO(gatewaySubChannel, args);
 
         // 执行脚本
         ExecuteScriptOutputDTO output = gatewayService.executeScript(input);
@@ -90,8 +91,7 @@ public class GatewayController {
 
         // 支付
         PayOrderDTO payOrder = GatewayControllerConvert.getPayOrderDTO(orderInfo, output);
-        payOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_C.getCode());
-        payOrder.setBehavior(OrderBehaviorEnum.BEHAVIOR_S.getCode());
+        payOrder.setBehavior(GatewayControllerConvert.getBehavior(args));
         orderService.payOrder(payOrder);
 
         String resp = output.getContent();
