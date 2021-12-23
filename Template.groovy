@@ -70,7 +70,7 @@ class GroovyChannelService {
         output.setOrderId(input.getOrderId())
         output.setOrderStatus(json.Success ? "NP" : "AF")
         output.setAmount(input.getAmount())
-        output.setChannelReturnMessage(post)
+        output.setChannelReturnMessage(json.toJSONString())
 
         if (json.Success) {
 
@@ -101,20 +101,20 @@ class GroovyChannelService {
 
         // Post
         def post = groovyHttpUtil.doPost(bizContentJson.queryOrderUrl, JSON.toJSONString(treeMap))
-        def postJson = JSON.parseObject(post)
+        def json = JSON.parseObject(post)
 
         // 响应对象
         GroovyExecuteScriptOutputDTO output = new GroovyExecuteScriptOutputDTO()
         output.setOrderId(input.getOrderId())
         output.setCalleeOrderId(input.getCalleeOrderId())
         output.setOrderStatus("AF")
-        output.setChannelReturnMessage(post)
+        output.setChannelReturnMessage(json.toJSONString())
 
-        if ("0".equals(postJson.ErrCode) && 0 == postJson.ResData) {
+        if ("0".equals(json.ErrCode) && 0 == json.ResData) {
             output.setOrderStatus("NP")
             return JSON.toJSONString(output)
         }
-        if ("0".equals(postJson.ErrCode) && 1 == postJson.ResData) {
+        if ("0".equals(json.ErrCode) && 1 == json.ResData) {
             output.setOrderStatus("AP")
             return JSON.toJSONString(output)
         }
@@ -136,6 +136,7 @@ class GroovyChannelService {
         output.setOrderStatus("AP")
         output.setAmount(bodyJson.Amount)
         output.setActualAmount(bodyJson.ActualAmount)
+        output.setContent("ok")
 
         return JSON.toJSONString(output)
     }
