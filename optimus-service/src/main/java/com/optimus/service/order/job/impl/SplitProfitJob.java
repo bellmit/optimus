@@ -21,6 +21,7 @@ import com.optimus.service.order.job.BaseOrderJob;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.DateUtil;
 import com.optimus.util.constants.RespCodeEnum;
+import com.optimus.util.constants.common.CommonSystemConfigEnum;
 import com.optimus.util.constants.order.OrderSplitProfitStatusEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
@@ -44,15 +45,6 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class SplitProfitJob extends BaseOrderJob {
-
-    /** 订单分润定时任务分片配置项 */
-    private static final String SPLIT_PROFIT_JOB_SHARDING_BASE_KEY = "SPLIT_PROFIT_JOB_SHARDING";
-
-    /** 订单分润一次执行上限配置项 */
-    private static final String SPLIT_PROFIT_ONCE_EXECUTE_LIMIT_BASE_KEY = "SPLIT_PROFIT_ONCE_EXECUTE_LIMIT";
-
-    /** 订单分润间隔配置项 */
-    private static final String SPLIT_PROFIT_INTERVAL_BASE_KEY = "SPLIT_PROFIT_INTERVAL";
 
     /** 订单分润一次执行上限默认值 */
     private static Integer splitProfitOnceExecuteLimit = 100;
@@ -142,13 +134,13 @@ public class SplitProfitJob extends BaseOrderJob {
     private void init() {
 
         // 一次执行上限
-        String value1 = super.loadSystemConfig(SPLIT_PROFIT_ONCE_EXECUTE_LIMIT_BASE_KEY);
+        String value1 = super.loadSystemConfig(CommonSystemConfigEnum.SPLIT_PROFIT_ONCE_EXECUTE_LIMIT.getCode());
         if (StringUtils.hasLength(value1)) {
             splitProfitOnceExecuteLimit = Integer.parseInt(value1);
         }
 
         // 间隔
-        String value2 = super.loadSystemConfig(SPLIT_PROFIT_INTERVAL_BASE_KEY);
+        String value2 = super.loadSystemConfig(CommonSystemConfigEnum.SPLIT_PROFIT_INTERVAL.getCode());
         if (StringUtils.hasLength(value2)) {
             splitProfitInterval = Integer.parseInt(value2);
         }
@@ -163,7 +155,7 @@ public class SplitProfitJob extends BaseOrderJob {
     private OrderInfoQuery getOrderInfoQuery() {
 
         // 分片
-        Map<Integer, Integer> shardingMap = super.sharding(SPLIT_PROFIT_JOB_SHARDING_BASE_KEY);
+        Map<Integer, Integer> shardingMap = super.sharding(CommonSystemConfigEnum.SPLIT_PROFIT_JOB_SHARDING.getCode());
         if (CollectionUtils.isEmpty(shardingMap)) {
             return null;
         }

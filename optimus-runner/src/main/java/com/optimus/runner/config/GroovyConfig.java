@@ -1,6 +1,7 @@
 package com.optimus.runner.config;
 
 import com.optimus.service.common.CommonSystemConfigService;
+import com.optimus.util.constants.common.CommonSystemConfigEnum;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -17,8 +18,6 @@ import groovy.util.GroovyScriptEngine;
 @Configuration
 public class GroovyConfig {
 
-    private static final String GROOVY_SCRIPT_PATH_BASE_KEY = "GROOVY_SCRIPT_PATH";
-
     @Autowired
     private CommonSystemConfigService commonSystemConfigService;
 
@@ -27,7 +26,7 @@ public class GroovyConfig {
     public GroovyScriptEngine groovyScriptEngine() throws Exception {
 
         // 查询系统配置
-        String value = commonSystemConfigService.getCommonSystemConfigByBaseKey(GROOVY_SCRIPT_PATH_BASE_KEY);
+        String value = commonSystemConfigService.getCommonSystemConfigByBaseKey(CommonSystemConfigEnum.GROOVY_SCRIPT_PATH.getCode());
 
         // 实例化
         return new GroovyScriptEngine(value);

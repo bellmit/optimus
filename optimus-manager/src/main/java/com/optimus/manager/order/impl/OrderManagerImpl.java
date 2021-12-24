@@ -15,6 +15,7 @@ import com.optimus.dao.mapper.OrderInfoDao;
 import com.optimus.dao.result.MemberInfoChainResult;
 import com.optimus.manager.account.AccountManager;
 import com.optimus.manager.account.dto.DoTransDTO;
+import com.optimus.manager.common.CommonSystemConfigManager;
 import com.optimus.manager.order.OrderManager;
 import com.optimus.manager.order.convert.OrderManagerConvert;
 import com.optimus.manager.order.dto.OrderInfoDTO;
@@ -25,6 +26,7 @@ import com.optimus.util.JacksonUtil;
 import com.optimus.util.SignUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.account.AccountChangeTypeEnum;
+import com.optimus.util.constants.common.CommonSystemConfigEnum;
 import com.optimus.util.constants.order.OrderMerchantNotifyStatusEnum;
 import com.optimus.util.constants.order.OrderReleaseStatusEnum;
 import com.optimus.util.constants.order.OrderSplitProfitStatusEnum;
@@ -52,6 +54,9 @@ public class OrderManagerImpl implements OrderManager {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private CommonSystemConfigManager commonSystemConfigManager;
 
     @Autowired
     private AccountManager accountManager;
@@ -183,6 +188,11 @@ public class OrderManagerImpl implements OrderManager {
             return false;
         }
 
+        // 获取通知地址
+        String url = commonSystemConfigManager.getCommonSystemConfigByBaseKey(CommonSystemConfigEnum.BASE_NOTICE_URL.getCode());
+        AssertUtil.notEmpty(url, RespCodeEnum.FAILE, "未配置通知地址");
+        url = String.format(url, orderInfo.getMerchantCallbackUrl());
+
         // 获取订单通知DTO
         OrderNoticeDTO orderNotice = OrderManagerConvert.getOrderNoticeDTO(orderInfo);
 
@@ -198,7 +208,7 @@ public class OrderManagerImpl implements OrderManager {
         log.info("订单信息通知报文:{}", orderNotice);
 
         // Post
-        ResponseEntity<String> entity = restTemplate.postForEntity(orderInfo.getMerchantCallbackUrl(), orderNotice, String.class);
+        ResponseEntity<String> entity = restTemplate.postForEntity(url, orderNotice, String.class);
         log.info("订单信息通知结果:{}", entity);
 
         // 下游响应不成功

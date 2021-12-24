@@ -12,7 +12,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ScriptEnum {
 
-    /* ---------脚本方法类--------- */
+    /* ---------脚本方法--------- */
 
     CREATE("create", "平台调用网关渠道下单方法"),
 

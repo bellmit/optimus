@@ -12,7 +12,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum BaseEnum {
 
-    /* ---------基础类--------- */
+    /* ---------基础--------- */
 
     UNKNOWN("unknown", "未知"),
 

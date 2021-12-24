@@ -17,6 +17,7 @@ import com.optimus.manager.gateway.dto.ExecuteScriptOutputDTO;
 import com.optimus.manager.order.convert.OrderManagerConvert;
 import com.optimus.service.order.job.BaseOrderJob;
 import com.optimus.util.DateUtil;
+import com.optimus.util.constants.common.CommonSystemConfigEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
 import com.optimus.util.model.page.Page;
@@ -37,18 +38,6 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class ChannelOrderQueryJob extends BaseOrderJob {
-
-    /** 渠道订单查询定时任务分片配置项 */
-    private static final String CHANNEL_ORDER_QUERY_JOB_SHARDING_BASE_KEY = "CHANNEL_ORDER_QUERY_JOB_SHARDING";
-
-    /** 渠道订单查询次数系统配置项 */
-    private static final String CHANNEL_ORDER_QUERY_COUNT_BASE_KEY = "CHANNEL_ORDER_QUERY_COUNT";
-
-    /** 渠道订单查询一次执行上限配置项 */
-    private static final String CHANNEL_ORDER_QUERY_ONCE_EXECUTE_LIMIT_BASE_KEY = "CHANNEL_ORDER_QUERY_ONCE_EXECUTE_LIMIT";
-
-    /** 渠道订单查询间隔配置项 */
-    private static final String CHANNEL_ORDER_QUERY_INTERVAL_BASE_KEY = "CHANNEL_ORDER_QUERY_INTERVAL";
 
     /** 渠道订单查询次数默认值 */
     private static Short channelOrderQueryCount = 3;
@@ -120,19 +109,19 @@ public class ChannelOrderQueryJob extends BaseOrderJob {
     private void init() {
 
         // 渠道订单查询次数
-        String value0 = super.loadSystemConfig(CHANNEL_ORDER_QUERY_COUNT_BASE_KEY);
+        String value0 = super.loadSystemConfig(CommonSystemConfigEnum.CHANNEL_ORDER_QUERY_COUNT.getCode());
         if (StringUtils.hasLength(value0)) {
             channelOrderQueryCount = Short.parseShort(value0);
         }
 
         // 一次执行上限
-        String value1 = super.loadSystemConfig(CHANNEL_ORDER_QUERY_ONCE_EXECUTE_LIMIT_BASE_KEY);
+        String value1 = super.loadSystemConfig(CommonSystemConfigEnum.CHANNEL_ORDER_QUERY_ONCE_EXECUTE_LIMIT.getCode());
         if (StringUtils.hasLength(value1)) {
             channelOrderQueryOnceExecuteLimit = Integer.parseInt(value1);
         }
 
         // 间隔
-        String value2 = super.loadSystemConfig(CHANNEL_ORDER_QUERY_INTERVAL_BASE_KEY);
+        String value2 = super.loadSystemConfig(CommonSystemConfigEnum.CHANNEL_ORDER_QUERY_INTERVAL.getCode());
         if (StringUtils.hasLength(value2)) {
             channelOrderQueryInterval = Integer.parseInt(value2);
         }
@@ -147,7 +136,7 @@ public class ChannelOrderQueryJob extends BaseOrderJob {
     private OrderInfoQuery getOrderInfoQuery() {
 
         // 分片
-        Map<Integer, Integer> shardingMap = super.sharding(CHANNEL_ORDER_QUERY_JOB_SHARDING_BASE_KEY);
+        Map<Integer, Integer> shardingMap = super.sharding(CommonSystemConfigEnum.CHANNEL_ORDER_QUERY_JOB_SHARDING.getCode());
         if (CollectionUtils.isEmpty(shardingMap)) {
             return null;
         }

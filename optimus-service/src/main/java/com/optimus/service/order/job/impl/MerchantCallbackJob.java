@@ -13,6 +13,7 @@ import com.optimus.manager.order.OrderManager;
 import com.optimus.manager.order.dto.OrderInfoDTO;
 import com.optimus.service.order.job.BaseOrderJob;
 import com.optimus.util.DateUtil;
+import com.optimus.util.constants.common.CommonSystemConfigEnum;
 import com.optimus.util.constants.order.OrderMerchantNotifyStatusEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
@@ -36,18 +37,6 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class MerchantCallbackJob extends BaseOrderJob {
-
-    /** 回调商户定时任务分片配置项 */
-    private static final String MERCHANT_CALLBACK_JOB_SHARDING_BASE_KEY = "MERCHANT_CALLBACK_JOB_SHARDING";
-
-    /** 回调商户次数系统配置项 */
-    private static final String MERCHANT_CALLBACK_COUNT_BASE_KEY = "MERCHANT_CALLBACK_COUNT";
-
-    /** 回调商户一次执行上限配置项 */
-    private static final String MERCHANT_CALLBACK_ONCE_EXECUTE_LIMIT_BASE_KEY = "MERCHANT_CALLBACK_ONCE_EXECUTE_LIMIT";
-
-    /** 回调商户间隔配置项 */
-    private static final String MERCHANT_CALLBACK_INTERVAL_BASE_KEY = "MERCHANT_CALLBACK_INTERVAL";
 
     /** 回调商户次数默认值 */
     private static Short merchantCallbackCount = 3;
@@ -111,19 +100,19 @@ public class MerchantCallbackJob extends BaseOrderJob {
     private void init() {
 
         // 回调商户次数
-        String value0 = super.loadSystemConfig(MERCHANT_CALLBACK_COUNT_BASE_KEY);
+        String value0 = super.loadSystemConfig(CommonSystemConfigEnum.MERCHANT_CALLBACK_COUNT.getCode());
         if (StringUtils.hasLength(value0)) {
             merchantCallbackCount = Short.parseShort(value0);
         }
 
         // 一次执行上限
-        String value1 = super.loadSystemConfig(MERCHANT_CALLBACK_ONCE_EXECUTE_LIMIT_BASE_KEY);
+        String value1 = super.loadSystemConfig(CommonSystemConfigEnum.MERCHANT_CALLBACK_ONCE_EXECUTE_LIMIT.getCode());
         if (StringUtils.hasLength(value1)) {
             merchantCallbackOnceExecuteLimit = Integer.parseInt(value1);
         }
 
         // 间隔
-        String value2 = super.loadSystemConfig(MERCHANT_CALLBACK_INTERVAL_BASE_KEY);
+        String value2 = super.loadSystemConfig(CommonSystemConfigEnum.MERCHANT_CALLBACK_INTERVAL.getCode());
         if (StringUtils.hasLength(value2)) {
             merchantCallbackInterval = Integer.parseInt(value2);
         }
@@ -138,7 +127,7 @@ public class MerchantCallbackJob extends BaseOrderJob {
     private OrderInfoQuery getOrderInfoQuery() {
 
         // 分片
-        Map<Integer, Integer> shardingMap = super.sharding(MERCHANT_CALLBACK_JOB_SHARDING_BASE_KEY);
+        Map<Integer, Integer> shardingMap = super.sharding(CommonSystemConfigEnum.MERCHANT_CALLBACK_JOB_SHARDING.getCode());
         if (CollectionUtils.isEmpty(shardingMap)) {
             return null;
         }

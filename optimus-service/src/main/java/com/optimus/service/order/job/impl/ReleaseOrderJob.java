@@ -13,6 +13,7 @@ import com.optimus.manager.order.OrderManager;
 import com.optimus.manager.order.dto.OrderInfoDTO;
 import com.optimus.service.order.job.BaseOrderJob;
 import com.optimus.util.DateUtil;
+import com.optimus.util.constants.common.CommonSystemConfigEnum;
 import com.optimus.util.constants.order.OrderReleaseStatusEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
 import com.optimus.util.exception.OptimusException;
@@ -35,15 +36,6 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class ReleaseOrderJob extends BaseOrderJob {
-
-    /** 释放订单定时任务分片配置项 */
-    private static final String RELEASE_ORDER_JOB_SHARDING_BASE_KEY = "RELEASE_ORDER_JOB_SHARDING";
-
-    /** 释放订单一次执行上限配置项 */
-    private static final String RELEASE_ORDER_ONCE_EXECUTE_LIMIT_BASE_KEY = "RELEASE_ORDER_ONCE_EXECUTE_LIMIT";
-
-    /** 释放订单间隔配置项 */
-    private static final String RELEASE_ORDER_INTERVAL_BASE_KEY = "RELEASE_ORDER_INTERVAL";
 
     /** 释放订单一次执行上限默认值 */
     private static Integer releaseOrderOnceExecuteLimit = 100;
@@ -115,13 +107,13 @@ public class ReleaseOrderJob extends BaseOrderJob {
     private void init() {
 
         // 一次执行上限
-        String value1 = super.loadSystemConfig(RELEASE_ORDER_ONCE_EXECUTE_LIMIT_BASE_KEY);
+        String value1 = super.loadSystemConfig(CommonSystemConfigEnum.RELEASE_ORDER_ONCE_EXECUTE_LIMIT.getCode());
         if (StringUtils.hasLength(value1)) {
             releaseOrderOnceExecuteLimit = Integer.parseInt(value1);
         }
 
         // 间隔
-        String value2 = super.loadSystemConfig(RELEASE_ORDER_INTERVAL_BASE_KEY);
+        String value2 = super.loadSystemConfig(CommonSystemConfigEnum.RELEASE_ORDER_INTERVAL.getCode());
         if (StringUtils.hasLength(value2)) {
             releaseOrderInterval = Integer.parseInt(value2);
         }
@@ -136,7 +128,7 @@ public class ReleaseOrderJob extends BaseOrderJob {
     private OrderInfoQuery getOrderInfoQuery() {
 
         // 分片
-        Map<Integer, Integer> shardingMap = super.sharding(RELEASE_ORDER_JOB_SHARDING_BASE_KEY);
+        Map<Integer, Integer> shardingMap = super.sharding(CommonSystemConfigEnum.RELEASE_ORDER_JOB_SHARDING.getCode());
         if (CollectionUtils.isEmpty(shardingMap)) {
             return null;
         }
