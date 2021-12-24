@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -11,16 +12,19 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.optimus.dao.domain.MemberChannelDO;
 import com.optimus.dao.domain.MemberInfoDO;
 import com.optimus.dao.domain.OrderInfoDO;
+import com.optimus.dao.mapper.MemberChannelDao;
 import com.optimus.dao.mapper.MemberInfoDao;
 import com.optimus.dao.mapper.OrderInfoDao;
 import com.optimus.dao.result.MemberInfoChainResult;
 import com.optimus.manager.account.AccountManager;
 import com.optimus.manager.account.dto.DoTransDTO;
 import com.optimus.manager.common.CommonSystemConfigManager;
+import com.optimus.manager.member.MemberManager;
 import com.optimus.manager.order.OrderManager;
 import com.optimus.manager.order.convert.OrderManagerConvert;
 import com.optimus.manager.order.dto.OrderInfoDTO;
 import com.optimus.manager.order.dto.OrderNoticeDTO;
+import com.optimus.manager.order.validate.OrderManagerValidate;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.DateUtil;
 import com.optimus.util.JacksonUtil;
@@ -63,7 +67,13 @@ public class OrderManagerImpl implements OrderManager {
     private AccountManager accountManager;
 
     @Resource
+    private MemberManager memberManager;
+
+    @Resource
     private MemberInfoDao memberInfoDao;
+
+    @Resource
+    private MemberChannelDao memberChannelDao;
 
     @Resource
     private OrderInfoDao orderInfoDao;
@@ -146,14 +156,26 @@ public class OrderManagerImpl implements OrderManager {
     }
 
     @Override
-    public boolean splitProfit(OrderInfoDTO orderInfo, List<MemberInfoChainResult> chainList, List<MemberChannelDO> memberChannelList) {
+    public boolean splitProfit(OrderInfoDTO orderInfo) {
 
-        log.info("订单信息分润,订单信息:{},会员信息链:{},会员渠道:{}", orderInfo, chainList, memberChannelList);
+        log.info("订单信息分润,订单信息:{}", orderInfo);
 
         // 订单状态不为成功
         if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_AP.getCode(), orderInfo.getOrderStatus())) {
             return false;
         }
+
+        // 查询会员信息链
+        List<MemberInfoChainResult> chainList = memberManager.listMemberInfoChains(orderInfo.getCodeMemberId());
+        AssertUtil.notEmpty(chainList, RespCodeEnum.MEMBER_ERROR, "会员信息链不能为空");
+        log.info("会员信息链:{}", chainList);
+
+        // 查询会员关系链的会员渠道费率
+        List<String> memberIdList = chainList.stream().map(MemberInfoChainResult::getMemberId).collect(Collectors.toList());
+        memberIdList.add(orderInfo.getMemberId());
+        List<MemberChannelDO> memberChannelList = memberChannelDao.listMemberChannelByMemberIdLists(memberIdList);
+        OrderManagerValidate.validateChainAndChannel(chainList, memberChannelList, orderInfo.getCodeMemberId());
+        log.info("会员渠道费率:{}", memberChannelList);
 
         // 账户交易List
         List<DoTransDTO> doTransList = OrderManagerConvert.getDoTransDTOList(orderInfo, chainList, memberChannelList);
@@ -173,7 +195,6 @@ public class OrderManagerImpl implements OrderManager {
         }
 
         log.info("订单信息分润结果:{}", doTrans);
-
         return doTrans;
 
     }
@@ -248,11 +269,11 @@ public class OrderManagerImpl implements OrderManager {
 
     @Async
     @Override
-    public void asyncSplitProfit(OrderInfoDTO orderInfo, List<MemberInfoChainResult> chainList, List<MemberChannelDO> memberChannelList) {
+    public void asyncSplitProfit(OrderInfoDTO orderInfo) {
 
         try {
 
-            splitProfit(orderInfo, chainList, memberChannelList);
+            splitProfit(orderInfo);
 
         } catch (OptimusException e) {
             log.error("异步订单分润业务异常:", e);

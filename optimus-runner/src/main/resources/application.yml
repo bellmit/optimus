@@ -18,6 +18,7 @@ spring:
         type: caffeine
         cache-names:
             - systemConfig
+            - systemMemberIdConfig
             - memberChainConfig
         caffeine:
             spec: maximumSize=1000, expireAfterWrite=600s

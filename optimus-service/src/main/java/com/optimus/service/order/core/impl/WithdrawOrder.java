@@ -128,7 +128,6 @@ public class WithdrawOrder extends BaseOrder {
 
             // 回滚账户信息
             rollbackAccountInfo(payOrder);
-
             return;
         }
 

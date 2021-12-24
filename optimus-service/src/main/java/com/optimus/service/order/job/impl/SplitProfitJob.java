@@ -3,24 +3,17 @@ package com.optimus.service.order.job.impl;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
-import com.optimus.dao.domain.MemberChannelDO;
 import com.optimus.dao.domain.OrderInfoDO;
 import com.optimus.dao.mapper.MemberChannelDao;
 import com.optimus.dao.mapper.OrderInfoDao;
 import com.optimus.dao.query.OrderInfoQuery;
-import com.optimus.dao.result.MemberInfoChainResult;
-import com.optimus.manager.member.MemberManager;
 import com.optimus.manager.order.OrderManager;
 import com.optimus.manager.order.dto.OrderInfoDTO;
-import com.optimus.manager.order.validate.OrderManagerValidate;
 import com.optimus.service.order.job.BaseOrderJob;
-import com.optimus.util.AssertUtil;
 import com.optimus.util.DateUtil;
-import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.common.CommonSystemConfigEnum;
 import com.optimus.util.constants.order.OrderSplitProfitStatusEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
@@ -51,9 +44,6 @@ public class SplitProfitJob extends BaseOrderJob {
 
     /** 订单分润间隔默认值 */
     private static Integer splitProfitInterval = 10;
-
-    @Autowired
-    private MemberManager memberManager;
 
     @Autowired
     private OrderManager orderManager;
@@ -98,20 +88,8 @@ public class SplitProfitJob extends BaseOrderJob {
 
                 try {
 
-                    // 查询会员信息链
-                    List<MemberInfoChainResult> chainList = memberManager.listMemberInfoChains(orderInfo.getCodeMemberId());
-                    AssertUtil.notEmpty(chainList, RespCodeEnum.MEMBER_ERROR, "会员信息链不能为空");
-
-                    // 查询会员关系链的会员渠道费率
-                    List<String> memberIdList = chainList.stream().map(MemberInfoChainResult::getMemberId).collect(Collectors.toList());
-                    memberIdList.add(orderInfo.getMemberId());
-                    List<MemberChannelDO> memberChannelList = memberChannelDao.listMemberChannelByMemberIdLists(memberIdList);
-
-                    // 验证链及渠道
-                    OrderManagerValidate.validateChainAndChannel(chainList, memberChannelList, orderInfo.getCodeMemberId());
-
                     // 订单分润
-                    orderManager.splitProfit(orderInfo, chainList, memberChannelList);
+                    orderManager.splitProfit(orderInfo);
 
                 } catch (OptimusException e) {
                     log.error("订单分润业务异常:", e);

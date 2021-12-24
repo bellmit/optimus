@@ -54,7 +54,7 @@ public abstract class BaseOrder {
 
         // 验证账户金额是否充足
         AccountInfoDTO accountInfo = accountManager.getAccountInfoByMemberIdAndAccountType(memberId, accountTypeEnum.getCode());
-        log.info("查询账户金额:{}", accountInfo);
+        log.info("账户信息:{}", accountInfo);
 
         // 账户金额不足
         if (accountInfo.getAmount().compareTo(orderAmount) < 0) {

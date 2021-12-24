@@ -78,7 +78,7 @@ public class GatewayManagerImpl implements GatewayManager {
             AssertUtil.notEmpty(output.getOrderId(), RespCodeEnum.GATEWAY_EXECUTE_SCRIPT_ERROR, "执行脚本输出对象订单编号不能为空");
             AssertUtil.notEmpty(output.getOrderStatus(), RespCodeEnum.GATEWAY_EXECUTE_SCRIPT_ERROR, "执行脚本输出对象订单状态不能为空");
 
-            log.info("执行脚本输出:{}", output);
+            log.info("执行脚本输出对象:{}", output);
 
             return output;
 
@@ -111,7 +111,7 @@ public class GatewayManagerImpl implements GatewayManager {
         MatchChannelDTO matchChannel = GatewayManagerConvert.getMatchChannelDTO(gatewaySubChannelList);
         AssertUtil.notEmpty(matchChannel, RespCodeEnum.GATEWAY_CHANNEL_ERROR, "未匹配到子渠道");
 
-        log.info("匹配渠道内部:{}", matchChannel);
+        log.info("已匹配渠道内部:{}", matchChannel);
 
         return matchChannel;
 
@@ -145,7 +145,7 @@ public class GatewayManagerImpl implements GatewayManager {
         MatchChannelDTO matchChannel = GatewayManagerConvert.getMatchChannelDTO(memberInfoList, memberChannelList, gatewaySubChannelList);
         AssertUtil.notEmpty(matchChannel, RespCodeEnum.GATEWAY_CHANNEL_ERROR, "未匹配到子渠道");
 
-        log.info("匹配渠道外部:{}", matchChannel);
+        log.info("已匹配渠道外部:{}", matchChannel);
 
         return matchChannel;
 

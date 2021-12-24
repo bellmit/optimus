@@ -3,15 +3,12 @@ package com.optimus.service.order.core.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
-import com.optimus.dao.domain.MemberChannelDO;
 import com.optimus.dao.domain.OrderInfoDO;
 import com.optimus.dao.mapper.MemberChannelDao;
 import com.optimus.dao.mapper.OrderInfoDao;
-import com.optimus.dao.result.MemberInfoChainResult;
 import com.optimus.manager.account.AccountManager;
 import com.optimus.manager.account.dto.DoTransDTO;
 import com.optimus.manager.gateway.GatewayManager;
@@ -23,7 +20,6 @@ import com.optimus.manager.order.convert.OrderManagerConvert;
 import com.optimus.manager.order.dto.CreateOrderDTO;
 import com.optimus.manager.order.dto.OrderInfoDTO;
 import com.optimus.manager.order.dto.PayOrderDTO;
-import com.optimus.manager.order.validate.OrderManagerValidate;
 import com.optimus.service.order.core.BaseOrder;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
@@ -134,18 +130,6 @@ public class PlaceOrder extends BaseOrder {
     @Override
     public void payOrder(PayOrderDTO payOrder) {
 
-        // 查询会员信息链
-        List<MemberInfoChainResult> chainList = memberManager.listMemberInfoChains(payOrder.getCodeMemberId());
-        AssertUtil.notEmpty(chainList, RespCodeEnum.MEMBER_ERROR, "会员信息链不能为空");
-
-        // 查询会员关系链的会员渠道费率
-        List<String> memberIdList = chainList.stream().map(MemberInfoChainResult::getMemberId).collect(Collectors.toList());
-        memberIdList.add(payOrder.getMemberId());
-        List<MemberChannelDO> memberChannelList = memberChannelDao.listMemberChannelByMemberIdLists(memberIdList);
-
-        // 验证链及渠道
-        OrderManagerValidate.validateChainAndChannel(chainList, memberChannelList, payOrder.getCodeMemberId());
-
         // 获取订单信息DTO及DO
         OrderInfoDTO orderInfo = OrderManagerConvert.getOrderInfoDTO(payOrder);
         OrderInfoDO orderInfoDO = OrderManagerConvert.getOrderInfoDO(payOrder, OrderSplitProfitStatusEnum.SPLIT_PROFIT_STATUS_N.getCode());
@@ -160,7 +144,7 @@ public class PlaceOrder extends BaseOrder {
         orderManager.asyncRelease(orderInfo);
 
         // 异步分润
-        orderManager.asyncSplitProfit(orderInfo, chainList, memberChannelList);
+        orderManager.asyncSplitProfit(orderInfo);
 
         // 异步通知商户
         orderManager.asyncOrderNotice(orderInfo);

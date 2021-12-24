@@ -10,6 +10,7 @@ import com.optimus.dao.domain.OrderInfoDO;
 import com.optimus.dao.mapper.OrderInfoDao;
 import com.optimus.dao.query.OrderInfoQuery;
 import com.optimus.manager.order.OrderManager;
+import com.optimus.manager.order.convert.OrderManagerConvert;
 import com.optimus.manager.order.dto.OrderInfoDTO;
 import com.optimus.service.order.job.BaseOrderJob;
 import com.optimus.util.DateUtil;
@@ -20,7 +21,6 @@ import com.optimus.util.constants.order.OrderTypeEnum;
 import com.optimus.util.exception.OptimusException;
 import com.optimus.util.model.page.Page;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -82,11 +82,13 @@ public class MerchantCallbackJob extends BaseOrderJob {
             for (OrderInfoDO item : orderInfoList) {
 
                 // 订单信息
-                OrderInfoDTO orderInfo = new OrderInfoDTO();
-                BeanUtils.copyProperties(item, orderInfo);
+                OrderInfoDTO orderInfo = OrderManagerConvert.getOrderInfoDTO(item);
 
                 // 回调商户:订单通知
-                noticeOrder(orderInfo);
+                boolean noticeResult = noticeOrder(orderInfo);
+
+                // 更新订单信息
+                updateOrderInfo(item.getId(), noticeResult);
 
             }
 
@@ -151,36 +153,45 @@ public class MerchantCallbackJob extends BaseOrderJob {
      * 订单通知
      * 
      * @param orderInfo
+     * @return
      */
-    private void noticeOrder(OrderInfoDTO orderInfo) {
-
-        // 订单通知结果
-        boolean result = false;
+    private boolean noticeOrder(OrderInfoDTO orderInfo) {
 
         try {
 
             // 订单通知
-            result = orderManager.orderNotice(orderInfo);
+            return orderManager.orderNotice(orderInfo);
 
         } catch (OptimusException e) {
             log.error("订单通知业务异常:", e);
             log.warn("订单通知异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
-            return;
+            return false;
         } catch (Exception e) {
             log.error("订单通知异常:", e);
-            return;
+            return false;
         }
 
-        // 通知成功
-        if (result) {
-            return;
-        }
+    }
 
-        // 通知失败
+    /**
+     * 更新订单信息
+     * 
+     * @param id
+     * @param noticeResult
+     */
+    private void updateOrderInfo(Long id, boolean noticeResult) {
+
         try {
 
+            // 商户通知状态
+            String merchantNotifyStatus = OrderMerchantNotifyStatusEnum.MERCHANT_NOTIFY_STATUS_NF.getCode();
+            if (noticeResult) {
+                merchantNotifyStatus = OrderMerchantNotifyStatusEnum.MERCHANT_NOTIFY_STATUS_NS.getCode();
+            }
+
             OrderInfoDO orderInfoDO = new OrderInfoDO();
-            orderInfoDO.setMerchantNotifyStatus(OrderMerchantNotifyStatusEnum.MERCHANT_NOTIFY_STATUS_NF.getCode());
+            orderInfoDO.setId(id);
+            orderInfoDO.setMerchantNotifyStatus(merchantNotifyStatus);
             orderInfoDO.setMerchantCallbackCount(merchantCallbackCount);
             orderInfoDO.setUpdateTime(DateUtil.currentDate());
 

@@ -38,10 +38,10 @@ public class CommonSystemConfigManagerImpl implements CommonSystemConfigManager 
         }
 
         CommonSystemConfigDO commonSystemConfigDO = commonSystemConfigDao.getCommonSystemConfigByBaseKey(baseKey);
-        log.debug("根据键查询系统配置:{}", commonSystemConfigDO);
+        log.debug("系统配置:{}", commonSystemConfigDO);
 
         if (Objects.isNull(commonSystemConfigDO)) {
-            log.warn("根据键查询系统配置为空,键:{}", baseKey);
+            log.warn("系统配置为空,键:{}", baseKey);
             return value;
         }
 

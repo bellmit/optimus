@@ -88,7 +88,7 @@ public class MemberManagerImpl implements MemberManager {
         MemberInfoDTO memberInfo = new MemberInfoDTO();
         BeanUtils.copyProperties(memberInfoDO, memberInfo);
 
-        log.info("根据会员编号查询会员信息:{}", memberInfo);
+        log.info("会员信息:{}", memberInfo);
 
         return memberInfo;
 
@@ -109,13 +109,14 @@ public class MemberManagerImpl implements MemberManager {
         MemberTransConfineDTO memberTransConfine = new MemberTransConfineDTO();
         BeanUtils.copyProperties(memberTransConfineDO, memberTransConfine);
 
-        log.info("根据会员编号查询会员交易限制:{}", memberTransConfine);
+        log.info("会员交易限制:{}", memberTransConfine);
 
         return memberTransConfine;
 
     }
 
     @Override
+    @Cacheable(value = "systemMemberIdConfig", key = "#memberId", unless = "#result == null")
     public String getSystemMemberId(String memberId) {
 
         log.info("查询系统会员信息,会员编号:{}", memberId);
@@ -144,7 +145,7 @@ public class MemberManagerImpl implements MemberManager {
 
         // 递归查询会员信息链
         List<MemberInfoChainResult> chainList = memberInfoDao.listMemberInfoChains(memberId);
-        log.info("查询会员信息链:{}", chainList);
+        log.info("会员信息链:{}", chainList);
 
         if (CollectionUtils.isEmpty(chainList)) {
             return null;

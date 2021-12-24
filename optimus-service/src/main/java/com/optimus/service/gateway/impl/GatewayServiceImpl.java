@@ -59,7 +59,7 @@ public class GatewayServiceImpl implements GatewayService {
         GatewayChannelDTO gatewayChannel = new GatewayChannelDTO();
         BeanUtils.copyProperties(gatewayChannelDO, gatewayChannel);
 
-        log.info("根据渠道编号查询网关渠道:{}", gatewayChannel);
+        log.info("网关渠道:{}", gatewayChannel);
 
         return gatewayChannel;
 
@@ -78,7 +78,7 @@ public class GatewayServiceImpl implements GatewayService {
         GatewaySubChannelDTO gatewaySubChannel = new GatewaySubChannelDTO();
         BeanUtils.copyProperties(gatewaySubChannelDO, gatewaySubChannel);
 
-        log.info("根据子渠道编号查询网关子渠道:{}", gatewaySubChannel);
+        log.info("网关子渠道:{}", gatewaySubChannel);
 
         return gatewaySubChannel;
 

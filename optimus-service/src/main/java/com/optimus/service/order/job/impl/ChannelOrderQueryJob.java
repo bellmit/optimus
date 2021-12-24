@@ -14,7 +14,9 @@ import com.optimus.dao.query.OrderInfoQuery;
 import com.optimus.manager.gateway.GatewayManager;
 import com.optimus.manager.gateway.dto.ExecuteScriptInputDTO;
 import com.optimus.manager.gateway.dto.ExecuteScriptOutputDTO;
+import com.optimus.manager.order.OrderManager;
 import com.optimus.manager.order.convert.OrderManagerConvert;
+import com.optimus.manager.order.dto.OrderInfoDTO;
 import com.optimus.service.order.job.BaseOrderJob;
 import com.optimus.util.DateUtil;
 import com.optimus.util.constants.common.CommonSystemConfigEnum;
@@ -47,6 +49,9 @@ public class ChannelOrderQueryJob extends BaseOrderJob {
 
     /** 渠道订单查询间隔默认值 */
     private static Integer channelOrderQueryInterval = 10;
+
+    @Autowired
+    private OrderManager orderManager;
 
     @Autowired
     private GatewayManager gatewayManager;
@@ -94,8 +99,12 @@ public class ChannelOrderQueryJob extends BaseOrderJob {
                 // 执行脚本
                 String orderStatus = executeScript(item, gatewaySubChannel);
 
-                // 更新订单信息
-                updateOrderInfo(item, orderStatus);
+                // 获取订单信息DTO
+                OrderInfoDTO orderInfo = OrderManagerConvert.getOrderInfoDTO(item);
+                orderInfo.setOrderStatus(orderStatus);
+
+                // 处理订单信息
+                handleOrderInfo(orderInfo);
 
             }
 
@@ -198,7 +207,7 @@ public class ChannelOrderQueryJob extends BaseOrderJob {
                 return null;
             }
 
-            // 明确成功或不成功
+            // 非明确成功或不成功
             if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_AP.getCode(), output.getOrderStatus()) && !StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_AF.getCode(), output.getOrderStatus())) {
                 return null;
             }
@@ -213,28 +222,41 @@ public class ChannelOrderQueryJob extends BaseOrderJob {
     }
 
     /**
-     * 更新订单信息
+     * 处理订单信息
      * 
      * @param orderInfo
-     * @param orderStatus
      */
-    private void updateOrderInfo(OrderInfoDO orderInfo, String orderStatus) {
+    private void handleOrderInfo(OrderInfoDTO orderInfo) {
 
         try {
 
-            // 明确成功或不成功
-            if (StringUtils.hasLength(orderStatus)) {
-                orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(orderInfo.getOrderId(), orderStatus, OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());
+            // 非明确成功或不成功
+            if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_AP.getCode(), orderInfo.getOrderStatus()) && !StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_AF.getCode(), orderInfo.getOrderStatus())) {
+
+                OrderInfoDO orderInfoDO = new OrderInfoDO();
+                orderInfoDO.setId(orderInfo.getId());
+                orderInfoDO.setChannelOrderQueryCount(channelOrderQueryCount);
+                orderInfoDO.setUpdateTime(DateUtil.currentDate());
+
+                orderInfoDao.updateOrderInfoForChannelOrderQuery(orderInfoDO);
+
                 return;
             }
 
-            // 未知订单状态
-            OrderInfoDO orderInfoDO = new OrderInfoDO();
-            orderInfoDO.setId(orderInfo.getId());
-            orderInfoDO.setChannelOrderQueryCount(channelOrderQueryCount);
-            orderInfoDO.setUpdateTime(DateUtil.currentDate());
+            // 明确成功或不成功
+            int update = orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(orderInfo.getOrderId(), orderInfo.getOrderStatus(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());
+            if (update != 1) {
+                return;
+            }
 
-            orderInfoDao.updateOrderInfoForChannelOrderQuery(orderInfoDO);
+            // 异步释放
+            orderManager.asyncRelease(orderInfo);
+
+            // 异步分润
+            orderManager.asyncSplitProfit(orderInfo);
+
+            // 异步订单通知
+            orderManager.asyncOrderNotice(orderInfo);
 
         } catch (Exception e) {
             log.error("渠道订单查询更新订单信息异常:", e);

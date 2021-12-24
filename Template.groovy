@@ -64,7 +64,7 @@ class GroovyChannelService {
         def post = groovyHttpUtil.doPost(bizContentJson.createOrderUrl, JSON.toJSONString(treeMap))
         def json = JSON.parseObject(post)
 
-        // 响应对象
+        // 输出对象
         GroovyExecuteScriptOutputDTO output = new GroovyExecuteScriptOutputDTO()
         // output.setCodeMemberId()    // 渠道方修改后调整此处
         output.setOrderId(input.getOrderId())
@@ -103,7 +103,7 @@ class GroovyChannelService {
         def post = groovyHttpUtil.doPost(bizContentJson.queryOrderUrl, JSON.toJSONString(treeMap))
         def json = JSON.parseObject(post)
 
-        // 响应对象
+        // 输出对象
         GroovyExecuteScriptOutputDTO output = new GroovyExecuteScriptOutputDTO()
         output.setOrderId(input.getOrderId())
         output.setCalleeOrderId(input.getCalleeOrderId())
@@ -129,7 +129,7 @@ class GroovyChannelService {
         def argsJson = JSON.parseObject(input.getArgs())
         def bodyJson = argsJson.getJSONObject("body")
 
-        // 响应对象
+        // 输出对象
         GroovyExecuteScriptOutputDTO output = new GroovyExecuteScriptOutputDTO()
         output.setOrderId(bodyJson.MchOrderNo)
         output.setCalleeOrderId(bodyJson.OrderNo)

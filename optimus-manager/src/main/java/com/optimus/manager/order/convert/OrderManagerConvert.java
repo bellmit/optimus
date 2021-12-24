@@ -276,6 +276,22 @@ public class OrderManagerConvert {
 
     /**
      * 获取订单信息DTO
+     * 
+     * @param orderInfoDO
+     * @return
+     */
+    public static OrderInfoDTO getOrderInfoDTO(OrderInfoDO orderInfoDO) {
+
+        // 订单信息DTO
+        OrderInfoDTO orderInfo = new OrderInfoDTO();
+        BeanUtils.copyProperties(orderInfoDO, orderInfo);
+
+        return orderInfo;
+
+    }
+
+    /**
+     * 获取订单信息DTO
      *
      * @param createOrder
      * @param output

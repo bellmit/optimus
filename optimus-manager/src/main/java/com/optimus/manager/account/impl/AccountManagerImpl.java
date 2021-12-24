@@ -50,7 +50,7 @@ public class AccountManagerImpl implements AccountManager {
         // 根据会员编号和账户类型查询账户信息
         AccountInfoDO accountInfoDO = accountInfoDao.getAccountInfoByMemberIdAndAccountType(memberId, accountType);
         if (Objects.isNull(accountInfoDO)) {
-            log.warn("根据会员编号和账户类型查询账户信息:{}", accountInfoDO);
+            log.warn("账户信息:{}", accountInfoDO);
             return null;
         }
 
@@ -58,7 +58,7 @@ public class AccountManagerImpl implements AccountManager {
         AccountInfoDTO accountInfo = new AccountInfoDTO();
         BeanUtils.copyProperties(accountInfoDO, accountInfo);
 
-        log.warn("根据会员编号和账户类型查询账户信息:{}", accountInfo);
+        log.warn("账户信息:{}", accountInfo);
 
         return accountInfo;
     }

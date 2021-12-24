@@ -1,11 +1,6 @@
 package com.optimus.manager.order;
 
-import java.util.List;
-
-import com.optimus.dao.domain.MemberChannelDO;
-import com.optimus.dao.result.MemberInfoChainResult;
 import com.optimus.manager.order.dto.OrderInfoDTO;
-import com.optimus.manager.order.validate.OrderManagerValidate;
 
 /**
  * 订单manager
@@ -42,16 +37,10 @@ public interface OrderManager {
     /**
      * 分润
      * 
-     * 调用方保证参数的合法性
-     * 
-     * @see OrderManagerValidate.validateChainAndChannel
-     * 
      * @param orderInfo
-     * @param chainList
-     * @param memberChannelList
      * @return
      */
-    boolean splitProfit(OrderInfoDTO orderInfo, List<MemberInfoChainResult> chainList, List<MemberChannelDO> memberChannelList);
+    boolean splitProfit(OrderInfoDTO orderInfo);
 
     /**
      * 订单通知
@@ -72,10 +61,8 @@ public interface OrderManager {
      * 异步分润
      * 
      * @param orderInfo
-     * @param chainList
-     * @param memberChannelList
      */
-    void asyncSplitProfit(OrderInfoDTO orderInfo, List<MemberInfoChainResult> chainList, List<MemberChannelDO> memberChannelList);
+    void asyncSplitProfit(OrderInfoDTO orderInfo);
 
     /**
      * 异步订单通知
