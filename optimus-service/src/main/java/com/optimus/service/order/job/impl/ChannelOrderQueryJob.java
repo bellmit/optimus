@@ -103,10 +103,10 @@ public class ChannelOrderQueryJob extends BaseOrderJob {
                 }
 
                 // 执行脚本
-                boolean executeScript = executeScript(item, gatewaySubChannel);
+                String orderStatus = executeScript(item, gatewaySubChannel);
 
                 // 更新订单信息
-                updateOrderInfo(item, executeScript);
+                updateOrderInfo(item, orderStatus);
 
             }
 
@@ -193,12 +193,12 @@ public class ChannelOrderQueryJob extends BaseOrderJob {
      * @param gatewaySubChannel
      * @return
      */
-    private boolean executeScript(OrderInfoDO orderInfo, GatewaySubChannelDO gatewaySubChannel) {
+    private String executeScript(OrderInfoDO orderInfo, GatewaySubChannelDO gatewaySubChannel) {
 
         // 执行脚本输入
         ExecuteScriptInputDTO input = OrderManagerConvert.getExecuteScriptInputDTO(orderInfo, gatewaySubChannel);
         if (Objects.isNull(input)) {
-            return false;
+            return null;
         }
 
         try {
@@ -206,19 +206,19 @@ public class ChannelOrderQueryJob extends BaseOrderJob {
             // 执行脚本
             ExecuteScriptOutputDTO output = gatewayManager.executeScript(input);
             if (Objects.isNull(output)) {
-                return false;
+                return null;
             }
 
-            // 不成功
-            if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_AP.getCode(), output.getOrderStatus())) {
-                return false;
+            // 明确成功或不成功
+            if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_AP.getCode(), output.getOrderStatus()) && !StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_AF.getCode(), output.getOrderStatus())) {
+                return null;
             }
 
-            return true;
+            return output.getOrderStatus();
 
         } catch (Exception e) {
             log.error("渠道订单查询执行脚本异常:", e);
-            return false;
+            return null;
         }
 
     }
@@ -227,19 +227,19 @@ public class ChannelOrderQueryJob extends BaseOrderJob {
      * 更新订单信息
      * 
      * @param orderInfo
-     * @param executeScript
+     * @param orderStatus
      */
-    private void updateOrderInfo(OrderInfoDO orderInfo, boolean executeScript) {
+    private void updateOrderInfo(OrderInfoDO orderInfo, String orderStatus) {
 
         try {
 
-            // 成功
-            if (executeScript) {
-                orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(orderInfo.getOrderId(), OrderStatusEnum.ORDER_STATUS_AP.getCode(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());
+            // 明确成功或不成功
+            if (StringUtils.hasLength(orderStatus)) {
+                orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(orderInfo.getOrderId(), orderStatus, OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());
                 return;
             }
 
-            // 失败
+            // 未知订单状态
             OrderInfoDO orderInfoDO = new OrderInfoDO();
             orderInfoDO.setId(orderInfo.getId());
             orderInfoDO.setChannelOrderQueryCount(channelOrderQueryCount);
