@@ -365,6 +365,12 @@
       <if test="orderInfo.splitProfitStatus != null">
         SPLIT_PROFIT_STATUS = #{orderInfo.splitProfitStatus,jdbcType=VARCHAR},
       </if>
+      <if test="orderInfo.payTime != null">
+        PAY_TIME = #{orderInfo.payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderInfo.behavior != null">
+        BEHAVIOR = #{orderInfo.behavior,jdbcType=VARCHAR},
+      </if>
       <if test="orderInfo.updateTime != null">
         UPDATE_TIME = #{orderInfo.updateTime,jdbcType=TIMESTAMP},
       </if>

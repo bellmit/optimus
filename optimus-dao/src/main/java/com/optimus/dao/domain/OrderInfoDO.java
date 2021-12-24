@@ -93,11 +93,6 @@ public class OrderInfoDO implements Serializable {
     private Date orderTime;
 
     /**
-     * 支付时间
-     */
-    private Date payTime;
-
-    /**
      * 释放状态
      * 
      * @see OrderReleaseStatusEnum
@@ -110,6 +105,11 @@ public class OrderInfoDO implements Serializable {
      * @see OrderSplitProfitStatusEnum
      */
     private String splitProfitStatus;
+
+    /**
+     * 支付时间
+     */
+    private Date payTime;
 
     /**
      * 行为
