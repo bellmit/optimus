@@ -41,17 +41,17 @@ public class RespBodyConfig implements ResponseBodyAdvice<Object> {
         String methodName = arg1.getMethod().getName();
 
         if (arg0 instanceof String) {
-            log.info("{}.{} resp is {}", className, methodName, arg0);
+            log.info("{}.{},响应:{}", className, methodName, arg0);
             return arg0;
         }
 
         if (arg0 instanceof Resp) {
-            log.info("{}.{} resp is {}", className, methodName, arg0);
+            log.info("{}.{},响应:{}", className, methodName, arg0);
             return arg0;
         }
 
         Resp<Object> resp = new Resp<>(arg0);
-        log.info("{}.{} resp is {}", className, methodName, resp);
+        log.info("{}.{},响应:{}", className, methodName, resp);
 
         return resp;
     }

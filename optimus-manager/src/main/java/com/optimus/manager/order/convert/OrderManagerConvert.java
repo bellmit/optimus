@@ -140,7 +140,9 @@ public class OrderManagerConvert {
 
         orderInfo.setId(payOrder.getId());
         orderInfo.setOrderStatus(payOrder.getOrderStatus());
+        orderInfo.setPayTime(DateUtil.currentDate());
         orderInfo.setSplitProfitStatus(splitProfitStatus);
+        orderInfo.setBehavior(payOrder.getBehavior());
         orderInfo.setUpdateTime(DateUtil.currentDate());
 
         return orderInfo;

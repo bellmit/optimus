@@ -3,6 +3,7 @@ package com.optimus.manager.order.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.annotation.Resource;
 
@@ -209,7 +210,7 @@ public class OrderManagerImpl implements OrderManager {
 
         // Post
         ResponseEntity<String> entity = restTemplate.postForEntity(url, orderNotice, String.class);
-        log.info("订单信息通知结果:{}", entity);
+        log.info("订单信息通知结果:{}", Objects.isNull(entity) ? entity : entity.getBody());
 
         // 下游响应不成功
         if (!StringUtils.pathEquals(HttpStatus.OK.name(), entity.getBody())) {
