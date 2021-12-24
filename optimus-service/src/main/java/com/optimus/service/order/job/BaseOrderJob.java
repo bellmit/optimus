@@ -3,6 +3,7 @@ package com.optimus.service.order.job;
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.optimus.manager.common.CommonSystemConfigManager;
@@ -88,15 +89,17 @@ public abstract class BaseOrderJob {
 
             // 查询系统配置
             String value = loadSystemConfig(baseKey);
-            AssertUtil.notEmpty(value, RespCodeEnum.FAILE, "未配置系统定时任务参数");
+            AssertUtil.notEmpty(value, RespCodeEnum.FAILE, "未配置系统定时任务分片");
 
             // 转换为JsonNode
             JsonNode jsonNode = JacksonUtil.toTree(value);
             JsonNode shardJsonNode = jsonNode.get(ip);
             Integer totalShard = jsonNode.size();
 
-            AssertUtil.notEmpty(shardJsonNode, RespCodeEnum.FAILE, "未配置系统定时任务数据分片号");
-            AssertUtil.notEmpty(totalShard, RespCodeEnum.FAILE, "未配置系统定时任务数据分片总数");
+            // 未分配分片
+            if (Objects.isNull(shardJsonNode) || Objects.isNull(totalShard)) {
+                return null;
+            }
 
             // 分片信息
             Map<Integer, Integer> shardingMap = new HashMap<>(16);
