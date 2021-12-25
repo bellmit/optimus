@@ -177,7 +177,6 @@ public class CollectController {
         OrderInfoDTO orderInfo = orderService.createOrder(createOrder);
 
         // 支付订单
-        // 注意:由于后面的订单信息的会员ID是下级的,所以这里会员信息看作是上级会员
         PayOrderDTO payOrder = CollectControllerConvert.getPayOrderDTO(orderInfo);
         payOrder.setSupMemberInfo(memberInfo);
         orderService.payOrder(payOrder);

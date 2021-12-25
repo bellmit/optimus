@@ -379,6 +379,39 @@
     and ORDER_STATUS = #{originOrderStatus,jdbcType=VARCHAR}
   </update>
 
+  <update id="updateOrderInfoByOrderIdAndOrderStatus">
+    update T_ORDER_INFO
+    <set>
+      <if test="orderInfo.orderStatus != null">
+        ORDER_STATUS = #{orderInfo.orderStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="orderInfo.supMemberId != null">
+        SUP_MEMBER_ID = #{orderInfo.supMemberId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderInfo.updateTime != null">
+        UPDATE_TIME = #{orderInfo.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ORDER_ID = #{orderInfo.orderId,jdbcType=VARCHAR}
+    and ORDER_STATUS = #{originOrderStatus,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateOrderInfoByOrderIdAndReleaseStatus">
+    update T_ORDER_INFO
+    set RELEASE_STATUS = #{releaseStatus,jdbcType=VARCHAR},
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+    where ORDER_ID = #{orderId,jdbcType=VARCHAR}
+    and RELEASE_STATUS = #{originReleaseStatus,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateOrderInfoByOrderIdAndSplitProfitStatus">
+    update T_ORDER_INFO
+    set SPLIT_PROFIT_STATUS = #{splitProfitStatus,jdbcType=VARCHAR},
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+    where ORDER_ID = #{orderId,jdbcType=VARCHAR}
+    and SPLIT_PROFIT_STATUS = #{originSplitProfitStatus,jdbcType=VARCHAR}
+  </update>
+
   <update id="updateOrderInfoForMerchantCallback" parameterType="com.optimus.dao.domain.OrderInfoDO">
     update T_ORDER_INFO
     <set>
@@ -412,30 +445,6 @@
     <if test="channelOrderQueryCount != null">
       and CHANNEL_ORDER_QUERY_COUNT &lt; #{channelOrderQueryCount,jdbcType=NUMERIC}
     </if>
-  </update>
-
-  <update id="updateOrderInfoByOrderIdAndOrderStatus">
-    update T_ORDER_INFO
-    set ORDER_STATUS = #{orderStatus,jdbcType=VARCHAR},
-        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
-    where ORDER_ID = #{orderId,jdbcType=VARCHAR}
-    and ORDER_STATUS = #{originOrderStatus,jdbcType=VARCHAR}
-  </update>
-
-  <update id="updateOrderInfoByOrderIdAndReleaseStatus">
-    update T_ORDER_INFO
-    set RELEASE_STATUS = #{releaseStatus,jdbcType=VARCHAR},
-        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
-    where ORDER_ID = #{orderId,jdbcType=VARCHAR}
-    and RELEASE_STATUS = #{originReleaseStatus,jdbcType=VARCHAR}
-  </update>
-
-  <update id="updateOrderInfoByOrderIdAndSplitProfitStatus">
-    update T_ORDER_INFO
-    set SPLIT_PROFIT_STATUS = #{splitProfitStatus,jdbcType=VARCHAR},
-        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
-    where ORDER_ID = #{orderId,jdbcType=VARCHAR}
-    and SPLIT_PROFIT_STATUS = #{originSplitProfitStatus,jdbcType=VARCHAR}
   </update>
 
 </mapper>

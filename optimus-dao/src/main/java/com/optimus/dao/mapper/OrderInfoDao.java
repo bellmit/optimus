@@ -82,31 +82,13 @@ public interface OrderInfoDao {
     int updateOrderInfoByIdAndOrderStatus(@Param("orderInfo") OrderInfoDO orderInfoDO, @Param("originOrderStatus") String originOrderStatus);
 
     /**
-     * 更新订单信息:回调商户
-     * 
-     * @param orderInfoDO
-     * @return
-     */
-    int updateOrderInfoForMerchantCallback(OrderInfoDO orderInfoDO);
-
-    /**
-     * 更新订单信息:渠道订单查询
-     * 
-     * @param orderInfoDO
-     * @return
-     */
-    int updateOrderInfoForChannelOrderQuery(OrderInfoDO orderInfoDO);
-
-    /**
      * 根据订单编号和订单状态更新订单信息
      *
-     * @param orderId
-     * @param orderStatus
+     * @param orderInfoDO
      * @param originOrderStatus
-     * @param updateTime
      * @return
      */
-    int updateOrderInfoByOrderIdAndOrderStatus(@Param("orderId") String orderId, @Param("orderStatus") String orderStatus, @Param("originOrderStatus") String originOrderStatus, @Param("updateTime") Date updateTime);
+    int updateOrderInfoByOrderIdAndOrderStatus(@Param("orderInfo") OrderInfoDO orderInfoDO, @Param("originOrderStatus") String originOrderStatus);
 
     /**
      * 根据订单编号和释放状态更新订单信息
@@ -129,5 +111,21 @@ public interface OrderInfoDao {
      * @return
      */
     int updateOrderInfoByOrderIdAndSplitProfitStatus(@Param("orderId") String orderId, @Param("splitProfitStatus") String splitProfitStatus, @Param("originSplitProfitStatus") String originSplitProfitStatus, @Param("updateTime") Date updateTime);
+
+    /**
+     * 更新订单信息:回调商户
+     * 
+     * @param orderInfoDO
+     * @return
+     */
+    int updateOrderInfoForMerchantCallback(OrderInfoDO orderInfoDO);
+
+    /**
+     * 更新订单信息:渠道订单查询
+     * 
+     * @param orderInfoDO
+     * @return
+     */
+    int updateOrderInfoForChannelOrderQuery(OrderInfoDO orderInfoDO);
 
 }

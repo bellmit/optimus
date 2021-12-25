@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.optimus.dao.domain.GatewaySubChannelDO;
@@ -24,6 +25,7 @@ import com.optimus.util.constants.gateway.GatewayChannelGroupEnum;
 import com.optimus.util.constants.gateway.ScriptEnum;
 import com.optimus.util.constants.member.MemberTypeEnum;
 import com.optimus.util.constants.order.OrderReleaseStatusEnum;
+import com.optimus.util.constants.order.OrderSplitProfitStatusEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
 import com.optimus.util.exception.OptimusException;
@@ -130,10 +132,10 @@ public class OrderManagerConvert {
      * 获取订单信息DO
      * 
      * @param payOrder
-     * @param splitProfitStatus
+     * @param orderSplitProfitStatusEnum
      * @return
      */
-    public static OrderInfoDO getOrderInfoDO(PayOrderDTO payOrder, String splitProfitStatus) {
+    public static OrderInfoDO getOrderInfoDO(PayOrderDTO payOrder, OrderSplitProfitStatusEnum orderSplitProfitStatusEnum) {
 
         // 订单信息DO
         OrderInfoDO orderInfo = new OrderInfoDO();
@@ -141,9 +143,32 @@ public class OrderManagerConvert {
         orderInfo.setId(payOrder.getId());
         orderInfo.setOrderStatus(payOrder.getOrderStatus());
         orderInfo.setPayTime(DateUtil.currentDate());
-        orderInfo.setSplitProfitStatus(splitProfitStatus);
+        orderInfo.setSplitProfitStatus(orderSplitProfitStatusEnum.getCode());
         orderInfo.setBehavior(payOrder.getBehavior());
         orderInfo.setUpdateTime(DateUtil.currentDate());
+
+        return orderInfo;
+    }
+
+    /**
+     * 获取订单信息DO
+     * 
+     * @param payOrder
+     * @param orderStatusEnum
+     * @return
+     */
+    public static OrderInfoDO getOrderInfoDO(PayOrderDTO payOrder, OrderStatusEnum orderStatusEnum) {
+
+        // 订单信息DO
+        OrderInfoDO orderInfo = new OrderInfoDO();
+
+        orderInfo.setOrderId(payOrder.getOrderId());
+        orderInfo.setOrderStatus(orderStatusEnum.getCode());
+        orderInfo.setUpdateTime(DateUtil.currentDate());
+
+        if (!Objects.isNull(payOrder.getSupMemberInfo())) {
+            orderInfo.setSupMemberId(payOrder.getSupMemberInfo().getMemberId());
+        }
 
         return orderInfo;
     }

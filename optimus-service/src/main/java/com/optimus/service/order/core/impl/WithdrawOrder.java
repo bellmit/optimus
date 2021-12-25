@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import javax.annotation.Resource;
 
+import com.optimus.dao.domain.OrderInfoDO;
 import com.optimus.dao.mapper.OrderInfoDao;
 import com.optimus.manager.account.AccountManager;
 import com.optimus.manager.account.dto.DoTransDTO;
@@ -18,7 +19,6 @@ import com.optimus.manager.order.dto.OrderInfoDTO;
 import com.optimus.manager.order.dto.PayOrderDTO;
 import com.optimus.service.order.core.BaseOrder;
 import com.optimus.util.AssertUtil;
-import com.optimus.util.DateUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.account.AccountChangeTypeEnum;
 import com.optimus.util.constants.account.AccountTypeEnum;
@@ -121,7 +121,8 @@ public class WithdrawOrder extends BaseOrder {
         if (StringUtils.pathEquals(OrderConfirmTypeEnum.CONFIRM_TYPE_R.getCode(), payOrder.getConfirmType())) {
 
             // 更新订单状态
-            int update = orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_AC.getCode(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());
+            OrderInfoDO orderInfoDO = OrderManagerConvert.getOrderInfoDO(payOrder, OrderStatusEnum.ORDER_STATUS_AC);
+            int update = orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(orderInfoDO, OrderStatusEnum.ORDER_STATUS_NP.getCode());
             if (update != 1) {
                 return;
             }
@@ -142,7 +143,8 @@ public class WithdrawOrder extends BaseOrder {
         }
 
         // 更新订单状态
-        int update = orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(payOrder.getOrderId(), OrderStatusEnum.ORDER_STATUS_AP.getCode(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());
+        OrderInfoDO orderInfoDO = OrderManagerConvert.getOrderInfoDO(payOrder, OrderStatusEnum.ORDER_STATUS_AP);
+        int update = orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(orderInfoDO, OrderStatusEnum.ORDER_STATUS_NP.getCode());
         if (update != 1) {
             return;
         }

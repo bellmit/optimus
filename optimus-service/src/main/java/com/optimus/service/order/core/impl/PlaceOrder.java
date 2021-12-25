@@ -132,7 +132,7 @@ public class PlaceOrder extends BaseOrder {
 
         // 获取订单信息DTO及DO
         OrderInfoDTO orderInfo = OrderManagerConvert.getOrderInfoDTO(payOrder);
-        OrderInfoDO orderInfoDO = OrderManagerConvert.getOrderInfoDO(payOrder, OrderSplitProfitStatusEnum.SPLIT_PROFIT_STATUS_N.getCode());
+        OrderInfoDO orderInfoDO = OrderManagerConvert.getOrderInfoDO(payOrder, OrderSplitProfitStatusEnum.SPLIT_PROFIT_STATUS_N);
 
         // 更新订单状态
         int update = orderInfoDao.updateOrderInfoByIdAndOrderStatus(orderInfoDO, OrderStatusEnum.ORDER_STATUS_NP.getCode());
