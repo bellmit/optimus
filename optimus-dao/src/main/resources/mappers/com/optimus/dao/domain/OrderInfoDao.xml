@@ -71,19 +71,13 @@
     and CALLER_ORDER_ID = #{callerOrderId,jdbcType=VARCHAR}
   </select>
 
-  <select id="listOrderInfoByOrderInfoQuerys" parameterType="com.optimus.dao.query.OrderInfoQuery" resultMap="BaseResultMap">
+  <select id="listOrderInfoForJobByOrderInfoQuerys" parameterType="com.optimus.dao.query.OrderInfoQuery" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from T_ORDER_INFO
     <where>
       <if test="shard != null and totalShard != null">
         and ID % #{totalShard,jdbcType=NUMERIC} = #{shard,jdbcType=NUMERIC}
-      </if>
-      <if test="initTime != null">
-        and CREATE_TIME &lt;= #{initTime,jdbcType=TIMESTAMP}
-      </if>
-      <if test="lastTime != null">
-        and UPDATE_TIME &lt; #{lastTime,jdbcType=TIMESTAMP}
       </if>
       <if test="orderType != null">
         and ORDER_TYPE = #{orderType,jdbcType=VARCHAR}
@@ -105,6 +99,12 @@
       </if>
       <if test="channelOrderQueryCount != null">
         and CHANNEL_ORDER_QUERY_COUNT &lt; #{channelOrderQueryCount,jdbcType=NUMERIC}
+      </if>
+      <if test="payTime != null">
+        and PAY_TIME &lt; #{payTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="createTime != null">
+        and CREATE_TIME &lt; #{createTime,jdbcType=TIMESTAMP}
       </if>
     </where>
     order by ID

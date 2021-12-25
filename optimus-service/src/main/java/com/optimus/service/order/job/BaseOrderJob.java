@@ -25,6 +25,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class BaseOrderJob {
 
+    /** 基础页面大小 */
+    public static final Integer BASE_ORDER_JOB_PAGE_SIZE = 1000;
+
     @Autowired
     private CommonSystemConfigManager commonSystemConfigManager;
 

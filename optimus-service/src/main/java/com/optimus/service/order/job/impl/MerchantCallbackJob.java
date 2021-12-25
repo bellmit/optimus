@@ -41,9 +41,6 @@ public class MerchantCallbackJob extends BaseOrderJob {
     /** 回调商户次数默认值 */
     private static Short merchantCallbackCount = 3;
 
-    /** 回调商户一次执行上限默认值 */
-    private static Integer merchantCallbackOnceExecuteLimit = 100;
-
     /** 回调商户间隔默认值 */
     private static Integer merchantCallbackInterval = 10;
 
@@ -69,12 +66,15 @@ public class MerchantCallbackJob extends BaseOrderJob {
         // 下标
         Integer index = 0;
 
-        while (index.compareTo(merchantCallbackOnceExecuteLimit) < 0) {
+        while (true) {
 
             index++;
 
+            // 设置分页对象
+            query.getPage().setPageNo(index);
+
             // 查询订单
-            List<OrderInfoDO> orderInfoList = orderInfoDao.listOrderInfoByOrderInfoQuerys(query);
+            List<OrderInfoDO> orderInfoList = orderInfoDao.listOrderInfoForJobByOrderInfoQuerys(query);
             if (CollectionUtils.isEmpty(orderInfoList)) {
                 break;
             }
@@ -107,16 +107,10 @@ public class MerchantCallbackJob extends BaseOrderJob {
             merchantCallbackCount = Short.parseShort(value0);
         }
 
-        // 一次执行上限
-        String value1 = super.loadSystemConfig(CommonSystemConfigEnum.MERCHANT_CALLBACK_ONCE_EXECUTE_LIMIT.getCode());
-        if (StringUtils.hasLength(value1)) {
-            merchantCallbackOnceExecuteLimit = Integer.parseInt(value1);
-        }
-
         // 间隔
-        String value2 = super.loadSystemConfig(CommonSystemConfigEnum.MERCHANT_CALLBACK_INTERVAL.getCode());
-        if (StringUtils.hasLength(value2)) {
-            merchantCallbackInterval = Integer.parseInt(value2);
+        String value1 = super.loadSystemConfig(CommonSystemConfigEnum.MERCHANT_CALLBACK_INTERVAL.getCode());
+        if (StringUtils.hasLength(value1)) {
+            merchantCallbackInterval = Integer.parseInt(value1);
         }
 
     }
@@ -136,14 +130,14 @@ public class MerchantCallbackJob extends BaseOrderJob {
 
         // 订单信息Query
         OrderInfoQuery query = new OrderInfoQuery();
-        query.setPage(new Page(1, 1000));
+        query.setPage(new Page(1, BaseOrderJob.BASE_ORDER_JOB_PAGE_SIZE));
         query.setShard(shardingMap.entrySet().stream().findFirst().get().getKey());
         query.setTotalShard(shardingMap.entrySet().stream().findFirst().get().getValue());
-        query.setLastTime(DateUtil.offsetForMinute(DateUtil.currentDate(), -merchantCallbackInterval));
         query.setOrderType(OrderTypeEnum.ORDER_TYPE_C.getCode());
         query.setOrderStatus(OrderStatusEnum.ORDER_STATUS_AP.getCode());
         query.setMerchantNotifyStatus(OrderMerchantNotifyStatusEnum.MERCHANT_NOTIFY_STATUS_NS.getCode());
         query.setMerchantCallbackCount(merchantCallbackCount);
+        query.setPayTime(DateUtil.offsetForMinute(DateUtil.currentDate(), -merchantCallbackInterval));
 
         return query;
 
@@ -181,17 +175,18 @@ public class MerchantCallbackJob extends BaseOrderJob {
      */
     private void updateOrderInfo(Long id, boolean noticeResult) {
 
+        // 订单通知成功
+        if (noticeResult) {
+            return;
+        }
+
         try {
 
-            // 商户通知状态
-            String merchantNotifyStatus = OrderMerchantNotifyStatusEnum.MERCHANT_NOTIFY_STATUS_NF.getCode();
-            if (noticeResult) {
-                merchantNotifyStatus = OrderMerchantNotifyStatusEnum.MERCHANT_NOTIFY_STATUS_NS.getCode();
-            }
+            // 订单通知失败
 
             OrderInfoDO orderInfoDO = new OrderInfoDO();
             orderInfoDO.setId(id);
-            orderInfoDO.setMerchantNotifyStatus(merchantNotifyStatus);
+            orderInfoDO.setMerchantNotifyStatus(OrderMerchantNotifyStatusEnum.MERCHANT_NOTIFY_STATUS_NF.getCode());
             orderInfoDO.setMerchantCallbackCount(merchantCallbackCount);
             orderInfoDO.setUpdateTime(DateUtil.currentDate());
 

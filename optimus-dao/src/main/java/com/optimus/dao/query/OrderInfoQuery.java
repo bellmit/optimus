@@ -33,16 +33,6 @@ public class OrderInfoQuery implements Serializable {
     private Integer totalShard;
 
     /**
-     * 初始时间
-     */
-    private Date initTime;
-
-    /**
-     * 最后时间
-     */
-    private Date lastTime;
-
-    /**
      * 订单类型
      * 
      * @see OrderTypeEnum
@@ -86,6 +76,16 @@ public class OrderInfoQuery implements Serializable {
      * 网关渠道订单查询次数
      */
     private Short channelOrderQueryCount;
+
+    /**
+     * 支付时间
+     */
+    private Date payTime;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
 
     /**
      * 分页对象

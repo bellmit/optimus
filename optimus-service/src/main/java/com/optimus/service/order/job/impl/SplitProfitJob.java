@@ -39,9 +39,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SplitProfitJob extends BaseOrderJob {
 
-    /** 订单分润一次执行上限默认值 */
-    private static Integer splitProfitOnceExecuteLimit = 100;
-
     /** 订单分润间隔默认值 */
     private static Integer splitProfitInterval = 10;
 
@@ -54,7 +51,7 @@ public class SplitProfitJob extends BaseOrderJob {
     @Resource
     private OrderInfoDao orderInfoDao;
 
-    @Scheduled(initialDelay = 60000, fixedDelay = 30000)
+    @Scheduled(initialDelay = 60000, fixedDelay = 60000)
     @Override
     public void execute() {
 
@@ -70,12 +67,15 @@ public class SplitProfitJob extends BaseOrderJob {
         // 下标
         Integer index = 0;
 
-        while (index.compareTo(splitProfitOnceExecuteLimit) < 0) {
+        while (true) {
 
             index++;
 
+            // 设置分页对象
+            query.getPage().setPageNo(index);
+
             // 查询订单
-            List<OrderInfoDO> orderInfoList = orderInfoDao.listOrderInfoByOrderInfoQuerys(query);
+            List<OrderInfoDO> orderInfoList = orderInfoDao.listOrderInfoForJobByOrderInfoQuerys(query);
             if (CollectionUtils.isEmpty(orderInfoList)) {
                 break;
             }
@@ -111,16 +111,10 @@ public class SplitProfitJob extends BaseOrderJob {
      */
     private void init() {
 
-        // 一次执行上限
-        String value1 = super.loadSystemConfig(CommonSystemConfigEnum.SPLIT_PROFIT_ONCE_EXECUTE_LIMIT.getCode());
-        if (StringUtils.hasLength(value1)) {
-            splitProfitOnceExecuteLimit = Integer.parseInt(value1);
-        }
-
         // 间隔
-        String value2 = super.loadSystemConfig(CommonSystemConfigEnum.SPLIT_PROFIT_INTERVAL.getCode());
-        if (StringUtils.hasLength(value2)) {
-            splitProfitInterval = Integer.parseInt(value2);
+        String value = super.loadSystemConfig(CommonSystemConfigEnum.SPLIT_PROFIT_INTERVAL.getCode());
+        if (StringUtils.hasLength(value)) {
+            splitProfitInterval = Integer.parseInt(value);
         }
 
     }
@@ -140,13 +134,13 @@ public class SplitProfitJob extends BaseOrderJob {
 
         // 订单信息Query
         OrderInfoQuery query = new OrderInfoQuery();
-        query.setPage(new Page(1, 1000));
+        query.setPage(new Page(1, BaseOrderJob.BASE_ORDER_JOB_PAGE_SIZE));
         query.setShard(shardingMap.entrySet().stream().findFirst().get().getKey());
         query.setTotalShard(shardingMap.entrySet().stream().findFirst().get().getValue());
-        query.setLastTime(DateUtil.offsetForMinute(DateUtil.currentDate(), -splitProfitInterval));
         query.setOrderType(OrderTypeEnum.ORDER_TYPE_C.getCode());
         query.setOrderStatus(OrderStatusEnum.ORDER_STATUS_AP.getCode());
         query.setSplitProfitStatus(OrderSplitProfitStatusEnum.SPLIT_PROFIT_STATUS_N.getCode());
+        query.setPayTime(DateUtil.offsetForMinute(DateUtil.currentDate(), -splitProfitInterval));
 
         return query;
 

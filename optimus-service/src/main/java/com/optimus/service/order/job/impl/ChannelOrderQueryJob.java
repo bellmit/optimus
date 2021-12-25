@@ -20,6 +20,7 @@ import com.optimus.manager.order.dto.OrderInfoDTO;
 import com.optimus.service.order.job.BaseOrderJob;
 import com.optimus.util.DateUtil;
 import com.optimus.util.constants.common.CommonSystemConfigEnum;
+import com.optimus.util.constants.order.OrderSplitProfitStatusEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
 import com.optimus.util.model.page.Page;
@@ -44,9 +45,6 @@ public class ChannelOrderQueryJob extends BaseOrderJob {
     /** 渠道订单查询次数默认值 */
     private static Short channelOrderQueryCount = 3;
 
-    /** 渠道订单查询一次执行上限配置项 */
-    private static Integer channelOrderQueryOnceExecuteLimit = 100;
-
     /** 渠道订单查询间隔默认值 */
     private static Integer channelOrderQueryInterval = 10;
 
@@ -62,7 +60,7 @@ public class ChannelOrderQueryJob extends BaseOrderJob {
     @Resource
     private GatewaySubChannelDao gatewaySubChannelDao;
 
-    @Scheduled(initialDelay = 60000, fixedDelay = 120000)
+    @Scheduled(initialDelay = 60000, fixedDelay = 60000)
     @Override
     public void execute() {
 
@@ -78,12 +76,15 @@ public class ChannelOrderQueryJob extends BaseOrderJob {
         // 下标
         Integer index = 0;
 
-        while (index.compareTo(channelOrderQueryOnceExecuteLimit) < 0) {
+        while (true) {
 
             index++;
 
+            // 设置分页对象
+            query.getPage().setPageNo(index);
+
             // 查询订单
-            List<OrderInfoDO> orderInfoList = orderInfoDao.listOrderInfoByOrderInfoQuerys(query);
+            List<OrderInfoDO> orderInfoList = orderInfoDao.listOrderInfoForJobByOrderInfoQuerys(query);
             if (CollectionUtils.isEmpty(orderInfoList)) {
                 break;
             }
@@ -92,9 +93,6 @@ public class ChannelOrderQueryJob extends BaseOrderJob {
 
                 // 查询网关子渠道
                 GatewaySubChannelDO gatewaySubChannel = getGatewaySubChannel(item);
-                if (Objects.isNull(gatewaySubChannel)) {
-                    continue;
-                }
 
                 // 执行脚本
                 String orderStatus = executeScript(item, gatewaySubChannel);
@@ -123,16 +121,10 @@ public class ChannelOrderQueryJob extends BaseOrderJob {
             channelOrderQueryCount = Short.parseShort(value0);
         }
 
-        // 一次执行上限
-        String value1 = super.loadSystemConfig(CommonSystemConfigEnum.CHANNEL_ORDER_QUERY_ONCE_EXECUTE_LIMIT.getCode());
-        if (StringUtils.hasLength(value1)) {
-            channelOrderQueryOnceExecuteLimit = Integer.parseInt(value1);
-        }
-
         // 间隔
-        String value2 = super.loadSystemConfig(CommonSystemConfigEnum.CHANNEL_ORDER_QUERY_INTERVAL.getCode());
-        if (StringUtils.hasLength(value2)) {
-            channelOrderQueryInterval = Integer.parseInt(value2);
+        String value1 = super.loadSystemConfig(CommonSystemConfigEnum.CHANNEL_ORDER_QUERY_INTERVAL.getCode());
+        if (StringUtils.hasLength(value1)) {
+            channelOrderQueryInterval = Integer.parseInt(value1);
         }
 
     }
@@ -152,13 +144,13 @@ public class ChannelOrderQueryJob extends BaseOrderJob {
 
         // 订单信息Query
         OrderInfoQuery query = new OrderInfoQuery();
-        query.setPage(new Page(1, 1000));
+        query.setPage(new Page(1, BaseOrderJob.BASE_ORDER_JOB_PAGE_SIZE));
         query.setShard(shardingMap.entrySet().stream().findFirst().get().getKey());
         query.setTotalShard(shardingMap.entrySet().stream().findFirst().get().getValue());
-        query.setLastTime(DateUtil.offsetForMinute(DateUtil.currentDate(), -channelOrderQueryInterval));
         query.setOrderType(OrderTypeEnum.ORDER_TYPE_C.getCode());
         query.setOrderStatus(OrderStatusEnum.ORDER_STATUS_NP.getCode());
         query.setChannelOrderQueryCount(channelOrderQueryCount);
+        query.setCreateTime(DateUtil.offsetForMinute(DateUtil.currentDate(), -channelOrderQueryInterval));
 
         return query;
 
@@ -193,22 +185,17 @@ public class ChannelOrderQueryJob extends BaseOrderJob {
      */
     private String executeScript(OrderInfoDO orderInfo, GatewaySubChannelDO gatewaySubChannel) {
 
-        // 执行脚本输入
-        ExecuteScriptInputDTO input = OrderManagerConvert.getExecuteScriptInputDTO(orderInfo, gatewaySubChannel);
-        if (Objects.isNull(input)) {
-            return null;
-        }
-
         try {
+
+            // 执行脚本输入
+            ExecuteScriptInputDTO input = OrderManagerConvert.getExecuteScriptInputDTO(orderInfo, gatewaySubChannel);
+            if (Objects.isNull(input)) {
+                return null;
+            }
 
             // 执行脚本
             ExecuteScriptOutputDTO output = gatewayManager.executeScript(input);
             if (Objects.isNull(output)) {
-                return null;
-            }
-
-            // 非明确成功或不成功
-            if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_AP.getCode(), output.getOrderStatus()) && !StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_AF.getCode(), output.getOrderStatus())) {
                 return null;
             }
 
@@ -230,21 +217,30 @@ public class ChannelOrderQueryJob extends BaseOrderJob {
 
         try {
 
+            // 订单信息DO
+            OrderInfoDO orderInfoDO = new OrderInfoDO();
+            orderInfoDO.setId(orderInfo.getId());
+            orderInfoDO.setUpdateTime(DateUtil.currentDate());
+
             // 非明确成功或不成功
             if (!StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_AP.getCode(), orderInfo.getOrderStatus()) && !StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_AF.getCode(), orderInfo.getOrderStatus())) {
 
-                OrderInfoDO orderInfoDO = new OrderInfoDO();
-                orderInfoDO.setId(orderInfo.getId());
                 orderInfoDO.setChannelOrderQueryCount(channelOrderQueryCount);
-                orderInfoDO.setUpdateTime(DateUtil.currentDate());
-
                 orderInfoDao.updateOrderInfoForChannelOrderQuery(orderInfoDO);
 
                 return;
             }
 
             // 明确成功或不成功
-            int update = orderInfoDao.updateOrderInfoByOrderIdAndOrderStatus(orderInfo.getOrderId(), orderInfo.getOrderStatus(), OrderStatusEnum.ORDER_STATUS_NP.getCode(), DateUtil.currentDate());
+            orderInfoDO.setOrderStatus(orderInfo.getOrderStatus());
+            orderInfoDO.setBehavior(orderInfo.getBehavior());
+
+            if (StringUtils.pathEquals(OrderStatusEnum.ORDER_STATUS_AP.getCode(), orderInfo.getOrderStatus())) {
+                orderInfoDO.setSplitProfitStatus(OrderSplitProfitStatusEnum.SPLIT_PROFIT_STATUS_N.getCode());
+                orderInfoDO.setPayTime(DateUtil.currentDate());
+            }
+
+            int update = orderInfoDao.updateOrderInfoByIdAndOrderStatus(orderInfoDO, OrderStatusEnum.ORDER_STATUS_NP.getCode());
             if (update != 1) {
                 return;
             }
@@ -259,7 +255,7 @@ public class ChannelOrderQueryJob extends BaseOrderJob {
             orderManager.asyncOrderNotice(orderInfo);
 
         } catch (Exception e) {
-            log.error("渠道订单查询更新订单信息异常:", e);
+            log.error("渠道订单查询处理订单信息异常:", e);
         }
 
     }

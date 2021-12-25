@@ -54,7 +54,7 @@ public interface OrderInfoDao {
      * @param query
      * @return
      */
-    List<OrderInfoDO> listOrderInfoByOrderInfoQuerys(OrderInfoQuery query);
+    List<OrderInfoDO> listOrderInfoForJobByOrderInfoQuerys(OrderInfoQuery query);
 
     /**
      * 新增一条订单信息

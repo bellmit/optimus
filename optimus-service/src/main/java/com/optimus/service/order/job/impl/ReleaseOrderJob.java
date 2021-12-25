@@ -37,9 +37,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ReleaseOrderJob extends BaseOrderJob {
 
-    /** 释放订单一次执行上限默认值 */
-    private static Integer releaseOrderOnceExecuteLimit = 100;
-
     /** 释放订单间隔默认值 */
     private static Integer releaseOrderInterval = 10;
 
@@ -65,12 +62,15 @@ public class ReleaseOrderJob extends BaseOrderJob {
         // 下标
         Integer index = 0;
 
-        while (index.compareTo(releaseOrderOnceExecuteLimit) < 0) {
+        while (true) {
 
             index++;
 
+            // 设置分页对象
+            query.getPage().setPageNo(index);
+
             // 查询订单
-            List<OrderInfoDO> orderInfoList = orderInfoDao.listOrderInfoByOrderInfoQuerys(query);
+            List<OrderInfoDO> orderInfoList = orderInfoDao.listOrderInfoForJobByOrderInfoQuerys(query);
             if (CollectionUtils.isEmpty(orderInfoList)) {
                 break;
             }
@@ -106,16 +106,10 @@ public class ReleaseOrderJob extends BaseOrderJob {
      */
     private void init() {
 
-        // 一次执行上限
-        String value1 = super.loadSystemConfig(CommonSystemConfigEnum.RELEASE_ORDER_ONCE_EXECUTE_LIMIT.getCode());
-        if (StringUtils.hasLength(value1)) {
-            releaseOrderOnceExecuteLimit = Integer.parseInt(value1);
-        }
-
         // 间隔
-        String value2 = super.loadSystemConfig(CommonSystemConfigEnum.RELEASE_ORDER_INTERVAL.getCode());
-        if (StringUtils.hasLength(value2)) {
-            releaseOrderInterval = Integer.parseInt(value2);
+        String value = super.loadSystemConfig(CommonSystemConfigEnum.RELEASE_ORDER_INTERVAL.getCode());
+        if (StringUtils.hasLength(value)) {
+            releaseOrderInterval = Integer.parseInt(value);
         }
 
     }
@@ -135,12 +129,12 @@ public class ReleaseOrderJob extends BaseOrderJob {
 
         // 订单信息Query
         OrderInfoQuery query = new OrderInfoQuery();
-        query.setPage(new Page(1, 1000));
+        query.setPage(new Page(1, BaseOrderJob.BASE_ORDER_JOB_PAGE_SIZE));
         query.setShard(shardingMap.entrySet().stream().findFirst().get().getKey());
         query.setTotalShard(shardingMap.entrySet().stream().findFirst().get().getValue());
-        query.setInitTime(DateUtil.offsetForMinute(DateUtil.currentDate(), -releaseOrderInterval));
         query.setOrderType(OrderTypeEnum.ORDER_TYPE_C.getCode());
         query.setReleaseStatus(OrderReleaseStatusEnum.RELEASE_STATUS_N.getCode());
+        query.setCreateTime(DateUtil.offsetForMinute(DateUtil.currentDate(), -releaseOrderInterval));
 
         return query;
 
