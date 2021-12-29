@@ -4,8 +4,10 @@ server:
     threads:
       max: 1000
       min-spare: 100
+    max-keep-alive-requests: 200
     max-connections: 10000
-    connection-timeout: 30000
+    keep-alive-timeout: 15000
+    connection-timeout: 60000
 spring:
     datasource:
         url: jdbc:sqlserver://150.158.159.17:1433;databaseName=Hulk
