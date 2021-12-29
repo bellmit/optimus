@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import com.optimus.util.constants.RespCodeEnum;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Resp<T> implements Serializable {
 
     private static final long serialVersionUID = -5107305879027514980L;
@@ -26,9 +28,5 @@ public class Resp<T> implements Serializable {
      * 响应报文体
      */
     private T data;
-
-    public Resp(T data) {
-        this.data = data;
-    }
 
 }

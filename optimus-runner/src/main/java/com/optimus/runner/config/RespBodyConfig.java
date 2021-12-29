@@ -1,5 +1,6 @@
 package com.optimus.runner.config;
 
+import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.model.resp.Resp;
 
 import org.springframework.context.annotation.Configuration;
@@ -50,8 +51,8 @@ public class RespBodyConfig implements ResponseBodyAdvice<Object> {
             return arg0;
         }
 
-        Resp<Object> resp = new Resp<>(arg0);
-        log.info("{}.{},响应:{}", className, methodName, resp);
+        Resp<Object> resp = new Resp<>(RespCodeEnum.FAILE.getCode(), RespCodeEnum.FAILE.getMemo(), arg0);
+        log.warn("{}.{},响应:{}", className, methodName, resp);
 
         return resp;
     }
