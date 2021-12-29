@@ -258,7 +258,6 @@ public class OrderManagerImpl implements OrderManager {
             release(orderInfo);
 
         } catch (OptimusException e) {
-            log.error("异步释放订单业务异常:", e);
             log.warn("异步释放订单异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
             return;
         } catch (Exception e) {
@@ -276,7 +275,6 @@ public class OrderManagerImpl implements OrderManager {
             splitProfit(orderInfo);
 
         } catch (OptimusException e) {
-            log.error("异步订单分润业务异常:", e);
             log.warn("异步订单分润异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
             return;
         } catch (Exception e) {
@@ -294,7 +292,6 @@ public class OrderManagerImpl implements OrderManager {
             orderNotice(orderInfo);
 
         } catch (OptimusException e) {
-            log.error("异步订单通知业务异常:", e);
             log.warn("异步订单通知异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
             return;
         } catch (Exception e) {

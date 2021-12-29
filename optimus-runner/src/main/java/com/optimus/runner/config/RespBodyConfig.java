@@ -51,8 +51,8 @@ public class RespBodyConfig implements ResponseBodyAdvice<Object> {
             return arg0;
         }
 
-        Resp<Object> resp = new Resp<>(RespCodeEnum.FAILE.getCode(), RespCodeEnum.FAILE.getMemo(), arg0);
-        log.warn("{}.{},响应:{}", className, methodName, resp);
+        Resp<Object> resp = new Resp<>(RespCodeEnum.SUCCESS.getCode(), RespCodeEnum.SUCCESS.getMemo(), arg0);
+        log.info("{}.{},响应:{}", className, methodName, resp);
 
         return resp;
     }

@@ -64,7 +64,6 @@ public abstract class BaseOrderJob {
             return commonSystemConfigManager.getCommonSystemConfigByBaseKey(baseKey);
 
         } catch (OptimusException e) {
-            log.error("加载系统配置业务异常:", e);
             log.warn("加载系统配置异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
             return null;
         } catch (Exception e) {
@@ -111,7 +110,6 @@ public abstract class BaseOrderJob {
             return shardingMap;
 
         } catch (OptimusException e) {
-            log.error("系统业务异常:", e);
             log.warn("定时任务分片异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
             return null;
         } catch (Exception e) {
