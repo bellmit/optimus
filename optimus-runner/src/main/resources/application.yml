@@ -1,3 +1,11 @@
+server:
+  tomcat:
+    accept-count: 1000
+    threads:
+      max: 1000
+      min-spare: 100
+    max-connections: 10000
+    connection-timeout: 30000
 spring:
     datasource:
         url: jdbc:sqlserver://150.158.159.17:1433;databaseName=Hulk
