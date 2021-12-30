@@ -1,12 +1,14 @@
 package com.optimus.service.order.core.impl;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.Resource;
 
+import com.optimus.dao.domain.CommonSystemConfigDO;
 import com.optimus.dao.domain.OrderInfoDO;
+import com.optimus.dao.mapper.CommonSystemConfigDao;
 import com.optimus.dao.mapper.MemberChannelDao;
 import com.optimus.dao.mapper.OrderInfoDao;
 import com.optimus.manager.account.AccountManager;
@@ -22,9 +24,11 @@ import com.optimus.manager.order.dto.OrderInfoDTO;
 import com.optimus.manager.order.dto.PayOrderDTO;
 import com.optimus.service.order.core.BaseOrder;
 import com.optimus.util.AssertUtil;
+import com.optimus.util.JacksonUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.account.AccountChangeTypeEnum;
 import com.optimus.util.constants.account.AccountTypeEnum;
+import com.optimus.util.constants.common.CommonSystemConfigTypeEnum;
 import com.optimus.util.constants.gateway.GatewayChannelGroupEnum;
 import com.optimus.util.constants.member.MemberCodeBalanceSwitchEnum;
 import com.optimus.util.constants.member.MemberFreezeBalanceSwitchEnum;
@@ -60,6 +64,9 @@ public class PlaceOrder extends BaseOrder {
     private OrderManager orderManager;
 
     @Resource
+    private CommonSystemConfigDao commonSystemConfigDao;
+
+    @Resource
     private MemberChannelDao memberChannelDao;
 
     @Resource
@@ -74,13 +81,8 @@ public class PlaceOrder extends BaseOrder {
     @Override
     public OrderInfoDTO createOrder(CreateOrderDTO createOrder) {
 
-        // 会员交易限制
-        MemberTransConfineDTO memberTransConfine = null;
-
-        // 验证会员交易:外部
-        if (StringUtils.pathEquals(GatewayChannelGroupEnum.CHANNEL_GROUP_O.getCode(), createOrder.getGatewayChannel().getChannelGroup())) {
-            memberTransConfine = checkMemberTrans(createOrder.getCodeMemberId(), createOrder.getOrderAmount());
-        }
+        // 默认验证会员交易:外部
+        MemberTransConfineDTO memberTransConfine = checkMemberTrans(createOrder);
 
         // 执行脚本
         ExecuteScriptOutputDTO output = gatewayManager.executeScript(OrderManagerConvert.getExecuteScriptInputDTO(createOrder));
@@ -95,9 +97,7 @@ public class PlaceOrder extends BaseOrder {
         }
 
         // 验证会员交易:自研
-        if (StringUtils.pathEquals(GatewayChannelGroupEnum.CHANNEL_GROUP_I.getCode(), createOrder.getGatewayChannel().getChannelGroup())) {
-            memberTransConfine = checkMemberTrans(orderInfo.getCodeMemberId());
-        }
+        memberTransConfine = checkMemberTrans(createOrder, memberTransConfine, orderInfo.getCodeMemberId());
 
         // 不冻结码商余额
         if (StringUtils.pathEquals(MemberFreezeBalanceSwitchEnum.FREEZE_BALANCE_SWITCH_N.getCode(), memberTransConfine.getFreezeBalanceSwitch())) {
@@ -154,20 +154,22 @@ public class PlaceOrder extends BaseOrder {
     /**
      * 验证会员交易:外部
      * 
-     * @param codeMemberId
-     * @param orderAmount
+     * @param createOrder
      * @return
      */
-    private MemberTransConfineDTO checkMemberTrans(String codeMemberId, BigDecimal orderAmount) {
+    private MemberTransConfineDTO checkMemberTrans(CreateOrderDTO createOrder) {
+
+        // 非外部
+        if (!StringUtils.pathEquals(GatewayChannelGroupEnum.CHANNEL_GROUP_O.getCode(), createOrder.getGatewayChannel().getChannelGroup())) {
+            return null;
+        }
 
         // 查询码商会员交易限制
-        MemberTransConfineDTO memberTransConfine = memberManager.getMemberTransConfineByMemberId(codeMemberId);
-        AssertUtil.notEmpty(memberTransConfine.getCodeBalanceSwitch(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置码商余额限制开关");
-        AssertUtil.notEmpty(memberTransConfine.getReleaseFreezeBalanceAging(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置释放冻结余额时效");
+        MemberTransConfineDTO memberTransConfine = getMemberTransConfine(createOrder.getCodeMemberId(), createOrder.getOrganizeId());
 
         // 验证账户金额是否充足
         if (!StringUtils.pathEquals(MemberCodeBalanceSwitchEnum.CODE_BALANCE_SWITCH_N.getCode(), memberTransConfine.getCodeBalanceSwitch())) {
-            super.checkAccountAmount(codeMemberId, orderAmount, AccountTypeEnum.ACCOUNT_TYPE_B);
+            super.checkAccountAmount(createOrder.getCodeMemberId(), createOrder.getOrderAmount(), AccountTypeEnum.ACCOUNT_TYPE_B);
         }
 
         return memberTransConfine;
@@ -177,13 +179,49 @@ public class PlaceOrder extends BaseOrder {
     /**
      * 验证会员交易:自研
      * 
+     * @param createOrder
+     * @param memberTransConfine
      * @param codeMemberId
      * @return
      */
-    private MemberTransConfineDTO checkMemberTrans(String codeMemberId) {
+    private MemberTransConfineDTO checkMemberTrans(CreateOrderDTO createOrder, MemberTransConfineDTO memberTransConfine, String codeMemberId) {
+
+        // 非自研
+        if (!StringUtils.pathEquals(GatewayChannelGroupEnum.CHANNEL_GROUP_I.getCode(), createOrder.getGatewayChannel().getChannelGroup())) {
+            return memberTransConfine;
+        }
+
+        // 查询码商会员交易限制
+        return getMemberTransConfine(createOrder.getCodeMemberId(), createOrder.getOrganizeId());
+
+    }
+
+    /**
+     * 查询会员交易限制
+     * 
+     * @param codeMemberId
+     * @param organizeId
+     * @return
+     */
+    private MemberTransConfineDTO getMemberTransConfine(String codeMemberId, Long organizeId) {
 
         // 查询码商会员交易限制
         MemberTransConfineDTO memberTransConfine = memberManager.getMemberTransConfineByMemberId(codeMemberId);
+        AssertUtil.notEmpty(memberTransConfine, RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置码商会员交易限制");
+
+        // 未配置:查询通用会员交易限制
+        if (!StringUtils.hasLength(memberTransConfine.getCodeBalanceSwitch()) || !StringUtils.hasLength(memberTransConfine.getFreezeBalanceSwitch())
+                || Objects.isNull(memberTransConfine.getReleaseFreezeBalanceAging())) {
+
+            CommonSystemConfigDO commonSystemConfig = commonSystemConfigDao.getCommonSystemConfigByTypeAndBaseKey(CommonSystemConfigTypeEnum.TYPE_MTC.getCode(), String.valueOf(organizeId));
+            AssertUtil.notEmpty(commonSystemConfig, RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置通用码商会员交易限制");
+
+            memberTransConfine = JacksonUtil.toBean(commonSystemConfig.getValue(), MemberTransConfineDTO.class);
+            memberTransConfine.setMemberId(codeMemberId);
+        }
+
+        // 断言:非空
+        AssertUtil.notEmpty(memberTransConfine.getCodeBalanceSwitch(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置码商余额限制开关");
         AssertUtil.notEmpty(memberTransConfine.getFreezeBalanceSwitch(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置码商订单释放状态开关");
         AssertUtil.notEmpty(memberTransConfine.getReleaseFreezeBalanceAging(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置释放冻结余额时效");
 

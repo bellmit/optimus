@@ -36,6 +36,11 @@ public class CreateOrderDTO implements Serializable {
     private String codeMemberId;
 
     /**
+     * 组织编号
+     */
+    private Long organizeId;
+
+    /**
      * 订单编号
      */
     private String orderId;

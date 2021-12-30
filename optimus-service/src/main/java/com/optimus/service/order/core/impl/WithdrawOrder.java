@@ -7,7 +7,9 @@ import java.util.Objects;
 
 import javax.annotation.Resource;
 
+import com.optimus.dao.domain.CommonSystemConfigDO;
 import com.optimus.dao.domain.OrderInfoDO;
+import com.optimus.dao.mapper.CommonSystemConfigDao;
 import com.optimus.dao.mapper.OrderInfoDao;
 import com.optimus.manager.account.AccountManager;
 import com.optimus.manager.account.dto.DoTransDTO;
@@ -19,9 +21,12 @@ import com.optimus.manager.order.dto.OrderInfoDTO;
 import com.optimus.manager.order.dto.PayOrderDTO;
 import com.optimus.service.order.core.BaseOrder;
 import com.optimus.util.AssertUtil;
+import com.optimus.util.JacksonUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.account.AccountChangeTypeEnum;
 import com.optimus.util.constants.account.AccountTypeEnum;
+import com.optimus.util.constants.common.CommonSystemConfigTypeEnum;
+import com.optimus.util.constants.member.MemberCollectFeeTypeEnum;
 import com.optimus.util.constants.member.MemberCollectFeeWayEnum;
 import com.optimus.util.constants.order.OrderConfirmTypeEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
@@ -49,6 +54,9 @@ public class WithdrawOrder extends BaseOrder {
     private AccountManager accountManager;
 
     @Resource
+    private CommonSystemConfigDao commonSystemConfigDao;
+
+    @Resource
     private OrderInfoDao orderInfoDao;
 
     /**
@@ -60,12 +68,8 @@ public class WithdrawOrder extends BaseOrder {
     @Override
     public OrderInfoDTO createOrder(CreateOrderDTO createOrder) {
 
-        // 验证会员交易限制
-        MemberTransConfineDTO memberTransConfine = memberManager.getMemberTransConfineByMemberId(createOrder.getMemberId());
-        AssertUtil.notEmpty(memberTransConfine.getWithdrawFeeSwitch(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置提现手续费开关");
-        AssertUtil.notEmpty(memberTransConfine.getSingleMinAmount(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置单笔最小金额");
-        AssertUtil.notEmpty(memberTransConfine.getSingleMaxAmount(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置单笔最大金额");
-        AssertUtil.notEmpty(memberTransConfine.getCollectFeeWay(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置手续费收取方式");
+        // 查询会员交易限制
+        MemberTransConfineDTO memberTransConfine = getMemberTransConfine(createOrder.getMemberId(), null);
 
         // 验证提现金额:最小金额<=提现金额<=最大金额
         if (createOrder.getOrderAmount().compareTo(memberTransConfine.getSingleMaxAmount()) > 0 || createOrder.getOrderAmount().compareTo(memberTransConfine.getSingleMinAmount()) < 0) {
@@ -155,6 +159,58 @@ public class WithdrawOrder extends BaseOrder {
             rollbackAccountInfo(payOrder);
             throw new OptimusException(RespCodeEnum.ORDER_PLACE_ERROR, "提现记账异常");
         }
+
+    }
+
+    /**
+     * 查询会员交易限制
+     * 
+     * @param memberId
+     * @param organizeId
+     * @return
+     */
+    private MemberTransConfineDTO getMemberTransConfine(String memberId, Long organizeId) {
+
+        // 验证会员交易限制
+        MemberTransConfineDTO memberTransConfine = memberManager.getMemberTransConfineByMemberId(memberId);
+
+        // 未配置:查询通用会员交易限制
+        if (!StringUtils.hasLength(memberTransConfine.getWithdrawFeeSwitch()) || !StringUtils.hasLength(memberTransConfine.getCollectFeeWay())
+                || Objects.isNull(memberTransConfine.getSingleMinAmount()) || Objects.isNull(memberTransConfine.getSingleMinAmount())) {
+
+            CommonSystemConfigDO commonSystemConfig = commonSystemConfigDao.getCommonSystemConfigByTypeAndBaseKey(CommonSystemConfigTypeEnum.TYPE_MTC.getCode(), String.valueOf(organizeId));
+            AssertUtil.notEmpty(commonSystemConfig, RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置通用会员交易限制");
+
+            memberTransConfine = JacksonUtil.toBean(commonSystemConfig.getValue(), MemberTransConfineDTO.class);
+            memberTransConfine.setMemberId(memberId);
+        }
+
+        log.info("提现会员交易限制:{}", memberTransConfine);
+
+        // 断言:非空
+        AssertUtil.notEmpty(memberTransConfine.getWithdrawFeeSwitch(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置提现手续费开关");
+        AssertUtil.notEmpty(memberTransConfine.getSingleMinAmount(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置单笔最小金额");
+        AssertUtil.notEmpty(memberTransConfine.getSingleMaxAmount(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置单笔最大金额");
+        AssertUtil.notEmpty(memberTransConfine.getCollectFeeWay(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置手续费收取方式");
+
+        // 单笔
+        if (StringUtils.pathEquals(MemberCollectFeeTypeEnum.COLLECT_FEE_TYPE_S.getCode(), memberTransConfine.getCollectFeeType())) {
+            AssertUtil.notEmpty(memberTransConfine.getSingleCollectFee(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置单笔收取手续费");
+        }
+
+        // 比例
+        if (StringUtils.pathEquals(MemberCollectFeeTypeEnum.COLLECT_FEE_TYPE_R.getCode(), memberTransConfine.getCollectFeeType())) {
+            AssertUtil.notEmpty(memberTransConfine.getRatioCollectFee(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置比例手续手续费");
+        }
+
+        // 单笔+比例
+        if (StringUtils.pathEquals(MemberCollectFeeTypeEnum.COLLECT_FEE_TYPE_SR.getCode(), memberTransConfine.getCollectFeeType())) {
+            if (Objects.isNull(memberTransConfine.getRatioCollectFee()) || Objects.isNull(memberTransConfine.getSingleCollectFee())) {
+                throw new OptimusException(RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置单笔收取手续费和比例手续手续费");
+            }
+        }
+
+        return memberTransConfine;
 
     }
 

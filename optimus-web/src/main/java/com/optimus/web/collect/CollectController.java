@@ -87,8 +87,6 @@ public class CollectController {
 
         // 创建订单
         CreateOrderDTO createOrder = CollectControllerConvert.getCreateOrderDTO(req);
-        createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_R.getCode());
-
         OrderInfoDTO orderInfo = orderService.createOrder(createOrder);
 
         // 响应信息
@@ -173,7 +171,6 @@ public class CollectController {
 
         // 创建订单
         CreateOrderDTO createOrder = CollectControllerConvert.getCreateOrderDTO(req);
-        createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_R.getCode());
         OrderInfoDTO orderInfo = orderService.createOrder(createOrder);
 
         // 支付订单
@@ -208,8 +205,7 @@ public class CollectController {
         }
 
         // 创建订单
-        CreateOrderDTO createOrder = CollectControllerConvert.getCreateOrderDTO(req);
-        createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_W.getCode());
+        CreateOrderDTO createOrder = CollectControllerConvert.getCreateOrderDTO(req, memberInfo.getOrganizeId());
         orderService.createOrder(createOrder);
 
         // 响应信息
@@ -290,9 +286,7 @@ public class CollectController {
         memberService.checkMemberLevel(memberInfo, req.getSubDirectMemberId());
 
         // 创建订单
-        CreateOrderDTO createOrder = CollectControllerConvert.getCreateOrderDTO(req);
-        createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_W.getCode());
-
+        CreateOrderDTO createOrder = CollectControllerConvert.getCreateOrderDTO(req, subDirectMemberInfo.getOrganizeId());
         OrderInfoDTO orderInfo = orderService.createOrder(createOrder);
 
         // 支付订单
@@ -330,7 +324,6 @@ public class CollectController {
 
         // 创建订单
         CreateOrderDTO createOrder = CollectControllerConvert.getCreateOrderDTO(req);
-        createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_M.getCode());
         OrderInfoDTO orderInfo = orderService.createOrder(createOrder);
 
         // 支付订单
@@ -375,8 +368,7 @@ public class CollectController {
         MatchChannelDTO matchChannel = gatewayService.matchChannel(memberInfo, gatewayChannel, req.getAmount());
 
         // 下单
-        CreateOrderDTO createOrder = CollectControllerConvert.getCreateOrderDTO(req);
-        createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_C.getCode());
+        CreateOrderDTO createOrder = CollectControllerConvert.getCreateOrderDTO(req, memberInfo.getOrganizeId());
         createOrder.setSupMemberId(memberInfo.getSupDirectMemberId());
         createOrder.setCodeMemberId(matchChannel.getCodeMemberId());
         createOrder.setGatewayChannel(gatewayChannel);

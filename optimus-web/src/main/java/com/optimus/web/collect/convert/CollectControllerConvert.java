@@ -4,6 +4,7 @@ import com.optimus.manager.order.dto.CreateOrderDTO;
 import com.optimus.manager.order.dto.OrderInfoDTO;
 import com.optimus.manager.order.dto.PayOrderDTO;
 import com.optimus.util.DateUtil;
+import com.optimus.util.constants.order.OrderTypeEnum;
 import com.optimus.web.collect.req.ApplyForRechargeReq;
 import com.optimus.web.collect.req.ApplyForWithdrawReq;
 import com.optimus.web.collect.req.PlaceOrderReq;
@@ -23,13 +24,17 @@ public class CollectControllerConvert {
      * 获取创建订单DTO
      * 
      * @param req
+     * @param organizeId
      * @return
      */
-    public static CreateOrderDTO getCreateOrderDTO(PlaceOrderReq req) {
+    public static CreateOrderDTO getCreateOrderDTO(PlaceOrderReq req, Long organizeId) {
 
         // 创建订单DTO
         CreateOrderDTO createOrder = new CreateOrderDTO();
+
+        createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_C.getCode());
         createOrder.setMemberId(req.getMemberId());
+        createOrder.setOrganizeId(organizeId);
         createOrder.setCallerOrderId(req.getCallerOrderId());
         createOrder.setOrderAmount(req.getAmount());
         createOrder.setOrderTime(DateUtil.currentDate());
@@ -46,7 +51,6 @@ public class CollectControllerConvert {
      * 获取创建订单DTO
      * 
      * @param req
-     *            ApplyForRechargeReq
      * @return
      */
     public static CreateOrderDTO getCreateOrderDTO(ApplyForRechargeReq req) {
@@ -54,48 +58,8 @@ public class CollectControllerConvert {
         // 创建订单DTO
         CreateOrderDTO createOrder = new CreateOrderDTO();
 
+        createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_R.getCode());
         createOrder.setMemberId(req.getMemberId());
-        createOrder.setOrderAmount(req.getAmount());
-        createOrder.setCallerOrderId(req.getCallerOrderId());
-
-        return createOrder;
-
-    }
-
-    /**
-     * 获取创建订单DTO
-     * 
-     * @param req
-     *            ApplyForWithdrawReq
-     * @return
-     */
-    public static CreateOrderDTO getCreateOrderDTO(ApplyForWithdrawReq req) {
-
-        // 创建订单DTO
-        CreateOrderDTO createOrder = new CreateOrderDTO();
-
-        createOrder.setMemberId(req.getMemberId());
-        createOrder.setOrderAmount(req.getAmount());
-        createOrder.setCallerOrderId(req.getCallerOrderId());
-
-        return createOrder;
-
-    }
-
-    /**
-     * 获取创建订单DTO
-     * 
-     * @param req
-     *            WithdrawReq
-     * @return
-     */
-    public static CreateOrderDTO getCreateOrderDTO(WithdrawReq req) {
-
-        // 创建订单DTO
-        CreateOrderDTO createOrder = new CreateOrderDTO();
-
-        createOrder.setMemberId(req.getSubDirectMemberId());
-        createOrder.setSupMemberId(req.getMemberId());
         createOrder.setOrderAmount(req.getAmount());
         createOrder.setCallerOrderId(req.getCallerOrderId());
 
@@ -107,7 +71,6 @@ public class CollectControllerConvert {
      * 获取创建订单DTO
      *
      * @param req
-     *            RechargeReq
      * @return
      */
     public static CreateOrderDTO getCreateOrderDTO(RechargeReq req) {
@@ -115,6 +78,7 @@ public class CollectControllerConvert {
         // 创建订单DTO
         CreateOrderDTO createOrder = new CreateOrderDTO();
 
+        createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_R.getCode());
         createOrder.setMemberId(req.getSubDirectMemberId());
         createOrder.setSupMemberId(req.getMemberId());
         createOrder.setOrderAmount(req.getAmount());
@@ -128,7 +92,51 @@ public class CollectControllerConvert {
      * 获取创建订单DTO
      * 
      * @param req
-     *            TransferReq
+     * @param organizeId
+     * @return
+     */
+    public static CreateOrderDTO getCreateOrderDTO(ApplyForWithdrawReq req, Long organizeId) {
+
+        // 创建订单DTO
+        CreateOrderDTO createOrder = new CreateOrderDTO();
+
+        createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_W.getCode());
+        createOrder.setMemberId(req.getMemberId());
+        createOrder.setOrganizeId(organizeId);
+        createOrder.setCallerOrderId(req.getCallerOrderId());
+        createOrder.setOrderAmount(req.getAmount());
+
+        return createOrder;
+
+    }
+
+    /**
+     * 获取创建订单DTO
+     * 
+     * @param req
+     * @param organizeId
+     * @return
+     */
+    public static CreateOrderDTO getCreateOrderDTO(WithdrawReq req, Long organizeId) {
+
+        // 创建订单DTO
+        CreateOrderDTO createOrder = new CreateOrderDTO();
+
+        createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_W.getCode());
+        createOrder.setMemberId(req.getSubDirectMemberId());
+        createOrder.setSupMemberId(req.getMemberId());
+        createOrder.setOrganizeId(organizeId);
+        createOrder.setCallerOrderId(req.getCallerOrderId());
+        createOrder.setOrderAmount(req.getAmount());
+
+        return createOrder;
+
+    }
+
+    /**
+     * 获取创建订单DTO
+     * 
+     * @param req
      * @return
      */
     public static CreateOrderDTO getCreateOrderDTO(TransferReq req) {
@@ -136,6 +144,7 @@ public class CollectControllerConvert {
         // 创建订单DTO
         CreateOrderDTO createOrder = new CreateOrderDTO();
 
+        createOrder.setOrderType(OrderTypeEnum.ORDER_TYPE_M.getCode());
         createOrder.setMemberId(req.getMemberId());
         createOrder.setOrderAmount(req.getAmount());
         createOrder.setCallerOrderId(req.getCallerOrderId());
@@ -148,7 +157,6 @@ public class CollectControllerConvert {
      * 获取支付订单DTO
      * 
      * @param orderInfo
-     *            OrderInfoDTO
      * @return
      */
     public static PayOrderDTO getPayOrderDTO(OrderInfoDTO orderInfo) {
