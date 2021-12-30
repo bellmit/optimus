@@ -62,10 +62,10 @@ public class WithdrawOrder extends BaseOrder {
 
         // 验证会员交易限制
         MemberTransConfineDTO memberTransConfine = memberManager.getMemberTransConfineByMemberId(createOrder.getMemberId());
-        AssertUtil.notEmpty(memberTransConfine.getCollectFeeWay(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置手续费收取方式");
         AssertUtil.notEmpty(memberTransConfine.getWithdrawFeeSwitch(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置提现手续费开关");
         AssertUtil.notEmpty(memberTransConfine.getSingleMinAmount(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置单笔最小金额");
         AssertUtil.notEmpty(memberTransConfine.getSingleMaxAmount(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置单笔最大金额");
+        AssertUtil.notEmpty(memberTransConfine.getCollectFeeWay(), RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置手续费收取方式");
 
         // 验证提现金额:最小金额<=提现金额<=最大金额
         if (createOrder.getOrderAmount().compareTo(memberTransConfine.getSingleMaxAmount()) > 0 || createOrder.getOrderAmount().compareTo(memberTransConfine.getSingleMinAmount()) < 0) {
@@ -75,10 +75,7 @@ public class WithdrawOrder extends BaseOrder {
 
         // 订单信息DTO
         OrderInfoDTO orderInfo = OrderManagerConvert.getOrderInfoDTO(createOrder);
-
-        // 获取提现手续费
-        BigDecimal fee = memberManager.getFeeForWithdraw(createOrder.getOrderAmount(), memberTransConfine);
-        orderInfo.setFee(fee);
+        orderInfo.setFee(memberManager.getFeeForWithdraw(createOrder.getOrderAmount(), memberTransConfine));
 
         // 手续费收取方式为到账余额:实际金额与订单金额一致
         if (StringUtils.pathEquals(MemberCollectFeeWayEnum.COLLECT_FEE_WAY_A.getCode(), memberTransConfine.getCollectFeeWay())) {
@@ -87,7 +84,7 @@ public class WithdrawOrder extends BaseOrder {
 
         // 手续费收取方式为余额:实际金额=订单金额+手续费
         if (StringUtils.pathEquals(MemberCollectFeeWayEnum.COLLECT_FEE_WAY_B.getCode(), memberTransConfine.getCollectFeeWay())) {
-            orderInfo.setActualAmount(orderInfo.getOrderAmount().add(fee));
+            orderInfo.setActualAmount(orderInfo.getOrderAmount().add(orderInfo.getFee()));
         }
 
         // 验证账户金额是否充足
