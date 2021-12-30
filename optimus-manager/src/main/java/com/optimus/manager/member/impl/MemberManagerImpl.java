@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 
 import com.optimus.dao.domain.MemberInfoDO;
 import com.optimus.dao.domain.MemberTransConfineDO;
+import com.optimus.dao.mapper.CommonSystemConfigDao;
 import com.optimus.dao.mapper.MemberInfoDao;
 import com.optimus.dao.mapper.MemberTransConfineDao;
 import com.optimus.dao.result.MemberInfoChainResult;
@@ -37,6 +38,9 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class MemberManagerImpl implements MemberManager {
+
+    @Resource
+    private CommonSystemConfigDao commonSystemConfigDao;
 
     @Resource
     private MemberInfoDao memberInfoDao;

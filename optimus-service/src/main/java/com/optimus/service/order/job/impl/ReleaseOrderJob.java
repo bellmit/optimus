@@ -13,7 +13,7 @@ import com.optimus.manager.order.OrderManager;
 import com.optimus.manager.order.dto.OrderInfoDTO;
 import com.optimus.service.order.job.BaseOrderJob;
 import com.optimus.util.DateUtil;
-import com.optimus.util.constants.common.CommonSystemConfigEnum;
+import com.optimus.util.constants.common.CommonSystemConfigBaseKeyEnum;
 import com.optimus.util.constants.order.OrderReleaseStatusEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
 import com.optimus.util.exception.OptimusException;
@@ -106,7 +106,7 @@ public class ReleaseOrderJob extends BaseOrderJob {
     private void init() {
 
         // 间隔
-        String value = super.loadSystemConfig(CommonSystemConfigEnum.RELEASE_ORDER_INTERVAL.getCode());
+        String value = super.loadSystemConfig(CommonSystemConfigBaseKeyEnum.RELEASE_ORDER_INTERVAL.getCode());
         if (StringUtils.hasLength(value)) {
             releaseOrderInterval = Integer.parseInt(value);
         }
@@ -121,7 +121,7 @@ public class ReleaseOrderJob extends BaseOrderJob {
     private OrderInfoQuery getOrderInfoQuery() {
 
         // 分片
-        Map<Integer, Integer> shardingMap = super.sharding(CommonSystemConfigEnum.RELEASE_ORDER_JOB_SHARDING.getCode());
+        Map<Integer, Integer> shardingMap = super.sharding(CommonSystemConfigBaseKeyEnum.RELEASE_ORDER_JOB_SHARDING.getCode());
         if (CollectionUtils.isEmpty(shardingMap)) {
             return null;
         }

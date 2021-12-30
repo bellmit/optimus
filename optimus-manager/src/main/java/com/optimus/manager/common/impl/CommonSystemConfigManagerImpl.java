@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import com.optimus.dao.domain.CommonSystemConfigDO;
 import com.optimus.dao.mapper.CommonSystemConfigDao;
 import com.optimus.manager.common.CommonSystemConfigManager;
+import com.optimus.util.constants.common.CommonSystemConfigTypeEnum;
 
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
@@ -28,7 +29,7 @@ public class CommonSystemConfigManagerImpl implements CommonSystemConfigManager 
 
     @Override
     @Cacheable(value = "systemConfig", key = "#baseKey", unless = "#result == null")
-    public String getCommonSystemConfigByBaseKey(String baseKey) {
+    public String getCommonSystemConfigForSystem(String baseKey) {
 
         String value = null;
 
@@ -37,7 +38,7 @@ public class CommonSystemConfigManagerImpl implements CommonSystemConfigManager 
             return value;
         }
 
-        CommonSystemConfigDO commonSystemConfigDO = commonSystemConfigDao.getCommonSystemConfigByBaseKey(baseKey);
+        CommonSystemConfigDO commonSystemConfigDO = commonSystemConfigDao.getCommonSystemConfigByTypeAndBaseKey(CommonSystemConfigTypeEnum.TYPE_S.getCode(), baseKey);
         log.debug("系统配置:{}", commonSystemConfigDO);
 
         if (Objects.isNull(commonSystemConfigDO)) {

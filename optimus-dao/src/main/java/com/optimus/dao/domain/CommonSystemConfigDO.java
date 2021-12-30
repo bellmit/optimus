@@ -3,6 +3,9 @@ package com.optimus.dao.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.optimus.util.constants.common.CommonSystemConfigBaseKeyEnum;
+import com.optimus.util.constants.common.CommonSystemConfigTypeEnum;
+
 import lombok.Data;
 
 /**
@@ -21,7 +24,16 @@ public class CommonSystemConfigDO implements Serializable {
     private Long id;
 
     /**
+     * 类型
+     * 
+     * @see CommonSystemConfigTypeEnum
+     */
+    private String type;
+
+    /**
      * 键
+     * 
+     * @see CommonSystemConfigBaseKeyEnum
      */
     private String baseKey;
 

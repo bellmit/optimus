@@ -19,7 +19,7 @@ import com.optimus.manager.order.convert.OrderManagerConvert;
 import com.optimus.manager.order.dto.OrderInfoDTO;
 import com.optimus.service.order.job.BaseOrderJob;
 import com.optimus.util.DateUtil;
-import com.optimus.util.constants.common.CommonSystemConfigEnum;
+import com.optimus.util.constants.common.CommonSystemConfigBaseKeyEnum;
 import com.optimus.util.constants.order.OrderSplitProfitStatusEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
@@ -116,13 +116,13 @@ public class ChannelOrderQueryJob extends BaseOrderJob {
     private void init() {
 
         // 渠道订单查询次数
-        String value0 = super.loadSystemConfig(CommonSystemConfigEnum.CHANNEL_ORDER_QUERY_COUNT.getCode());
+        String value0 = super.loadSystemConfig(CommonSystemConfigBaseKeyEnum.CHANNEL_ORDER_QUERY_COUNT.getCode());
         if (StringUtils.hasLength(value0)) {
             channelOrderQueryCount = Short.parseShort(value0);
         }
 
         // 间隔
-        String value1 = super.loadSystemConfig(CommonSystemConfigEnum.CHANNEL_ORDER_QUERY_INTERVAL.getCode());
+        String value1 = super.loadSystemConfig(CommonSystemConfigBaseKeyEnum.CHANNEL_ORDER_QUERY_INTERVAL.getCode());
         if (StringUtils.hasLength(value1)) {
             channelOrderQueryInterval = Integer.parseInt(value1);
         }
@@ -137,7 +137,7 @@ public class ChannelOrderQueryJob extends BaseOrderJob {
     private OrderInfoQuery getOrderInfoQuery() {
 
         // 分片
-        Map<Integer, Integer> shardingMap = super.sharding(CommonSystemConfigEnum.CHANNEL_ORDER_QUERY_JOB_SHARDING.getCode());
+        Map<Integer, Integer> shardingMap = super.sharding(CommonSystemConfigBaseKeyEnum.CHANNEL_ORDER_QUERY_JOB_SHARDING.getCode());
         if (CollectionUtils.isEmpty(shardingMap)) {
             return null;
         }

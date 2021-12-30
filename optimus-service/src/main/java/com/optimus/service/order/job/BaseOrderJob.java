@@ -61,7 +61,7 @@ public abstract class BaseOrderJob {
 
         try {
 
-            return commonSystemConfigManager.getCommonSystemConfigByBaseKey(baseKey);
+            return commonSystemConfigManager.getCommonSystemConfigForSystem(baseKey);
 
         } catch (OptimusException e) {
             log.warn("加载系统配置异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());

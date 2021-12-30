@@ -25,12 +25,12 @@ public class CommonSystemConfigServiceImpl implements CommonSystemConfigService 
     private CommonSystemConfigDao commonSystemConfigDao;
 
     @Override
-    public String getCommonSystemConfigByBaseKey(String baseKey) {
+    public String getCommonSystemConfigByTypeAndBaseKey(String type, String baseKey) {
 
-        log.info("根据键查询系统配置,键:{}", baseKey);
+        log.info("根据键查询系统配置,类型:{};键:{}", type, baseKey);
 
         // 根据baseKey查询系统配置
-        CommonSystemConfigDO commonSystemConfigDO = commonSystemConfigDao.getCommonSystemConfigByBaseKey(baseKey);
+        CommonSystemConfigDO commonSystemConfigDO = commonSystemConfigDao.getCommonSystemConfigByTypeAndBaseKey(type, baseKey);
         AssertUtil.notEmpty(commonSystemConfigDO, RespCodeEnum.FAILE, "系统配置不能为空");
 
         log.info("系统配置:{}", commonSystemConfigDO);

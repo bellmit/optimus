@@ -55,6 +55,11 @@ public class MemberInfoDTO implements Serializable {
     private String supDirectMemberId;
 
     /**
+     * 组织编号
+     */
+    private Long organizeId;
+
+    /**
      * 删除标识
      * 
      * @see MemberDeleteFlagEnum

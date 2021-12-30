@@ -4,15 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 系统配置Enum
+ * 系统配置键Enum
  * 
  * @author sunxp
  */
 @Getter
 @AllArgsConstructor
-public enum CommonSystemConfigEnum {
+public enum CommonSystemConfigBaseKeyEnum {
 
-    /* ---------系统配置--------- */
+    /* ---------系统配置键--------- */
 
     BASE_NOTICE_URL("BASE_NOTICE_URL", "订单通知地址"),
 

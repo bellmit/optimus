@@ -8,11 +8,12 @@ package com.optimus.service.common;
 public interface CommonSystemConfigService {
 
     /**
-     * 根据baseKey查询系统配置value
+     * 根据type和baseKey查询系统配置value
      * 
+     * @param type
      * @param baseKey
      * @return
      */
-    String getCommonSystemConfigByBaseKey(String baseKey);
+    String getCommonSystemConfigByTypeAndBaseKey(String type, String baseKey);
 
 }

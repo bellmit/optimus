@@ -18,9 +18,7 @@ public interface MemberManager {
      * 获取提现手续费
      *
      * @param orderAmount
-     *            订单金额
      * @param memberTransConfine
-     *            交易限制
      * @return
      */
     BigDecimal getFeeForWithdraw(BigDecimal orderAmount, MemberTransConfineDTO memberTransConfine);
@@ -36,7 +34,7 @@ public interface MemberManager {
     MemberInfoDTO getMemberInfoByMemberId(String memberId);
 
     /**
-     * 根据memberId查询交易限制
+     * 根据会员编号查询交易限制
      *
      * @param memberId
      * @return
@@ -47,7 +45,6 @@ public interface MemberManager {
      * 根据会员编号获取平台会员编号
      *
      * @param memberId
-     *            会员编号
      * @return
      */
     String getSystemMemberId(String memberId);

@@ -9,6 +9,7 @@
     <result column="MEMBER_TYPE" jdbcType="VARCHAR" property="memberType" />
     <result column="MEMBER_STATUS" jdbcType="VARCHAR" property="memberStatus" />
     <result column="SUP_DIRECT_MEMBER_ID" jdbcType="VARCHAR" property="supDirectMemberId" />
+    <result column="ORGANIZE_ID" jdbcType="NUMERIC" property="organizeId" />
     <result column="DELETE_FLAG" jdbcType="VARCHAR" property="deleteFlag" />
     <result column="CREATE_BY" jdbcType="VARCHAR" property="createBy" />
     <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
@@ -24,7 +25,7 @@
 
   <sql id="Base_Column_List">
     ID, MEMBER_ID, MEMBER_KEY, MEMBER_TYPE, MEMBER_STATUS, SUP_DIRECT_MEMBER_ID, 
-    DELETE_FLAG, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME
+    ORGANIZE_ID, DELETE_FLAG, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME
   </sql>
 
   <select id="getMemberInfoById" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -88,6 +89,9 @@
       <if test="supDirectMemberId != null">
         SUP_DIRECT_MEMBER_ID,
       </if>
+      <if test="organizeId != null">
+        ORGANIZE_ID,
+      </if>
       <if test="deleteFlag != null">
         DELETE_FLAG,
       </if>
@@ -116,6 +120,8 @@
       <if test="memberStatus != null"> #{memberStatus,jdbcType=VARCHAR},
       </if>
       <if test="supDirectMemberId != null"> #{supDirectMemberId,jdbcType=VARCHAR},
+      </if>
+      <if test="organizeId != null"> #{organizeId,jdbcType=NUMERIC},
       </if>
       <if test="deleteFlag != null"> #{deleteFlag,jdbcType=VARCHAR},
       </if>
@@ -147,6 +153,9 @@
       </if>
       <if test="supDirectMemberId != null">
         SUP_DIRECT_MEMBER_ID = #{supDirectMemberId,jdbcType=VARCHAR},
+      </if>
+      <if test="organizeId != null">
+        ORGANIZE_ID = #{organizeId,jdbcType=NUMERIC},
       </if>
       <if test="deleteFlag != null">
         DELETE_FLAG = #{deleteFlag,jdbcType=VARCHAR},

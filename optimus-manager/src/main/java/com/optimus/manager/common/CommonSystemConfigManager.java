@@ -8,11 +8,11 @@ package com.optimus.manager.common;
 public interface CommonSystemConfigManager {
 
     /**
-     * 根据baseKey查询系统配置value
+     * 查询系统配置value
      * 
      * @param baseKey
      * @return
      */
-    String getCommonSystemConfigByBaseKey(String baseKey);
+    String getCommonSystemConfigForSystem(String baseKey);
 
 }

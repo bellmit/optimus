@@ -12,11 +12,12 @@ import org.apache.ibatis.annotations.Param;
 public interface CommonSystemConfigDao {
 
     /**
-     * 根据baseKey查询系统配置
+     * 根据type和baseKey查询系统配置
      * 
+     * @param type
      * @param baseKey
      * @return
      */
-    CommonSystemConfigDO getCommonSystemConfigByBaseKey(@Param("baseKey") String baseKey);
+    CommonSystemConfigDO getCommonSystemConfigByTypeAndBaseKey(@Param("type") String type, @Param("baseKey") String baseKey);
 
 }

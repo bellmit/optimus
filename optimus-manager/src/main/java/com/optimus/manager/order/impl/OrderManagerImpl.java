@@ -31,7 +31,7 @@ import com.optimus.util.JacksonUtil;
 import com.optimus.util.SignUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.account.AccountChangeTypeEnum;
-import com.optimus.util.constants.common.CommonSystemConfigEnum;
+import com.optimus.util.constants.common.CommonSystemConfigBaseKeyEnum;
 import com.optimus.util.constants.order.OrderMerchantNotifyStatusEnum;
 import com.optimus.util.constants.order.OrderReleaseStatusEnum;
 import com.optimus.util.constants.order.OrderSplitProfitStatusEnum;
@@ -211,7 +211,7 @@ public class OrderManagerImpl implements OrderManager {
         }
 
         // 获取通知地址
-        String url = commonSystemConfigManager.getCommonSystemConfigByBaseKey(CommonSystemConfigEnum.BASE_NOTICE_URL.getCode());
+        String url = commonSystemConfigManager.getCommonSystemConfigForSystem(CommonSystemConfigBaseKeyEnum.BASE_NOTICE_URL.getCode());
         AssertUtil.notEmpty(url, RespCodeEnum.FAILE, "未配置通知地址");
         url = String.format(url, orderInfo.getMerchantCallbackUrl());
 

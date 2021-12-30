@@ -14,7 +14,7 @@ import com.optimus.manager.order.OrderManager;
 import com.optimus.manager.order.dto.OrderInfoDTO;
 import com.optimus.service.order.job.BaseOrderJob;
 import com.optimus.util.DateUtil;
-import com.optimus.util.constants.common.CommonSystemConfigEnum;
+import com.optimus.util.constants.common.CommonSystemConfigBaseKeyEnum;
 import com.optimus.util.constants.order.OrderSplitProfitStatusEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
@@ -111,7 +111,7 @@ public class SplitProfitJob extends BaseOrderJob {
     private void init() {
 
         // 间隔
-        String value = super.loadSystemConfig(CommonSystemConfigEnum.SPLIT_PROFIT_INTERVAL.getCode());
+        String value = super.loadSystemConfig(CommonSystemConfigBaseKeyEnum.SPLIT_PROFIT_INTERVAL.getCode());
         if (StringUtils.hasLength(value)) {
             splitProfitInterval = Integer.parseInt(value);
         }
@@ -126,7 +126,7 @@ public class SplitProfitJob extends BaseOrderJob {
     private OrderInfoQuery getOrderInfoQuery() {
 
         // 分片
-        Map<Integer, Integer> shardingMap = super.sharding(CommonSystemConfigEnum.SPLIT_PROFIT_JOB_SHARDING.getCode());
+        Map<Integer, Integer> shardingMap = super.sharding(CommonSystemConfigBaseKeyEnum.SPLIT_PROFIT_JOB_SHARDING.getCode());
         if (CollectionUtils.isEmpty(shardingMap)) {
             return null;
         }
