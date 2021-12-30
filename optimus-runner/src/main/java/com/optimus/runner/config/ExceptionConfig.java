@@ -44,7 +44,7 @@ public class ExceptionConfig {
         resp.setCode(code);
         resp.setMemo(memo);
 
-        log.info("自定义业务异常:{}", resp);
+        log.warn("自定义业务异常:{}", resp);
 
         return ResponseEntity.status(HttpStatus.OK).body(resp);
 
