@@ -192,7 +192,7 @@ public class PlaceOrder extends BaseOrder {
         }
 
         // 查询码商会员交易限制
-        return getMemberTransConfine(createOrder.getCodeMemberId(), createOrder.getOrganizeId());
+        return getMemberTransConfine(codeMemberId, createOrder.getOrganizeId());
 
     }
 
