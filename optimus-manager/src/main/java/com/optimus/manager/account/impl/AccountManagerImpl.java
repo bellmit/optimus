@@ -157,11 +157,9 @@ public class AccountManagerImpl implements AccountManager {
 
         // 查询账户交易后的数据
         List<AccountInfoDO> accountInfoList = accountInfoDao.listAccountInfoByIdLists(idList);
-        log.info("账户交易更新后的账户信息:{}", accountInfoList);
 
         // 获取账户日志
         List<AccountLogDO> accountLogList = AccountManagerConvert.getAccountLogDOList(accountInfoList, doTransList);
-        log.info("账户交易日志记录:{}", accountLogList);
 
         // 验证获取的账户日志
         AssertUtil.notEmpty(accountLogList, RespCodeEnum.ACCOUNT_TRANSACTION_ERROR, "账户交易账户日志对象不能为空");

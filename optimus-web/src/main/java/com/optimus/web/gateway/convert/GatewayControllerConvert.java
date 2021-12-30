@@ -209,7 +209,7 @@ public class GatewayControllerConvert {
             behavior = OrderBehaviorEnum.BEHAVIOR_A.getCode();
 
         } catch (Exception e) {
-            log.error("渠道回调,获取行为异常:{}", e);
+            log.error("渠道回调,获取行为异常:", e);
         }
 
         return behavior;
