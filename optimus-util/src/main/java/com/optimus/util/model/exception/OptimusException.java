@@ -1,4 +1,4 @@
-package com.optimus.util.exception;
+package com.optimus.util.model.exception;
 
 import com.optimus.util.constants.RespCodeEnum;
 

@@ -25,7 +25,7 @@ import com.optimus.manager.member.dto.MemberInfoDTO;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.JacksonUtil;
 import com.optimus.util.constants.RespCodeEnum;
-import com.optimus.util.exception.OptimusException;
+import com.optimus.util.model.exception.OptimusException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

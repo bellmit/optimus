@@ -17,7 +17,7 @@ import com.optimus.service.order.core.factory.OrderFactory;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.GenerateUtil;
 import com.optimus.util.constants.RespCodeEnum;
-import com.optimus.util.exception.OptimusException;
+import com.optimus.util.model.exception.OptimusException;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

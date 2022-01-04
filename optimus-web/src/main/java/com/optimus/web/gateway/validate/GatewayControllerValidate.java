@@ -5,7 +5,7 @@ import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.BaseEnum;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
-import com.optimus.util.exception.OptimusException;
+import com.optimus.util.model.exception.OptimusException;
 
 import org.springframework.util.StringUtils;
 

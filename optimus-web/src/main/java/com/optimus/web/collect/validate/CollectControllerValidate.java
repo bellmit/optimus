@@ -6,7 +6,7 @@ import java.util.Objects;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.BaseEnum;
 import com.optimus.util.constants.RespCodeEnum;
-import com.optimus.util.exception.OptimusException;
+import com.optimus.util.model.exception.OptimusException;
 import com.optimus.web.collect.req.ApplyForRechargeReq;
 import com.optimus.web.collect.req.ApplyForWithdrawReq;
 import com.optimus.web.collect.req.BaseCollectReq;

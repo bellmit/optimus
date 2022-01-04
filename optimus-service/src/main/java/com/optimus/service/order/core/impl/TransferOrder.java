@@ -19,7 +19,7 @@ import com.optimus.util.constants.account.AccountChangeTypeEnum;
 import com.optimus.util.constants.account.AccountTypeEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.constants.order.OrderTransferTypeEnum;
-import com.optimus.util.exception.OptimusException;
+import com.optimus.util.model.exception.OptimusException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

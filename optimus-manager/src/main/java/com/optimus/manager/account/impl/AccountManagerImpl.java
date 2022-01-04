@@ -18,7 +18,7 @@ import com.optimus.manager.account.validate.AccountManagerValidate;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.DateUtil;
 import com.optimus.util.constants.RespCodeEnum;
-import com.optimus.util.exception.OptimusException;
+import com.optimus.util.model.exception.OptimusException;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;

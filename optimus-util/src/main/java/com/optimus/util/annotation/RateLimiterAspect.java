@@ -1,4 +1,4 @@
-package com.optimus.util.interceptor;
+package com.optimus.util.annotation;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -7,9 +7,8 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.common.util.concurrent.RateLimiter;
 import com.optimus.util.AssertUtil;
-import com.optimus.util.annotation.OptimusRateLimiter;
 import com.optimus.util.constants.RespCodeEnum;
-import com.optimus.util.exception.OptimusException;
+import com.optimus.util.model.exception.OptimusException;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -19,13 +18,13 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
 /**
- * 限流拦截器
+ * 限流切面类
  * 
  * @author sunxp
  */
 @Aspect
 @Component
-public class RateLimiterInterceptor {
+public class RateLimiterAspect {
 
     /** 方法:令牌桶 */
     private static final Map<String, RateLimiter> MAP = new ConcurrentHashMap<>();
@@ -38,7 +37,7 @@ public class RateLimiterInterceptor {
     }
 
     /**
-     * 拦截逻辑
+     * 环绕切点逻辑
      * 
      * @param joinPoint
      * @return
@@ -47,7 +46,7 @@ public class RateLimiterInterceptor {
     @Around(value = "pointCut()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
 
-        // 获取拦截方法
+        // 获取切点方法
         Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
         String methodName = joinPoint.getSignature().getName();
 

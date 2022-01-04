@@ -16,7 +16,7 @@ import com.optimus.util.JacksonUtil;
 import com.optimus.util.SignUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.member.MemberStatusEnum;
-import com.optimus.util.exception.OptimusException;
+import com.optimus.util.model.exception.OptimusException;
 import com.optimus.util.model.req.Req;
 
 import org.springframework.beans.factory.annotation.Autowired;

@@ -19,7 +19,7 @@ import com.optimus.service.gateway.GatewayService;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.gateway.GatewayChannelGroupEnum;
-import com.optimus.util.exception.OptimusException;
+import com.optimus.util.model.exception.OptimusException;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -20,7 +20,7 @@ import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.member.MemberCollectFeeTypeEnum;
 import com.optimus.util.constants.member.MemberTypeEnum;
 import com.optimus.util.constants.member.MemberWithdrawFeeSwitchEnum;
-import com.optimus.util.exception.OptimusException;
+import com.optimus.util.model.exception.OptimusException;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.Cacheable;

@@ -11,7 +11,7 @@ import com.optimus.util.constants.BaseEnum;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.account.AccountChangeTypeEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
-import com.optimus.util.exception.OptimusException;
+import com.optimus.util.model.exception.OptimusException;
 
 /**
  * 账户ManagerValidate

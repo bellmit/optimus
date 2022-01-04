@@ -18,7 +18,7 @@ import com.optimus.util.constants.member.MemberMerchantOrderSwitchEnum;
 import com.optimus.util.constants.member.MemberTypeEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
-import com.optimus.util.exception.OptimusException;
+import com.optimus.util.model.exception.OptimusException;
 import com.optimus.web.collect.convert.CollectControllerConvert;
 import com.optimus.web.collect.req.ApplyForRechargeReq;
 import com.optimus.web.collect.req.ApplyForWithdrawReq;

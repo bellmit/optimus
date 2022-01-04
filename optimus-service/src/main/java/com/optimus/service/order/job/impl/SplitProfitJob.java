@@ -18,7 +18,7 @@ import com.optimus.util.constants.common.CommonSystemConfigBaseKeyEnum;
 import com.optimus.util.constants.order.OrderSplitProfitStatusEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
-import com.optimus.util.exception.OptimusException;
+import com.optimus.util.model.exception.OptimusException;
 import com.optimus.util.model.page.Page;
 
 import org.springframework.beans.BeanUtils;

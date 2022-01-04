@@ -17,7 +17,7 @@ import com.optimus.util.JacksonUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.gateway.ScriptEnum;
 import com.optimus.util.constants.order.OrderBehaviorEnum;
-import com.optimus.util.exception.OptimusException;
+import com.optimus.util.model.exception.OptimusException;
 
 import org.springframework.util.StringUtils;
 

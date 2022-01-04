@@ -36,7 +36,7 @@ import com.optimus.util.constants.order.OrderMerchantNotifyStatusEnum;
 import com.optimus.util.constants.order.OrderReleaseStatusEnum;
 import com.optimus.util.constants.order.OrderSplitProfitStatusEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
-import com.optimus.util.exception.OptimusException;
+import com.optimus.util.model.exception.OptimusException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -9,7 +9,7 @@ import com.optimus.manager.order.dto.OrderInfoDTO;
 import com.optimus.manager.order.dto.PayOrderDTO;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.account.AccountTypeEnum;
-import com.optimus.util.exception.OptimusException;
+import com.optimus.util.model.exception.OptimusException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 

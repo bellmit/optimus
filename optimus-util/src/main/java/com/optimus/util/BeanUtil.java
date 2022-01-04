@@ -3,7 +3,7 @@ package com.optimus.util;
 import java.util.List;
 
 import com.optimus.util.constants.RespCodeEnum;
-import com.optimus.util.exception.OptimusException;
+import com.optimus.util.model.exception.OptimusException;
 
 import org.springframework.beans.BeanUtils;
 

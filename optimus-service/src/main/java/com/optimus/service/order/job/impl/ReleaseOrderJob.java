@@ -16,7 +16,7 @@ import com.optimus.util.DateUtil;
 import com.optimus.util.constants.common.CommonSystemConfigBaseKeyEnum;
 import com.optimus.util.constants.order.OrderReleaseStatusEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
-import com.optimus.util.exception.OptimusException;
+import com.optimus.util.model.exception.OptimusException;
 import com.optimus.util.model.page.Page;
 
 import org.springframework.beans.BeanUtils;

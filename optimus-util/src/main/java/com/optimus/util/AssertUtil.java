@@ -1,7 +1,7 @@
 package com.optimus.util;
 
 import com.optimus.util.constants.RespCodeEnum;
-import com.optimus.util.exception.OptimusException;
+import com.optimus.util.model.exception.OptimusException;
 
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;

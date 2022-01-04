@@ -18,7 +18,7 @@ import com.optimus.util.constants.common.CommonSystemConfigBaseKeyEnum;
 import com.optimus.util.constants.order.OrderMerchantNotifyStatusEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
-import com.optimus.util.exception.OptimusException;
+import com.optimus.util.model.exception.OptimusException;
 import com.optimus.util.model.page.Page;
 
 import org.springframework.beans.factory.annotation.Autowired;

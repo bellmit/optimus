@@ -18,7 +18,7 @@ import com.optimus.util.annotation.OptimusRateLimiter;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
 import com.optimus.util.constants.order.OrderTypeEnum;
-import com.optimus.util.exception.OptimusException;
+import com.optimus.util.model.exception.OptimusException;
 import com.optimus.web.gateway.convert.GatewayControllerConvert;
 import com.optimus.web.gateway.validate.GatewayControllerValidate;
 
