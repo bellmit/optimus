@@ -13,6 +13,7 @@ import com.optimus.service.gateway.GatewayService;
 import com.optimus.service.member.MemberService;
 import com.optimus.service.order.OrderService;
 import com.optimus.util.AssertUtil;
+import com.optimus.util.HostUtil;
 import com.optimus.util.annotation.OptimusRateLimiter;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.order.OrderStatusEnum;
@@ -62,7 +63,7 @@ public class GatewayController {
         log.info("渠道回调,子渠道:{},参数:{}", subChannelCode, args);
 
         // 商户客户端IP
-        String ip = GatewayControllerConvert.getRemoteIp(req);
+        String ip = HostUtil.getRemoteIp(req);
         AssertUtil.notEmpty(ip, RespCodeEnum.ERROR_IP, "客户端IP不能为空");
 
         // 查询子渠道
