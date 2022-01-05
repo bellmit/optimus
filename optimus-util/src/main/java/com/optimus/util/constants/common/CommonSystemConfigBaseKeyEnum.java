@@ -14,10 +14,6 @@ public enum CommonSystemConfigBaseKeyEnum {
 
     /* ---------系统配置键--------- */
 
-    BASE_INTERFACE_LIMIT("BASE_INTERFACE_LIMIT", "接口限制"),
-
-    BASE_INTERFACE_ACCESS_IP("BASE_INTERFACE_ACCESS_IP", "接口限制可访问IP"),
-
     BASE_NOTICE_URL("BASE_NOTICE_URL", "订单通知地址"),
 
     GROOVY_SCRIPT_PATH("GROOVY_SCRIPT_PATH", "GROOVY脚本路径"),

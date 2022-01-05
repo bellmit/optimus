@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 自定义注解限流器
+ * 自定义限流器注解
  * 
  * @author sunxp
  */

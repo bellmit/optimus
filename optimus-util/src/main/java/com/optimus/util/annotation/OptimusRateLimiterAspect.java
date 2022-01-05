@@ -18,13 +18,13 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
 /**
- * 限流切面类
+ * 自定义限流器切面类
  * 
  * @author sunxp
  */
 @Aspect
 @Component
-public class RateLimiterAspect {
+public class OptimusRateLimiterAspect {
 
     /** 方法:令牌桶 */
     private static final Map<String, RateLimiter> MAP = new ConcurrentHashMap<>();
@@ -37,7 +37,7 @@ public class RateLimiterAspect {
     }
 
     /**
-     * 环绕切点逻辑
+     * 环绕
      * 
      * @param joinPoint
      * @return
@@ -46,7 +46,7 @@ public class RateLimiterAspect {
     @Around(value = "pointCut()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
 
-        // 获取切点方法
+        // 获取切面方法
         Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
         String methodName = joinPoint.getSignature().getName();
 
