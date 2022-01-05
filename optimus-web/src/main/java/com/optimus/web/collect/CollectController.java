@@ -45,8 +45,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * 收单Controller
  *
@@ -54,7 +52,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 @RestController
 @RequestMapping(value = "/optimus/collect")
-@Slf4j
 public class CollectController {
 
     @Autowired
@@ -76,8 +73,6 @@ public class CollectController {
     @PostMapping("/applyForRecharge")
     public ApplyForRechargeResp applyForRecharge(@RequestBody ApplyForRechargeReq req) {
 
-        log.info("申请充值,请求:{}", req);
-
         // 参数验证
         CollectControllerValidate.validateApplyForRecharge(req);
 
@@ -93,8 +88,6 @@ public class CollectController {
         ApplyForRechargeResp resp = new ApplyForRechargeResp();
         resp.setOrderId(orderInfo.getOrderId());
 
-        log.info("申请充值,响应:{}", resp);
-
         return resp;
 
     }
@@ -108,8 +101,6 @@ public class CollectController {
     @OptimusRateLimiter(permits = 10D, timeout = 0)
     @PostMapping("/confirmForRecharge")
     public ConfirmForRechargeResp confirmForRecharge(@RequestBody ConfirmForRechargeReq req) {
-
-        log.info("确认充值,请求:{}", req);
 
         // 参数验证
         CollectControllerValidate.validateConfirmForRecharge(req);
@@ -134,8 +125,6 @@ public class CollectController {
         payOrder.setSupMemberInfo(memberInfo);
         orderService.payOrder(payOrder);
 
-        log.info("确认充值,响应成功");
-
         return new ConfirmForRechargeResp();
     }
 
@@ -148,8 +137,6 @@ public class CollectController {
     @OptimusRateLimiter(permits = 10D, timeout = 0)
     @PostMapping("/recharge")
     public RechargeResp recharge(@RequestBody RechargeReq req) {
-
-        log.info("充值,请求:{}", req);
 
         // 参数验证
         CollectControllerValidate.validateRecharge(req);
@@ -178,8 +165,6 @@ public class CollectController {
         payOrder.setSupMemberInfo(memberInfo);
         orderService.payOrder(payOrder);
 
-        log.info("充值,响应成功");
-
         return new RechargeResp();
     }
 
@@ -192,8 +177,6 @@ public class CollectController {
     @OptimusRateLimiter(permits = 10D, timeout = 0)
     @PostMapping("/applyForWithdraw")
     public ApplyForWithdrawResp applyForWithdraw(@RequestBody ApplyForWithdrawReq req) {
-
-        log.info("申请提现,请求:{}", req);
 
         // 参数验证
         CollectControllerValidate.validateApplyForWithdraw(req);
@@ -212,8 +195,6 @@ public class CollectController {
         ApplyForWithdrawResp resp = new ApplyForWithdrawResp();
         resp.setOrderId(createOrder.getOrderId());
 
-        log.info("申请提现,响应:{}", resp);
-
         return resp;
     }
 
@@ -226,8 +207,6 @@ public class CollectController {
     @OptimusRateLimiter(permits = 10D, timeout = 0)
     @PostMapping("/confirmForWithdraw")
     public ConfirmForWithdrawResp confirmForWithdraw(@RequestBody ConfirmForWithdrawReq req) {
-
-        log.info("确认提现,请求:{}", req);
 
         // 参数验证
         CollectControllerValidate.validateConfirmForWithdraw(req);
@@ -252,8 +231,6 @@ public class CollectController {
         payOrder.setSupMemberInfo(memberInfo);
         orderService.payOrder(payOrder);
 
-        log.info("确认提现,响应成功");
-
         return new ConfirmForWithdrawResp();
     }
 
@@ -266,8 +243,6 @@ public class CollectController {
     @OptimusRateLimiter(permits = 10D, timeout = 0)
     @PostMapping("/withdraw")
     public WithdrawResp withdraw(@RequestBody WithdrawReq req) {
-
-        log.info("提现,请求:{}", req);
 
         // 参数验证
         CollectControllerValidate.validateWithdraw(req);
@@ -294,8 +269,6 @@ public class CollectController {
         payOrder.setSupMemberInfo(memberInfo);
         orderService.payOrder(payOrder);
 
-        log.info("提现,响应成功");
-
         return new WithdrawResp();
     }
 
@@ -308,8 +281,6 @@ public class CollectController {
     @OptimusRateLimiter(permits = 10D, timeout = 0)
     @PostMapping("/transfer")
     public TransferResp transfer(@RequestBody TransferReq req) {
-
-        log.info("划账,请求:{}", req);
 
         // 参数验证
         CollectControllerValidate.validateTransfer(req);
@@ -331,8 +302,6 @@ public class CollectController {
         payOrder.setTransferType(req.getTransferType());
         orderService.payOrder(payOrder);
 
-        log.info("划账,响应成功");
-
         return new TransferResp();
 
     }
@@ -346,8 +315,6 @@ public class CollectController {
     @OptimusRateLimiter(permits = 100D, timeout = 0)
     @PostMapping("/placeOrder")
     public PlaceOrderResp placeOrder(@RequestBody PlaceOrderReq req) {
-
-        log.info("下单,请求:{}", req);
 
         // 参数验证
         CollectControllerValidate.validatePlaceOrder(req);
@@ -377,10 +344,7 @@ public class CollectController {
         OrderInfoDTO orderInfo = orderService.createOrder(createOrder);
         AssertUtil.notEquals(OrderStatusEnum.ORDER_STATUS_NP.getCode(), orderInfo.getOrderStatus(), RespCodeEnum.ORDER_PLACE_ERROR, "下单失败");
 
-        PlaceOrderResp resp = CollectControllerConvert.getPlaceOrderResp(orderInfo);
-        log.info("下单,响应:{}", resp);
-
-        return resp;
+        return CollectControllerConvert.getPlaceOrderResp(orderInfo);
     }
 
 }
