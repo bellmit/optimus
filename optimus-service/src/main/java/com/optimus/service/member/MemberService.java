@@ -13,16 +13,6 @@ public interface MemberService {
     /**
      * 根据memberId查询用户信息
      * 
-     * 重要:1.有限流需求时使用; 2.不处理已删除的会员
-     * 
-     * @param memberId
-     * @return
-     */
-    MemberInfoDTO getMemberInfoByMemberIdForLimiter(String memberId);
-
-    /**
-     * 根据memberId查询用户信息
-     * 
      * @param memberId
      * @return
      */

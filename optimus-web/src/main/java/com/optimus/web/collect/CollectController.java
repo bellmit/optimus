@@ -72,7 +72,7 @@ public class CollectController {
      * @param req
      * @return ApplyForRechargeResp
      */
-    @OptimusRateLimiter(permits = 100D, timeout = 0)
+    @OptimusRateLimiter(permits = 10D, timeout = 0)
     @PostMapping("/applyForRecharge")
     public ApplyForRechargeResp applyForRecharge(@RequestBody ApplyForRechargeReq req) {
 
@@ -105,7 +105,7 @@ public class CollectController {
      * @param req
      * @return ConfirmForRechargeResp
      */
-    @OptimusRateLimiter(permits = 100D, timeout = 0)
+    @OptimusRateLimiter(permits = 10D, timeout = 0)
     @PostMapping("/confirmForRecharge")
     public ConfirmForRechargeResp confirmForRecharge(@RequestBody ConfirmForRechargeReq req) {
 
@@ -145,7 +145,7 @@ public class CollectController {
      * @param req
      * @return RechargeResp
      */
-    @OptimusRateLimiter(permits = 100D, timeout = 0)
+    @OptimusRateLimiter(permits = 10D, timeout = 0)
     @PostMapping("/recharge")
     public RechargeResp recharge(@RequestBody RechargeReq req) {
 
@@ -189,7 +189,7 @@ public class CollectController {
      * @param req
      * @return ApplyForWithdrawResp
      */
-    @OptimusRateLimiter(permits = 100D, timeout = 0)
+    @OptimusRateLimiter(permits = 10D, timeout = 0)
     @PostMapping("/applyForWithdraw")
     public ApplyForWithdrawResp applyForWithdraw(@RequestBody ApplyForWithdrawReq req) {
 
@@ -223,7 +223,7 @@ public class CollectController {
      * @param req
      * @return ConfirmForWithdrawReq
      */
-    @OptimusRateLimiter(permits = 100D, timeout = 0)
+    @OptimusRateLimiter(permits = 10D, timeout = 0)
     @PostMapping("/confirmForWithdraw")
     public ConfirmForWithdrawResp confirmForWithdraw(@RequestBody ConfirmForWithdrawReq req) {
 
@@ -263,7 +263,7 @@ public class CollectController {
      * @param req
      * @return WithdrawResp
      */
-    @OptimusRateLimiter(permits = 100D, timeout = 0)
+    @OptimusRateLimiter(permits = 10D, timeout = 0)
     @PostMapping("/withdraw")
     public WithdrawResp withdraw(@RequestBody WithdrawReq req) {
 
@@ -305,7 +305,7 @@ public class CollectController {
      * @param req
      * @return TransferResp
      */
-    @OptimusRateLimiter(permits = 100D, timeout = 0)
+    @OptimusRateLimiter(permits = 10D, timeout = 0)
     @PostMapping("/transfer")
     public TransferResp transfer(@RequestBody TransferReq req) {
 
@@ -343,7 +343,7 @@ public class CollectController {
      * @param req
      * @return
      */
-    @OptimusRateLimiter(permits = 500D, timeout = 0)
+    @OptimusRateLimiter(permits = 100D, timeout = 0)
     @PostMapping("/placeOrder")
     public PlaceOrderResp placeOrder(@RequestBody PlaceOrderReq req) {
 

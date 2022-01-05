@@ -14,6 +14,7 @@ import com.optimus.util.AssertUtil;
 import com.optimus.util.DateUtil;
 import com.optimus.util.JacksonUtil;
 import com.optimus.util.SignUtil;
+import com.optimus.util.annotation.OptimusRateLimiter;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.member.MemberStatusEnum;
 import com.optimus.util.model.exception.OptimusException;
@@ -54,6 +55,7 @@ public class ReqBodyConfig implements RequestBodyAdvice {
     /**
      * 前置读
      */
+    @OptimusRateLimiter(permits = 1000D, timeout = 0)
     @Override
     public HttpInputMessage beforeBodyRead(HttpInputMessage arg0, MethodParameter arg1, Type arg2, Class<? extends HttpMessageConverter<?>> arg3) throws IOException {
 
@@ -123,7 +125,7 @@ public class ReqBodyConfig implements RequestBodyAdvice {
             throw new OptimusException(RespCodeEnum.INVALID_PARAM, "时间戳已过期");
         }
 
-        MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberIdForLimiter(memberId);
+        MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(memberId);
         AssertUtil.notEquals(MemberStatusEnum.MEMBER_STATUS_Y.getCode(), memberInfo.getMemberStatus(), RespCodeEnum.MEMBER_ERROR, "无效的会员");
 
         Map<String, Object> map = JacksonUtil.toBean(body, new TypeReference<Map<String, Object>>() {

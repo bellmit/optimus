@@ -19,7 +19,7 @@ public @interface OptimusRateLimiter {
      * 
      * @return
      */
-    double permits() default 10D;
+    double permits() default 1D;
 
     /**
      * 获取令牌超时时间(s)

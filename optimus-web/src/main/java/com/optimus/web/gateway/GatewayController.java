@@ -54,7 +54,7 @@ public class GatewayController {
      *
      * @return
      */
-    @OptimusRateLimiter(permits = 500D, timeout = 0)
+    @OptimusRateLimiter(permits = 100D, timeout = 0)
     @RequestMapping(value = "/channelCallback", method = { RequestMethod.GET, RequestMethod.POST })
     public String channelCallback(HttpServletRequest req, @RequestParam("subChannelCode") String subChannelCode) {
 

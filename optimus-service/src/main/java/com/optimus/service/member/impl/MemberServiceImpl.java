@@ -5,7 +5,6 @@ import com.optimus.manager.member.dto.MemberInfoDTO;
 import com.optimus.manager.member.dto.MemberTransConfineDTO;
 import com.optimus.service.member.MemberService;
 import com.optimus.util.AssertUtil;
-import com.optimus.util.annotation.OptimusRateLimiter;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.member.MemberDeleteFlagEnum;
 
@@ -25,13 +24,6 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     private MemberManager memberManager;
-
-    @OptimusRateLimiter(permits = 1000D)
-    @Override
-    public MemberInfoDTO getMemberInfoByMemberIdForLimiter(String memberId) {
-        // 获取号会员信息
-        return memberManager.getMemberInfoByMemberId(memberId);
-    }
 
     @Override
     public MemberInfoDTO getMemberInfoByMemberId(String memberId) {
