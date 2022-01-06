@@ -28,6 +28,7 @@ import com.optimus.util.JacksonUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.account.AccountChangeTypeEnum;
 import com.optimus.util.constants.account.AccountTypeEnum;
+import com.optimus.util.constants.common.CommonSystemConfigBaseKeyEnum;
 import com.optimus.util.constants.common.CommonSystemConfigTypeEnum;
 import com.optimus.util.constants.gateway.GatewayChannelGroupEnum;
 import com.optimus.util.constants.member.MemberCodeBalanceSwitchEnum;
@@ -84,8 +85,13 @@ public class PlaceOrder extends BaseOrder {
         // 默认验证会员交易:外部
         MemberTransConfineDTO memberTransConfine = checkMemberTrans(createOrder);
 
+        // 查询平台回调域名
+        CommonSystemConfigDO commonSystemConfig = commonSystemConfigDao.getCommonSystemConfigByTypeAndBaseKey(CommonSystemConfigTypeEnum.TYPE_BB.getCode(), CommonSystemConfigBaseKeyEnum.BASE_CALLBACK_DOMAIN.getCode());
+        AssertUtil.notEmpty(commonSystemConfig, RespCodeEnum.ERROR_CONFIG, "下单未配置系统配置");
+        AssertUtil.notEmpty(commonSystemConfig.getValue(), RespCodeEnum.ERROR_CONFIG, "下单平台回调域名不能为空");
+
         // 执行脚本
-        ExecuteScriptOutputDTO output = gatewayManager.executeScript(OrderManagerConvert.getExecuteScriptInputDTO(createOrder));
+        ExecuteScriptOutputDTO output = gatewayManager.executeScript(OrderManagerConvert.getExecuteScriptInputDTO(createOrder, commonSystemConfig.getValue()));
         AssertUtil.notEmpty(output, RespCodeEnum.GATEWAY_EXECUTE_SCRIPT_ERROR, "下单执行脚本输出不能为空");
 
         // 订单信息
@@ -214,7 +220,7 @@ public class PlaceOrder extends BaseOrder {
                 || Objects.isNull(memberTransConfine.getReleaseFreezeBalanceAging())) {
 
             CommonSystemConfigDO commonSystemConfig = commonSystemConfigDao.getCommonSystemConfigByTypeAndBaseKey(CommonSystemConfigTypeEnum.TYPE_MTC.getCode(), String.valueOf(organizeId));
-            AssertUtil.notEmpty(commonSystemConfig, RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置通用码商会员交易限制");
+            AssertUtil.notEmpty(commonSystemConfig, RespCodeEnum.ERROR_CONFIG, "未配置通用码商会员交易限制");
 
             memberTransConfine = JacksonUtil.toBean(commonSystemConfig.getValue(), MemberTransConfineDTO.class);
             memberTransConfine.setMemberId(codeMemberId);

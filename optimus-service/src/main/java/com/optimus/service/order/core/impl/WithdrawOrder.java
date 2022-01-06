@@ -179,7 +179,7 @@ public class WithdrawOrder extends BaseOrder {
                 || Objects.isNull(memberTransConfine.getSingleMinAmount()) || Objects.isNull(memberTransConfine.getSingleMinAmount())) {
 
             CommonSystemConfigDO commonSystemConfig = commonSystemConfigDao.getCommonSystemConfigByTypeAndBaseKey(CommonSystemConfigTypeEnum.TYPE_MTC.getCode(), String.valueOf(organizeId));
-            AssertUtil.notEmpty(commonSystemConfig, RespCodeEnum.MEMBER_TRANS_PERMISSION_ERROR, "未配置通用会员交易限制");
+            AssertUtil.notEmpty(commonSystemConfig, RespCodeEnum.ERROR_CONFIG, "未配置通用会员交易限制");
 
             memberTransConfine = JacksonUtil.toBean(commonSystemConfig.getValue(), MemberTransConfineDTO.class);
             memberTransConfine.setMemberId(memberId);

@@ -29,7 +29,7 @@ public class CommonSystemConfigManagerImpl implements CommonSystemConfigManager 
 
     @Override
     @Cacheable(value = "systemConfig", key = "#baseKey", unless = "#result == null")
-    public String getCommonSystemConfigForSystem(String baseKey) {
+    public String getCommonSystemConfigForCache(String type, String baseKey) {
 
         String value = null;
 
@@ -38,15 +38,15 @@ public class CommonSystemConfigManagerImpl implements CommonSystemConfigManager 
             return value;
         }
 
-        CommonSystemConfigDO commonSystemConfigDO = commonSystemConfigDao.getCommonSystemConfigByTypeAndBaseKey(CommonSystemConfigTypeEnum.TYPE_S.getCode(), baseKey);
-        log.debug("系统配置:{}", commonSystemConfigDO);
+        CommonSystemConfigDO commonSystemConfig = commonSystemConfigDao.getCommonSystemConfigByTypeAndBaseKey(CommonSystemConfigTypeEnum.TYPE_S.getCode(), baseKey);
+        log.debug("系统配置:{}", commonSystemConfig);
 
-        if (Objects.isNull(commonSystemConfigDO)) {
+        if (Objects.isNull(commonSystemConfig)) {
             log.warn("系统配置为空,键:{}", baseKey);
             return value;
         }
 
-        return commonSystemConfigDO.getValue();
+        return commonSystemConfig.getValue();
 
     }
 

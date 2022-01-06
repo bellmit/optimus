@@ -366,9 +366,10 @@ public class OrderManagerConvert {
      * 下单
      * 
      * @param createOrder
+     * @param domainName
      * @return
      */
-    public static ExecuteScriptInputDTO getExecuteScriptInputDTO(CreateOrderDTO createOrder) {
+    public static ExecuteScriptInputDTO getExecuteScriptInputDTO(CreateOrderDTO createOrder, String domainName) {
 
         // 执行脚本输入DTO
         ExecuteScriptInputDTO input = new ExecuteScriptInputDTO();
@@ -381,6 +382,7 @@ public class OrderManagerConvert {
 
         // 下单必要参数
         if (StringUtils.pathEquals(OrderTypeEnum.ORDER_TYPE_C.getCode(), createOrder.getOrderType())) {
+            input.setDomainName(domainName);
             input.setClientIp(createOrder.getClientIp());
             input.setRedirectUrl(createOrder.getRedirectUrl());
             input.setImplPath(createOrder.getGatewaySubChannel().getImplPath());

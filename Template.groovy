@@ -52,7 +52,7 @@ class GroovyChannelService {
         Map<String, Object> treeMap = new TreeMap<>(String::compareTo)
         treeMap.put("MchId", bizContentJson.channelMerchantId)
         treeMap.put("MchOrderNo", input.getOrderId())
-        treeMap.put("NotifyUrl", bizContentJson.callbackUrl)
+        treeMap.put("NotifyUrl", input.getDomainName() + bizContentJson.callbackUrl)
         treeMap.put("RequestTime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(input.getOrderTime()))
         treeMap.put("CategoryCode", bizContentJson.channelCode)
         treeMap.put("Amount", input.getAmount())
@@ -217,6 +217,9 @@ class GroovyExecuteScriptInputDTO {
 
     // 实现路径
     String implPath
+
+    // 平台回调域名
+    String domainName;
 
     // 业务大字段[{"channelMerchantId":"商户编号","channelMerchantKey":"商户密钥","channelCode":"渠道编号","subChannelCode":"子渠道编号","callbackUrl":"回调地址","redirectUrl":"重定向地址","createOrderUrl":"创建订单地址","queryOrderUrl":"调单查询地址"}]
     String bizContent

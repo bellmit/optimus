@@ -82,6 +82,60 @@ public class GatewayControllerConvert {
     }
 
     /**
+     * 获取行为
+     * 
+     * @param args
+     * @return
+     */
+    public static String getBehavior(String args) {
+
+        // 默认系统触发
+        String behavior = OrderBehaviorEnum.BEHAVIOR_S.getCode();
+
+        if (!StringUtils.hasLength(args)) {
+            return behavior;
+        }
+
+        try {
+
+            // 解析人为触发行为
+            JsonNode jsonNode = JacksonUtil.toTree(args);
+            jsonNode = jsonNode.get("parameter");
+            jsonNode = jsonNode.get("behavior");
+
+            if (Objects.isNull(jsonNode)) {
+                return behavior;
+            }
+
+            behavior = OrderBehaviorEnum.BEHAVIOR_A.getCode();
+
+        } catch (Exception e) {
+            log.error("渠道回调,获取行为异常:", e);
+        }
+
+        return behavior;
+    }
+
+    /**
+     * 获取网关子渠道编号
+     * 
+     * @param req
+     * @return
+     */
+    public static String getSubChannelCode(HttpServletRequest req) {
+
+        // 子渠道编号
+        String subChannelCode = "100";
+
+        // URI
+        String uri = req.getRequestURI();
+        subChannelCode = uri.substring(uri.lastIndexOf("/") + 1);
+
+        return subChannelCode;
+
+    }
+
+    /**
      * 获取网关渠道全部参数
      * 
      * @param req
@@ -122,42 +176,6 @@ public class GatewayControllerConvert {
         map.put("body", JacksonUtil.toTree(body));
 
         return JacksonUtil.toString(map);
-
-    }
-
-    /**
-     * 获取行为
-     * 
-     * @param args
-     * @return
-     */
-    public static String getBehavior(String args) {
-
-        // 默认系统触发
-        String behavior = OrderBehaviorEnum.BEHAVIOR_S.getCode();
-
-        if (!StringUtils.hasLength(args)) {
-            return behavior;
-        }
-
-        try {
-
-            // 解析人为触发行为
-            JsonNode jsonNode = JacksonUtil.toTree(args);
-            jsonNode = jsonNode.get("parameter");
-            jsonNode = jsonNode.get("behavior");
-
-            if (Objects.isNull(jsonNode)) {
-                return behavior;
-            }
-
-            behavior = OrderBehaviorEnum.BEHAVIOR_A.getCode();
-
-        } catch (Exception e) {
-            log.error("渠道回调,获取行为异常:", e);
-        }
-
-        return behavior;
     }
 
 }

@@ -20,13 +20,15 @@ public enum RespCodeEnum {
 
     INVALID_PARAM("1002", "无效参数"),
 
-    ERROR_CONVERT("1003", "转换异常"),
+    ERROR_CONFIG("1003", "配置异常"),
 
-    ERROR_SIGN("1004", "签名异常"),
+    ERROR_CONVERT("1004", "转换异常"),
 
-    ERROR_LIMIT("1005", "限流异常"),
+    ERROR_SIGN("1005", "签名异常"),
 
-    ERROR_IP("1006", "IP异常"),
+    ERROR_LIMIT("1006", "限流异常"),
+
+    ERROR_IP("1007", "IP异常"),
 
     /* ---------会员类编码--------- */
 

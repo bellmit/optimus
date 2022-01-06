@@ -30,13 +30,13 @@ public class CommonSystemConfigServiceImpl implements CommonSystemConfigService 
         log.info("根据键查询系统配置,类型:{};键:{}", type, baseKey);
 
         // 根据baseKey查询系统配置
-        CommonSystemConfigDO commonSystemConfigDO = commonSystemConfigDao.getCommonSystemConfigByTypeAndBaseKey(type, baseKey);
-        AssertUtil.notEmpty(commonSystemConfigDO, RespCodeEnum.FAILE, "系统配置不能为空");
+        CommonSystemConfigDO commonSystemConfig = commonSystemConfigDao.getCommonSystemConfigByTypeAndBaseKey(type, baseKey);
+        AssertUtil.notEmpty(commonSystemConfig, RespCodeEnum.ERROR_CONFIG, "未配置系统配置");
 
-        log.info("系统配置:{}", commonSystemConfigDO);
+        log.info("系统配置:{}", commonSystemConfig);
 
         // 系统配置值
-        String value = commonSystemConfigDO.getValue();
+        String value = commonSystemConfig.getValue();
         AssertUtil.notEmpty(value, RespCodeEnum.FAILE, "系统配置值不能为空");
 
         return value;

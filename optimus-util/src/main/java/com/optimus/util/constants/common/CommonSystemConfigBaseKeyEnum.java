@@ -12,9 +12,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum CommonSystemConfigBaseKeyEnum {
 
-    /* ---------系统配置键--------- */
-
-    BASE_NOTICE_URL("BASE_NOTICE_URL", "订单通知地址"),
+    /* ---------系统--------- */
 
     GROOVY_SCRIPT_PATH("GROOVY_SCRIPT_PATH", "GROOVY脚本路径"),
 
@@ -37,6 +35,12 @@ public enum CommonSystemConfigBaseKeyEnum {
     SPLIT_PROFIT_JOB_SHARDING("SPLIT_PROFIT_JOB_SHARDING", "订单分润定时任务分片"),
 
     SPLIT_PROFIT_INTERVAL("SPLIT_PROFIT_INTERVAL", "订单分润间隔"),
+
+    /* ---------基础业务--------- */
+
+    BASE_NOTICE_URL("BASE_NOTICE_URL", "订单通知地址"),
+
+    BASE_CALLBACK_DOMAIN("BASE_CALLBACK_DOMAIN", "平台回调域名"),
 
     ;
 

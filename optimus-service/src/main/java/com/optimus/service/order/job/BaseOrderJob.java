@@ -10,6 +10,7 @@ import com.optimus.manager.common.CommonSystemConfigManager;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.JacksonUtil;
 import com.optimus.util.constants.RespCodeEnum;
+import com.optimus.util.constants.common.CommonSystemConfigTypeEnum;
 import com.optimus.util.model.exception.OptimusException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +29,11 @@ public abstract class BaseOrderJob {
     /** 基础页面大小 */
     protected static final Integer BASE_ORDER_JOB_PAGE_SIZE = 1000;
 
+    /** 本机IP */
+    private static String ip;
+
     @Autowired
     private CommonSystemConfigManager commonSystemConfigManager;
-
-    private static String ip;
 
     static {
 
@@ -61,7 +63,7 @@ public abstract class BaseOrderJob {
 
         try {
 
-            return commonSystemConfigManager.getCommonSystemConfigForSystem(baseKey);
+            return commonSystemConfigManager.getCommonSystemConfigForCache(CommonSystemConfigTypeEnum.TYPE_S.getCode(), baseKey);
 
         } catch (OptimusException e) {
             log.warn("加载系统配置异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());

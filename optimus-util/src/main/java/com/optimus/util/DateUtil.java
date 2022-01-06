@@ -11,13 +11,13 @@ import java.util.TimeZone;
  */
 public class DateUtil {
 
+    /** 日历实例 */
     private static final Calendar CALENDAR = Calendar.getInstance();
-
-    private static final TimeZone DEFAULT_TIME_ZONE = TimeZone.getTimeZone("GMT+8");
 
     static {
 
-        TimeZone.setDefault(DEFAULT_TIME_ZONE);
+        // 默认时区
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
 
     }
 

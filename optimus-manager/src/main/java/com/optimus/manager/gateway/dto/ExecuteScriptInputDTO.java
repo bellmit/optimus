@@ -52,6 +52,11 @@ public class ExecuteScriptInputDTO implements Serializable {
     private String implPath;
 
     /**
+     * 平台回调域名[商户下单时从系统配置中获取]
+     */
+    private String domainName;
+
+    /**
      * 业务大字段[网关子渠道表存储的信息]
      */
     private String bizContent;

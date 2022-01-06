@@ -25,7 +25,6 @@ import com.optimus.web.gateway.validate.GatewayControllerValidate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +38,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping(value = "/optimus/gateway")
 @Slf4j
 public class GatewayController {
+
+    @Autowired
+    private HttpServletRequest httpServletRequest;
 
     @Autowired
     public MemberService memberService;
@@ -55,16 +57,20 @@ public class GatewayController {
      * @return
      */
     @OptimusRateLimiter(permits = 100D, timeout = 0)
-    @RequestMapping(value = "/channelCallback", method = { RequestMethod.GET, RequestMethod.POST })
-    public String channelCallback(HttpServletRequest req, @RequestParam("subChannelCode") String subChannelCode) {
+    @RequestMapping(value = "/channelCallback/*", method = { RequestMethod.GET, RequestMethod.POST })
+    public String channelCallback() {
 
-        // 解析参数
-        String args = GatewayControllerConvert.getAllArgs(req);
-        log.info("渠道回调,子渠道:{},参数:{}", subChannelCode, args);
+        // 解析业务参数
+        String ip = HostUtil.getRemoteIp(httpServletRequest);
+        String subChannelCode = GatewayControllerConvert.getSubChannelCode(httpServletRequest);
+        String args = GatewayControllerConvert.getAllArgs(httpServletRequest);
 
-        // 商户客户端IP
-        String ip = HostUtil.getRemoteIp(req);
+        log.info("渠道回调,客户端IP:{},子渠道:{},参数:{}", ip, subChannelCode, args);
+
+        // 断言:非空
         AssertUtil.notEmpty(ip, RespCodeEnum.ERROR_IP, "客户端IP不能为空");
+        AssertUtil.notEmpty(subChannelCode, RespCodeEnum.INVALID_PARAM, "网关子渠道编号不能为空");
+        AssertUtil.notEmpty(args, RespCodeEnum.INVALID_PARAM, "参数不能为空");
 
         // 查询子渠道
         GatewaySubChannelDTO gatewaySubChannel = gatewayService.getGatewaySubChannelBySubChannelCode(subChannelCode);
@@ -73,7 +79,6 @@ public class GatewayController {
         // 验证IP
         String[] ips = gatewaySubChannel.getCallbackIp().split(",");
         if (!Arrays.asList(ips).contains(ip)) {
-            log.warn("渠道回调,客户端IP:{},配置IP:{}", ip, ips);
             throw new OptimusException(RespCodeEnum.ERROR_IP, "客户端IP异常");
         }
 
@@ -86,6 +91,7 @@ public class GatewayController {
 
         // 查询订单信息:订单类型/子渠道合法性
         OrderInfoDTO orderInfo = orderService.getOrderInfoByOrderId(output.getOrderId());
+        AssertUtil.notEmpty(orderInfo, RespCodeEnum.ORDER_ERROR, "订单不存在");
         AssertUtil.notEquals(OrderTypeEnum.ORDER_TYPE_C.getCode(), orderInfo.getOrderType(), RespCodeEnum.ORDER_ERROR, "订单类型异常");
         AssertUtil.notEquals(orderInfo.getSubChannelCode(), subChannelCode, RespCodeEnum.ORDER_ERROR, "订单子渠道异常");
         AssertUtil.notEquals(OrderStatusEnum.ORDER_STATUS_NP.getCode(), orderInfo.getOrderStatus(), RespCodeEnum.ORDER_ERROR, "原订单状态不合法");
