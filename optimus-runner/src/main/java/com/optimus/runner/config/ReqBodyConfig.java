@@ -18,7 +18,7 @@ import com.optimus.util.annotation.OptimusRateLimiter;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.member.MemberStatusEnum;
 import com.optimus.util.model.exception.OptimusException;
-import com.optimus.util.model.req.Req;
+import com.optimus.util.model.jackson.BaseJacksonBody;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -106,11 +106,11 @@ public class ReqBodyConfig implements RequestBodyAdvice {
      */
     private void handleForSign(String body) {
 
-        Req req = JacksonUtil.toBean(body, Req.class);
-        String sign = req.getSign();
-        String method = req.getMethod();
-        Date timestamp = req.getTimestamp();
-        String memberId = JacksonUtil.toTree(body).get("memberId").asText();
+        BaseJacksonBody baseJacksonBody = JacksonUtil.toBean(body, BaseJacksonBody.class);
+        String sign = baseJacksonBody.getSign();
+        String method = baseJacksonBody.getMethod();
+        Date timestamp = baseJacksonBody.getTimestamp();
+        String memberId = baseJacksonBody.getMemberId();
 
         AssertUtil.notEmpty(sign, RespCodeEnum.INVALID_PARAM, "签名串不能为空");
         AssertUtil.notEmpty(method, RespCodeEnum.INVALID_PARAM, "方法名不能为空");
