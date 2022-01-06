@@ -17,14 +17,8 @@ import org.springframework.util.StringUtils;
  */
 public class SignUtil {
 
-    /** 共用方法名字段 */
-    public static final String METHOD = "method";
-
-    /** 共用时间戳字段 */
-    public static final String TIMESTAMP = "timestamp";
-
-    /** 共用签名字段 */
-    public static final String SIGN = "sign";
+    /** 签名字段 */
+    private static final String SIGN = "sign";
 
     /**
      * sign

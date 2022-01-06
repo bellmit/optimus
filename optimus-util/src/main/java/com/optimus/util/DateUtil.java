@@ -11,15 +11,9 @@ import java.util.TimeZone;
  */
 public class DateUtil {
 
-    public static final Calendar CALENDAR = Calendar.getInstance();
+    private static final Calendar CALENDAR = Calendar.getInstance();
 
-    public static final TimeZone DEFAULT_TIME_ZONE = TimeZone.getTimeZone("GMT+8");
-
-    public static final String DATETIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
-
-    public static final String DATE_PATTERN = "yyyy-MM-dd";
-
-    public static final String TIME_PATTERN = "HH:mm:ss";
+    private static final TimeZone DEFAULT_TIME_ZONE = TimeZone.getTimeZone("GMT+8");
 
     static {
 

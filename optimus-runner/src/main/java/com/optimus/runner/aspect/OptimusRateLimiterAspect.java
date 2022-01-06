@@ -1,4 +1,4 @@
-package com.optimus.util.annotation;
+package com.optimus.runner.aspect;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.common.util.concurrent.RateLimiter;
 import com.optimus.util.AssertUtil;
+import com.optimus.util.annotation.OptimusRateLimiter;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.model.exception.OptimusException;
 

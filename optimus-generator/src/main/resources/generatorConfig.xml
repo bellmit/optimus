@@ -57,8 +57,8 @@
             <property name="useActualColumnNames" value="false" />
             <columnOverride column="ID" javaType="java.lang.Long" />
             <columnOverride column="AMOUNT" javaType="java.math.BigDecimal" />
-            <columnOverride column="BEFORE_ CHANGE_AMOUNT" javaType="java.math.BigDecimal" />
-            <columnOverride column="AFTER_ CHANGE_AMOUNT" javaType="java.math.BigDecimal" />
+            <columnOverride column="BEFORE_CHANGE_AMOUNT" javaType="java.math.BigDecimal" />
+            <columnOverride column="AFTER_CHANGE_AMOUNT" javaType="java.math.BigDecimal" />
         </table> -->
 
         <!-- <table tableName="T_GATEWAY_CHANNEL" domainObjectName="GatewayChannelDO" mapperName="GatewayChannelDao" enableInsert="true" enableSelectByPrimaryKey="true" enableSelectByExample="false" enableUpdateByPrimaryKey="true" enableDeleteByPrimaryKey="false" enableDeleteByExample="false" enableCountByExample="false" enableUpdateByExample="false">
@@ -80,6 +80,7 @@
         <!-- <table tableName="T_MEMBER_INFO" domainObjectName="MemberInfoDO" mapperName="MemberInfoDao" enableInsert="true" enableSelectByPrimaryKey="true" enableSelectByExample="false" enableUpdateByPrimaryKey="true" enableDeleteByPrimaryKey="false" enableDeleteByExample="false" enableCountByExample="false" enableUpdateByExample="false">
             <property name="useActualColumnNames" value="false" />
             <columnOverride column="ID" javaType="java.lang.Long" />
+            <columnOverride column="ORGANIZE_ID" javaType="java.lang.Long" />
         </table> -->
 
         <!-- <table tableName="T_MEMBER_TRANS_CONFINE" domainObjectName="MemberTransConfineDO" mapperName="MemberTransConfineDao" enableInsert="true" enableSelectByPrimaryKey="true" enableSelectByExample="false" enableUpdateByPrimaryKey="true" enableDeleteByPrimaryKey="false" enableDeleteByExample="false" enableCountByExample="false" enableUpdateByExample="false">
