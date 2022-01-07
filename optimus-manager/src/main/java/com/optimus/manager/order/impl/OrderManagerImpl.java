@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
@@ -214,6 +215,8 @@ public class OrderManagerImpl implements OrderManager {
         // 获取系统配置
         String value = commonSystemConfigManager.getCommonSystemConfigForCache(CommonSystemConfigTypeEnum.TYPE_S.getCode(), CommonSystemConfigBaseKeyEnum.BASE_NOTICE_URL.getCode());
         AssertUtil.notEmpty(value, RespCodeEnum.ERROR_CONFIG, "未配置通知地址");
+        String[] values = value.split(",");
+        value = values[ThreadLocalRandom.current().nextInt(values.length)];
 
         // 获取订单通知DTO
         OrderNoticeDTO orderNotice = OrderManagerConvert.getOrderNoticeDTO(orderInfo);

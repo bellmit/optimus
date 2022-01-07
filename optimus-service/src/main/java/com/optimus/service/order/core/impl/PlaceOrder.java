@@ -3,6 +3,7 @@ package com.optimus.service.order.core.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.annotation.Resource;
 
@@ -92,6 +93,8 @@ public class PlaceOrder extends BaseOrder {
         // 查询平台回调域名
         String value = commonSystemConfigManager.getCommonSystemConfigForCache(CommonSystemConfigTypeEnum.TYPE_S.getCode(), CommonSystemConfigBaseKeyEnum.BASE_CALLBACK_DOMAIN.getCode());
         AssertUtil.notEmpty(value, RespCodeEnum.ERROR_CONFIG, "未配置下单平台回调域名");
+        String[] values = value.split(",");
+        value = values[ThreadLocalRandom.current().nextInt(values.length)];
 
         // 执行脚本
         ExecuteScriptOutputDTO output = gatewayManager.executeScript(OrderManagerConvert.getExecuteScriptInputDTO(createOrder, value));
