@@ -32,7 +32,7 @@ public interface OrderService {
     /**
      * 创建订单
      *
-     * 适用场景-申请充值/充值/申请提现/提现/划账/下单
+     * 适用场景-申请充值/确认充值/充值/申请提现/确认提现/提现/划账/下单
      *
      * @param createOrder
      * @return OrderInfoDTO
@@ -42,7 +42,7 @@ public interface OrderService {
     /**
      * 支付订单
      *
-     * 适用场景-充值/提现/划账/网关渠道回调
+     * 适用场景-确认充值/充值/确认提现/提现/划账/网关渠道回调
      *
      * @param payOrder
      */
