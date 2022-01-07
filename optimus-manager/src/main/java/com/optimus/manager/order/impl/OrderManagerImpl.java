@@ -9,17 +9,16 @@ import java.util.stream.Collectors;
 import javax.annotation.Resource;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.optimus.dao.domain.CommonSystemConfigDO;
 import com.optimus.dao.domain.MemberChannelDO;
 import com.optimus.dao.domain.MemberInfoDO;
 import com.optimus.dao.domain.OrderInfoDO;
-import com.optimus.dao.mapper.CommonSystemConfigDao;
 import com.optimus.dao.mapper.MemberChannelDao;
 import com.optimus.dao.mapper.MemberInfoDao;
 import com.optimus.dao.mapper.OrderInfoDao;
 import com.optimus.dao.result.MemberInfoChainResult;
 import com.optimus.manager.account.AccountManager;
 import com.optimus.manager.account.dto.DoTransDTO;
+import com.optimus.manager.common.CommonSystemConfigManager;
 import com.optimus.manager.member.MemberManager;
 import com.optimus.manager.order.OrderManager;
 import com.optimus.manager.order.convert.OrderManagerConvert;
@@ -63,13 +62,13 @@ public class OrderManagerImpl implements OrderManager {
     private RestTemplate restTemplate;
 
     @Autowired
+    private CommonSystemConfigManager commonSystemConfigManager;
+
+    @Autowired
     private AccountManager accountManager;
 
     @Resource
     private MemberManager memberManager;
-
-    @Autowired
-    private CommonSystemConfigDao commonSystemConfigDao;
 
     @Resource
     private MemberInfoDao memberInfoDao;
@@ -213,9 +212,8 @@ public class OrderManagerImpl implements OrderManager {
         }
 
         // 获取系统配置
-        CommonSystemConfigDO commonSystemConfig = commonSystemConfigDao.getCommonSystemConfigByTypeAndBaseKey(CommonSystemConfigTypeEnum.TYPE_BB.getCode(), CommonSystemConfigBaseKeyEnum.BASE_NOTICE_URL.getCode());
-        AssertUtil.notEmpty(commonSystemConfig, RespCodeEnum.ERROR_CONFIG, "订单信息通知,未配置系统配置");
-        AssertUtil.notEmpty(commonSystemConfig.getValue(), RespCodeEnum.ERROR_CONFIG, "未配置通知地址");
+        String value = commonSystemConfigManager.getCommonSystemConfigForCache(CommonSystemConfigTypeEnum.TYPE_S.getCode(), CommonSystemConfigBaseKeyEnum.BASE_NOTICE_URL.getCode());
+        AssertUtil.notEmpty(value, RespCodeEnum.ERROR_CONFIG, "未配置通知地址");
 
         // 获取订单通知DTO
         OrderNoticeDTO orderNotice = OrderManagerConvert.getOrderNoticeDTO(orderInfo);
@@ -232,7 +230,7 @@ public class OrderManagerImpl implements OrderManager {
         log.info("订单信息通知报文:{}", orderNotice);
 
         // Post
-        ResponseEntity<String> entity = restTemplate.postForEntity(String.format(commonSystemConfig.getValue(), orderInfo.getMerchantCallbackUrl()), orderNotice, String.class);
+        ResponseEntity<String> entity = restTemplate.postForEntity(String.format(value, orderInfo.getMerchantCallbackUrl()), orderNotice, String.class);
         log.info("订单信息通知结果:{}", Objects.isNull(entity) ? entity : entity.getBody());
 
         // 下游响应不成功

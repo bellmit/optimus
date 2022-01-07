@@ -13,6 +13,7 @@ import com.optimus.dao.mapper.MemberChannelDao;
 import com.optimus.dao.mapper.OrderInfoDao;
 import com.optimus.manager.account.AccountManager;
 import com.optimus.manager.account.dto.DoTransDTO;
+import com.optimus.manager.common.CommonSystemConfigManager;
 import com.optimus.manager.gateway.GatewayManager;
 import com.optimus.manager.gateway.dto.ExecuteScriptOutputDTO;
 import com.optimus.manager.member.MemberManager;
@@ -53,6 +54,9 @@ import lombok.extern.slf4j.Slf4j;
 public class PlaceOrder extends BaseOrder {
 
     @Autowired
+    private CommonSystemConfigManager commonSystemConfigManager;
+
+    @Autowired
     private MemberManager memberManager;
 
     @Autowired
@@ -86,12 +90,11 @@ public class PlaceOrder extends BaseOrder {
         MemberTransConfineDTO memberTransConfine = checkMemberTrans(createOrder);
 
         // 查询平台回调域名
-        CommonSystemConfigDO commonSystemConfig = commonSystemConfigDao.getCommonSystemConfigByTypeAndBaseKey(CommonSystemConfigTypeEnum.TYPE_BB.getCode(), CommonSystemConfigBaseKeyEnum.BASE_CALLBACK_DOMAIN.getCode());
-        AssertUtil.notEmpty(commonSystemConfig, RespCodeEnum.ERROR_CONFIG, "下单未配置系统配置");
-        AssertUtil.notEmpty(commonSystemConfig.getValue(), RespCodeEnum.ERROR_CONFIG, "下单平台回调域名不能为空");
+        String value = commonSystemConfigManager.getCommonSystemConfigForCache(CommonSystemConfigTypeEnum.TYPE_S.getCode(), CommonSystemConfigBaseKeyEnum.BASE_CALLBACK_DOMAIN.getCode());
+        AssertUtil.notEmpty(value, RespCodeEnum.ERROR_CONFIG, "未配置下单平台回调域名");
 
         // 执行脚本
-        ExecuteScriptOutputDTO output = gatewayManager.executeScript(OrderManagerConvert.getExecuteScriptInputDTO(createOrder, commonSystemConfig.getValue()));
+        ExecuteScriptOutputDTO output = gatewayManager.executeScript(OrderManagerConvert.getExecuteScriptInputDTO(createOrder, value));
         AssertUtil.notEmpty(output, RespCodeEnum.GATEWAY_EXECUTE_SCRIPT_ERROR, "下单执行脚本输出不能为空");
 
         // 订单信息

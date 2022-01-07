@@ -16,8 +16,6 @@ public enum CommonSystemConfigTypeEnum {
 
     TYPE_S("S", "系统"),
 
-    TYPE_BB("BB", "基础业务"),
-
     TYPE_MTC("MTC", "通用会员交易限制"),
 
     ;
