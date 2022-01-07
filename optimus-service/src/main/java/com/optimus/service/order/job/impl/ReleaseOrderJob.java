@@ -87,6 +87,7 @@ public class ReleaseOrderJob extends BaseOrderJob {
                     orderManager.release(orderInfo);
 
                 } catch (OptimusException e) {
+                    log.error("释放订单异常:", e);
                     log.warn("释放订单异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());
                     continue;
                 } catch (Exception e) {

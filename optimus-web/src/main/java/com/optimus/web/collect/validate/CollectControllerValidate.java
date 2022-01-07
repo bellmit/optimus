@@ -18,11 +18,14 @@ import com.optimus.web.collect.req.RechargeReq;
 import com.optimus.web.collect.req.TransferReq;
 import com.optimus.web.collect.req.WithdrawReq;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 收单ControllerValidate
  *
  * @author sunxp
  */
+@Slf4j
 public class CollectControllerValidate {
 
     /**
@@ -40,6 +43,7 @@ public class CollectControllerValidate {
         // 验证IP
         String[] values = value.split(",");
         if (!Arrays.asList(values).contains(ip)) {
+            log.warn("验证访问IP未通过,授权访问IP:{};访问IP:{}", values, ip);
             throw new OptimusException(RespCodeEnum.ERROR_IP, "客户端IP异常");
         }
 
