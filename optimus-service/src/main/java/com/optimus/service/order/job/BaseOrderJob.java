@@ -10,7 +10,6 @@ import com.optimus.manager.common.CommonSystemConfigManager;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.JacksonUtil;
 import com.optimus.util.constants.RespCodeEnum;
-import com.optimus.util.constants.common.CommonSystemConfigTypeEnum;
 import com.optimus.util.model.exception.OptimusException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +62,7 @@ public abstract class BaseOrderJob {
 
         try {
 
-            return commonSystemConfigManager.getCommonSystemConfigForCache(CommonSystemConfigTypeEnum.TYPE_S.getCode(), baseKey);
+            return commonSystemConfigManager.getCommonSystemConfigForCache(baseKey);
 
         } catch (OptimusException e) {
             log.warn("加载系统配置异常:[{}-{}:{}]", e.getRespCodeEnum().getCode(), e.getRespCodeEnum().getMemo(), e.getMemo());

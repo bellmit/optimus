@@ -1,5 +1,7 @@
 package com.optimus.web.collect;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.optimus.manager.gateway.dto.GatewayChannelDTO;
 import com.optimus.manager.gateway.dto.MatchChannelDTO;
 import com.optimus.manager.member.dto.MemberInfoDTO;
@@ -7,12 +9,15 @@ import com.optimus.manager.member.dto.MemberTransConfineDTO;
 import com.optimus.manager.order.dto.CreateOrderDTO;
 import com.optimus.manager.order.dto.OrderInfoDTO;
 import com.optimus.manager.order.dto.PayOrderDTO;
+import com.optimus.service.common.CommonSystemConfigService;
 import com.optimus.service.gateway.GatewayService;
 import com.optimus.service.member.MemberService;
 import com.optimus.service.order.OrderService;
 import com.optimus.util.AssertUtil;
+import com.optimus.util.HostUtil;
 import com.optimus.util.annotation.OptimusRateLimiter;
 import com.optimus.util.constants.RespCodeEnum;
+import com.optimus.util.constants.common.CommonSystemConfigBaseKeyEnum;
 import com.optimus.util.constants.gateway.GatewayChannelStatusEnum;
 import com.optimus.util.constants.member.MemberMerchantOrderSwitchEnum;
 import com.optimus.util.constants.member.MemberTypeEnum;
@@ -55,13 +60,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class CollectController {
 
     @Autowired
+    private HttpServletRequest httpServletRequest;
+
+    @Autowired
+    private CommonSystemConfigService commonSystemConfigService;
+
+    @Autowired
+    private MemberService memberService;
+
+    @Autowired
     private GatewayService gatewayService;
 
     @Autowired
     private OrderService orderService;
-
-    @Autowired
-    private MemberService memberService;
 
     /**
      * 申请充值
@@ -73,8 +84,12 @@ public class CollectController {
     @PostMapping("/applyForRecharge")
     public ApplyForRechargeResp applyForRecharge(@RequestBody ApplyForRechargeReq req) {
 
-        // 参数验证
+        // 验证参数
         CollectControllerValidate.validateApplyForRecharge(req);
+
+        // 验证访问IP
+        String value = commonSystemConfigService.getCommonSystemConfigForCache(CommonSystemConfigBaseKeyEnum.BASE_ACCESS_IP.getCode());
+        CollectControllerValidate.validateAccessIp(value, HostUtil.getRemoteIp(httpServletRequest));
 
         // 会员类型必须为代理
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
@@ -102,8 +117,12 @@ public class CollectController {
     @PostMapping("/confirmForRecharge")
     public ConfirmForRechargeResp confirmForRecharge(@RequestBody ConfirmForRechargeReq req) {
 
-        // 参数验证
+        // 验证参数
         CollectControllerValidate.validateConfirmForRecharge(req);
+
+        // 验证访问IP
+        String value = commonSystemConfigService.getCommonSystemConfigForCache(CommonSystemConfigBaseKeyEnum.BASE_ACCESS_IP.getCode());
+        CollectControllerValidate.validateAccessIp(value, HostUtil.getRemoteIp(httpServletRequest));
 
         // 会员类型必须为平台
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
@@ -138,8 +157,12 @@ public class CollectController {
     @PostMapping("/recharge")
     public RechargeResp recharge(@RequestBody RechargeReq req) {
 
-        // 参数验证
+        // 验证参数
         CollectControllerValidate.validateRecharge(req);
+
+        // 验证访问IP
+        String value = commonSystemConfigService.getCommonSystemConfigForCache(CommonSystemConfigBaseKeyEnum.BASE_ACCESS_IP.getCode());
+        CollectControllerValidate.validateAccessIp(value, HostUtil.getRemoteIp(httpServletRequest));
 
         // 验证会员类型必须为代理或码商
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
@@ -178,8 +201,12 @@ public class CollectController {
     @PostMapping("/applyForWithdraw")
     public ApplyForWithdrawResp applyForWithdraw(@RequestBody ApplyForWithdrawReq req) {
 
-        // 参数验证
+        // 验证参数
         CollectControllerValidate.validateApplyForWithdraw(req);
+
+        // 验证访问IP
+        String value = commonSystemConfigService.getCommonSystemConfigForCache(CommonSystemConfigBaseKeyEnum.BASE_ACCESS_IP.getCode());
+        CollectControllerValidate.validateAccessIp(value, HostUtil.getRemoteIp(httpServletRequest));
 
         // 会员类型必须为管理或代理
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
@@ -208,8 +235,12 @@ public class CollectController {
     @PostMapping("/confirmForWithdraw")
     public ConfirmForWithdrawResp confirmForWithdraw(@RequestBody ConfirmForWithdrawReq req) {
 
-        // 参数验证
+        // 验证参数
         CollectControllerValidate.validateConfirmForWithdraw(req);
+
+        // 验证访问IP
+        String value = commonSystemConfigService.getCommonSystemConfigForCache(CommonSystemConfigBaseKeyEnum.BASE_ACCESS_IP.getCode());
+        CollectControllerValidate.validateAccessIp(value, HostUtil.getRemoteIp(httpServletRequest));
 
         // 会员类型必须为平台
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
@@ -244,8 +275,12 @@ public class CollectController {
     @PostMapping("/withdraw")
     public WithdrawResp withdraw(@RequestBody WithdrawReq req) {
 
-        // 参数验证
+        // 验证参数
         CollectControllerValidate.validateWithdraw(req);
+
+        // 验证访问IP
+        String value = commonSystemConfigService.getCommonSystemConfigForCache(CommonSystemConfigBaseKeyEnum.BASE_ACCESS_IP.getCode());
+        CollectControllerValidate.validateAccessIp(value, HostUtil.getRemoteIp(httpServletRequest));
 
         // 会员类型必须为代理
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
@@ -282,8 +317,12 @@ public class CollectController {
     @PostMapping("/transfer")
     public TransferResp transfer(@RequestBody TransferReq req) {
 
-        // 参数验证
+        // 验证参数
         CollectControllerValidate.validateTransfer(req);
+
+        // 验证访问IP
+        String value = commonSystemConfigService.getCommonSystemConfigForCache(CommonSystemConfigBaseKeyEnum.BASE_ACCESS_IP.getCode());
+        CollectControllerValidate.validateAccessIp(value, HostUtil.getRemoteIp(httpServletRequest));
 
         // 会员信息
         MemberInfoDTO memberInfo = memberService.getMemberInfoByMemberId(req.getMemberId());
@@ -316,7 +355,7 @@ public class CollectController {
     @PostMapping("/placeOrder")
     public PlaceOrderResp placeOrder(@RequestBody PlaceOrderReq req) {
 
-        // 参数验证
+        // 验证参数
         CollectControllerValidate.validatePlaceOrder(req);
 
         // 会员信息

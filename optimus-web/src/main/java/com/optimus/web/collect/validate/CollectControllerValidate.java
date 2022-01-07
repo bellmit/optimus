@@ -1,6 +1,7 @@
 package com.optimus.web.collect.validate;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Objects;
 
 import com.optimus.util.AssertUtil;
@@ -23,6 +24,26 @@ import com.optimus.web.collect.req.WithdrawReq;
  * @author sunxp
  */
 public class CollectControllerValidate {
+
+    /**
+     * 验证访问IP
+     * 
+     * @param value
+     * @param ip
+     */
+    public static void validateAccessIp(String value, String ip) {
+
+        // 断言
+        AssertUtil.notEmpty(value, RespCodeEnum.ERROR_CONFIG, "未配置授权IP");
+        AssertUtil.notEmpty(ip, RespCodeEnum.ERROR_CONFIG, "客户端IP不能为空");
+
+        // 验证IP
+        String[] values = value.split(",");
+        if (!Arrays.asList(values).contains(ip)) {
+            throw new OptimusException(RespCodeEnum.ERROR_IP, "客户端IP异常");
+        }
+
+    }
 
     /**
      * 验证基础参数

@@ -10,6 +10,14 @@ public interface CommonSystemConfigService {
     /**
      * 根据type和baseKey查询系统配置value
      * 
+     * @param baseKey
+     * @return
+     */
+    String getCommonSystemConfigForCache(String baseKey);
+
+    /**
+     * 根据type和baseKey查询系统配置value
+     * 
      * @param type
      * @param baseKey
      * @return

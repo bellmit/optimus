@@ -27,7 +27,7 @@ public interface MemberService {
     MemberTransConfineDTO getMemberTransConfineByMemberId(String memberId);
 
     /**
-     * 检查上下级关系
+     * 验证上下级关系
      * 
      * @param memberInfo
      * @param subDirectMemberId

@@ -4,10 +4,12 @@ import javax.annotation.Resource;
 
 import com.optimus.dao.domain.CommonSystemConfigDO;
 import com.optimus.dao.mapper.CommonSystemConfigDao;
+import com.optimus.manager.common.CommonSystemConfigManager;
 import com.optimus.service.common.CommonSystemConfigService;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.constants.RespCodeEnum;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +23,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CommonSystemConfigServiceImpl implements CommonSystemConfigService {
 
+    @Autowired
+    private CommonSystemConfigManager commonSystemConfigManager;
+
     @Resource
     private CommonSystemConfigDao commonSystemConfigDao;
+
+    @Override
+    public String getCommonSystemConfigForCache(String baseKey) {
+        return commonSystemConfigManager.getCommonSystemConfigForCache(baseKey);
+    }
 
     @Override
     public String getCommonSystemConfigByTypeAndBaseKey(String type, String baseKey) {

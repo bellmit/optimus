@@ -10,10 +10,9 @@ public interface CommonSystemConfigManager {
     /**
      * 查询系统配置value
      * 
-     * @param type
      * @param baseKey
      * @return
      */
-    String getCommonSystemConfigForCache(String type, String baseKey);
+    String getCommonSystemConfigForCache(String baseKey);
 
 }

@@ -29,8 +29,9 @@ public class CommonSystemConfigManagerImpl implements CommonSystemConfigManager 
 
     @Override
     @Cacheable(value = "systemConfig", key = "#baseKey", unless = "#result == null")
-    public String getCommonSystemConfigForCache(String type, String baseKey) {
+    public String getCommonSystemConfigForCache(String baseKey) {
 
+        String type = CommonSystemConfigTypeEnum.TYPE_S.getCode();
         String value = null;
 
         if (!StringUtils.hasLength(baseKey)) {
@@ -38,7 +39,7 @@ public class CommonSystemConfigManagerImpl implements CommonSystemConfigManager 
             return value;
         }
 
-        CommonSystemConfigDO commonSystemConfig = commonSystemConfigDao.getCommonSystemConfigByTypeAndBaseKey(CommonSystemConfigTypeEnum.TYPE_S.getCode(), baseKey);
+        CommonSystemConfigDO commonSystemConfig = commonSystemConfigDao.getCommonSystemConfigByTypeAndBaseKey(type, baseKey);
         log.debug("系统配置:{}", commonSystemConfig);
 
         if (Objects.isNull(commonSystemConfig)) {

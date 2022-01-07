@@ -91,7 +91,7 @@ public class PlaceOrder extends BaseOrder {
         MemberTransConfineDTO memberTransConfine = checkMemberTrans(createOrder);
 
         // 查询平台回调域名
-        String value = commonSystemConfigManager.getCommonSystemConfigForCache(CommonSystemConfigTypeEnum.TYPE_S.getCode(), CommonSystemConfigBaseKeyEnum.BASE_CALLBACK_DOMAIN.getCode());
+        String value = commonSystemConfigManager.getCommonSystemConfigForCache(CommonSystemConfigBaseKeyEnum.BASE_CALLBACK_DOMAIN.getCode());
         AssertUtil.notEmpty(value, RespCodeEnum.ERROR_CONFIG, "未配置下单平台回调域名");
         String[] values = value.split(",");
         value = values[ThreadLocalRandom.current().nextInt(values.length)];

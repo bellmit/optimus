@@ -33,7 +33,6 @@ import com.optimus.util.SignUtil;
 import com.optimus.util.constants.RespCodeEnum;
 import com.optimus.util.constants.account.AccountChangeTypeEnum;
 import com.optimus.util.constants.common.CommonSystemConfigBaseKeyEnum;
-import com.optimus.util.constants.common.CommonSystemConfigTypeEnum;
 import com.optimus.util.constants.order.OrderMerchantNotifyStatusEnum;
 import com.optimus.util.constants.order.OrderReleaseStatusEnum;
 import com.optimus.util.constants.order.OrderSplitProfitStatusEnum;
@@ -213,7 +212,7 @@ public class OrderManagerImpl implements OrderManager {
         }
 
         // 获取系统配置
-        String value = commonSystemConfigManager.getCommonSystemConfigForCache(CommonSystemConfigTypeEnum.TYPE_S.getCode(), CommonSystemConfigBaseKeyEnum.BASE_NOTICE_URL.getCode());
+        String value = commonSystemConfigManager.getCommonSystemConfigForCache(CommonSystemConfigBaseKeyEnum.BASE_NOTICE_URL.getCode());
         AssertUtil.notEmpty(value, RespCodeEnum.ERROR_CONFIG, "未配置通知地址");
         String[] values = value.split(",");
         value = values[ThreadLocalRandom.current().nextInt(values.length)];
