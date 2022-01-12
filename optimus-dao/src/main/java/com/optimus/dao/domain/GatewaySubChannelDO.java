@@ -89,6 +89,8 @@ public class GatewaySubChannelDO implements Serializable {
 
     /**
      * 业务大字段[网关子渠道表存储的信息]
+     * 
+     * {"channelMerchantId":"商户编号","channelMerchantKey":"商户密钥","channelCode":"真实渠道编号","callbackUrl":"回调地址","redirectUrl":"重定向地址","createOrderUrl":"创建订单地址","queryOrderUrl":"调单查询地址"}
      */
     private String bizContent;
 

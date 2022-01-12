@@ -221,7 +221,7 @@ class GroovyExecuteScriptInputDTO {
     // 平台回调域名
     String domainName;
 
-    // 业务大字段[{"channelMerchantId":"商户编号","channelMerchantKey":"商户密钥","channelCode":"渠道编号","subChannelCode":"子渠道编号","callbackUrl":"回调地址","redirectUrl":"重定向地址","createOrderUrl":"创建订单地址","queryOrderUrl":"调单查询地址"}]
+    // 业务大字段[{"channelMerchantId":"商户编号","channelMerchantKey":"商户密钥","channelCode":"真实渠道编号","callbackUrl":"回调地址","redirectUrl":"重定向地址","createOrderUrl":"创建订单地址","queryOrderUrl":"调单查询地址"}]
     String bizContent
 
     // 参数[{"parameter":{},"header":{},"body":{}}]

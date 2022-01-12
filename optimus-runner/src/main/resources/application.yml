@@ -31,7 +31,7 @@ spring:
             - systemMemberIdConfig
             - memberChainConfig
         caffeine:
-            spec: maximumSize=1000, expireAfterWrite=600s
+            spec: maximumSize=10000, expireAfterWrite=600s
 
     jackson:
         date-format: yyyy-MM-dd HH:mm:ss
