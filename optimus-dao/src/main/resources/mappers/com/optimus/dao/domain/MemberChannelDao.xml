@@ -28,25 +28,34 @@
     where ID = #{id,jdbcType=NUMERIC}
   </select>
 
-  <select id="listMemberChannelByMemberIdLists" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="listMemberChannelByMemberChannelQuerys" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from T_MEMBER_CHANNEL
-    where MEMBER_ID in
-    <foreach collection="memberIdList" item="item" open="(" close=")" separator=","> #{item,jdbcType=VARCHAR}
-    </foreach>
-  </select>
-
-  <select id="listMemberChannelHundredByMemberChannelQuerys" resultMap="BaseResultMap">
-    select top 100
-    <include refid="Base_Column_List" />
-    from T_MEMBER_CHANNEL
-    where AGENT_MEMBER_ID = #{memberChannelQuery.agentMemberId,jdbcType=VARCHAR}
-    and MEMBER_TYPE = #{memberChannelQuery.memberType,jdbcType=VARCHAR}
-    and SUB_CHANNEL_CODE in
-    <foreach collection="memberChannelQuery.subChannelCodeList" item="item" open="(" close=")" separator=","> #{item,jdbcType=VARCHAR}
-    </foreach>
-    and 1 >= CAST(CHECKSUM(NEWID(), id) &amp; 0x7fffffff AS float) / CAST (0x7fffffff AS int)
+    <where>
+      <if test="memberChannelQuery.agentMemberId != null">
+        and AGENT_MEMBER_ID = #{memberChannelQuery.agentMemberId,jdbcType=VARCHAR}
+      </if>
+      <if test="memberChannelQuery.memberType != null">
+        and MEMBER_TYPE = #{memberChannelQuery.memberType,jdbcType=VARCHAR}
+      </if>
+      <if test="memberChannelQuery.channelCode != null">
+        and CHANNEL_CODE = #{memberChannelQuery.channelCode,jdbcType=VARCHAR}
+      </if>
+      <if test="memberChannelQuery.subChannelCode != null">
+        and SUB_CHANNEL_CODE = #{memberChannelQuery.subChannelCode,jdbcType=VARCHAR}
+      </if>
+      <if test="memberChannelQuery.memberIdList != null">
+        and MEMBER_ID in
+        <foreach collection="memberChannelQuery.memberIdList" item="item" open="(" close=")" separator=","> #{item,jdbcType=VARCHAR}
+        </foreach>
+      </if>
+      <if test="memberChannelQuery.subChannelCodeList != null">
+        and SUB_CHANNEL_CODE in
+        <foreach collection="memberChannelQuery.subChannelCodeList" item="item" open="(" close=")" separator=","> #{item,jdbcType=VARCHAR}
+        </foreach>
+      </if>
+    </where>
   </select>
 
   <insert id="addMemberChannel" parameterType="com.optimus.dao.domain.MemberChannelDO">

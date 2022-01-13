@@ -23,11 +23,26 @@ public class MemberChannelQuery implements Serializable {
     private String agentMemberId;
 
     /**
+     * 网关渠道编号
+     */
+    private String channelCode;
+
+    /**
+     * 网关子渠道编号
+     */
+    private String subChannelCode;
+
+    /**
      * 会员类型[冗余一份用以匹配渠道]
      * 
      * @see MemberTypeEnum
      */
     private String memberType;
+
+    /**
+     * 会员编号List
+     */
+    private List<String> memberIdList;
 
     /**
      * 网关子渠道编号List

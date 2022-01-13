@@ -15,17 +15,12 @@ import com.optimus.dao.domain.GatewaySubChannelDO;
 import com.optimus.dao.domain.MemberChannelDO;
 import com.optimus.dao.domain.MemberInfoDO;
 import com.optimus.dao.query.GatewaySubChannelQuery;
-import com.optimus.dao.query.MemberChannelQuery;
-import com.optimus.dao.query.MemberInfoQuery;
 import com.optimus.manager.gateway.dto.GatewayChannelDTO;
 import com.optimus.manager.gateway.dto.GatewaySubChannelDTO;
 import com.optimus.manager.gateway.dto.MatchChannelDTO;
 import com.optimus.manager.member.dto.MemberInfoDTO;
 import com.optimus.util.constants.gateway.GatewayChannelStatusEnum;
 import com.optimus.util.constants.gateway.GatewayFaceValueTypeEnum;
-import com.optimus.util.constants.member.MemberDeleteFlagEnum;
-import com.optimus.util.constants.member.MemberStatusEnum;
-import com.optimus.util.constants.member.MemberTypeEnum;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.CollectionUtils;
@@ -39,43 +34,6 @@ import org.springframework.util.StringUtils;
 public class GatewayManagerConvert {
 
     /**
-     * 获取会员信息Query
-     * 
-     * @param memberChannelList
-     * @return
-     */
-    public static MemberInfoQuery getMemberInfoQuery(List<MemberChannelDO> memberChannelList) {
-
-        // 会员信息Query
-        MemberInfoQuery query = new MemberInfoQuery();
-        query.setMemberIdList(memberChannelList.stream().map(MemberChannelDO::getMemberId).collect(Collectors.toList()));
-        query.setMemberStatus(MemberStatusEnum.MEMBER_STATUS_Y.getCode());
-        query.setDeleteFlag(MemberDeleteFlagEnum.DELETE_FLAG_ND.getCode());
-
-        return query;
-
-    }
-
-    /**
-     * 获取会员渠道Query
-     * 
-     * @param memberInfo
-     * @param gatewaySubChannelList
-     * @return
-     */
-    public static MemberChannelQuery getMemberChannelQuery(MemberInfoDTO memberInfo, List<GatewaySubChannelDO> gatewaySubChannelList) {
-
-        // 会员渠道Query
-        MemberChannelQuery query = new MemberChannelQuery();
-
-        query.setAgentMemberId(memberInfo.getSupDirectMemberId());
-        query.setMemberType(MemberTypeEnum.MEMBER_TYPE_C.getCode());
-        query.setSubChannelCodeList(gatewaySubChannelList.stream().map(GatewaySubChannelDO::getChannelCode).distinct().collect(Collectors.toList()));
-
-        return query;
-    }
-
-    /**
      * 获取网关子渠道Query
      * 
      * @param memberInfo
@@ -87,7 +45,6 @@ public class GatewayManagerConvert {
         // 网关子渠道Query
         GatewaySubChannelQuery query = new GatewaySubChannelQuery();
 
-        query.setAgentMemberId(memberInfo.getSupDirectMemberId());
         query.setParentChannelCode(gatewayChannel.getChannelCode());
         query.setChannelStatus(GatewayChannelStatusEnum.CHANNEL_STATUS_Y.getCode());
 

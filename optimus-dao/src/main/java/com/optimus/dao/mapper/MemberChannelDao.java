@@ -23,20 +23,12 @@ public interface MemberChannelDao {
     MemberChannelDO getMemberChannelById(Long id);
 
     /**
-     * 根据会员编号List查询会员渠道
-     * 
-     * @param memberIdList
-     * @return
-     */
-    List<MemberChannelDO> listMemberChannelByMemberIdLists(@Param("memberIdList") List<String> memberIdList);
-
-    /**
-     * 根据会员渠道Query随机查询100条会员渠道
+     * 根据会员渠道Query查询会员渠道
      * 
      * @param query
      * @return
      */
-    List<MemberChannelDO> listMemberChannelHundredByMemberChannelQuerys(@Param("memberChannelQuery") MemberChannelQuery query);
+    List<MemberChannelDO> listMemberChannelByMemberChannelQuerys(@Param("memberChannelQuery") MemberChannelQuery query);
 
     /**
      * 新增一条会员渠道

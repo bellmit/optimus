@@ -21,6 +21,7 @@ import com.optimus.manager.account.AccountManager;
 import com.optimus.manager.account.dto.DoTransDTO;
 import com.optimus.manager.common.CommonSystemConfigManager;
 import com.optimus.manager.member.MemberManager;
+import com.optimus.manager.member.convert.MemberManagerConvert;
 import com.optimus.manager.order.OrderManager;
 import com.optimus.manager.order.convert.OrderManagerConvert;
 import com.optimus.manager.order.dto.OrderInfoDTO;
@@ -174,7 +175,7 @@ public class OrderManagerImpl implements OrderManager {
         // 查询会员关系链的会员渠道费率
         List<String> memberIdList = chainList.stream().map(MemberInfoChainResult::getMemberId).collect(Collectors.toList());
         memberIdList.add(orderInfo.getMemberId());
-        List<MemberChannelDO> memberChannelList = memberChannelDao.listMemberChannelByMemberIdLists(memberIdList);
+        List<MemberChannelDO> memberChannelList = memberChannelDao.listMemberChannelByMemberChannelQuerys(MemberManagerConvert.getMemberChannelQuery(orderInfo.getChannelCode(), orderInfo.getSubChannelCode(), memberIdList));
         OrderManagerValidate.validateChainAndChannel(chainList, memberChannelList, orderInfo.getCodeMemberId());
         log.info("会员渠道费率:{}", memberChannelList);
 

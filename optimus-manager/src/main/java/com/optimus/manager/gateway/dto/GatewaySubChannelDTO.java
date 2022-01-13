@@ -23,11 +23,6 @@ public class GatewaySubChannelDTO implements Serializable {
     private Long id;
 
     /**
-     * 代理会员编号
-     */
-    private String agentMemberId;
-
-    /**
      * 父渠道编号
      */
     private String parentChannelCode;
