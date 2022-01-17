@@ -1,29 +1,9 @@
 package com.optimus.manager.gateway.impl;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.annotation.Resource;
-
-import com.optimus.dao.domain.GatewaySubChannelDO;
-import com.optimus.dao.domain.MemberChannelDO;
-import com.optimus.dao.domain.MemberInfoDO;
-import com.optimus.dao.mapper.GatewaySubChannelDao;
-import com.optimus.dao.mapper.MemberChannelDao;
-import com.optimus.dao.mapper.MemberInfoDao;
-import com.optimus.dao.query.GatewaySubChannelQuery;
-import com.optimus.dao.query.MemberChannelQuery;
-import com.optimus.dao.query.MemberInfoQuery;
 import com.optimus.manager.gateway.GatewayManager;
-import com.optimus.manager.gateway.convert.GatewayManagerConvert;
 import com.optimus.manager.gateway.dto.ExecuteScriptInputDTO;
 import com.optimus.manager.gateway.dto.ExecuteScriptOutputDTO;
-import com.optimus.manager.gateway.dto.GatewayChannelDTO;
-import com.optimus.manager.gateway.dto.MatchChannelDTO;
 import com.optimus.manager.gateway.validate.GatewayManagerValidate;
-import com.optimus.manager.member.convert.MemberManagerConvert;
-import com.optimus.manager.member.dto.MemberInfoDTO;
 import com.optimus.util.AssertUtil;
 import com.optimus.util.JacksonUtil;
 import com.optimus.util.constants.RespCodeEnum;
@@ -47,15 +27,6 @@ public class GatewayManagerImpl implements GatewayManager {
 
     @Autowired
     private GroovyScriptEngine groovyScriptEngine;
-
-    @Resource
-    private MemberInfoDao memberInfoDao;
-
-    @Resource
-    private MemberChannelDao memberChannelDao;
-
-    @Resource
-    private GatewaySubChannelDao gatewaySubChannelDao;
 
     @Override
     public ExecuteScriptOutputDTO executeScript(ExecuteScriptInputDTO input) {
@@ -92,66 +63,6 @@ public class GatewayManagerImpl implements GatewayManager {
             log.error("执行脚本异常:", e);
             return null;
         }
-
-    }
-
-    @Override
-    public MatchChannelDTO insideMatch(MemberInfoDTO memberInfo, GatewayChannelDTO gatewayChannel, BigDecimal amount) {
-
-        log.info("匹配渠道内部,会员信息:{},网关渠道:{},金额:{}", memberInfo, gatewayChannel, amount);
-
-        // 查询父渠道下启用的子渠道List
-        GatewaySubChannelQuery gatewaySubChannelQuery = GatewayManagerConvert.getGatewaySubChannelQuery(memberInfo, gatewayChannel);
-        List<GatewaySubChannelDO> gatewaySubChannelList = gatewaySubChannelDao.listGatewaySubChannelByGatewaySubChannelQuerys(gatewaySubChannelQuery);
-        AssertUtil.notEmpty(gatewaySubChannelList, RespCodeEnum.GATEWAY_CHANNEL_ERROR, "无启用的子渠道");
-
-        // 查询代理关联的子渠道 TODO
-
-        // 筛选子渠道
-        gatewaySubChannelList = GatewayManagerConvert.getGatewaySubChannelList(gatewaySubChannelList, amount);
-        AssertUtil.notEmpty(gatewaySubChannelList, RespCodeEnum.GATEWAY_CHANNEL_ERROR, "无符合条件的子渠道");
-
-        // 选择子渠道
-        MatchChannelDTO matchChannel = GatewayManagerConvert.getMatchChannelDTO(gatewaySubChannelList);
-        AssertUtil.notEmpty(matchChannel, RespCodeEnum.GATEWAY_CHANNEL_ERROR, "未匹配到子渠道");
-
-        log.info("已匹配渠道内部:{}", matchChannel);
-
-        return matchChannel;
-
-    }
-
-    @Override
-    public MatchChannelDTO outsideMatch(MemberInfoDTO memberInfo, GatewayChannelDTO gatewayChannel, BigDecimal amount) {
-
-        log.info("匹配渠道外部,会员信息:{},网关渠道:{},金额:{}", memberInfo, gatewayChannel, amount);
-
-        // 查询父渠道下启用的子渠道List
-        GatewaySubChannelQuery gatewaySubChannelQuery = GatewayManagerConvert.getGatewaySubChannelQuery(memberInfo, gatewayChannel);
-        List<GatewaySubChannelDO> gatewaySubChannelList = gatewaySubChannelDao.listGatewaySubChannelByGatewaySubChannelQuerys(gatewaySubChannelQuery);
-        AssertUtil.notEmpty(gatewaySubChannelList, RespCodeEnum.GATEWAY_CHANNEL_ERROR, "无启用的子渠道");
-
-        // 筛选子渠道
-        gatewaySubChannelList = GatewayManagerConvert.getGatewaySubChannelList(gatewaySubChannelList, amount);
-        AssertUtil.notEmpty(gatewaySubChannelList, RespCodeEnum.GATEWAY_CHANNEL_ERROR, "无符合条件的子渠道");
-
-        // 查询代理在子渠道下配置的码商会员渠道List 查询代理关联的子渠道 TODO
-        MemberChannelQuery memberChannelQuery = MemberManagerConvert.getMemberChannelQuery(memberInfo, gatewaySubChannelList.stream().map(GatewaySubChannelDO::getChannelCode).distinct().collect(Collectors.toList()));
-        List<MemberChannelDO> memberChannelList = memberChannelDao.listMemberChannelByMemberChannelQuerys(memberChannelQuery);
-        AssertUtil.notEmpty(memberChannelList, RespCodeEnum.MEMBER_CHANNEL_ERROR, "无会员渠道");
-
-        // 查询码商会员的有效性
-        MemberInfoQuery memberInfoQuery = MemberManagerConvert.getMemberInfoQuery(memberChannelList);
-        List<MemberInfoDO> memberInfoList = memberInfoDao.listMemberInfoByMemberInfoQuerys(memberInfoQuery);
-        AssertUtil.notEmpty(memberInfoList, RespCodeEnum.MEMBER_ERROR, "会员信息状态已删除或无效");
-
-        // 选择码商和子渠道
-        MatchChannelDTO matchChannel = GatewayManagerConvert.getMatchChannelDTO(memberInfoList, memberChannelList, gatewaySubChannelList);
-        AssertUtil.notEmpty(matchChannel, RespCodeEnum.GATEWAY_CHANNEL_ERROR, "未匹配到子渠道");
-
-        log.info("已匹配渠道外部:{}", matchChannel);
-
-        return matchChannel;
 
     }
 

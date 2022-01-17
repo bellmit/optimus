@@ -4,10 +4,12 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
@@ -50,6 +52,38 @@ public class GatewayManagerConvert {
 
         return query;
 
+    }
+
+    /**
+     * 获取真实的网关子渠道
+     * 
+     * @param list0
+     * @param list1
+     * @return
+     */
+    public static List<GatewaySubChannelDO> getGatewaySubChannelList(List<MemberChannelDO> list0, List<GatewaySubChannelDO> list1) {
+
+        // 真实的网关子渠道
+        List<GatewaySubChannelDO> gatewaySubChannelList = new ArrayList<>();
+
+        // 有效的会员渠道
+        Set<String> set = new HashSet<>();
+        for (MemberChannelDO item : list0) {
+            set.add(item.getChannelCode() + item.getSubChannelCode());
+        }
+
+        for (GatewaySubChannelDO item : list1) {
+
+            // 不匹配
+            if (!set.contains(item.getParentChannelCode() + item.getChannelCode())) {
+                continue;
+            }
+
+            gatewaySubChannelList.add(item);
+
+        }
+
+        return gatewaySubChannelList;
     }
 
     /**

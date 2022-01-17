@@ -1,9 +1,11 @@
 package com.optimus.manager.member.convert;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.optimus.dao.domain.MemberChannelDO;
+import com.optimus.dao.domain.MemberInfoDO;
 import com.optimus.dao.query.MemberChannelQuery;
 import com.optimus.dao.query.MemberInfoQuery;
 import com.optimus.manager.member.dto.MemberInfoDTO;
@@ -73,6 +75,35 @@ public class MemberManagerConvert {
         query.setMemberIdList(memberIdList);
 
         return query;
+    }
+
+    /**
+     * 获取真实的会员渠道
+     * 
+     * @param list0
+     * @param list1
+     * @return
+     */
+    public static List<MemberChannelDO> getMemberChannelList(List<MemberInfoDO> list0, List<MemberChannelDO> list1) {
+
+        // 真实的会员渠道
+        List<MemberChannelDO> memberChannelList = new ArrayList<>();
+
+        // 有效的会员编号
+        List<String> memberIdList = list0.stream().map(MemberInfoDO::getMemberId).distinct().collect(Collectors.toList());
+
+        for (MemberChannelDO item : list1) {
+
+            // 不匹配
+            if (!memberIdList.contains(item.getMemberId())) {
+                continue;
+            }
+
+            memberChannelList.add(item);
+
+        }
+
+        return memberChannelList;
     }
 
 }
