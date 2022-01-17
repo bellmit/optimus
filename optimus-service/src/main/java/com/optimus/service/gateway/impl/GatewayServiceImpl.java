@@ -138,7 +138,7 @@ public class GatewayServiceImpl implements GatewayService {
 
             MatchChannelDTO matchChannel = GatewayManagerConvert.getMatchChannelDTO(gatewaySubChannelList);
             AssertUtil.notEmpty(matchChannel, RespCodeEnum.GATEWAY_CHANNEL_ERROR, "未匹配到子渠道");
-            log.info("已匹配渠道内部:{}", matchChannel);
+            log.info("已匹配渠道自研:{}", matchChannel);
 
             return matchChannel;
         }
