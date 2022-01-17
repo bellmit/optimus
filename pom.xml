@@ -21,6 +21,7 @@
 
 	<properties>
 		<java.version>11</java.version>
+		<log4j2.version>2.16.0</log4j2.version>
 		<optimus.version>0.0.1-RELEASED</optimus.version>
 		<spring-boot.version>2.5.6</spring-boot.version>
 		<mybatis-spring-boot-starter.version>2.2.0</mybatis-spring-boot-starter.version>
